@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "allowJs": true,
+        "sourceMap": true,
+        "jsx": "react",
+        "jsxFactory": "createCell",
+        "lib": ["ES6", "DOM"],
+        "rootDir": "src"
+    },
+    "include": ["src/**/*"]
+}

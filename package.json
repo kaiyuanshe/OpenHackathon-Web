@@ -1,0 +1,73 @@
+{
+    "name": "webcell-scaffold",
+    "version": "0.3.0",
+    "keywords": [
+        "web-component",
+        "typescript",
+        "jsx"
+    ],
+    "description": "",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EasyWebApp/scaffold.git"
+    },
+    "bugs": {
+        "url": "https://github.com/EasyWebApp/scaffold/issues"
+    },
+    "main": "src/index.html",
+    "dependencies": {
+        "boot-cell": "^1.0.0-beta.1",
+        "browser-unhandled-rejection": "^1.0.2",
+        "cell-router": "^2.0.0-rc.6",
+        "classnames": "^2.2.6",
+        "mobx": "^5.15.4",
+        "mobx-web-cell": "^0.2.5",
+        "web-cell": "2.0.0-rc.19"
+    },
+    "devDependencies": {
+        "@typescript-eslint/parser": "^2.20.0",
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "husky": "^4.2.3",
+        "lint-staged": "^10.0.7",
+        "parcel-bundler": "^1.12.4",
+        "prettier": "^1.19.1",
+        "typescript": "^3.8.2",
+        "workbox-cli": "^4.3.1"
+    },
+    "prettier": {
+        "singleQuote": true,
+        "tabWidth": 4
+    },
+    "lint-staged": {
+        "*.{html,md,css,less,json,yml}": [
+            "prettier --write"
+        ],
+        "*.{js,ts,tsx}": [
+            "prettier --write",
+            "eslint --fix"
+        ]
+    },
+    "postcss": {
+        "modules": true,
+        "plugins": {
+            "autoprefixer": {
+                "grid": true
+            }
+        }
+    },
+    "scripts": {
+        "test": "lint-staged",
+        "start": "workbox generateSW  &&  parcel src/index.html --open",
+        "pack-dist": "parcel build src/index.html --public-url .",
+        "pack-sw": "rm -f dist/sw.js.map  &&  workbox generateSW",
+        "build": "rm -rf dist/  &&  npm run pack-dist  &&  npm run pack-sw"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm test",
+            "pre-push": "npm run build"
+        }
+    }
+}
