@@ -51,10 +51,7 @@ export class PageRouter extends HTMLRouter {
                     </Button>
                 </NavBar>
 
-                <main
-                    className="container my-5 pt-3"
-                    style={{ minHeight: '60vh' }}
-                >
+                <main className="my-5 pt-3" style={{ minHeight: '60vh' }}>
                     {super.render()}
                 </main>
 

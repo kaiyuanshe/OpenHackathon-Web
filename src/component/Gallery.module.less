@@ -1,0 +1,40 @@
+.box {
+    display: flex;
+    align-items: stretch;
+
+    & > :first-child {
+        width: calc(100% - 16rem);
+        margin-right: 1rem;
+    }
+    & > :last-child {
+        width: 15rem;
+        & > div {
+            height: 135px;
+            background-size: cover;
+            position: relative;
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                transition: 0.25s;
+            }
+            &:hover::before,
+            &.active::before {
+                background: transparent;
+            }
+        }
+    }
+    @media (max-width: 1024px) {
+        & > :first-child {
+            width: 100%;
+            margin-right: 0;
+        }
+        & > :last-child {
+            display: none !important;
+        }
+    }
+}
