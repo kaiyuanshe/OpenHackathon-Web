@@ -2,12 +2,10 @@ import { component, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { HTMLRouter } from 'cell-router/source';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
+import { Button } from 'boot-cell/source/Form/Button';
 
 import { history } from '../model';
-import WebCell_0 from '../image/WebCell-0.png';
-
-import { Hello } from './Hello';
-import { CellClock } from './Clock';
+import { HomePage } from './Home';
 
 @observer
 @component({
@@ -18,27 +16,19 @@ export class PageRouter extends HTMLRouter {
     protected history = history;
     protected routes = [
         {
-            paths: ['clock'],
-            component: CellClock
-        },
-        {
-            paths: ['hello', ''],
-            component: Hello
+            paths: [''],
+            component: HomePage
         }
     ];
 
     menu = [
         {
-            title: 'Hello',
-            href: 'hello'
+            title: '首页',
+            href: ''
         },
         {
-            title: 'Clock',
-            href: 'clock'
-        },
-        {
-            title: 'GitHub source',
-            href: 'https://github.com/EasyWebApp/scaffold'
+            title: '新手帮助',
+            href: 'https://github.com/kaiyuanshe/open-hackathon'
         }
     ];
 
@@ -49,13 +39,17 @@ export class PageRouter extends HTMLRouter {
                     narrow
                     brand={
                         <img
-                            alt="WebCell scaffold"
-                            src={WebCell_0}
+                            alt="开放黑客松"
+                            src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
                             style={{ width: '2rem' }}
                         />
                     }
                     menu={this.menu}
-                />
+                >
+                    <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
+                        登录
+                    </Button>
+                </NavBar>
 
                 <main
                     className="container my-5 pt-3"

@@ -1,23 +1,23 @@
-![](src/image/WebCell-0.png)
+# Open Hackathon - Web App
 
-# WebCell scaffold
+**Progressive Web App** of [Open Hackathon platform][1] based on [WebCell v2][2]
 
-App Project scaffold of **WebCell** v2
+[![NPM Dependency](https://david-dm.org/kaiyuanshe/OpenHackathon-Web.svg)][3]
+[![Build Status](https://travis-ci.com/kaiyuanshe/OpenHackathon-Web.svg?branch=master)][4]
 
-https://web-cell.dev/scaffold/
+## Project kanban
 
-[![NPM Dependency](https://david-dm.org/EasyWebApp/scaffold.svg)][1]
-[![Build Status](https://travis-ci.com/EasyWebApp/scaffold.svg?branch=master)][2]
+https://github.com/kaiyuanshe/OpenHackathon-Web/projects/1?fullscreen=true
 
 ## Technology stack
 
--   Language: [TypeScript v3][3]
--   Component engine: [WebCell v2][4]
--   Component suite: [BootStrap v4][5]
--   State management: [MobX v5][6]
--   PWA framework: [Workbox v4][7]
--   Package bundler: [Parcel v1][8]
--   CI / CD: [Travis CI][9] + [GitHub Pages][10]
+-   Language: [TypeScript v3][5]
+-   Component engine: [WebCell v2][6]
+-   Component suite: [BootStrap v4][7]
+-   State management: [MobX v5][8]
+-   PWA framework: [Workbox v4][9]
+-   Package bundler: [Parcel v1][10]
+-   CI / CD: [Travis CI][11] + [GitHub Pages][12]
 
 ## Development
 
@@ -33,13 +33,15 @@ npm start
 npm run build
 ```
 
-[1]: https://david-dm.org/EasyWebApp/scaffold
-[2]: https://travis-ci.com/EasyWebApp/scaffold
-[3]: https://typescriptlang.org
-[4]: https://web-cell.dev/
-[5]: https://getbootstrap.com
-[6]: https://mobx.js.org
-[7]: https://developers.google.com/web/tools/workbox
-[8]: https://parceljs.org
-[9]: https://travis-ci.com/
-[10]: https://pages.github.com/
+[1]: https://hacking.kaiyuanshe.cn/
+[2]: https://web-cell.dev/
+[3]: https://david-dm.org/kaiyuanshe/OpenHackathon-Web
+[4]: https://travis-ci.com/kaiyuanshe/OpenHackathon-Web
+[5]: https://typescriptlang.org
+[6]: https://web-cell.dev/
+[7]: https://getbootstrap.com
+[8]: https://mobx.js.org
+[9]: https://developers.google.com/web/tools/workbox
+[10]: https://parceljs.org
+[11]: https://travis-ci.com/
+[12]: https://pages.github.com/

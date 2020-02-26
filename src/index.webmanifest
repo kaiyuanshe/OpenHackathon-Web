@@ -1,20 +1,20 @@
 {
-  "name": "WebCell scaffold",
-  "short_name": "WC Demo",
-  "start_url": "https://web-cell.dev/scaffold/",
-  "description": "App Project scaffold of WebCell v2",
+  "name": "开放黑客松",
+  "short_name": "黑客松",
+  "start_url": "https://kaiyuanshe.cn/OpenHackathon-Web/",
+  "description": "Progressive Web App of Open Hackathon platform based on WebCell v2",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "lang": "en-US",
+  "lang": "zh-CN",
   "dir": "ltr",
   "theme_color": "rgba(0,0,0,0.5)",
   "background_color": "transparent",
   "icons": [
     {
-      "src": "image/WebCell-0.png",
+      "src": "image/logo.png",
       "type": "image/png",
-      "sizes": "300x300"
+      "sizes": "71x71"
     }
   ]
 }

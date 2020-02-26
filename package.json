@@ -1,27 +1,17 @@
 {
-    "name": "webcell-scaffold",
+    "name": "@open-hackathon/web",
     "version": "0.3.0",
-    "keywords": [
-        "web-component",
-        "typescript",
-        "jsx"
-    ],
-    "description": "",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/EasyWebApp/scaffold.git"
-    },
-    "bugs": {
-        "url": "https://github.com/EasyWebApp/scaffold/issues"
-    },
+    "private": true,
     "main": "src/index.html",
     "dependencies": {
         "boot-cell": "^1.0.0-beta.1",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.0-rc.6",
         "classnames": "^2.2.6",
+        "koajax": "^0.6.0",
         "mobx": "^5.15.4",
         "mobx-web-cell": "^0.2.5",
+        "regenerator-runtime": "^0.13.3",
         "web-cell": "2.0.0-rc.19"
     },
     "devDependencies": {
