@@ -27,7 +27,7 @@
         "postcss-modules": "^1.5.0",
         "prettier": "^1.19.1",
         "typescript": "^3.8.2",
-        "workbox-cli": "^4.3.1"
+        "workbox-cli": "^5.0.0"
     },
     "prettier": {
         "singleQuote": true,
