@@ -28,7 +28,8 @@ export class PageRouter extends HTMLRouter {
         },
         {
             title: '新手帮助',
-            href: 'https://github.com/kaiyuanshe/open-hackathon'
+            href:
+                'https://github.com/kaiyuanshe/open-hackathon/wiki/%E5%BC%80%E6%94%BE%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
         }
     ];
 
@@ -55,7 +56,7 @@ export class PageRouter extends HTMLRouter {
                     {super.render()}
                 </main>
 
-                <footer className="text-center bg-light py-5">
+                <footer className="bg-dark text-white text-center py-5">
                     Proudly developed with
                     <a
                         className="mx-1"

@@ -1,0 +1,25 @@
+.logo {
+    display: block;
+    margin-bottom: 0.5rem;
+    position: relative;
+
+    &::before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        content: attr(title);
+        font-size: 1.5rem;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: 0.25s;
+    }
+    &:hover::before {
+        opacity: 1;
+    }
+}

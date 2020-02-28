@@ -13,6 +13,7 @@ export interface ListFilter {
 
 export interface DataItem {
     id: string;
+    name: string;
     creator: string;
     create_time: number;
     update_time: number;

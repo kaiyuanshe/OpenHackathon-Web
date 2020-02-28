@@ -3,9 +3,11 @@ import { observer } from 'mobx-web-cell';
 import { TabList } from 'boot-cell/source/Content/TabList';
 import { Card } from 'boot-cell/source/Content/Card';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
+import { MediaItem } from 'boot-cell/source/Content/MediaItem';
 
-import { activity, Activity } from '../model';
+import { activity, user, Activity, partner } from '../model';
 import { GalleryView } from '../component';
+import style from './Home.module.less';
 
 @observer
 @component({
@@ -14,7 +16,7 @@ import { GalleryView } from '../component';
 })
 export class HomePage extends mixin() {
     connectedCallback() {
-        activity.getList();
+        activity.getList(), user.getActiveList();
     }
 
     renderCard({
@@ -38,6 +40,19 @@ export class HomePage extends mixin() {
                 style={{ width: '18rem' }}
                 title={display_name}
                 image={banners[0]}
+                footer={
+                    <small className="d-flex justify-content-between">
+                        <time
+                            datetime={new Date(registration_end_time).toJSON()}
+                        >
+                            报名截止 {days < 0 ? '--' : days} 天
+                        </time>
+                        <span>
+                            <Icon name="heart" className="text-danger" /> {like}
+                        </span>
+                        <span>{register}人报名</span>
+                    </small>
+                }
             >
                 <small className="d-flex justify-content-between">
                     <time datetime={event_start.toJSON()}>
@@ -57,15 +72,6 @@ export class HomePage extends mixin() {
                         </li>
                     ))}
                 </ul>
-                <small className="d-flex justify-content-between">
-                    <time datetime={new Date(registration_end_time).toJSON()}>
-                        报名截止 {days < 0 ? '--' : days} 天
-                    </time>
-                    <span>
-                        <Icon name="heart" className="text-danger" /> {like}
-                    </span>
-                    <span>{register}人报名</span>
-                </small>
             </Card>
         );
     }
@@ -75,6 +81,28 @@ export class HomePage extends mixin() {
             <div className="d-flex justify-content-around flex-wrap">
                 {list.map(item => item.banners?.[0] && this.renderCard(item))}
             </div>
+        );
+    }
+
+    renderLogoSection(title: string, list: typeof partner.host) {
+        return (
+            <section>
+                <h2>{title}</h2>
+                <ul className="list-inline">
+                    {list.map(({ url, name, logo }) => (
+                        <li className="list-inline-item">
+                            <a
+                                className={style.logo}
+                                target="_blank"
+                                href={url}
+                                title={name}
+                            >
+                                <img style={{ width: 182 }} src={logo} />
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </section>
         );
     }
 
@@ -92,6 +120,8 @@ export class HomePage extends mixin() {
             <Fragment>
                 <GalleryView
                     className="container py-3"
+                    controls
+                    indicators
                     interval={3}
                     list={banner}
                 />
@@ -112,6 +142,29 @@ export class HomePage extends mixin() {
                         />
                     </div>
                 </section>
+                <div className="py-5 container d-flex">
+                    <div>
+                        {this.renderLogoSection('赞助伙伴', partner.sponsor)}
+                        {this.renderLogoSection('合作主办', partner.host)}
+                    </div>
+                    <section>
+                        <h2>活跃用户</h2>
+                        <ol className="list-unstyled">
+                            {user.activeList.map(
+                                ({ avatar_url, nickname, profile }) => (
+                                    <MediaItem
+                                        image={avatar_url}
+                                        title={nickname}
+                                    >
+                                        <p className="text-nowrap">
+                                            {profile?.career_type}
+                                        </p>
+                                    </MediaItem>
+                                )
+                            )}
+                        </ol>
+                    </section>
+                </div>
             </Fragment>
         );
     }
