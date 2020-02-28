@@ -1,5 +1,8 @@
 # Open Hackathon - Web App
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kaiyuanshe/OpenHackathon-Web.svg)](https://greenkeeper.io/)
+
+
 **Progressive Web App** of [Open Hackathon platform][1] based on [WebCell v2][2]
 
 [![NPM Dependency](https://david-dm.org/kaiyuanshe/OpenHackathon-Web.svg)][3]
