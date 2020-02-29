@@ -1,4 +1,11 @@
-import { component, mixin, watch, attribute, createCell } from 'web-cell';
+import {
+    component,
+    mixin,
+    watch,
+    attribute,
+    createCell,
+    Fragment
+} from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { Badge } from 'boot-cell/source/Reminder/Badge';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
@@ -8,7 +15,7 @@ import { TabList } from 'boot-cell/source/Content/TabList';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 
 import style from './Activity.module.less';
-import { relativeTimeTo, TimeUnitName } from '../utility';
+import { relativeTimeTo, TimeUnitName, isMobile } from '../utility';
 import { activity } from '../model';
 
 @observer
@@ -22,7 +29,11 @@ export class ActivityPage extends mixin() {
     name = '';
 
     connectedCallback() {
+        this.classList.add('d-block', 'container');
+
         activity.getOne(this.name);
+
+        super.connectedCallback();
     }
 
     renderMeta() {
@@ -52,7 +63,8 @@ export class ActivityPage extends mixin() {
                         报名时间
                         <Icon
                             name="calendar-alt"
-                            className="mx-2 text-success"
+                            color="success"
+                            className="mx-2"
                         />
                         {new Date(registration_start_time).toLocaleString()} ~{' '}
                         {new Date(registration_end_time).toLocaleString()}
@@ -61,7 +73,8 @@ export class ActivityPage extends mixin() {
                         活动时间
                         <Icon
                             name="calendar-alt"
-                            className="mx-2 text-success"
+                            color="success"
+                            className="mx-2"
                         />
                         {new Date(event_start_time).toLocaleString()} ~{' '}
                         {new Date(event_end_time).toLocaleString()}
@@ -70,13 +83,14 @@ export class ActivityPage extends mixin() {
                         活动地址
                         <Icon
                             name="map-marker-alt"
-                            className="mx-2 text-success"
+                            color="success"
+                            className="mx-2"
                         />
                         {location}
                     </li>
                     <li>
                         报名人数
-                        <Icon name="users" className="mx-2 text-success" />
+                        <Icon name="users" color="success" className="mx-2" />
                         {stat?.register}人
                     </li>
                 </ul>
@@ -96,15 +110,16 @@ export class ActivityPage extends mixin() {
                     const { distance, unit } = relativeTimeTo(date);
 
                     return {
+                        href: link,
                         content: (
-                            <div className="d-flex">
+                            <div className="d-flex align-items-center">
                                 <time datetime={date.toJSON()}>
                                     {Math.abs(distance)} {TimeUnitName[unit]}前
                                 </time>
                                 <Badge kind="primary" className="mx-2">
                                     <Icon name="volume-down" size={2} />
                                 </Badge>
-                                <a href={link}>{content}</a>
+                                {content}
                             </div>
                         )
                     };
@@ -123,7 +138,7 @@ export class ActivityPage extends mixin() {
                         logo,
                         name,
                         member_count,
-                        leader: { avatar_url, nickname }
+                        leader: { id, avatar_url, nickname }
                     }) => (
                         <li
                             className="border overflow-hidden mb-3"
@@ -142,11 +157,13 @@ export class ActivityPage extends mixin() {
                             </div>
                             <div className="p-2">
                                 队长：
-                                <img
-                                    className={style.icon}
-                                    src={avatar_url}
-                                />{' '}
-                                {nickname}
+                                <a href={'user?uid=' + id}>
+                                    <img
+                                        className={style.icon}
+                                        src={avatar_url}
+                                    />{' '}
+                                    {nickname}
+                                </a>
                             </div>
                         </li>
                     )
@@ -165,10 +182,11 @@ export class ActivityPage extends mixin() {
         } = activity.current;
 
         return (
-            <div className="container">
+            <Fragment>
                 <header className="d-lg-flex py-3">
                     <CarouselView
-                        indicators
+                        controls
+                        indicators={!isMobile}
                         list={banners?.map(image => ({ image }))}
                     />
                     {this.renderMeta()}
@@ -218,7 +236,7 @@ export class ActivityPage extends mixin() {
                         />
                     </aside>
                 </div>
-            </div>
+            </Fragment>
         );
     }
 }

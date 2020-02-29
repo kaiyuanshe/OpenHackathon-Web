@@ -9,7 +9,7 @@
         "sourceMap": true,
         "jsx": "react",
         "jsxFactory": "createCell",
-        "lib": ["ES6", "DOM"],
+        "lib": ["ES2019", "DOM"],
         "rootDir": "src"
     },
     "include": ["src/**/*"]

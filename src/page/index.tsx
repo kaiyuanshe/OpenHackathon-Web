@@ -7,6 +7,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import { history } from '../model';
 import { HomePage } from './Home';
 import { ActivityPage } from './Activity';
+import { UserPage } from './User';
 
 @observer
 @component({
@@ -23,6 +24,10 @@ export class PageRouter extends HTMLRouter {
         {
             paths: ['activity'],
             component: ActivityPage
+        },
+        {
+            paths: ['user'],
+            component: UserPage
         }
     ];
 
@@ -57,7 +62,7 @@ export class PageRouter extends HTMLRouter {
                     </Button>
                 </NavBar>
 
-                <main className="my-5 pt-3" style={{ minHeight: '60vh' }}>
+                <main className="mt-5 pt-2" style={{ minHeight: '60vh' }}>
                     {super.render()}
                 </main>
 

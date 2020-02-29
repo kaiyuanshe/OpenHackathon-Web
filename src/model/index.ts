@@ -8,4 +8,5 @@ export const activity = new ActivityModel();
 export * from './static';
 export * from './service';
 export * from './AMap';
+export * from './User';
 export * from './Activity';

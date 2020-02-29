@@ -1,12 +1,11 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { TabList } from 'boot-cell/source/Content/TabList';
-import { Card } from 'boot-cell/source/Content/Card';
-import { Icon } from 'boot-cell/source/Reminder/Icon';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 
-import { activity, user, Activity, partner } from '../model';
-import { GalleryView } from '../component';
+import { isMobile } from '../utility';
+import { ActivityCard, GalleryView } from '../component';
+import { activity, user, Activity, User, partner } from '../model';
 import style from './Home.module.less';
 
 @observer
@@ -17,70 +16,16 @@ import style from './Home.module.less';
 export class HomePage extends mixin() {
     connectedCallback() {
         activity.getList(), user.getActiveList();
-    }
 
-    renderCard({
-        name,
-        display_name,
-        banners,
-        event_start_time,
-        location,
-        tags,
-        registration_end_time,
-        stat: { like, register }
-    }: Activity) {
-        const event_start = new Date(event_start_time),
-            days = +(
-                (registration_end_time - Date.now()) /
-                (1000 * 60 * 60 * 24)
-            ).toFixed(0);
-
-        return (
-            <Card
-                className="mb-3"
-                style={{ width: '18rem' }}
-                title={<a href={'activity?name=' + name}>{display_name}</a>}
-                image={banners[0]}
-                footer={
-                    <small className="d-flex justify-content-between">
-                        <time
-                            datetime={new Date(registration_end_time).toJSON()}
-                        >
-                            报名截止 {days < 0 ? '--' : days} 天
-                        </time>
-                        <span>
-                            <Icon name="heart" className="text-danger" /> {like}
-                        </span>
-                        <span>{register}人报名</span>
-                    </small>
-                }
-            >
-                <small className="d-flex justify-content-between">
-                    <time datetime={event_start.toJSON()}>
-                        <Icon name="calendar-alt" className="text-success" />{' '}
-                        {event_start.toLocaleString()}
-                    </time>
-                    <span>
-                        <Icon name="map-marker-alt" className="text-success" />{' '}
-                        {location.split(' ')[0]}
-                    </span>
-                </small>
-                <hr />
-                <ul className="list-inline text-success">
-                    {tags.map(tag => (
-                        <li class="list-inline-item">
-                            <small>{tag}</small>
-                        </li>
-                    ))}
-                </ul>
-            </Card>
-        );
+        super.connectedCallback();
     }
 
     renderTab(list: Activity[]) {
         return (
             <div className="d-flex justify-content-around flex-wrap">
-                {list.map(item => item.banners?.[0] && this.renderCard(item))}
+                {list.map(
+                    item => item.banners?.[0] && <ActivityCard {...item} />
+                )}
             </div>
         );
     }
@@ -107,6 +52,16 @@ export class HomePage extends mixin() {
         );
     }
 
+    renderUser = ({ avatar_url, id, nickname, profile }: User) => (
+        <MediaObject
+            listItem
+            image={avatar_url}
+            title={<a href={'user?uid=' + id}>{nickname}</a>}
+        >
+            <p className="text-nowrap">{profile?.career_type}</p>
+        </MediaObject>
+    );
+
     render() {
         const banner = activity.list
             .filter(({ banners }) => banners?.[0])
@@ -122,8 +77,8 @@ export class HomePage extends mixin() {
                 <GalleryView
                     className="container py-3"
                     controls
-                    indicators
-                    interval={3}
+                    indicators={!isMobile}
+                    interval={isMobile ? 0 : 3}
                     list={banner}
                 />
                 <section className="py-5 bg-light">
@@ -151,19 +106,7 @@ export class HomePage extends mixin() {
                     <section>
                         <h2 className="text-center text-md-left">活跃用户</h2>
                         <ol className="list-unstyled d-md-block d-flex flex-wrap justify-content-around">
-                            {user.activeList.map(
-                                ({ avatar_url, nickname, profile }) => (
-                                    <MediaObject
-                                        listItem
-                                        image={avatar_url}
-                                        title={nickname}
-                                    >
-                                        <p className="text-nowrap">
-                                            {profile?.career_type}
-                                        </p>
-                                    </MediaObject>
-                                )
-                            )}
+                            {user.activeList.map(this.renderUser)}
                         </ol>
                     </section>
                 </div>

@@ -1,3 +1,5 @@
+export const isMobile = 'ontouchend' in document.documentElement;
+
 const TimeUnit = [
     {
         scale: 1000,
