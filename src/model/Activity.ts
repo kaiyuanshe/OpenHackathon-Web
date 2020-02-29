@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
+
 import { DataItem, ListFilter, service, PageData } from './service';
+import { User } from './User';
 import { coordsOf, Coord } from './AMap';
 
 export interface Organization extends DataItem {
@@ -8,6 +10,26 @@ export interface Organization extends DataItem {
     organization_type: number;
     logo: string;
     homepage: string;
+}
+
+export interface Event extends DataItem {
+    event: number;
+    category: number;
+    is_read: boolean;
+    content: string;
+    hackathon: string;
+    link: string;
+}
+
+export interface Team extends DataItem {
+    works: any[];
+    member_count: number;
+    project_name: string;
+    cover: string;
+    members: User[];
+    awards: any[];
+    logo: string;
+    leader: User;
 }
 
 export interface Activity extends DataItem {
@@ -30,6 +52,8 @@ export interface Activity extends DataItem {
     status: number;
     organizers: Organization[];
     stat: { register: number; like: number };
+    events?: Event[];
+    teams?: Team[];
 }
 
 export class ActivityModel {
@@ -67,10 +91,37 @@ export class ActivityModel {
         return (this.list = items);
     }
 
-    async getOne(name: string) {
-        const { body } = await service.get<Activity>('hackathon', {
+    async getEventList(name: string) {
+        const {
+            body: { items }
+        } = await service.get<PageData<Event>>(
+            'hackathon/notice/list?' +
+                new URLSearchParams({
+                    hackathon_name: name,
+                    order_by: 'time'
+                })
+        );
+        return items;
+    }
+
+    async getTeamList(name: string) {
+        const { body } = await service.get<Team[]>('hackathon/team/list', {
             hackathon_name: name
         });
+        return body;
+    }
+
+    async getOne(name: string) {
+        const [{ body }, events, teams] = await Promise.all([
+            service.get<Activity>('hackathon', {
+                hackathon_name: name
+            }),
+            this.getEventList(name),
+            this.getTeamList(name)
+        ]);
+
+        (body.events = events), (body.teams = teams);
+
         if (body.location) body.coord = (await coordsOf(body.location))[0];
 
         return (this.current = body);

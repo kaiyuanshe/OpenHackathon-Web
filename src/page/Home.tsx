@@ -98,7 +98,7 @@ export class HomePage extends mixin() {
                                 href={url}
                                 title={name}
                             >
-                                <img style={{ width: 182 }} src={logo} />
+                                <img src={logo} />
                             </a>
                         </li>
                     ))}
@@ -150,7 +150,7 @@ export class HomePage extends mixin() {
                     </div>
                     <section>
                         <h2 className="text-center text-md-left">活跃用户</h2>
-                        <ol className="list-unstyled d-md-block d-flex flex-wrap justify-content-between">
+                        <ol className="list-unstyled d-md-block d-flex flex-wrap justify-content-around">
                             {user.activeList.map(
                                 ({ avatar_url, nickname, profile }) => (
                                     <MediaObject

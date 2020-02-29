@@ -2,10 +2,13 @@ import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { Badge } from 'boot-cell/source/Reminder/Badge';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
+import { ListGroup } from 'boot-cell/source/Content/ListGroup';
 import { CarouselView } from 'boot-cell/source/Content/Carousel';
 import { TabList } from 'boot-cell/source/Content/TabList';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 
+import style from './Activity.module.less';
+import { relativeTimeTo, TimeUnitName } from '../utility';
 import { activity } from '../model';
 
 @observer
@@ -81,6 +84,77 @@ export class ActivityPage extends mixin() {
         );
     }
 
+    renderEventList() {
+        const { events = [] } = activity.current;
+
+        return (
+            <ListGroup
+                key="news"
+                flush
+                list={events.map(({ create_time, link, content }) => {
+                    const date = new Date(create_time);
+                    const { distance, unit } = relativeTimeTo(date);
+
+                    return {
+                        content: (
+                            <div className="d-flex">
+                                <time datetime={date.toJSON()}>
+                                    {Math.abs(distance)} {TimeUnitName[unit]}前
+                                </time>
+                                <Badge kind="primary" className="mx-2">
+                                    <Icon name="volume-down" size={2} />
+                                </Badge>
+                                <a href={link}>{content}</a>
+                            </div>
+                        )
+                    };
+                })}
+            />
+        );
+    }
+
+    renderTeamList() {
+        const { teams = [] } = activity.current;
+
+        return (
+            <ol className="list-unstyled d-flex flex-wrap justify-content-around">
+                {teams.map(
+                    ({
+                        logo,
+                        name,
+                        member_count,
+                        leader: { avatar_url, nickname }
+                    }) => (
+                        <li
+                            className="border overflow-hidden mb-3"
+                            style={{ width: 200 }}
+                        >
+                            <div className="d-flex border-bottom">
+                                <img className={style.logo} src={logo} />
+                                <div className="flex-shrink-1">
+                                    <h4 className="text-nowrap my-1">{name}</h4>
+                                    共{' '}
+                                    <span className="text-success">
+                                        {member_count}
+                                    </span>{' '}
+                                    人
+                                </div>
+                            </div>
+                            <div className="p-2">
+                                队长：
+                                <img
+                                    className={style.icon}
+                                    src={avatar_url}
+                                />{' '}
+                                {nickname}
+                            </div>
+                        </li>
+                    )
+                )}
+            </ol>
+        );
+    }
+
     render() {
         const {
             banners,
@@ -105,6 +179,14 @@ export class ActivityPage extends mixin() {
                             {
                                 title: '活动详情',
                                 content: <div innerHTML={description} />
+                            },
+                            {
+                                title: '最新动态',
+                                content: this.renderEventList()
+                            },
+                            {
+                                title: '所有团队',
+                                content: this.renderTeamList()
                             }
                         ]}
                     />
