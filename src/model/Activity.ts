@@ -1,5 +1,6 @@
 import { observable } from 'mobx';
 import { DataItem, ListFilter, service, PageData } from './service';
+import { coordsOf, Coord } from './AMap';
 
 export interface Organization extends DataItem {
     name: string;
@@ -18,6 +19,7 @@ export interface Activity extends DataItem {
     tags: string[];
     banners: string[];
     location: string;
+    coord?: Coord;
     registration_start_time: number;
     registration_end_time: number;
     event_start_time: number;
@@ -40,6 +42,9 @@ export class ActivityModel {
     @observable
     totalCount = 0;
 
+    @observable
+    current: Activity = {} as Activity;
+
     async getList({
         order_by = 'time',
         page = '1',
@@ -60,5 +65,14 @@ export class ActivityModel {
         this.totalCount = total;
 
         return (this.list = items);
+    }
+
+    async getOne(name: string) {
+        const { body } = await service.get<Activity>('hackathon', {
+            hackathon_name: name
+        });
+        if (body.location) body.coord = (await coordsOf(body.location))[0];
+
+        return (this.current = body);
     }
 }

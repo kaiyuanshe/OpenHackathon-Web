@@ -3,7 +3,7 @@ import { observer } from 'mobx-web-cell';
 import { TabList } from 'boot-cell/source/Content/TabList';
 import { Card } from 'boot-cell/source/Content/Card';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
-import { MediaItem } from 'boot-cell/source/Content/MediaItem';
+import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 
 import { activity, user, Activity, partner } from '../model';
 import { GalleryView } from '../component';
@@ -20,6 +20,7 @@ export class HomePage extends mixin() {
     }
 
     renderCard({
+        name,
         display_name,
         banners,
         event_start_time,
@@ -38,7 +39,7 @@ export class HomePage extends mixin() {
             <Card
                 className="mb-3"
                 style={{ width: '18rem' }}
-                title={display_name}
+                title={<a href={'activity?name=' + name}>{display_name}</a>}
                 image={banners[0]}
                 footer={
                     <small className="d-flex justify-content-between">
@@ -86,7 +87,7 @@ export class HomePage extends mixin() {
 
     renderLogoSection(title: string, list: typeof partner.host) {
         return (
-            <section>
+            <section className="text-center text-md-left">
                 <h2>{title}</h2>
                 <ul className="list-inline">
                     {list.map(({ url, name, logo }) => (
@@ -142,24 +143,25 @@ export class HomePage extends mixin() {
                         />
                     </div>
                 </section>
-                <div className="py-5 container d-flex">
+                <div className="py-5 container d-flex flex-column flex-md-row align-items-center align-items-md-start">
                     <div>
                         {this.renderLogoSection('赞助伙伴', partner.sponsor)}
                         {this.renderLogoSection('合作主办', partner.host)}
                     </div>
                     <section>
-                        <h2>活跃用户</h2>
-                        <ol className="list-unstyled">
+                        <h2 className="text-center text-md-left">活跃用户</h2>
+                        <ol className="list-unstyled d-md-block d-flex flex-wrap justify-content-between">
                             {user.activeList.map(
                                 ({ avatar_url, nickname, profile }) => (
-                                    <MediaItem
+                                    <MediaObject
+                                        listItem
                                         image={avatar_url}
                                         title={nickname}
                                     >
                                         <p className="text-nowrap">
                                             {profile?.career_type}
                                         </p>
-                                    </MediaItem>
+                                    </MediaObject>
                                 )
                             )}
                         </ol>

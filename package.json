@@ -1,10 +1,10 @@
 {
     "name": "@open-hackathon/web",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "boot-cell": "^1.0.0-beta.4",
+        "boot-cell": "^1.0.0-beta.5",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.0-rc.6",
         "classnames": "^2.2.6",
@@ -26,7 +26,7 @@
         "parcel-bundler": "^1.12.4",
         "postcss-modules": "^1.5.0",
         "prettier": "^1.19.1",
-        "typescript": "^3.8.2",
+        "typescript": "^3.8.3",
         "workbox-cli": "^4.3.1"
     },
     "prettier": {

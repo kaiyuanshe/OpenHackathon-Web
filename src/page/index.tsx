@@ -6,6 +6,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import { history } from '../model';
 import { HomePage } from './Home';
+import { ActivityPage } from './Activity';
 
 @observer
 @component({
@@ -18,6 +19,10 @@ export class PageRouter extends HTMLRouter {
         {
             paths: [''],
             component: HomePage
+        },
+        {
+            paths: ['activity'],
+            component: ActivityPage
         }
     ];
 
