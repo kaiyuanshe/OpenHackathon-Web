@@ -1,9 +1,14 @@
+.avatar {
+    width: 6.5rem;
+    margin-right: 1rem;
+}
 .picture {
     min-height: 10rem;
     background-position: center;
-    background-size: cover;
+    background-size: 100%;
     margin-bottom: 1rem;
     position: relative;
+    transition: 0.25s;
 
     &::before {
         content: attr(title);
@@ -14,5 +19,8 @@
         padding: 0.5rem;
         background: rgba(0, 0, 0, 0.5);
         color: white;
+    }
+    &:hover {
+        background-size: 120%;
     }
 }

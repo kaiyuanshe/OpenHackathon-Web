@@ -129,13 +129,14 @@ export class ActivityPage extends mixin() {
     }
 
     renderTeamList() {
-        const { teams = [] } = activity.current;
+        const { teams = [], name: hackathon } = activity.current;
 
         return (
             <ol className="list-unstyled d-flex flex-wrap justify-content-around">
                 {teams.map(
                     ({
                         logo,
+                        id: tid,
                         name,
                         member_count,
                         leader: { id, avatar_url, nickname }
@@ -147,7 +148,13 @@ export class ActivityPage extends mixin() {
                             <div className="d-flex border-bottom">
                                 <img className={style.logo} src={logo} />
                                 <div className="flex-shrink-1">
-                                    <h4 className="text-nowrap my-1">{name}</h4>
+                                    <h4 className="text-nowrap my-1">
+                                        <a
+                                            href={`team?activity=${hackathon}&tid=${tid}`}
+                                        >
+                                            {name}
+                                        </a>
+                                    </h4>
                                     共{' '}
                                     <span className="text-success">
                                         {member_count}

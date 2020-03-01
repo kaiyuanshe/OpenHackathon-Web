@@ -1,8 +1,8 @@
 import { observable } from 'mobx';
 
 import { DataItem, ListFilter, service, PageData } from './service';
-import { User } from './User';
 import { coordsOf, Coord } from './AMap';
+import { Team } from './Team';
 
 export interface Organization extends DataItem {
     name: string;
@@ -19,17 +19,6 @@ export interface Event extends DataItem {
     content: string;
     hackathon: string;
     link: string;
-}
-
-export interface Team extends DataItem {
-    works: any[];
-    member_count: number;
-    project_name: string;
-    cover: string;
-    members: User[];
-    awards: any[];
-    logo: string;
-    leader: User;
 }
 
 export interface Activity extends DataItem {

@@ -8,6 +8,7 @@ import { history } from '../model';
 import { HomePage } from './Home';
 import { ActivityPage } from './Activity';
 import { UserPage } from './User';
+import { TeamPage } from './Team';
 
 @observer
 @component({
@@ -28,6 +29,10 @@ export class PageRouter extends HTMLRouter {
         {
             paths: ['user'],
             component: UserPage
+        },
+        {
+            paths: ['team'],
+            component: TeamPage
         }
     ];
 
