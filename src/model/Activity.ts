@@ -1,8 +1,9 @@
 import { observable } from 'mobx';
 
-import { DataItem, ListFilter, service, PageData } from './service';
-import { coordsOf, Coord } from './AMap';
+import { DataItem, service, PageData } from './service';
+import { Coord, coordsOf } from './AMap';
 import { Team } from './Team';
+import { BaseModel } from './BaseModel';
 
 export interface Organization extends DataItem {
     name: string;
@@ -45,40 +46,11 @@ export interface Activity extends DataItem {
     teams?: Team[];
 }
 
-export class ActivityModel {
-    @observable
-    list: Activity[] = [];
-
-    pageIndex = 0;
-    pageSize = 10;
-
-    @observable
-    totalCount = 0;
+export class ActivityModel extends BaseModel<Activity> {
+    baseURI = 'hackathon/list';
 
     @observable
     current: Activity = {} as Activity;
-
-    async getList({
-        order_by = 'time',
-        page = '1',
-        per_page = '10'
-    }: ListFilter = {}) {
-        (this.pageIndex = +page), (this.pageSize = +per_page);
-
-        const {
-            body: { items, total }
-        } = await service.get<PageData<Activity>>(
-            'hackathon/list?' +
-                new URLSearchParams({
-                    order_by,
-                    page,
-                    per_page
-                })
-        );
-        this.totalCount = total;
-
-        return (this.list = items);
-    }
 
     async getEventList(name: string) {
         const {

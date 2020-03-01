@@ -6,7 +6,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import { history } from '../model';
 import { HomePage } from './Home';
-import { ActivityPage } from './Activity';
+import { ActivityDetail, ActivityList } from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
@@ -24,7 +24,11 @@ export class PageRouter extends HTMLRouter {
         },
         {
             paths: ['activity'],
-            component: ActivityPage
+            component: ActivityDetail
+        },
+        {
+            paths: ['activity/list'],
+            component: ActivityList
         },
         {
             paths: ['user'],

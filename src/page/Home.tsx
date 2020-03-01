@@ -1,7 +1,8 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
-import { TabList } from 'boot-cell/source/Content/TabList';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
+import { TabList } from 'boot-cell/source/Content/TabList';
+import { Button } from 'boot-cell/source/Form/Button';
 
 import { isMobile } from '../utility';
 import { ActivityCard, GalleryView } from '../component';
@@ -15,7 +16,7 @@ import style from './Home.module.less';
 })
 export class HomePage extends mixin() {
     connectedCallback() {
-        activity.getList(), user.getActiveList();
+        activity.getNextPage({}, true), user.getActiveList();
 
         super.connectedCallback();
     }
@@ -97,6 +98,15 @@ export class HomePage extends mixin() {
                             ]}
                         />
                     </div>
+                    <Button
+                        outline
+                        block
+                        size="sm"
+                        className="w-25 m-auto"
+                        href="activity/list"
+                    >
+                        更多活动
+                    </Button>
                 </section>
                 <div className="py-5 container d-flex flex-column flex-md-row align-items-center align-items-md-start">
                     <div>

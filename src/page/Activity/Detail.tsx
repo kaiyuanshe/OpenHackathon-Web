@@ -14,16 +14,16 @@ import { CarouselView } from 'boot-cell/source/Content/Carousel';
 import { TabList } from 'boot-cell/source/Content/TabList';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 
-import style from './Activity.module.less';
-import { relativeTimeTo, TimeUnitName, isMobile } from '../utility';
-import { activity } from '../model';
+import style from './Detail.module.less';
+import { relativeTimeTo, TimeUnitName, isMobile } from '../../utility';
+import { activity } from '../../model';
 
 @observer
 @component({
-    tagName: 'activity-page',
+    tagName: 'activity-detail',
     renderTarget: 'children'
 })
-export class ActivityPage extends mixin() {
+export class ActivityDetail extends mixin() {
     @attribute
     @watch
     name = '';

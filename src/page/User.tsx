@@ -4,7 +4,7 @@ import { TabList } from 'boot-cell/source/Content/TabList';
 import { BGIcon } from 'boot-cell/source/Reminder/Icon';
 
 import { ActivityCard } from '../component';
-import { Provider, user } from '../model';
+import { Provider, user, Registration } from '../model';
 import style from './User.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
@@ -34,13 +34,40 @@ export class UserPage extends mixin() {
         super.connectedCallback();
     }
 
+    renderIcon = ([key, name]: string[]) => {
+        const { name: userName, provider } = user.current;
+
+        return (
+            <a target="_blank" href={provider_link[key]?.(userName)}>
+                <BGIcon
+                    type="square"
+                    kind="brands"
+                    name={name}
+                    size="lg"
+                    color={provider === key ? 'success' : 'secondary'}
+                />
+            </a>
+        );
+    };
+
+    renderLikes = ({
+        hackathon_info: { banners, display_name, name }
+    }: Registration) => (
+        <li>
+            <a
+                className={style.picture}
+                style={{ backgroundImage: `url(${banners[0]})` }}
+                title={display_name}
+                href={'activity?name=' + name}
+            />
+        </li>
+    );
+
     render() {
         const {
-            name: userName,
             nickname,
             avatar_url,
             profile,
-            provider,
             likes,
             registrations
         } = user.current;
@@ -58,24 +85,7 @@ export class UserPage extends mixin() {
                         </div>
                     </header>
                     <div className="p-3 border-top text-nowrap">
-                        {provider_list.map(([key, name]) => (
-                            <a
-                                target="_blank"
-                                href={provider_link[key]?.(userName)}
-                            >
-                                <BGIcon
-                                    type="square"
-                                    kind="brands"
-                                    name={name}
-                                    size="lg"
-                                    color={
-                                        provider === key
-                                            ? 'success'
-                                            : 'secondary'
-                                    }
-                                />
-                            </a>
-                        ))}
+                        {provider_list.map(this.renderIcon)}
                     </div>
                     <div className="p-3 border-top">
                         <h6>
@@ -87,19 +97,7 @@ export class UserPage extends mixin() {
                             关注的活动
                         </h6>
                         <ul className="list-unstyled">
-                            {likes?.map(
-                                ({
-                                    hackathon_info: { banners, display_name }
-                                }) => (
-                                    <li
-                                        className={style.picture}
-                                        style={{
-                                            backgroundImage: `url(${banners[0]})`
-                                        }}
-                                        title={display_name}
-                                    />
-                                )
-                            )}
+                            {likes?.map(this.renderLikes)}
                         </ul>
                     </div>
                 </div>
