@@ -7,15 +7,18 @@ import {
     Fragment
 } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { diffTime } from 'web-utility/source/date';
+
 import { Badge } from 'boot-cell/source/Reminder/Badge';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
 import { ListGroup } from 'boot-cell/source/Content/ListGroup';
-import { CarouselView } from 'boot-cell/source/Content/Carousel';
+import { CarouselView } from 'boot-cell/source/Media/Carousel';
 import { TabList } from 'boot-cell/source/Content/TabList';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
+import { Embed } from 'boot-cell/source/Media/Embed';
 
 import style from './Detail.module.less';
-import { relativeTimeTo, TimeUnitName, isMobile } from '../../utility';
+import { TimeUnitName, isMobile } from '../../utility';
 import { activity } from '../../model';
 
 @observer
@@ -107,7 +110,7 @@ export class ActivityDetail extends mixin() {
                 flush
                 list={events.map(({ create_time, link, content }) => {
                     const date = new Date(create_time);
-                    const { distance, unit } = relativeTimeTo(date);
+                    const { distance, unit } = diffTime(date);
 
                     return {
                         href: link,
@@ -233,12 +236,10 @@ export class ActivityDetail extends mixin() {
                             />
                         ))}
                         <h3 className="mt-3">活动地点</h3>
-                        <iframe
-                            className="border-0 w-100"
+                        <Embed
+                            is="iframe"
                             style={{ height: '20rem' }}
                             scrolling="no"
-                            lazyload="1"
-                            loading="lazy"
                             src={`//uri.amap.com/marker?src=OHP&callnative=1&position=${coord?.longitude},${coord?.latitude}&name=${location}`}
                         />
                     </aside>

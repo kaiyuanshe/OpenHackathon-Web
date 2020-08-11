@@ -1,3 +1,4 @@
+import 'core-js/es/string/match-all';
 import { HTTPClient } from 'koajax';
 
 export const service = new HTTPClient({
@@ -9,6 +10,7 @@ export interface ListFilter {
     order_by?: 'time';
     page?: string;
     per_page?: string;
+    [key: string]: string;
 }
 
 export interface DataItem {

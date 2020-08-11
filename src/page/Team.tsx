@@ -3,7 +3,7 @@ import { observer } from 'mobx-web-cell';
 
 import { team, activity } from '../model';
 import { BGIcon } from 'boot-cell/source/Reminder/Icon';
-import { BreadCrumb } from 'boot-cell/source/Navigator';
+import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 
 @observer
 @component({

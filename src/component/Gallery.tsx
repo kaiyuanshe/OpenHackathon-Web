@@ -1,5 +1,6 @@
 import { component, createCell, Fragment } from 'web-cell';
-import { CarouselProps, CarouselView } from 'boot-cell/source/Content/Carousel';
+import { CarouselProps, CarouselView } from 'boot-cell/source/Media/Carousel';
+import { Image } from 'boot-cell/source/Media/Image';
 
 import style from './Gallery.module.less';
 
@@ -21,11 +22,12 @@ export class GalleryView extends CarouselView {
 
                 <div className="d-flex flex-column justify-content-between">
                     {list.map(({ image }, index) => (
-                        <div
+                        <Image
+                            background
                             className={
                                 activeIndex === index ? style.active : null
                             }
-                            style={{ backgroundImage: `url(${image})` }}
+                            src={image}
                             onClick={() => this.turnTo(index)}
                         />
                     ))}
