@@ -10,10 +10,11 @@ import { observer } from 'mobx-web-cell';
 import { diffTime } from 'web-utility/source/date';
 
 import { Badge } from 'boot-cell/source/Reminder/Badge';
-import { Icon } from 'boot-cell/source/Reminder/Icon';
-import { ListGroup } from 'boot-cell/source/Content/ListGroup';
-import { CarouselView } from 'boot-cell/source/Media/Carousel';
-import { TabList } from 'boot-cell/source/Content/TabList';
+import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
+import { ListGroup, ListItem } from 'boot-cell/source/Content/ListGroup';
+import { CarouselView, CarouselItem } from 'boot-cell/source/Media/Carousel';
+import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
+import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 import { Embed } from 'boot-cell/source/Media/Embed';
 
@@ -64,7 +65,7 @@ export class ActivityDetail extends mixin() {
                 <ul className="list-unstyled">
                     <li>
                         报名时间
-                        <Icon
+                        <FAIcon
                             name="calendar-alt"
                             color="success"
                             className="mx-2"
@@ -74,7 +75,7 @@ export class ActivityDetail extends mixin() {
                     </li>
                     <li>
                         活动时间
-                        <Icon
+                        <FAIcon
                             name="calendar-alt"
                             color="success"
                             className="mx-2"
@@ -84,7 +85,7 @@ export class ActivityDetail extends mixin() {
                     </li>
                     <li>
                         活动地址
-                        <Icon
+                        <FAIcon
                             name="map-marker-alt"
                             color="success"
                             className="mx-2"
@@ -93,7 +94,7 @@ export class ActivityDetail extends mixin() {
                     </li>
                     <li>
                         报名人数
-                        <Icon name="users" color="success" className="mx-2" />
+                        <FAIcon name="users" color="success" className="mx-2" />
                         {stat?.register}人
                     </li>
                 </ul>
@@ -105,29 +106,27 @@ export class ActivityDetail extends mixin() {
         const { events = [] } = activity.current;
 
         return (
-            <ListGroup
-                key="news"
-                flush
-                list={events.map(({ create_time, link, content }) => {
+            <ListGroup key="news" flush>
+                {events.map(({ create_time, link, content }) => {
                     const date = new Date(create_time);
                     const { distance, unit } = diffTime(date);
 
-                    return {
-                        href: link,
-                        content: (
-                            <div className="d-flex align-items-center">
-                                <time datetime={date.toJSON()}>
-                                    {Math.abs(distance)} {TimeUnitName[unit]}前
-                                </time>
-                                <Badge kind="primary" className="mx-2">
-                                    <Icon name="volume-down" size={2} />
-                                </Badge>
-                                {content}
-                            </div>
-                        )
-                    };
+                    return (
+                        <ListItem
+                            className="d-flex align-items-center"
+                            href={link}
+                        >
+                            <time datetime={date.toJSON()}>
+                                {Math.abs(distance)} {TimeUnitName[unit]}前
+                            </time>
+                            <Badge kind="primary" className="mx-2">
+                                <FAIcon name="volume-down" size={2} />
+                            </Badge>
+                            {content}
+                        </ListItem>
+                    );
                 })}
-            />
+            </ListGroup>
         );
     }
 
@@ -194,30 +193,24 @@ export class ActivityDetail extends mixin() {
         return (
             <Fragment>
                 <header className="d-lg-flex py-3">
-                    <CarouselView
-                        controls
-                        indicators={!isMobile}
-                        list={banners?.map(image => ({ image }))}
-                    />
+                    <CarouselView controls indicators={!isMobile}>
+                        {banners?.map(image => (
+                            <CarouselItem image={image} />
+                        ))}
+                    </CarouselView>
                     {this.renderMeta()}
                 </header>
                 <div className="d-lg-flex">
-                    <TabList
-                        list={[
-                            {
-                                title: '活动详情',
-                                content: <div innerHTML={description} />
-                            },
-                            {
-                                title: '最新动态',
-                                content: this.renderEventList()
-                            },
-                            {
-                                title: '所有团队',
-                                content: this.renderTeamList()
-                            }
-                        ]}
-                    />
+                    <TabView>
+                        <NavLink>活动详情</NavLink>
+                        <TabPanel innerHTML={description} />
+
+                        <NavLink>最新动态</NavLink>
+                        <TabPanel>{this.renderEventList()}</TabPanel>
+
+                        <NavLink>所有团队</NavLink>
+                        <TabPanel>{this.renderTeamList()}</TabPanel>
+                    </TabView>
                     <aside className="ml-3">
                         <h3>主办方</h3>
                         {organizers?.map(({ logo, name, homepage }) => (

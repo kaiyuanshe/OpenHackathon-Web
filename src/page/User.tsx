@@ -1,7 +1,8 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
-import { TabList } from 'boot-cell/source/Content/TabList';
-import { BGIcon } from 'boot-cell/source/Reminder/Icon';
+import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
+import { NavLink } from 'boot-cell/source/Navigator/Nav';
+import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { ActivityCard } from '../component';
 import { Provider, user, Registration } from '../model';
@@ -101,25 +102,17 @@ export class UserPage extends mixin() {
                         </ul>
                     </div>
                 </div>
-                <TabList
-                    list={[
-                        {
-                            title: 'TA 参与的活动',
-                            content: (
-                                <div
-                                    className="border border-top-0 bg-white p-3 d-flex flex-wrap justify-content-around"
-                                    style={{ marginTop: '-0.5rem' }}
-                                >
-                                    {registrations?.map(
-                                        ({ hackathon_info }) => (
-                                            <ActivityCard {...hackathon_info} />
-                                        )
-                                    )}
-                                </div>
-                            )
-                        }
-                    ]}
-                />
+                <TabView>
+                    <NavLink>TA 参与的活动</NavLink>
+                    <TabPanel
+                        className="border border-top-0 bg-white p-3 d-flex flex-wrap justify-content-around"
+                        style={{ marginTop: '-0.5rem' }}
+                    >
+                        {registrations?.map(({ hackathon_info }) => (
+                            <ActivityCard {...hackathon_info} />
+                        ))}
+                    </TabPanel>
+                </TabView>
             </div>
         );
     }

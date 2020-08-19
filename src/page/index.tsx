@@ -2,6 +2,7 @@ import { component, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { HTMLRouter } from 'cell-router/source';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
+import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { history } from '../model';
@@ -64,8 +65,10 @@ export class PageRouter extends HTMLRouter {
                             style={{ width: '2rem' }}
                         />
                     }
-                    menu={this.menu}
                 >
+                    {this.menu.map(({ title, ...rest }) => (
+                        <NavLink {...rest}>{title}</NavLink>
+                    ))}
                     <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
                         登录
                     </Button>

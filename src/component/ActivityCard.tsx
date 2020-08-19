@@ -1,6 +1,6 @@
 import { createCell } from 'web-cell';
 import { Card } from 'boot-cell/source/Content/Card';
-import { Icon } from 'boot-cell/source/Reminder/Icon';
+import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { Activity } from '../model';
 
@@ -32,7 +32,7 @@ export function ActivityCard({
                         报名截止 {days < 0 ? '--' : days} 天
                     </time>
                     <span>
-                        <Icon name="heart" color="danger" /> {stat?.like}
+                        <FAIcon name="heart" color="danger" /> {stat?.like}
                     </span>
                     <span>{stat?.register}人报名</span>
                 </small>
@@ -40,11 +40,11 @@ export function ActivityCard({
         >
             <small className="d-flex justify-content-between">
                 <time datetime={event_start.toJSON()}>
-                    <Icon name="calendar-alt" color="success" />{' '}
+                    <FAIcon name="calendar-alt" color="success" />{' '}
                     {event_start.toLocaleString()}
                 </time>
                 <span>
-                    <Icon name="map-marker-alt" color="success" />{' '}
+                    <FAIcon name="map-marker-alt" color="success" />{' '}
                     {location.split(' ')[0]}
                 </span>
             </small>

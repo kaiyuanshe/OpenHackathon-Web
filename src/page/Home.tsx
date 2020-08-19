@@ -1,7 +1,8 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
-import { TabList } from 'boot-cell/source/Content/TabList';
+import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
+import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { isMobile } from '../utility';
@@ -88,15 +89,10 @@ export class HomePage extends mixin() {
                             <h2>推荐活动</h2>
                             <img src="https://hacking.kaiyuanshe.cn/static/images/index-07.png" />
                         </div>
-                        <TabList
-                            mode="pills"
-                            list={[
-                                {
-                                    title: '最新发布',
-                                    content: this.renderTab(activity.list)
-                                }
-                            ]}
-                        />
+                        <TabView mode="pills">
+                            <NavLink>最新发布</NavLink>
+                            <TabPanel>{this.renderTab(activity.list)}</TabPanel>
+                        </TabView>
                     </div>
                     <Button
                         outline
