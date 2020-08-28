@@ -55,7 +55,7 @@ export class PageRouter extends HTMLRouter {
 
     render() {
         return (
-            <Fragment>
+            <>
                 <NavBar
                     narrow
                     brand={
@@ -74,9 +74,7 @@ export class PageRouter extends HTMLRouter {
                     </Button>
                 </NavBar>
 
-                <main className="mt-5 pt-2" style={{ minHeight: '60vh' }}>
-                    {super.render()}
-                </main>
+                <main style={{ minHeight: '60vh' }}>{super.render()}</main>
 
                 <footer className="bg-dark text-white text-center py-5">
                     Proudly developed with
@@ -96,7 +94,7 @@ export class PageRouter extends HTMLRouter {
                         BootCell v1
                     </a>
                 </footer>
-            </Fragment>
+            </>
         );
     }
 }

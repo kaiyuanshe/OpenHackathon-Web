@@ -75,7 +75,7 @@ export class HomePage extends mixin() {
             }));
 
         return (
-            <Fragment>
+            <>
                 <GalleryView
                     className="container py-3"
                     controls
@@ -116,7 +116,7 @@ export class HomePage extends mixin() {
                         </ol>
                     </section>
                 </div>
-            </Fragment>
+            </>
         );
     }
 }

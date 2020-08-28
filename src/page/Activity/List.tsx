@@ -29,7 +29,7 @@ export class ActivityList extends mixin() {
         const { loading, list, noMore } = activity;
 
         return (
-            <Fragment>
+            <>
                 <h2 className="text-center mb-3">热门活动</h2>
 
                 <edge-detector onTouchEdge={this.loadMore}>
@@ -46,7 +46,7 @@ export class ActivityList extends mixin() {
                         {noMore ? '没有更多了' : '加载中……'}
                     </p>
                 </edge-detector>
-            </Fragment>
+            </>
         );
     }
 }

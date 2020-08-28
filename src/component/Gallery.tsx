@@ -5,11 +5,18 @@ import {
     CarouselItem
 } from 'boot-cell/source/Media/Carousel';
 import { Image } from 'boot-cell/source/Media/Image';
+import classNames from 'classnames';
 
 import style from './Gallery.module.less';
 
+export interface GalleryItem {
+    image: string;
+    title: string;
+    detail: string;
+}
+
 export interface GalleryProps extends CarouselProps {
-    list: { image: string; title: string; detail: string }[];
+    list: GalleryItem[];
     activeIndex?: number;
 }
 
@@ -19,7 +26,14 @@ export interface GalleryProps extends CarouselProps {
 })
 export class GalleryView extends CarouselView {
     @watch
-    list: string[] = [];
+    set list(list: GalleryItem[]) {
+        this.setProps({ list }).then(
+            () =>
+                (this.defaultSlot = list.map(item => (
+                    <CarouselItem {...item} />
+                )))
+        );
+    }
 
     connectedCallback() {
         this.classList.add(style.box);
@@ -30,21 +44,16 @@ export class GalleryView extends CarouselView {
     render({ list, activeIndex }: GalleryProps) {
         return (
             <Fragment>
-                <div className="flex-fill">
-                    {super.render({
-                        ...this.props,
-                        defaultSlot: list.map(item => (
-                            <CarouselItem {...item} />
-                        ))
-                    })}
-                </div>
+                <div className="flex-fill">{super.render(this.props)}</div>
+
                 <div className="d-flex flex-column justify-content-between">
                     {list.map(({ image }, index) => (
                         <Image
                             background
-                            className={
-                                activeIndex === index ? style.active : null
-                            }
+                            className={classNames(
+                                'flex-fill',
+                                activeIndex === index && 'active'
+                            )}
                             src={image}
                             onClick={() => this.turnTo(index)}
                         />

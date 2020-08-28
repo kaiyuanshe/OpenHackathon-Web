@@ -1,6 +1,6 @@
 .box {
+    max-height: 90vh;
     display: flex;
-    align-items: stretch;
 
     & > :first-child {
         width: calc(100% - 16rem);
@@ -8,8 +8,8 @@
     }
     & > :last-child {
         width: 15rem;
-        & > div {
-            height: 135px;
+        :global .back-image {
+            min-height: auto;
             position: relative;
             &::before {
                 content: '';

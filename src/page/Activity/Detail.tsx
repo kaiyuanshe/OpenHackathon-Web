@@ -57,7 +57,7 @@ export class ActivityDetail extends mixin() {
                 <h2 className="my-3">{display_name}</h2>
                 <aside className="my-2">
                     {tags?.map(tag => (
-                        <Badge kind="success" className="mr-1">
+                        <Badge color="success" className="mr-1">
                             {tag}
                         </Badge>
                     ))}
@@ -119,7 +119,7 @@ export class ActivityDetail extends mixin() {
                             <time datetime={date.toJSON()}>
                                 {Math.abs(distance)} {TimeUnitName[unit]}前
                             </time>
-                            <Badge kind="primary" className="mx-2">
+                            <Badge color="primary" className="mx-2">
                                 <FAIcon name="volume-down" size={2} />
                             </Badge>
                             {content}
@@ -191,7 +191,7 @@ export class ActivityDetail extends mixin() {
         } = activity.current;
 
         return (
-            <Fragment>
+            <>
                 <header className="d-lg-flex py-3">
                     <CarouselView controls indicators={!isMobile}>
                         {banners?.map(image => (
@@ -237,7 +237,7 @@ export class ActivityDetail extends mixin() {
                         />
                     </aside>
                 </div>
-            </Fragment>
+            </>
         );
     }
 }
