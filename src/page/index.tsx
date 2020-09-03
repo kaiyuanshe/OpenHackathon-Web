@@ -1,6 +1,5 @@
-import { component, createCell, Fragment } from 'web-cell';
-import { observer } from 'mobx-web-cell';
-import { HTMLRouter } from 'cell-router/source';
+import { createCell, Fragment } from 'web-cell';
+import { CellRouter } from 'cell-router/source';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
@@ -11,14 +10,7 @@ import { ActivityDetail, ActivityList } from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
-@observer
-@component({
-    tagName: 'page-router',
-    renderTarget: 'children'
-})
-export class PageRouter extends HTMLRouter {
-    protected history = history;
-    protected routes = [
+const routes = [
         {
             paths: [''],
             component: HomePage
@@ -39,8 +31,7 @@ export class PageRouter extends HTMLRouter {
             paths: ['team'],
             component: TeamPage
         }
-    ];
-
+    ],
     menu = [
         {
             title: '首页',
@@ -53,48 +44,51 @@ export class PageRouter extends HTMLRouter {
         }
     ];
 
-    render() {
-        return (
-            <>
-                <NavBar
-                    narrow
-                    brand={
-                        <img
-                            alt="开放黑客松"
-                            src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
-                            style={{ width: '2rem' }}
-                        />
-                    }
+export function PageRouter() {
+    return (
+        <>
+            <NavBar
+                narrow
+                brand={
+                    <img
+                        alt="开放黑客松"
+                        src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
+                        style={{ width: '2rem' }}
+                    />
+                }
+            >
+                {menu.map(({ title, ...rest }) => (
+                    <NavLink {...rest}>{title}</NavLink>
+                ))}
+                <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
+                    登录
+                </Button>
+            </NavBar>
+
+            <CellRouter
+                style={{ minHeight: '60vh' }}
+                history={history}
+                routes={routes}
+            />
+
+            <footer className="bg-dark text-white text-center py-5">
+                Proudly developed with
+                <a
+                    className="mx-1"
+                    target="_blank"
+                    href="https://web-cell.dev/"
                 >
-                    {this.menu.map(({ title, ...rest }) => (
-                        <NavLink {...rest}>{title}</NavLink>
-                    ))}
-                    <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
-                        登录
-                    </Button>
-                </NavBar>
-
-                <main style={{ minHeight: '60vh' }}>{super.render()}</main>
-
-                <footer className="bg-dark text-white text-center py-5">
-                    Proudly developed with
-                    <a
-                        className="mx-1"
-                        target="_blank"
-                        href="https://web-cell.dev/"
-                    >
-                        WebCell v2
-                    </a>
-                    &amp;
-                    <a
-                        className="mx-1"
-                        target="_blank"
-                        href="https://web-cell.dev/BootCell/"
-                    >
-                        BootCell v1
-                    </a>
-                </footer>
-            </>
-        );
-    }
+                    WebCell v2
+                </a>
+                &amp;
+                <a
+                    className="mx-1"
+                    target="_blank"
+                    href="https://web-cell.dev/BootCell/"
+                >
+                    BootCell v1
+                </a>
+            </footer>
+        </>
+    );
 }
