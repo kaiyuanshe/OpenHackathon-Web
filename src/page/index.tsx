@@ -6,7 +6,12 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import { history } from '../model';
 import { HomePage } from './Home';
-import { ActivityDetail, ActivityList } from './Activity';
+import {
+    ActivityDetail,
+    ActivityList,
+    CreateActivity,
+    ManagerOverview
+} from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
@@ -30,6 +35,14 @@ const routes = [
         {
             paths: ['team'],
             component: TeamPage
+        },
+        {
+            paths: ['create'],
+            component: CreateActivity
+        },
+        {
+            paths: ['manage'],
+            component: ManagerOverview
         }
     ],
     menu = [
@@ -46,7 +59,7 @@ const routes = [
 
 export function PageRouter() {
     return (
-        <>
+        <div>
             <NavBar
                 narrow
                 brand={
@@ -60,6 +73,11 @@ export function PageRouter() {
                 {menu.map(({ title, ...rest }) => (
                     <NavLink {...rest}>{title}</NavLink>
                 ))}
+                <div float="right">
+                    <NavLink href="manage" style={{ color: '#FFFFFF80' }}>
+                        发布活动
+                    </NavLink>
+                </div>
                 <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
                     登录
                 </Button>
@@ -89,6 +107,6 @@ export function PageRouter() {
                     BootCell v1
                 </a>
             </footer>
-        </>
+        </div>
     );
 }

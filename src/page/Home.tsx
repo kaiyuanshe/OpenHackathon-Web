@@ -17,17 +17,60 @@ import style from './Home.module.less';
 })
 export class HomePage extends mixin() {
     connectedCallback() {
-        activity.getNextPage({}, true), user.getActiveList();
+        activity.getNextPage({}, true);
+        user.getActiveList();
 
         super.connectedCallback();
     }
 
-    renderTab(list: Activity[]) {
+    renderTabLatestRelease(list: Activity[]) {
         return (
             <div className="d-flex justify-content-around flex-wrap">
                 {list.map(
                     item => item.banners?.[0] && <ActivityCard {...item} />
                 )}
+            </div>
+        );
+    }
+
+    renderTabPopular(list: Activity[]) {
+        list = list.sort((a, b) =>
+            a.stat?.register < b.stat?.register
+                ? 1
+                : a.stat?.register === b.stat?.register
+                ? a.stat?.like < b.stat?.like
+                    ? 1
+                    : -1
+                : -1
+        );
+        return (
+            <div className="d-flex justify-content-around flex-wrap">
+                {list.map(
+                    item => item.banners?.[0] && <ActivityCard {...item} />
+                )}
+            </div>
+        );
+    }
+
+    renderTabStarting(list: Activity[]) {
+        list = list.sort((a, b) => {
+            let a_days = +(
+                    (a.registration_end_time - Date.now()) /
+                    (1000 * 60 * 60 * 24)
+                ).toFixed(0),
+                b_days = +(
+                    (b.registration_end_time - Date.now()) /
+                    (1000 * 60 * 60 * 24)
+                ).toFixed(0);
+            return a_days < b_days ? 1 : -1;
+        });
+        return (
+            <div className="d-flex justify-content-around flex-wrap">
+                {list
+                    .filter(item => item.event_start_time > Date.now())
+                    .map(
+                        item => item.banners?.[0] && <ActivityCard {...item} />
+                    )}
             </div>
         );
     }
@@ -75,7 +118,7 @@ export class HomePage extends mixin() {
             }));
 
         return (
-            <>
+            <div>
                 <GalleryView
                     className="container py-3"
                     controls
@@ -91,7 +134,17 @@ export class HomePage extends mixin() {
                         </div>
                         <TabView mode="pills">
                             <NavLink>最新发布</NavLink>
-                            <TabPanel>{this.renderTab(activity.list)}</TabPanel>
+                            <TabPanel>
+                                {this.renderTabLatestRelease(activity.list)}
+                            </TabPanel>
+                            <NavLink>人气热点</NavLink>
+                            <TabPanel>
+                                {this.renderTabPopular(activity.list)}
+                            </TabPanel>
+                            <NavLink>即将开始</NavLink>
+                            <TabPanel>
+                                {this.renderTabStarting(activity.list)}
+                            </TabPanel>
                         </TabView>
                     </div>
                     <Button
@@ -116,7 +169,7 @@ export class HomePage extends mixin() {
                         </ol>
                     </section>
                 </div>
-            </>
+            </div>
         );
     }
 }

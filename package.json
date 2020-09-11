@@ -4,10 +4,10 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "boot-cell": "^1.0.1",
+        "boot-cell": "^1.0.3",
         "bootstrap-icons": "^1.0.0",
         "browser-unhandled-rejection": "^1.0.2",
-        "cell-router": "^2.0.0",
+        "cell-router": "^2.0.1",
         "classnames": "^2.2.6",
         "core-js": "^3.6.5",
         "koajax": "^0.6.2",
@@ -19,7 +19,7 @@
     },
     "devDependencies": {
         "@types/classnames": "^2.2.10",
-        "@types/core-js": "^2.5.3",
+        "@types/core-js": "^2.5.4",
         "@typescript-eslint/parser": "^4.0.1",
         "autoprefixer": "^9.8.6",
         "eslint": "^7.8.1",
