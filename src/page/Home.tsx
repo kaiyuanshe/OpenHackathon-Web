@@ -4,6 +4,7 @@ import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
+import { Image } from 'boot-cell/source/Media/Image';
 
 import { isMobile } from '../utility';
 import { ActivityCard, GalleryView } from '../component';
@@ -78,17 +79,54 @@ export class HomePage extends mixin() {
     renderLogoSection(title: string, list: typeof partner.host) {
         return (
             <section className="text-center text-md-left">
-                <h2>{title}</h2>
+                <div className="row text-center">
+                    <div className="col col-md-5">
+                        <hr
+                            style={{
+                                backgroundColor: '#00AD1C',
+                                height: '1px',
+                                width: '100%'
+                            }}
+                        />
+                    </div>
+                    <div className="col col-md-2">
+                        <h5>{title}</h5>
+                    </div>
+                    <div className="col col-md-5">
+                        <hr
+                            style={{
+                                backgroundColor: '#00AD1C',
+                                height: '1px',
+                                width: '100%'
+                            }}
+                        />
+                    </div>
+                </div>
                 <ul className="list-inline">
                     {list.map(({ url, name, logo }) => (
-                        <li className="list-inline-item">
+                        <li className="list-inline-item mb-3">
                             <a
                                 className={style.logo}
                                 target="_blank"
                                 href={url}
                                 title={name}
                             >
-                                <img src={logo} />
+                                <div
+                                    style={{
+                                        width: '165px',
+                                        height: '80px',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    <img
+                                        src={logo}
+                                        style={{
+                                            margin: '-25% 0 0 0',
+                                            width: '162px',
+                                            height: '162px'
+                                        }}
+                                    />
+                                </div>
                             </a>
                         </li>
                     ))}
@@ -128,12 +166,8 @@ export class HomePage extends mixin() {
                 />
                 <section className="py-5 bg-light">
                     <div className="container d-flex">
-                        <div className="d-none d-md-block mr-3">
-                            <h2>推荐活动</h2>
-                            <img src="https://hacking.kaiyuanshe.cn/static/images/index-07.png" />
-                        </div>
                         <TabView mode="pills">
-                            <NavLink>最新发布</NavLink>
+                            <NavLink>最新活动</NavLink>
                             <TabPanel>
                                 {this.renderTabLatestRelease(activity.list)}
                             </TabPanel>
@@ -161,13 +195,28 @@ export class HomePage extends mixin() {
                     <div>
                         {this.renderLogoSection('赞助伙伴', partner.sponsor)}
                         {this.renderLogoSection('合作主办', partner.host)}
+                        <section className="text-center text-md-left">
+                            <div className="row">
+                                <div className="col-2">
+                                    <h4>活跃用户</h4>
+                                </div>
+                                <div className="col-10">
+                                    <hr
+                                        style={{
+                                            backgroundColor: '#FD8900',
+                                            height: '1px',
+                                            width: '100%'
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <ul className="list-inline">
+                                <li className="list-inline-item d-flex flex-wrap justify-content-around">
+                                    {user.activeList.map(this.renderUser)}
+                                </li>
+                            </ul>
+                        </section>
                     </div>
-                    <section>
-                        <h2 className="text-center text-md-left">活跃用户</h2>
-                        <ol className="list-unstyled d-md-block d-flex flex-wrap justify-content-around">
-                            {user.activeList.map(this.renderUser)}
-                        </ol>
-                    </section>
                 </div>
             </div>
         );

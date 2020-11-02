@@ -47,8 +47,8 @@ const routes = [
     ],
     menu = [
         {
-            title: '首页',
-            href: ''
+            title: '黑客松活动',
+            href: 'activity/list'
         },
         {
             title: '新手帮助',

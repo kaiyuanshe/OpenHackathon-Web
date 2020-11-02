@@ -1,6 +1,7 @@
 import { createCell } from 'web-cell';
 import { Card } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
+import { Button } from 'boot-cell/source/Form/Button';
 
 import { Activity } from '../model';
 
@@ -23,19 +24,44 @@ export function ActivityCard({
     return (
         <Card
             className="mb-3"
-            style={{ width: '18rem' }}
+            style={{
+                width: '18rem',
+                border: '3px solid #00AD1C',
+                borderRadius: '10px',
+                display: 'flex',
+                flexFlow: 'column'
+            }}
             title={<a href={'activity?name=' + name}>{display_name}</a>}
-            image={banners[0]}
             footer={
-                <small className="d-flex justify-content-between">
-                    <time datetime={new Date(registration_end_time).toJSON()}>
-                        报名截止 {days < 0 ? '--' : days} 天
-                    </time>
-                    <span>
-                        <FAIcon name="heart" color="danger" /> {stat?.like}
-                    </span>
-                    <span>{stat?.register}人报名</span>
-                </small>
+                <div>
+                    <small className="d-flex justify-content-between mb-2">
+                        <time
+                            datetime={new Date(registration_end_time).toJSON()}
+                        >
+                            报名截止 {days < 0 ? '--' : days} 天
+                        </time>
+                        <span>
+                            <FAIcon name="heart" color="danger" /> {stat?.like}
+                        </span>
+                        <span>{stat?.register}人报名</span>
+                    </small>
+                    {days > 0 ? (
+                        <Button
+                            color="primary"
+                            style={{ transform: 'translate(4rem, 0)' }}
+                        >
+                            报名参加
+                        </Button>
+                    ) : (
+                        <Button
+                            color="secondary"
+                            style={{ transform: 'translate(4rem, 0)' }}
+                            disabled
+                        >
+                            报名已截止
+                        </Button>
+                    )}
+                </div>
             }
         >
             <small className="d-flex justify-content-between">
