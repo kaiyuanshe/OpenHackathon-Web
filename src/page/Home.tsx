@@ -4,7 +4,7 @@ import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
-import { Image } from 'boot-cell/source/Media/Image';
+import { Icon } from 'boot-cell/source/Reminder/Icon';
 
 import { isMobile } from '../utility';
 import { ActivityCard, GalleryView } from '../component';
@@ -53,7 +53,7 @@ export class HomePage extends mixin() {
         );
     }
 
-    renderTabStarting(list: Activity[]) {
+    renderTabUpcoming(list: Activity[]) {
         list = list.sort((a, b) => {
             let a_days = +(
                     (a.registration_end_time - Date.now()) /
@@ -79,29 +79,8 @@ export class HomePage extends mixin() {
     renderLogoSection(title: string, list: typeof partner.host) {
         return (
             <section className="text-center text-md-left">
-                <div className="row text-center">
-                    <div className="col col-md-5">
-                        <hr
-                            style={{
-                                backgroundColor: '#00AD1C',
-                                height: '1px',
-                                width: '100%'
-                            }}
-                        />
-                    </div>
-                    <div className="col col-md-2">
-                        <h5>{title}</h5>
-                    </div>
-                    <div className="col col-md-5">
-                        <hr
-                            style={{
-                                backgroundColor: '#00AD1C',
-                                height: '1px',
-                                width: '100%'
-                            }}
-                        />
-                    </div>
-                </div>
+                <h5 className={style.logoSectionTitle}>{title}</h5>
+
                 <ul className="list-inline">
                     {list.map(({ url, name, logo }) => (
                         <li className="list-inline-item mb-3">
@@ -111,22 +90,7 @@ export class HomePage extends mixin() {
                                 href={url}
                                 title={name}
                             >
-                                <div
-                                    style={{
-                                        width: '165px',
-                                        height: '80px',
-                                        overflow: 'hidden'
-                                    }}
-                                >
-                                    <img
-                                        src={logo}
-                                        style={{
-                                            margin: '-25% 0 0 0',
-                                            width: '162px',
-                                            height: '162px'
-                                        }}
-                                    />
-                                </div>
+                                <img src={logo} />
                             </a>
                         </li>
                     ))}
@@ -164,7 +128,7 @@ export class HomePage extends mixin() {
                     interval={isMobile ? 0 : 3}
                     list={banner}
                 />
-                <section className="py-5 bg-light">
+                <section className="py-5 bg-light" id="activities">
                     <div className="container d-flex">
                         <TabView mode="pills">
                             <NavLink>最新活动</NavLink>
@@ -177,7 +141,7 @@ export class HomePage extends mixin() {
                             </TabPanel>
                             <NavLink>即将开始</NavLink>
                             <TabPanel>
-                                {this.renderTabStarting(activity.list)}
+                                {this.renderTabUpcoming(activity.list)}
                             </TabPanel>
                         </TabView>
                     </div>
@@ -192,24 +156,15 @@ export class HomePage extends mixin() {
                     </Button>
                 </section>
                 <div className="py-5 container d-flex flex-column flex-md-row align-items-center align-items-md-start">
-                    <div>
+                    <div id="sponsors">
                         {this.renderLogoSection('赞助伙伴', partner.sponsor)}
                         {this.renderLogoSection('合作主办', partner.host)}
-                        <section className="text-center text-md-left">
-                            <div className="row">
-                                <div className="col-2">
-                                    <h4>活跃用户</h4>
-                                </div>
-                                <div className="col-10">
-                                    <hr
-                                        style={{
-                                            backgroundColor: '#FD8900',
-                                            height: '1px',
-                                            width: '100%'
-                                        }}
-                                    />
-                                </div>
-                            </div>
+                        <section
+                            className="text-center text-md-left"
+                            id="activeUsers"
+                        >
+                            <h5 className={style.userSectionTitle}>活跃用户</h5>
+
                             <ul className="list-inline">
                                 <li className="list-inline-item d-flex flex-wrap justify-content-around">
                                     {user.activeList.map(this.renderUser)}
@@ -217,6 +172,36 @@ export class HomePage extends mixin() {
                             </ul>
                         </section>
                     </div>
+                </div>
+
+                <div className={style.vl}>
+                    <a
+                        href="#activities"
+                        class="button"
+                        className={style.icons}
+                        title={'最新活动'}
+                        style={{ textDecoration: 'none', top: '200px' }}
+                    >
+                        <Icon name="circle-fill" width={20} />
+                    </a>
+                    <a
+                        href="#sponsors"
+                        class="button"
+                        className={style.icons}
+                        title={'赞助合作'}
+                        style={{ textDecoration: 'none', top: '270px' }}
+                    >
+                        <Icon name="circle-fill" width={20} />
+                    </a>
+                    <a
+                        href="#activeUsers"
+                        class="button"
+                        className={style.icons}
+                        title={'活跃用户'}
+                        style={{ textDecoration: 'none', top: '340px' }}
+                    >
+                        <Icon name="circle-fill" width={20} />
+                    </a>
                 </div>
             </div>
         );

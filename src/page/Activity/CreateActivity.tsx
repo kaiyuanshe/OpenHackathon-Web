@@ -20,8 +20,162 @@ export class CreateActivity extends mixin() {
                         className="text-center"
                         onSubmit={event => event.preventDefault()}
                     >
-                        <FormField label="名称" placeholder="名称" />
-                        <FormField label="显示名称" placeholder="显示名称" />
+                        <FormField
+                            label="名称*"
+                            labelColumn={2}
+                            placeholder="名称"
+                            required
+                        />
+                        <FormField
+                            label="显示名称*"
+                            labelColumn={2}
+                            placeholder="显示名称"
+                            required
+                        />
+                        <FormField
+                            label="标签"
+                            labelColumn={2}
+                            placeholder="标签"
+                        />
+                        <FormField
+                            label="活动地址"
+                            labelColumn={2}
+                            placeholder="活动地址"
+                        />
+
+                        <div className="row">
+                            <label className="col-2">活动时间*</label>
+                            <div className="col-5">
+                                <FormField
+                                    label="开始日期"
+                                    labelColumn={2}
+                                    placeholder="开始日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="开始时间"
+                                    labelColumn={2}
+                                    placeholder="开始时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                            <div className="col-5">
+                                <FormField
+                                    label="结束日期"
+                                    labelColumn={2}
+                                    placeholder="结束日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="结束时间"
+                                    labelColumn={2}
+                                    placeholder="结束时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <label className="col-2">报名时间*</label>
+                            <div className="col-5">
+                                <FormField
+                                    label="开始日期"
+                                    labelColumn={2}
+                                    placeholder="开始日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="开始时间"
+                                    labelColumn={2}
+                                    placeholder="开始时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                            <div className="col-5">
+                                <FormField
+                                    label="结束日期"
+                                    labelColumn={2}
+                                    placeholder="结束日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="结束时间"
+                                    labelColumn={2}
+                                    placeholder="结束时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <label className="col-2">评分时间*</label>
+                            <div className="col-5">
+                                <FormField
+                                    label="开始日期"
+                                    labelColumn={2}
+                                    placeholder="开始日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="开始时间"
+                                    labelColumn={2}
+                                    placeholder="开始时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                            <div className="col-5">
+                                <FormField
+                                    label="结束日期"
+                                    labelColumn={2}
+                                    placeholder="结束日期"
+                                    type="date"
+                                    required
+                                />
+                                <FormField
+                                    label="结束时间"
+                                    labelColumn={2}
+                                    placeholder="结束时间"
+                                    type="time"
+                                    value="00:00"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <FormField
+                            label="广告语"
+                            labelColumn={2}
+                            placeholder="广告语"
+                        />
+                        <FormField
+                            label="报名人数限制"
+                            labelColumn={2}
+                            placeholder="报名人数限制（0表示无限）"
+                            type="number"
+                        />
+                        <FormField
+                            label="活动简介"
+                            labelColumn={2}
+                            placeholder="活动简介"
+                        />
+                        <FormField
+                            label="活动详情"
+                            labelColumn={2}
+                            placeholder="活动详情"
+                            is="textarea"
+                        />
                         <Button type="submit">Next</Button>
                     </form>
                 </TabPanel>

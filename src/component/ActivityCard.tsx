@@ -23,14 +23,8 @@ export function ActivityCard({
 
     return (
         <Card
-            className="mb-3"
-            style={{
-                width: '18rem',
-                border: '3px solid #00AD1C',
-                borderRadius: '10px',
-                display: 'flex',
-                flexFlow: 'column'
-            }}
+            className="mb-3 d-flex border border-success rounded-lg"
+            style={{ width: '18rem' }}
             title={<a href={'activity?name=' + name}>{display_name}</a>}
             footer={
                 <div>
@@ -47,15 +41,19 @@ export function ActivityCard({
                     </small>
                     {days > 0 ? (
                         <Button
+                            block
+                            justify-content-center
+                            className="w-75 m-auto"
                             color="primary"
-                            style={{ transform: 'translate(4rem, 0)' }}
                         >
                             报名参加
                         </Button>
                     ) : (
                         <Button
+                            block
+                            justify-content-center
+                            className="w-75 m-auto"
                             color="secondary"
-                            style={{ transform: 'translate(4rem, 0)' }}
                             disabled
                         >
                             报名已截止

@@ -2,6 +2,9 @@
     display: block;
     margin-bottom: 0.5rem;
     position: relative;
+    width: 165px;
+    height: 80px;
+    overflow: hidden;
 
     &::before {
         position: absolute;
@@ -23,6 +26,70 @@
         opacity: 1;
     }
     & > img {
-        width: 182px;
+        width: 162px;
+        margin: -25% 0 0 0;
     }
+}
+
+.logoSectionTitle {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    &::before,
+    &::after {
+        margin: 0 7% 0 7%;
+        flex: 1 0 20px;
+        content: '';
+        border-top: 1.5px solid #00ad1c;
+    }
+}
+
+.userSectionTitle {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    &::after {
+        margin: 0 4% 0 4%;
+        flex: 1 0 20px;
+        content: '';
+        border-top: 1.5px solid #fd8900;
+    }
+}
+
+.icons {
+    display: block;
+    z-index: 1;
+    position: fixed;
+    align-items: center;
+    left: 5px;
+    right: 2em;
+    color: #8dda99;
+    width: max-content;
+    &::after {
+        content: attr(title);
+        margin: 0 0 0 10;
+        flex: 1 0 20px;
+        opacity: 0;
+        font-size: medium;
+        height: 28px;
+        width: 100px;
+    }
+    &:hover {
+        color: #00ad1c;
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+.vl {
+    border-left: 1px solid #00ad1d49;
+    position: fixed;
+    left: 15.5px;
+    top: 220px;
+    height: 140px;
 }
