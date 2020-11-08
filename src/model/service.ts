@@ -1,9 +1,21 @@
-import 'core-js/es/string/match-all';
 import { HTTPClient } from 'koajax';
 
+var token: string = self.localStorage.token || '';
+
+export const setToken = (raw: string) =>
+    (self.localStorage.token = token = raw);
+
 export const service = new HTTPClient({
-    baseURI: 'https://hacking.kaiyuanshe.cn:15000/api/',
+    baseURI:
+        self.location.hostname === 'localhost'
+            ? 'http://139.219.9.2:30150/api/'
+            : 'https://hacking.kaiyuanshe.cn:15000/api/',
     responseType: 'json'
+}).use(({ request }, next) => {
+    if (token)
+        (request.headers = request.headers || {})['Authorization'] =
+            'token ' + token;
+    return next();
 });
 
 export interface ListFilter {

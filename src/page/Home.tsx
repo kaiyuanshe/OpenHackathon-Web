@@ -57,8 +57,16 @@ export class HomePage extends mixin() {
     renderUser = ({ avatar_url, id, nickname, profile }: User) => (
         <MediaObject
             listItem
+            className="position-relative"
             image={avatar_url}
-            title={<a href={'user?uid=' + id}>{nickname}</a>}
+            title={
+                <a
+                    className="stretched-link text-nowrap"
+                    href={'user?uid=' + id}
+                >
+                    {nickname}
+                </a>
+            }
         >
             <p className="text-nowrap">{profile?.career_type}</p>
         </MediaObject>

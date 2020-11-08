@@ -4,7 +4,8 @@ import { NavBar } from 'boot-cell/source/Navigator/NavBar';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { history } from '../model';
+import logo from '../image/logo.png';
+import { history, session } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
 import { UserPage } from './User';
@@ -44,6 +45,21 @@ const routes = [
         }
     ];
 
+async function signIn() {
+    const Guard = await import('@authing/guard');
+
+    const dialog = new Guard('5f0e628e4ba608e9a69533ae', {
+        mountId: 'sign-in',
+        title: document.title,
+        logo
+    });
+    dialog.on('login', async ({ data }) => {
+        await session.signIn(data);
+
+        dialog.hide();
+    });
+}
+
 export function PageRouter() {
     return (
         <>
@@ -60,9 +76,7 @@ export function PageRouter() {
                 {menu.map(({ title, ...rest }) => (
                     <NavLink {...rest}>{title}</NavLink>
                 ))}
-                <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
-                    登录
-                </Button>
+                <Button onClick={signIn}>登录</Button>
             </NavBar>
 
             <CellRouter
@@ -70,7 +84,6 @@ export function PageRouter() {
                 history={history}
                 routes={routes}
             />
-
             <footer className="bg-dark text-white text-center py-5">
                 Proudly developed with
                 <a
