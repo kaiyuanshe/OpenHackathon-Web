@@ -41,18 +41,14 @@ export function ActivityCard({
                     </small>
                     {days > 0 ? (
                         <Button
-                            block
-                            justify-content-center
-                            className="w-75 m-auto"
+                            className="w-75 m-auto d-block justify-content-center"
                             color="primary"
                         >
                             报名参加
                         </Button>
                     ) : (
                         <Button
-                            block
-                            justify-content-center
-                            className="w-75 m-auto"
+                            className="w-75 m-auto d-block justify-content-center"
                             color="secondary"
                             disabled
                         >

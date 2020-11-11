@@ -180,7 +180,7 @@ export class HomePage extends mixin() {
                         class="button"
                         className={style.icons}
                         title={'最新活动'}
-                        style={{ textDecoration: 'none', top: '200px' }}
+                        style={{ textDecoration: 'none', top: '-10px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>
@@ -189,7 +189,7 @@ export class HomePage extends mixin() {
                         class="button"
                         className={style.icons}
                         title={'赞助合作'}
-                        style={{ textDecoration: 'none', top: '270px' }}
+                        style={{ textDecoration: 'none', top: '60px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>
@@ -198,7 +198,7 @@ export class HomePage extends mixin() {
                         class="button"
                         className={style.icons}
                         title={'活跃用户'}
-                        style={{ textDecoration: 'none', top: '340px' }}
+                        style={{ textDecoration: 'none', top: '130px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>

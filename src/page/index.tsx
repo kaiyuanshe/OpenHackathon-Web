@@ -78,9 +78,6 @@ export function PageRouter() {
                         发布活动
                     </NavLink>
                 </div>
-                <Button href="https://github.com/login/oauth/authorize?client_id=4c42893ddf18f872bfae">
-                    登录
-                </Button>
             </NavBar>
 
             <CellRouter

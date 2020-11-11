@@ -145,7 +145,7 @@ export class ActivityDetail extends mixin() {
                     }) => (
                         <li
                             className="border overflow-hidden mb-3"
-                            style={{ width: 200 }}
+                            style={{ width: '200' }}
                         >
                             <div className="d-flex border-bottom">
                                 <img className={style.logo} src={logo} />
