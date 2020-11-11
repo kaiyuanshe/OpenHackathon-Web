@@ -31,4 +31,6 @@ serviceWorker?.addEventListener('controllerchange', () =>
     window.location.reload()
 );
 
-documentReady.then(() => render(<PageRouter />));
+documentReady.then(() =>
+    render(<PageRouter />, document.querySelector('#root'))
+);
