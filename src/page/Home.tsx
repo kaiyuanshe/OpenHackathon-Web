@@ -35,14 +35,9 @@ export class HomePage extends mixin() {
     }
 
     renderTabPopular(list: Activity[]) {
-        list = list.sort((a, b) =>
-            a.stat?.register < b.stat?.register
-                ? 1
-                : a.stat?.register === b.stat?.register
-                ? a.stat?.like < b.stat?.like
-                    ? 1
-                    : -1
-                : -1
+        list = list.sort(
+            ({ stat: a }, { stat: b }) =>
+                b?.register - a?.register || b?.like - a?.like
         );
         return (
             <div className="d-flex justify-content-around flex-wrap">
@@ -54,24 +49,19 @@ export class HomePage extends mixin() {
     }
 
     renderTabUpcoming(list: Activity[]) {
-        list = list.sort((a, b) => {
-            let a_days = +(
-                    (a.registration_end_time - Date.now()) /
-                    (1000 * 60 * 60 * 24)
-                ).toFixed(0),
-                b_days = +(
-                    (b.registration_end_time - Date.now()) /
-                    (1000 * 60 * 60 * 24)
-                ).toFixed(0);
-            return a_days < b_days ? 1 : -1;
-        });
+        const now = Date.now();
+
+        list = list
+            .filter(({ event_start_time: start }) => start > now)
+            .sort(
+                ({ registration_end_time: A }, { registration_end_time: B }) =>
+                    B - A
+            );
         return (
             <div className="d-flex justify-content-around flex-wrap">
-                {list
-                    .filter(item => item.event_start_time > Date.now())
-                    .map(
-                        item => item.banners?.[0] && <ActivityCard {...item} />
-                    )}
+                {list.map(
+                    item => item.banners?.[0] && <ActivityCard {...item} />
+                )}
             </div>
         );
     }
@@ -101,7 +91,6 @@ export class HomePage extends mixin() {
 
     renderUser = ({ avatar_url, id, nickname, profile }: User) => (
         <MediaObject
-            listItem
             className="position-relative"
             image={avatar_url}
             title={
@@ -128,7 +117,7 @@ export class HomePage extends mixin() {
             }));
 
         return (
-            <div>
+            <>
                 <GalleryView
                     className="container py-3"
                     controls
@@ -173,11 +162,9 @@ export class HomePage extends mixin() {
                         >
                             <h5 className={style.userSectionTitle}>活跃用户</h5>
 
-                            <ul className="list-inline">
-                                <li className="list-inline-item d-flex flex-wrap justify-content-around">
-                                    {user.activeList.map(this.renderUser)}
-                                </li>
-                            </ul>
+                            <div className="d-flex flex-wrap justify-content-around">
+                                {user.activeList.map(this.renderUser)}
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -185,33 +172,30 @@ export class HomePage extends mixin() {
                 <div className={style.vl}>
                     <a
                         href="#activities"
-                        class="button"
                         className={style.icons}
-                        title={'最新活动'}
-                        style={{ textDecoration: 'none', top: '-10px' }}
+                        title="最新活动"
+                        style={{ top: '-10px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>
                     <a
                         href="#sponsors"
-                        class="button"
                         className={style.icons}
-                        title={'赞助合作'}
-                        style={{ textDecoration: 'none', top: '60px' }}
+                        title="赞助合作"
+                        style={{ top: '60px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>
                     <a
                         href="#activeUsers"
-                        class="button"
                         className={style.icons}
-                        title={'活跃用户'}
-                        style={{ textDecoration: 'none', top: '130px' }}
+                        title="活跃用户"
+                        style={{ top: '130px' }}
                     >
                         <Icon name="circle-fill" width={20} />
                     </a>
                 </div>
-            </div>
+            </>
         );
     }
 }

@@ -1,8 +1,10 @@
-import { createCell, Fragment } from 'web-cell';
+import { component, mixin, createCell, Fragment } from 'web-cell';
 import { CellRouter } from 'cell-router/source';
+import { observer } from 'mobx-web-cell';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
+import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
 import logo from '../image/logo.png';
 import { history, session } from '../model';
@@ -16,7 +18,13 @@ import {
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
-const routes = [
+@observer
+@component({
+    tagName: 'page-router',
+    renderTarget: 'children'
+})
+export class PageRouter extends mixin() {
+    routes = [
         {
             paths: [''],
             component: HomePage
@@ -45,7 +53,8 @@ const routes = [
             paths: ['manage'],
             component: ManagerOverview
         }
-    ],
+    ];
+
     menu = [
         {
             title: '黑客松活动',
@@ -58,63 +67,74 @@ const routes = [
         }
     ];
 
-async function signIn() {
-    const Guard = await import('@authing/guard');
+    async signIn() {
+        const Guard = await import('@authing/guard');
 
-    const dialog = new Guard('5f0e628e4ba608e9a69533ae', {
-        mountId: 'sign-in',
-        title: document.title,
-        logo
-    });
-    dialog.on('login', async ({ data }) => {
-        await session.signIn(data);
+        const dialog = new Guard('5f0e628e4ba608e9a69533ae', {
+            mountId: 'sign-in',
+            title: document.title,
+            logo
+        });
+        dialog.on('login', async ({ data }) => {
+            await session.signIn(data);
 
-        dialog.hide();
-    });
-}
+            dialog.hide();
+        });
+    }
 
-export function PageRouter() {
-    return (
-        <div>
-            <NavBar
-                narrow
-                brand={
-                    <img
-                        alt="开放黑客松"
-                        src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
-                        style={{ width: '2rem' }}
-                    />
-                }
-            >
-                {menu.map(({ title, ...rest }) => (
-                    <NavLink {...rest}>{title}</NavLink>
-                ))}
-                <Button onClick={signIn}>登录</Button>
-            </NavBar>
+    render() {
+        const { menu, routes } = this;
 
-            <CellRouter
-                style={{ minHeight: '60vh' }}
-                history={history}
-                routes={routes}
-            />
-            <footer className="bg-dark text-white text-center py-5">
-                Proudly developed with
-                <a
-                    className="mx-1"
-                    target="_blank"
-                    href="https://web-cell.dev/"
+        return (
+            <>
+                <NavBar
+                    narrow
+                    brand={
+                        <img
+                            alt="开放黑客松"
+                            src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
+                            style={{ width: '2rem' }}
+                        />
+                    }
                 >
-                    WebCell v2
-                </a>
-                &amp;
-                <a
-                    className="mx-1"
-                    target="_blank"
-                    href="https://web-cell.dev/BootCell/"
-                >
-                    BootCell v1
-                </a>
-            </footer>
-        </div>
-    );
+                    {menu.map(({ title, ...rest }) => (
+                        <NavLink {...rest}>{title}</NavLink>
+                    ))}
+                    {!session.user ? (
+                        <Button onClick={this.signIn}>登录</Button>
+                    ) : (
+                        <DropMenu caption={session.user.nickname}>
+                            <DropMenuItem onClick={() => session.signOut()}>
+                                退出
+                            </DropMenuItem>
+                        </DropMenu>
+                    )}
+                </NavBar>
+
+                <CellRouter
+                    style={{ minHeight: '60vh' }}
+                    history={history}
+                    routes={routes}
+                />
+                <footer className="bg-dark text-white text-center py-5">
+                    Proudly developed with
+                    <a
+                        className="mx-1"
+                        target="_blank"
+                        href="https://web-cell.dev/"
+                    >
+                        WebCell v2
+                    </a>
+                    &amp;
+                    <a
+                        className="mx-1"
+                        target="_blank"
+                        href="https://web-cell.dev/BootCell/"
+                    >
+                        BootCell v1
+                    </a>
+                </footer>
+            </>
+        );
+    }
 }

@@ -8,7 +8,6 @@ import { Activity } from '../model';
 export function ActivityCard({
     name,
     display_name,
-    banners,
     event_start_time,
     location,
     tags,
@@ -71,7 +70,7 @@ export function ActivityCard({
             <hr />
             <ul className="list-inline text-success">
                 {tags.map(tag => (
-                    <li class="list-inline-item">
+                    <li className="list-inline-item">
                         <small>{tag}</small>
                     </li>
                 ))}

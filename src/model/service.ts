@@ -1,13 +1,14 @@
 import { HTTPClient } from 'koajax';
 
-var token: string = self.localStorage.token || '';
+const { localStorage, location } = self;
 
-export const setToken = (raw: string) =>
-    (self.localStorage.token = token = raw);
+var token: string = localStorage.token || '';
+
+export const setToken = (raw: string) => (localStorage.token = token = raw);
 
 export const service = new HTTPClient({
     baseURI:
-        self.location.hostname === 'localhost'
+        location.hostname === 'localhost'
             ? 'http://139.219.9.2:30150/api/'
             : 'https://hacking.kaiyuanshe.cn:15000/api/',
     responseType: 'json'
