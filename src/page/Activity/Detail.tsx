@@ -145,7 +145,7 @@ export class ActivityDetail extends mixin() {
                     }) => (
                         <li
                             className="border overflow-hidden mb-3"
-                            style={{ width: 200 }}
+                            style={{ width: '200' }}
                         >
                             <div className="d-flex border-bottom">
                                 <img className={style.logo} src={logo} />
@@ -191,7 +191,7 @@ export class ActivityDetail extends mixin() {
         } = activity.current;
 
         return (
-            <>
+            <div>
                 <header className="d-lg-flex py-3">
                     <CarouselView controls indicators={!isMobile}>
                         {banners?.map(image => (
@@ -237,7 +237,7 @@ export class ActivityDetail extends mixin() {
                         />
                     </aside>
                 </div>
-            </>
+            </div>
         );
     }
 }

@@ -1,6 +1,7 @@
 import { createCell } from 'web-cell';
 import { Card } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
+import { Button } from 'boot-cell/source/Form/Button';
 
 import { Activity } from '../model';
 
@@ -22,20 +23,39 @@ export function ActivityCard({
 
     return (
         <Card
-            className="mb-3"
+            className="mb-3 d-flex border border-success rounded-lg"
             style={{ width: '18rem' }}
             title={<a href={'activity?name=' + name}>{display_name}</a>}
-            image={banners[0]}
             footer={
-                <small className="d-flex justify-content-between">
-                    <time datetime={new Date(registration_end_time).toJSON()}>
-                        报名截止 {days < 0 ? '--' : days} 天
-                    </time>
-                    <span>
-                        <FAIcon name="heart" color="danger" /> {stat?.like}
-                    </span>
-                    <span>{stat?.register}人报名</span>
-                </small>
+                <div>
+                    <small className="d-flex justify-content-between mb-2">
+                        <time
+                            datetime={new Date(registration_end_time).toJSON()}
+                        >
+                            报名截止 {days < 0 ? '--' : days} 天
+                        </time>
+                        <span>
+                            <FAIcon name="heart" color="danger" /> {stat?.like}
+                        </span>
+                        <span>{stat?.register}人报名</span>
+                    </small>
+                    {days > 0 ? (
+                        <Button
+                            className="w-75 m-auto d-block justify-content-center"
+                            color="primary"
+                        >
+                            报名参加
+                        </Button>
+                    ) : (
+                        <Button
+                            className="w-75 m-auto d-block justify-content-center"
+                            color="secondary"
+                            disabled
+                        >
+                            报名已截止
+                        </Button>
+                    )}
+                </div>
             }
         >
             <small className="d-flex justify-content-between">

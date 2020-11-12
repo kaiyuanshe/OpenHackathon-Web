@@ -7,7 +7,12 @@ import { Button } from 'boot-cell/source/Form/Button';
 import logo from '../image/logo.png';
 import { history, session } from '../model';
 import { HomePage } from './Home';
-import { ActivityDetail, ActivityList } from './Activity';
+import {
+    ActivityDetail,
+    ActivityList,
+    CreateActivity,
+    ManagerOverview
+} from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
@@ -31,12 +36,20 @@ const routes = [
         {
             paths: ['team'],
             component: TeamPage
+        },
+        {
+            paths: ['create'],
+            component: CreateActivity
+        },
+        {
+            paths: ['manage'],
+            component: ManagerOverview
         }
     ],
     menu = [
         {
-            title: '首页',
-            href: ''
+            title: '黑客松活动',
+            href: 'activity/list'
         },
         {
             title: '新手帮助',
@@ -62,7 +75,7 @@ async function signIn() {
 
 export function PageRouter() {
     return (
-        <>
+        <div>
             <NavBar
                 narrow
                 brand={
@@ -102,6 +115,6 @@ export function PageRouter() {
                     BootCell v1
                 </a>
             </footer>
-        </>
+        </div>
     );
 }
