@@ -9,12 +9,7 @@ import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 import logo from '../image/logo.png';
 import { history, session } from '../model';
 import { HomePage } from './Home';
-import {
-    ActivityDetail,
-    ActivityList,
-    CreateActivity,
-    ManagerOverview
-} from './Activity';
+import { ActivityDetail, ActivityList, ManagerOverview } from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
@@ -47,7 +42,8 @@ export class PageRouter extends mixin() {
         },
         {
             paths: ['create'],
-            component: CreateActivity
+            component: async () =>
+                (await import('./Activity/CreateActivity')).CreateActivity
         },
         {
             paths: ['manage'],

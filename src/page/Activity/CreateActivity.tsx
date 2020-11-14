@@ -5,8 +5,8 @@ import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { TimeRange } from '../../component';
-import { bootEditor } from '../../utility';
+import { TimeRange } from '../../component/TimeRange';
+import { bootEditor } from '../../component/HTMLEditor';
 
 @observer
 @component({
