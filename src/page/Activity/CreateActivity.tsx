@@ -6,6 +6,7 @@ import { FormField } from 'boot-cell/source/Form/FormField';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { TimeRange } from '../../component';
+import { bootEditor } from '../../utility';
 
 @observer
 @component({
@@ -83,13 +84,14 @@ export class CreateActivity extends mixin() {
                     labelColumn={2}
                     placeholder="活动简介"
                 />
-                <FormField
-                    label="活动详情"
-                    labelColumn={2}
-                    placeholder="活动详情"
-                    is="textarea"
+                <div
+                    ref={(box: HTMLElement) =>
+                        bootEditor(box, { placeholder: '活动详情' })
+                    }
                 />
-                <Button type="submit">Next</Button>
+                <Button type="submit" className="mt-3">
+                    Next
+                </Button>
             </form>
         );
     }
