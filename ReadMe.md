@@ -3,7 +3,7 @@
 **Progressive Web App** of [Open Hackathon platform][1] based on [WebCell v2][2]
 
 [![NPM Dependency](https://david-dm.org/kaiyuanshe/OpenHackathon-Web.svg)][3]
-[![Build Status](https://travis-ci.com/kaiyuanshe/OpenHackathon-Web.svg?branch=master)][4]
+[![CI & CD](https://github.com/kaiyuanshe/OpenHackathon-Web/workflows/CI%20&%20CD/badge.svg)][4]
 
 ## Key links
 
@@ -19,7 +19,7 @@
 -   State management: [MobX v5][8]
 -   PWA framework: [Workbox v4][9]
 -   Package bundler: [Parcel v1][10]
--   CI / CD: [Travis CI][11] + [GitHub Pages][12]
+-   CI / CD: GitHub [Actions][11] + [Pages][12]
 
 ## Development
 
@@ -41,12 +41,12 @@ npm run build
 [1]: https://hacking.kaiyuanshe.cn/
 [2]: https://web-cell.dev/
 [3]: https://david-dm.org/kaiyuanshe/OpenHackathon-Web
-[4]: https://travis-ci.com/kaiyuanshe/OpenHackathon-Web
+[4]: https://github.com/kaiyuanshe/OpenHackathon-Web/actions
 [5]: https://typescriptlang.org
 [6]: https://web-cell.dev/
 [7]: https://bootstrap.web-cell.dev/
 [8]: https://mobx.js.org
 [9]: https://developers.google.com/web/tools/workbox
 [10]: https://parceljs.org
-[11]: https://travis-ci.com/
+[11]: https://github.com/features/actions
 [12]: https://pages.github.com/
