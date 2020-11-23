@@ -1,3 +1,4 @@
+import { importCSS } from 'web-utility/source/DOM';
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
@@ -7,6 +8,8 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import { TimeRange } from '../../component/TimeRange';
 import { bootEditor } from '../../component/HTMLEditor';
+
+importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 
 @observer
 @component({

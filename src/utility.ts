@@ -10,3 +10,19 @@ export enum TimeUnitName {
     M = '月',
     Y = '年'
 }
+
+export function importJS(URI: string) {
+    var script = [...document.scripts].find(({ src }) => src === URI);
+
+    if (script) return Promise.resolve(script);
+
+    script = document.createElement('script');
+
+    return new Promise<HTMLScriptElement>((resolve, reject) => {
+        (script.onload = () => resolve(script)), (script.onerror = reject);
+
+        script.src = URI;
+
+        document.head.append(script);
+    });
+}
