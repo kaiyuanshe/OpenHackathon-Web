@@ -15,10 +15,9 @@ export function ActivityCard({
     stat
 }: Activity) {
     const event_start = new Date(event_start_time),
-        days = +(
-            (registration_end_time - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        ).toFixed(0);
+        days = Math.ceil(
+            (registration_end_time - Date.now()) / (1000 * 60 * 60 * 24)
+        );
 
     return (
         <Card

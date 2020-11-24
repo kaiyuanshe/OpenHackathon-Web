@@ -1,19 +1,17 @@
 import { component, watch, createCell, Fragment } from 'web-cell';
 import {
+    CarouselItemProps,
     CarouselProps,
-    CarouselView,
-    CarouselItem
+    CarouselCaption,
+    CarouselItem,
+    CarouselView
 } from 'boot-cell/source/Media/Carousel';
 import { Image } from 'boot-cell/source/Media/Image';
 import classNames from 'classnames';
 
 import style from './Gallery.module.less';
 
-export interface GalleryItem {
-    image: string;
-    title: string;
-    detail: string;
-}
+export type GalleryItem = Pick<CarouselItemProps, 'image' | 'title' | 'detail'>;
 
 export interface GalleryProps extends CarouselProps {
     list: GalleryItem[];
@@ -29,8 +27,11 @@ export class GalleryView extends CarouselView {
     set list(list: GalleryItem[]) {
         this.setProps({ list }).then(
             () =>
-                (this.defaultSlot = list.map(item => (
-                    <CarouselItem {...item} />
+                (this.defaultSlot = list.map(({ image, title, detail }) => (
+                    <CarouselItem>
+                        <Image background src={image} />
+                        <CarouselCaption title={title} detail={detail} />
+                    </CarouselItem>
                 )))
         );
     }
@@ -43,7 +44,7 @@ export class GalleryView extends CarouselView {
 
     render({ list, activeIndex }: GalleryProps) {
         return (
-            <Fragment>
+            <>
                 <div className="flex-fill">{super.render(this.props)}</div>
 
                 <div className="d-flex flex-column justify-content-between">
@@ -59,7 +60,7 @@ export class GalleryView extends CarouselView {
                         />
                     ))}
                 </div>
-            </Fragment>
+            </>
         );
     }
 }
