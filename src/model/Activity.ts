@@ -40,7 +40,7 @@ export interface Activity extends DataItem {
     judge_end_time: number;
     awards: any[];
     status: number;
-    organizers: Organization[];
+    organizers?: Organization[];
     stat: { register: number; like: number };
     events?: Event[];
     teams?: Team[];
@@ -86,5 +86,10 @@ export class ActivityModel extends BaseModel<Activity> {
         if (body.location) body.coord = (await coordsOf(body.location))[0];
 
         return (this.current = body);
+    }
+
+    async createActivity(data: Activity) {
+        await service.post('admin/hackathon', data);
+        return;
     }
 }
