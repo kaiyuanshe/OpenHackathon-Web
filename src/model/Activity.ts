@@ -27,7 +27,7 @@ export interface Activity extends DataItem {
     display_name: string;
     ribbon: string;
     short_description: string;
-    description: HTMLFormElement;
+    description: string;
     tags: string[];
     banners: string[];
     location: string;

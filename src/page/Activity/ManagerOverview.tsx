@@ -1,4 +1,4 @@
-import { component, mixin, createCell } from 'web-cell';
+import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { ActivityCard } from '../../component';
@@ -6,6 +6,7 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 
 import { session, user } from '../../model';
 import style from '../User.module.less';
+import { Button } from 'boot-cell/source/Form/Button';
 
 @observer
 @component({
@@ -30,8 +31,6 @@ export class ManagerOverview extends mixin() {
             likes,
             registrations
         } = user.current;
-        console.log(likes);
-        console.log(registrations);
         return (
             <div className="container d-lg-flex">
                 <div className="border bg-white mr-lg-3 mb-3 mb-lg-0">
@@ -47,7 +46,7 @@ export class ManagerOverview extends mixin() {
                     <NavLink href="create">创建黑客松</NavLink>
                     <NavLink>编辑个人信息</NavLink>
                 </div>
-                <TabView>
+                <TabView mode="masthead">
                     <NavLink>我关注的活动</NavLink>
                     <TabPanel>
                         <div className="d-flex justify-content-around flex-wrap">
@@ -62,7 +61,39 @@ export class ManagerOverview extends mixin() {
                             {likes
                                 ?.filter(e => e.remark === 'creator')
                                 .map(({ hackathon_info }) => (
-                                    <ActivityCard {...hackathon_info} />
+                                    <div className="flex-column">
+                                        <ActivityCard {...hackathon_info} />
+                                        <div className="row justify-content-between">
+                                            <Button
+                                                outline
+                                                href="manage/activity"
+                                                className="col-auto ml-4"
+                                            >
+                                                编辑活动
+                                            </Button>
+                                            {hackathon_info.status === 3 ? (
+                                                <Button
+                                                    outline
+                                                    className="col-auto mr-4"
+                                                    onClick={event =>
+                                                        event.preventDefault()
+                                                    }
+                                                >
+                                                    申请下线
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    outline
+                                                    className="col-auto mr-4"
+                                                    onClick={event =>
+                                                        event.preventDefault()
+                                                    }
+                                                >
+                                                    申请上线
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
                         </div>
                     </TabPanel>

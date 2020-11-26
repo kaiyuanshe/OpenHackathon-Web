@@ -36,7 +36,8 @@ export class CreateActivity extends mixin() {
         );
         await activity.createActivity({
             ...data,
-            tags: data.tags.split(' ') //tags need to be in array format
+            description: this.description.root.innerHTML,
+            tags: data.tags.split(' ')
         });
     };
 
@@ -118,7 +119,6 @@ export class CreateActivity extends mixin() {
                             placeholder: '活动详情'
                         });
                     }}
-                    name="description"
                 />
                 <Button type="submit" className="mt-3">
                     下一步
