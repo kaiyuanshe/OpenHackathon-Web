@@ -10,7 +10,7 @@
         "jsx": "react",
         "jsxFactory": "createCell",
         "jsxFragmentFactory": "Fragment",
-        "lib": ["ES2019", "DOM"],
+        "lib": ["ES2019", "DOM", "DOM.Iterable"],
         "rootDir": "src"
     },
     "include": ["src/**/*"]

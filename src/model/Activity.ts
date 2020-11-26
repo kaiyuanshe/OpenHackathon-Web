@@ -27,7 +27,7 @@ export interface Activity extends DataItem {
     display_name: string;
     ribbon: string;
     short_description: string;
-    description: string;
+    description: HTMLFormElement;
     tags: string[];
     banners: string[];
     location: string;
@@ -88,7 +88,7 @@ export class ActivityModel extends BaseModel<Activity> {
         return (this.current = body);
     }
 
-    async createActivity(data: Activity) {
+    async createActivity(data: Partial<Activity>) {
         await service.post('admin/hackathon', data);
         return;
     }

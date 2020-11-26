@@ -1,11 +1,13 @@
-import { component, mixin, createCell, Fragment } from 'web-cell';
+import { component, mixin, createCell } from 'web-cell';
 import { CellRouter } from 'cell-router/source';
 import { observer } from 'mobx-web-cell';
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
+import { importJS } from '../utility';
 import logo from '../image/logo.png';
 import { history, session } from '../model';
 import { HomePage } from './Home';
@@ -13,12 +15,18 @@ import { ActivityDetail, ActivityList, ManagerOverview } from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
+interface PageRouterState {
+    loading: boolean;
+}
+
 @observer
 @component({
     tagName: 'page-router',
     renderTarget: 'children'
 })
-export class PageRouter extends mixin() {
+export class PageRouter extends mixin<{}, PageRouterState>() {
+    state = { loading: false };
+
     routes = [
         {
             paths: [''],
@@ -63,26 +71,31 @@ export class PageRouter extends mixin() {
         }
     ];
 
-    async signIn() {
-        const Guard = await import('@authing/guard');
-
-        const dialog = new Guard('5f0e628e4ba608e9a69533ae', {
+    signIn = async () => {
+        this.setState({ loading: true });
+        await importJS(
+            'https://cdn.jsdelivr.net/npm/@authing/guard@1.16.4/dist/Guard.umd.min.js'
+        );
+        this.setState({ loading: false });
+        // @ts-ignore
+        const dialog = new self.Guard('5f0e628e4ba608e9a69533ae', {
             mountId: 'sign-in',
             title: document.title,
             logo
         });
-        dialog.on('login', async ({ data }) => {
-            await session.signIn(data);
+        const { data } = await new Promise(resolve =>
+            dialog.on('login', resolve)
+        );
+        await session.signIn(data);
 
-            dialog.hide();
-        });
-    }
+        dialog.hide();
+    };
 
-    render() {
+    render(_, { loading }: PageRouterState) {
         const { menu, routes } = this;
 
         return (
-            <>
+            <SpinnerBox cover={loading}>
                 <NavBar
                     narrow
                     brand={
@@ -131,7 +144,7 @@ export class PageRouter extends mixin() {
                         BootCell v1
                     </a>
                 </footer>
-            </>
+            </SpinnerBox>
         );
     }
 }

@@ -1,4 +1,5 @@
-import { component, mixin, createCell, Fragment, attribute } from 'web-cell';
+import { importCSS } from 'web-utility/source/DOM';
+import { component, mixin, attribute, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
@@ -7,8 +8,10 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import { TimeRange } from '../../component/TimeRange';
 import { bootEditor } from '../../component/HTMLEditor';
-import { activity, session } from '../../model';
+import { activity, Activity } from '../../model';
 import { formToJSON } from 'web-utility/source/DOM';
+
+importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 
 @observer
 @component({
@@ -19,9 +22,6 @@ export class CreateActivity extends mixin() {
     @attribute
     description;
 
-    @attribute
-    aid;
-
     connectedCallback() {
         this.classList.add('d-block', 'container');
 
@@ -29,43 +29,14 @@ export class CreateActivity extends mixin() {
     }
 
     saveBasicForm = async (event: Event) => {
-        event.preventDefault(), event.stopPropagation();
+        event.preventDefault();
 
-        const { target } = event;
-        const {
-            path_name,
-            display_name,
-            tags,
-            address,
-            start_time,
-            end_time,
-            summary,
-            slogan
-        } = formToJSON(target as HTMLFormElement);
-
+        const data = formToJSON<Partial<Activity>>(
+            event.target as HTMLFormElement
+        );
         await activity.createActivity({
-            id: this.aid,
-            name: path_name as string,
-            creator: session.user._id,
-            create_time: Date.now(),
-            update_time: Date.now(),
-            type: 0,
-            display_name: display_name as string,
-            ribbon: slogan as string,
-            short_description: summary as string,
-            description: JSON.stringify(this.description.getContents()),
-            tags: tags as string[],
-            banners: ['pathToBanner1'],
-            location: address as string,
-            registration_start_time: start_time[0] as number,
-            registration_end_time: end_time[0] as number,
-            event_start_time: start_time[1] as number,
-            event_end_time: end_time[1] as number,
-            judge_start_time: start_time[2] as number,
-            judge_end_time: end_time[2] as number,
-            awards: [],
-            status: 0,
-            stat: { register: 0, like: 0 }
+            ...data,
+            tags: data.tags.split(' ') //tags need to be in array format
         });
     };
 
@@ -74,7 +45,7 @@ export class CreateActivity extends mixin() {
             <form className="text-center" onSubmit={this.saveBasicForm}>
                 <FormField
                     label="名称"
-                    name="path_name"
+                    name="name"
                     labelColumn={2}
                     placeholder="名称，仅限字母和数字"
                     required
@@ -90,28 +61,28 @@ export class CreateActivity extends mixin() {
                     label="标签"
                     name="tags"
                     labelColumn={2}
-                    placeholder="标签"
+                    placeholder="标签，请以空格分隔"
                 />
                 <FormField
                     label="活动地址"
-                    name="address"
+                    name="location"
                     labelColumn={2}
                     placeholder="活动地址"
                 />
                 <div className="row mb-3">
                     <label className="col-2 align-self-center mb-0">
-                        活动时间
+                        报名时间
                     </label>
                     <div className="col-10">
-                        <TimeRange />
+                        <TimeRange parent_name="registration" />
                     </div>
                 </div>
                 <div className="row mb-3">
                     <label className="col-2 align-self-center mb-0">
-                        报名时间
+                        活动时间
                     </label>
                     <div className="col-10">
-                        <TimeRange />
+                        <TimeRange parent_name="event" />
                     </div>
                 </div>
                 <div className="row mb-3">
@@ -119,12 +90,12 @@ export class CreateActivity extends mixin() {
                         评分时间
                     </label>
                     <div className="col-10">
-                        <TimeRange />
+                        <TimeRange parent_name="judge" />
                     </div>
                 </div>
                 <FormField
                     label="广告语"
-                    name="slogan"
+                    name="ribbon"
                     labelColumn={2}
                     placeholder="广告语"
                 />
@@ -137,7 +108,7 @@ export class CreateActivity extends mixin() {
                 />
                 <FormField
                     label="活动简介"
-                    name="summary"
+                    name="short_description"
                     labelColumn={2}
                     placeholder="活动简介"
                 />
@@ -150,7 +121,7 @@ export class CreateActivity extends mixin() {
                     name="description"
                 />
                 <Button type="submit" className="mt-3">
-                    Next
+                    下一步
                 </Button>
             </form>
         );
@@ -176,9 +147,9 @@ export class CreateActivity extends mixin() {
                                 color="danger"
                                 className="mr-3"
                             >
-                                Previous
+                                上一步
                             </Button>
-                            <Button type="submit">Next</Button>
+                            <Button type="submit">下一步</Button>
                         </form>
                     </TabPanel>
                     <Step icon={3}>选择虚拟环境</Step>
@@ -192,9 +163,9 @@ export class CreateActivity extends mixin() {
                                 color="danger"
                                 className="mr-3"
                             >
-                                Previous
+                                上一步
                             </Button>
-                            <Button type="submit">Next</Button>
+                            <Button type="submit">下一步</Button>
                         </form>
                     </TabPanel>
                     <Step icon={4}>完成</Step>
@@ -208,9 +179,9 @@ export class CreateActivity extends mixin() {
                                 color="danger"
                                 className="mr-3"
                             >
-                                Previous
+                                上一步
                             </Button>
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">提交</Button>
                         </form>
                     </TabPanel>
                 </TabView>
