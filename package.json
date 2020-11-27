@@ -4,7 +4,7 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "boot-cell": "^1.3.1",
+        "boot-cell": "^1.3.4",
         "bootstrap-icons": "^1.1.0",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.1",
@@ -14,7 +14,7 @@
         "mobx-web-cell": "^0.3.2",
         "quill": "^1.3.7",
         "web-cell": "^2.2.0",
-        "web-utility": "^1.9.0"
+        "web-utility": "^2.0.0"
     },
     "devDependencies": {
         "@types/classnames": "^2.2.11",
@@ -26,7 +26,7 @@
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^4.3.0",
         "less": "^3.12.2",
-        "lint-staged": "^10.5.1",
+        "lint-staged": "^10.5.2",
         "parcel-bundler": "^1.12.4",
         "postcss-modules": "^3.2.2",
         "prettier": "^2.2.0",

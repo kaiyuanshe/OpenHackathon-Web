@@ -13,9 +13,10 @@ export const service = new HTTPClient({
     // : 'https://hacking.kaiyuanshe.cn:15000/api/',
     responseType: 'json'
 }).use(({ request }, next) => {
-    if (token)
-        (request.headers = request.headers || {})['Authorization'] =
-            'token ' + token;
+    if (token) {
+        (request.headers = request.headers || {})['Authorization'] = token;
+    }
+
     return next();
 });
 

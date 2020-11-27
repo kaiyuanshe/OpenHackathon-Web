@@ -113,6 +113,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                         <Button onClick={this.signIn}>登录</Button>
                     ) : (
                         <DropMenu caption={session.user.nickname}>
+                            <DropMenuItem href="manage">个人主页</DropMenuItem>
                             <DropMenuItem onClick={() => session.signOut()}>
                                 退出
                             </DropMenuItem>

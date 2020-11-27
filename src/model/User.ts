@@ -35,6 +35,7 @@ export interface Registration extends DataItem {
     role: 3;
     user: string;
     hackathon: string;
+    remark: string;
 }
 
 export interface User extends DataItem {
