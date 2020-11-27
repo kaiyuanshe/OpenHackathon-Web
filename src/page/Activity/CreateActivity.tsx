@@ -1,10 +1,11 @@
 import { importCSS } from 'web-utility/source/DOM';
-import { component, mixin, attribute, createCell, Fragment } from 'web-cell';
+import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { Button } from 'boot-cell/source/Form/Button';
+import Quill from 'quill';
 
 import { TimeRange } from '../../component/TimeRange';
 import { bootEditor } from '../../component/HTMLEditor';
@@ -19,8 +20,7 @@ importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
     renderTarget: 'children'
 })
 export class CreateActivity extends mixin() {
-    @attribute
-    description;
+    private description: Quill;
 
     connectedCallback() {
         this.classList.add('d-block', 'container');
