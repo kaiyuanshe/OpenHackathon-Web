@@ -8,7 +8,9 @@
 ## Key links
 
 -   [Task kanban](https://github.com/kaiyuanshe/OpenHackathon-Web/projects/1?fullscreen=true)
--   [UI design](https://hacking.kaiyuanshe.cn/)
+-   UI design
+    -   [Old site](https://hacking.kaiyuanshe.cn/)
+    -   [New design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
 -   [RESTful API](https://github.com/kaiyuanshe/open-hackathon/wiki/Open-hackathon-Restful-API)
 
 ## Technology stack

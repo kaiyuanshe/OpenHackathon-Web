@@ -27,12 +27,12 @@ export interface UserProfile {
 }
 
 export interface Registration extends DataItem {
-    status: 3;
-    like: true;
-    deleted: false;
+    status: number;
+    like: boolean;
+    deleted: boolean;
     hackathon_info: Activity;
     assets: any;
-    role: 3;
+    role: number;
     user: string;
     hackathon: string;
     remark: string;

@@ -11,7 +11,7 @@ import { importJS } from '../utility';
 import logo from '../image/logo.png';
 import { history, session } from '../model';
 import { HomePage } from './Home';
-import { ActivityDetail, ActivityList, ManagerOverview } from './Activity';
+import { ActivityDetail, ActivityList } from './Activity';
 import { UserPage } from './User';
 import { TeamPage } from './Team';
 
@@ -52,10 +52,6 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             paths: ['create'],
             component: async () =>
                 (await import('./Activity/CreateActivity')).CreateActivity
-        },
-        {
-            paths: ['manage'],
-            component: ManagerOverview
         }
     ];
 
@@ -92,7 +88,8 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
     };
 
     render(_, { loading }: PageRouterState) {
-        const { menu, routes } = this;
+        const { menu, routes } = this,
+            { user } = session;
 
         return (
             <SpinnerBox cover={loading}>
@@ -109,11 +106,13 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     {menu.map(({ title, ...rest }) => (
                         <NavLink {...rest}>{title}</NavLink>
                     ))}
-                    {!session.user ? (
+                    {!user ? (
                         <Button onClick={this.signIn}>登录</Button>
                     ) : (
-                        <DropMenu caption={session.user.nickname}>
-                            <DropMenuItem href="manage">个人主页</DropMenuItem>
+                        <DropMenu caption={user.nickname}>
+                            <DropMenuItem href={'user?uid=' + user.id}>
+                                个人主页
+                            </DropMenuItem>
                             <DropMenuItem onClick={() => session.signOut()}>
                                 退出
                             </DropMenuItem>

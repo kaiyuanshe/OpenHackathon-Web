@@ -1,4 +1,4 @@
-import { importCSS } from 'web-utility/source/DOM';
+import { importCSS, formToJSON } from 'web-utility/source/DOM';
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
@@ -10,7 +10,6 @@ import Quill from 'quill';
 import { TimeRange } from '../../component/TimeRange';
 import { bootEditor } from '../../component/HTMLEditor';
 import { activity, Activity } from '../../model';
-import { formToJSON } from 'web-utility/source/DOM';
 
 importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 
@@ -20,6 +19,7 @@ importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
     renderTarget: 'children'
 })
 export class CreateActivity extends mixin() {
+    private tabView: TabView;
     private description: Quill;
 
     connectedCallback() {
@@ -29,16 +29,19 @@ export class CreateActivity extends mixin() {
     }
 
     saveBasicForm = async (event: Event) => {
-        event.preventDefault();
+        event.preventDefault(), event.stopPropagation();
 
-        const data = formToJSON<Partial<Activity>>(
-            event.target as HTMLFormElement
-        );
+        const data = formToJSON<
+            Partial<Omit<Activity, 'tags' | 'description'> & { tags: string }>
+        >(event.target as HTMLFormElement);
+
         await activity.createActivity({
             ...data,
             description: this.description.root.innerHTML,
             tags: data.tags.split(' ')
         });
+
+        this.tabView.activeIndex++;
     };
 
     renderBasicForm() {
@@ -132,7 +135,10 @@ export class CreateActivity extends mixin() {
             <>
                 <h2 className="mt-4">创建活动</h2>
 
-                <TabView linear>
+                <TabView
+                    linear
+                    ref={(element: TabView) => (this.tabView = element)}
+                >
                     <Step icon={1}>填写基本信息</Step>
                     <TabPanel>{this.renderBasicForm()}</TabPanel>
 

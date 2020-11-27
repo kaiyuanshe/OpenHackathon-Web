@@ -89,7 +89,8 @@ export class ActivityModel extends BaseModel<Activity> {
     }
 
     async createActivity(data: Partial<Activity>) {
-        await service.post('admin/hackathon', data);
-        return;
+        const { body } = await service.post<Activity>('admin/hackathon', data);
+
+        return (this.current = body);
     }
 }
