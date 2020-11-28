@@ -1,9 +1,10 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
+import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
+import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { team, activity } from '../model';
-import { BGIcon } from 'boot-cell/source/Reminder/Icon';
-import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 
 @observer
 @component({
@@ -33,9 +34,10 @@ export class TeamPage extends mixin() {
     render() {
         const { display_name, name: hackathon } = activity.current;
         const { logo, name, members, project_name, cover } = team.current;
+        const loading = activity.loading || team.loading;
 
         return (
-            <div className="container">
+            <SpinnerBox className="container" cover={loading}>
                 <BreadCrumb
                     path={[
                         {
@@ -90,7 +92,7 @@ export class TeamPage extends mixin() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </SpinnerBox>
         );
     }
 }

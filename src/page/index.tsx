@@ -1,4 +1,4 @@
-import { component, mixin, createCell } from 'web-cell';
+import { component, mixin, createCell, Fragment } from 'web-cell';
 import { CellRouter } from 'cell-router/source';
 import { observer } from 'mobx-web-cell';
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
@@ -9,7 +9,7 @@ import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
 import { importJS } from '../utility';
 import logo from '../image/logo.png';
-import { history, session } from '../model';
+import { history, session, User } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
 import { UserPage } from './User';
@@ -87,6 +87,24 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         dialog.hide();
     };
 
+    renderUserBar({ nickname, id }: User) {
+        return (
+            <>
+                <Button className="mr-3" color="success" href="create">
+                    创建黑客松
+                </Button>
+                <DropMenu caption={nickname}>
+                    <DropMenuItem href={'user?uid=' + id}>
+                        个人主页
+                    </DropMenuItem>
+                    <DropMenuItem onClick={() => session.signOut()}>
+                        退出
+                    </DropMenuItem>
+                </DropMenu>
+            </>
+        );
+    }
+
     render(_, { loading }: PageRouterState) {
         const { menu, routes } = this,
             { user } = session;
@@ -109,14 +127,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     {!user ? (
                         <Button onClick={this.signIn}>登录</Button>
                     ) : (
-                        <DropMenu caption={user.nickname}>
-                            <DropMenuItem href={'user?uid=' + user.id}>
-                                个人主页
-                            </DropMenuItem>
-                            <DropMenuItem onClick={() => session.signOut()}>
-                                退出
-                            </DropMenuItem>
-                        </DropMenu>
+                        this.renderUserBar(user)
                     )}
                 </NavBar>
 

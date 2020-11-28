@@ -1,10 +1,14 @@
 import { observable } from 'mobx';
-import { DataItem, service, PageData, ListFilter } from './service';
+
+import { DataItem, ListFilter, PageData, service } from './service';
 
 export abstract class BaseModel<
     T extends DataItem = DataItem,
     F extends ListFilter = ListFilter
 > {
+    abstract singleBase: string;
+    abstract multipleBase: string;
+
     @observable
     loading = false;
 
@@ -20,7 +24,8 @@ export abstract class BaseModel<
     @observable
     list: T[] = [];
 
-    abstract baseURI: string;
+    @observable
+    current: T = {} as T;
 
     reset() {
         this.loading = this.noMore = false;
@@ -42,7 +47,7 @@ export abstract class BaseModel<
         const {
             body: { total, items }
         } = await service.get<PageData<T>>(
-            `${this.baseURI}?${new URLSearchParams({
+            `${this.multipleBase}?${new URLSearchParams({
                 order_by: 'time',
                 ...filter,
                 page: this.pageIndex + 1 + '',
@@ -60,5 +65,18 @@ export abstract class BaseModel<
         this.noMore = true;
     }
 
-    abstract async getOne(...params: any[]): Promise<T>;
+    abstract getOne(...params: any[]): Promise<T>;
+}
+
+export function loading(target: any, key: string, meta: PropertyDescriptor) {
+    const origin: (...data: any[]) => Promise<any> = meta.value;
+
+    meta.value = async function (this: BaseModel, ...data: any[]) {
+        this.loading = true;
+        try {
+            return await origin.apply(this, data);
+        } finally {
+            this.loading = false;
+        }
+    };
 }

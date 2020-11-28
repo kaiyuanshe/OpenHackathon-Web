@@ -1,6 +1,5 @@
-import { observable } from 'mobx';
-
 import { DataItem, service } from './service';
+import { BaseModel, loading } from './BaseModel';
 import { User } from './User';
 
 interface Membership {
@@ -26,14 +25,16 @@ export interface Team extends DataItem {
     is_frozen: boolean;
 }
 
-export class TeamModel {
-    @observable
-    current: Team = {} as Team;
+export class TeamModel extends BaseModel<Team> {
+    singleBase = 'team';
+    multipleBase = 'team/list';
 
+    @loading
     async getOne(activity: string, id: string) {
-        const { body } = await service.get<Team>('team?id=' + id, {
-            hackathon_name: activity
-        });
+        const { body } = await service.get<Team>(
+            `${this.singleBase}?id=${id}`,
+            { hackathon_name: activity }
+        );
         return (this.current = body);
     }
 }

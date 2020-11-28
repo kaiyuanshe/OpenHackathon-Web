@@ -1,14 +1,8 @@
-import {
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell,
-    Fragment
-} from 'web-cell';
+import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { diffTime } from 'web-utility/source/date';
 
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { Badge } from 'boot-cell/source/Reminder/Badge';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { ListGroup, ListItem } from 'boot-cell/source/Content/ListGroup';
@@ -183,15 +177,12 @@ export class ActivityDetail extends mixin() {
 
     render() {
         const {
-            banners,
-            location,
-            organizers,
-            description,
-            coord
-        } = activity.current;
+            loading,
+            current: { banners, location, organizers, description, coord }
+        } = activity;
 
         return (
-            <div>
+            <SpinnerBox cover={loading}>
                 <header className="d-lg-flex py-3">
                     <CarouselView controls indicators={!isMobile}>
                         {banners?.map(image => (
@@ -237,7 +228,7 @@ export class ActivityDetail extends mixin() {
                         />
                     </aside>
                 </div>
-            </div>
+            </SpinnerBox>
         );
     }
 }

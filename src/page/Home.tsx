@@ -1,5 +1,6 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
@@ -7,7 +8,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
 
 import { isMobile } from '../utility';
-import { ActivityCard, GalleryView } from '../component';
+import { ActivityGallery, GalleryView } from '../component';
 import { activity, user, Activity, User, partner } from '../model';
 import style from './Home.module.less';
 
@@ -24,30 +25,6 @@ export class HomePage extends mixin() {
         super.connectedCallback();
     }
 
-    renderTabLatestRelease(list: Activity[]) {
-        return (
-            <div className="d-flex justify-content-around flex-wrap">
-                {list.map(
-                    item => item.banners?.[0] && <ActivityCard {...item} />
-                )}
-            </div>
-        );
-    }
-
-    renderTabPopular(list: Activity[]) {
-        list = list.sort(
-            ({ stat: a }, { stat: b }) =>
-                b?.register - a?.register || b?.like - a?.like
-        );
-        return (
-            <div className="d-flex justify-content-around flex-wrap">
-                {list.map(
-                    item => item.banners?.[0] && <ActivityCard {...item} />
-                )}
-            </div>
-        );
-    }
-
     renderTabUpcoming(list: Activity[]) {
         const now = Date.now();
 
@@ -57,13 +34,7 @@ export class HomePage extends mixin() {
                 ({ registration_end_time: A }, { registration_end_time: B }) =>
                     B - A
             );
-        return (
-            <div className="d-flex justify-content-around flex-wrap">
-                {list.map(
-                    item => item.banners?.[0] && <ActivityCard {...item} />
-                )}
-            </div>
-        );
+        return <ActivityGallery list={list} />;
     }
 
     renderLogoSection(title: string, list: typeof partner.host) {
@@ -107,14 +78,19 @@ export class HomePage extends mixin() {
     );
 
     render() {
-        const banner = activity.list
-            .filter(({ banners }) => banners?.[0])
-            .slice(0, 3)
-            .map(({ display_name, banners, ribbon }) => ({
-                title: display_name,
-                image: banners[0],
-                detail: ribbon
-            }));
+        const { list, loading } = activity;
+        const banner = list
+                .filter(({ banners }) => banners?.[0])
+                .slice(0, 3)
+                .map(({ display_name, banners, ribbon }) => ({
+                    title: display_name,
+                    image: banners[0],
+                    detail: ribbon
+                })),
+            popular_activities = [...list].sort(
+                ({ stat: a }, { stat: b }) =>
+                    b?.register - a?.register || b?.like - a?.like
+            );
 
         return (
             <>
@@ -126,22 +102,20 @@ export class HomePage extends mixin() {
                     list={banner}
                 />
                 <section className="py-5 bg-light" id="activities">
-                    <div className="container d-flex">
+                    <SpinnerBox className="container d-flex" cover={loading}>
                         <TabView mode="pills">
                             <NavLink>最新活动</NavLink>
                             <TabPanel>
-                                {this.renderTabLatestRelease(activity.list)}
+                                <ActivityGallery list={list} />
                             </TabPanel>
                             <NavLink>人气热点</NavLink>
                             <TabPanel>
-                                {this.renderTabPopular(activity.list)}
+                                <ActivityGallery list={popular_activities} />
                             </TabPanel>
                             <NavLink>即将开始</NavLink>
-                            <TabPanel>
-                                {this.renderTabUpcoming(activity.list)}
-                            </TabPanel>
+                            <TabPanel>{this.renderTabUpcoming(list)}</TabPanel>
                         </TabView>
-                    </div>
+                    </SpinnerBox>
                     <Button
                         outline
                         block

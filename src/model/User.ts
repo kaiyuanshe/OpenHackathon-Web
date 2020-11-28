@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 
 import { DataItem, service } from './service';
+import { BaseModel, loading } from './BaseModel';
 import { Activity } from './Activity';
 
 export interface Email {
@@ -52,13 +53,14 @@ export interface User extends DataItem {
     registrations?: Registration[];
 }
 
-export class UserModel {
+export class UserModel extends BaseModel<User> {
+    singleBase = 'user';
+    multipleBase = 'admin/user/list';
+
     @observable
     activeList: User[] = [];
 
-    @observable
-    current: User = {} as User;
-
+    @loading
     async getActiveList() {
         const { body } = await service.get<User[]>('talent/list');
 
@@ -79,9 +81,10 @@ export class UserModel {
         return body;
     }
 
+    @loading
     async getOne(id: string) {
         const [{ body }, likes, registrations] = await Promise.all([
-            service.get<User>('user?user_id=' + id),
+            service.get<User>(`${this.singleBase}?user_id=${id}`),
             this.getLikeList(id),
             this.getRegistrationList(id)
         ]);

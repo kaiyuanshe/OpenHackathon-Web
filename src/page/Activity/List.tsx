@@ -5,7 +5,7 @@ import 'boot-cell/source/Content/EdgeDetector';
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 
 import { activity } from '../../model';
-import { ActivityCard } from '../../component';
+import { ActivityGallery } from '../../component';
 
 @observer
 @component({
@@ -33,14 +33,8 @@ export class ActivityList extends mixin() {
                 <h2 className="text-center mb-3">热门活动</h2>
 
                 <edge-detector onTouchEdge={this.loadMore}>
-                    <SpinnerBox
-                        className="d-flex flex-wrap justify-content-around"
-                        cover={loading}
-                    >
-                        {list.map(
-                            item =>
-                                item.banners[0] && <ActivityCard {...item} />
-                        )}
+                    <SpinnerBox cover={loading}>
+                        <ActivityGallery list={list} />
                     </SpinnerBox>
                     <p slot="bottom" className="text-center">
                         {noMore ? '没有更多了' : '加载中……'}

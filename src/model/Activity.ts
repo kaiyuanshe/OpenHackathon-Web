@@ -1,9 +1,7 @@
-import { observable } from 'mobx';
-
 import { DataItem, service, PageData } from './service';
+import { BaseModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { Team } from './Team';
-import { BaseModel } from './BaseModel';
 
 export interface Organization extends DataItem {
     name: string;
@@ -47,40 +45,36 @@ export interface Activity extends DataItem {
 }
 
 export class ActivityModel extends BaseModel<Activity> {
-    baseURI = 'hackathon/list';
-
-    @observable
-    current: Activity = {} as Activity;
+    singleBase = 'hackathon';
+    multipleBase = 'hackathon/list';
 
     async getEventList(name: string) {
         const {
             body: { items }
         } = await service.get<PageData<Event>>(
-            'hackathon/notice/list?' +
-                new URLSearchParams({
-                    hackathon_name: name,
-                    order_by: 'time'
-                })
+            `${this.singleBase}/notice/list?${new URLSearchParams({
+                hackathon_name: name,
+                order_by: 'time'
+            })}`
         );
         return items;
     }
 
     async getTeamList(name: string) {
-        const { body } = await service.get<Team[]>('hackathon/team/list', {
-            hackathon_name: name
-        });
+        const { body } = await service.get<Team[]>(
+            `${this.singleBase}/team/list`,
+            { hackathon_name: name }
+        );
         return body;
     }
 
+    @loading
     async getOne(name: string) {
         const [{ body }, events, teams] = await Promise.all([
-            service.get<Activity>('hackathon', {
-                hackathon_name: name
-            }),
+            service.get<Activity>(this.singleBase, { hackathon_name: name }),
             this.getEventList(name),
             this.getTeamList(name)
         ]);
-
         (body.events = events), (body.teams = teams);
 
         if (body.location) body.coord = (await coordsOf(body.location))[0];
@@ -88,6 +82,7 @@ export class ActivityModel extends BaseModel<Activity> {
         return (this.current = body);
     }
 
+    @loading
     async createActivity(data: Partial<Activity>) {
         const { body } = await service.post<Activity>('admin/hackathon', data);
 

@@ -1,28 +1,39 @@
 import { createCell } from 'web-cell';
-import { Card } from 'boot-cell/source/Content/Card';
+import { Day } from 'web-utility/source/date';
+import classNames from 'classnames';
+import { CardProps, Card } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { Activity } from '../model';
 
+export type ActivityCardProps = Omit<Activity, 'id'> & CardProps;
+
 export function ActivityCard({
+    className,
     name,
     display_name,
     event_start_time,
     location,
     tags,
     registration_end_time,
-    stat
-}: Activity) {
+    stat,
+    ...rest
+}: ActivityCardProps) {
     const event_start = new Date(event_start_time),
-        days = Math.ceil(
-            (registration_end_time - Date.now()) / (1000 * 60 * 60 * 24)
-        );
+        days = Math.ceil((registration_end_time - Date.now()) / Day);
 
     return (
         <Card
-            className="mb-3 d-flex border border-success rounded-lg"
-            style={{ width: '18rem' }}
+            {...rest}
+            key={rest.id}
+            className={classNames(
+                'mb-3',
+                'border',
+                'border-success',
+                'rounded-lg',
+                className
+            )}
             title={<a href={'activity?name=' + name}>{display_name}</a>}
             footer={
                 <div>

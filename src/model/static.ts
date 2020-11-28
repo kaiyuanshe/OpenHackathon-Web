@@ -9,6 +9,11 @@ export const partner = {
             name: '微软',
             url: 'https://www.microsoft.com/',
             logo: 'https://hacking.kaiyuanshe.cn/static/images/microsoft.png'
+        },
+        {
+            name: 'Authing',
+            url: 'https://authing.cn/',
+            logo: 'https://hacking.kaiyuanshe.cn/static/images/authing.png'
         }
     ],
     host: [

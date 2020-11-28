@@ -1,19 +1,13 @@
-import {
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell,
-    Fragment
-} from 'web-cell';
+import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { Button } from 'boot-cell/source/Form/Button';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
-import { ActivityCard } from '../component';
-import { Provider, Registration, user } from '../model';
+import { ActivityCard, ActivityGallery } from '../component';
+import { Provider, Registration, session, user } from '../model';
 import style from './User.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
@@ -34,7 +28,7 @@ export class UserPage extends mixin() {
     uid = '';
 
     connectedCallback() {
-        this.classList.add('container', 'd-block', 'd-lg-flex', 'py-5');
+        this.classList.add('d-block', 'py-5');
         this.style.background =
             'url(https://hacking.kaiyuanshe.cn/static/pic/profile-back-pattern.png)';
 
@@ -93,15 +87,13 @@ export class UserPage extends mixin() {
 
     render() {
         const {
-            nickname,
-            avatar_url,
-            profile,
-            likes,
-            registrations
-        } = user.current;
+            loading,
+            current: { id, nickname, avatar_url, profile, likes, registrations }
+        } = user;
+        const isSelf = session.user?.id === id;
 
         return (
-            <>
+            <SpinnerBox className="container d-lg-flex" cover={loading}>
                 <div className="border bg-white mr-lg-3 mb-3 mb-lg-0">
                     <header className="p-3">
                         <h2 className="text-nowrap">{nickname}</h2>
@@ -115,19 +107,22 @@ export class UserPage extends mixin() {
                     <div className="p-3 border-top text-nowrap">
                         {provider_list.map(this.renderIcon)}
                     </div>
-                    <Button color="success" href="create">
-                        创建黑客松
-                    </Button>
-                    <Button>编辑个人信息</Button>
+                    {!isSelf ? null : (
+                        <div className="p-3 border-top text-center">
+                            <Button>编辑个人信息</Button>
+                        </div>
+                    )}
                 </div>
                 <TabView mode="masthead" tabAlign="center">
                     <NavLink>关注的活动</NavLink>
                     <TabPanel>
-                        <div className="d-flex justify-content-around flex-wrap">
-                            {likes?.map(({ hackathon_info }) => (
-                                <ActivityCard {...hackathon_info} />
-                            ))}
-                        </div>
+                        {likes && (
+                            <ActivityGallery
+                                list={likes.map(
+                                    ({ hackathon_info }) => hackathon_info
+                                )}
+                            />
+                        )}
                     </TabPanel>
                     <NavLink>创建的活动</NavLink>
                     <TabPanel>
@@ -139,14 +134,16 @@ export class UserPage extends mixin() {
                     </TabPanel>
                     <NavLink>参与的活动</NavLink>
                     <TabPanel>
-                        <div className="d-flex justify-content-around flex-wrap">
-                            {registrations?.map(({ hackathon_info }) => (
-                                <ActivityCard {...hackathon_info} />
-                            ))}
-                        </div>
+                        {registrations && (
+                            <ActivityGallery
+                                list={registrations.map(
+                                    ({ hackathon_info }) => hackathon_info
+                                )}
+                            />
+                        )}
                     </TabPanel>
                 </TabView>
-            </>
+            </SpinnerBox>
         );
     }
 }
