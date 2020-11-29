@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 
 import { DataItem, service } from './service';
-import { BaseModel, loading } from './BaseModel';
+import { TableModel, loading } from './BaseModel';
 import { Activity } from './Activity';
 
 export enum Gender {
@@ -59,7 +59,7 @@ export interface User extends DataItem {
     registrations?: Registration[];
 }
 
-export class UserModel extends BaseModel<User> {
+export class UserModel extends TableModel<User> {
     singleBase = 'user';
     multipleBase = 'admin/user/list';
 

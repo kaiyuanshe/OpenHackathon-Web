@@ -1,5 +1,5 @@
 import { DataItem, service } from './service';
-import { BaseModel, loading } from './BaseModel';
+import { TableModel, loading } from './BaseModel';
 import { User } from './User';
 
 interface Membership {
@@ -25,7 +25,7 @@ export interface Team extends DataItem {
     is_frozen: boolean;
 }
 
-export class TeamModel extends BaseModel<Team> {
+export class TeamModel extends TableModel<Team> {
     singleBase = 'team';
     multipleBase = 'team/list';
 

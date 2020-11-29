@@ -2,15 +2,30 @@ import { observable } from 'mobx';
 
 import { DataItem, ListFilter, PageData, service } from './service';
 
-export abstract class BaseModel<
-    T extends DataItem = DataItem,
-    F extends ListFilter = ListFilter
-> {
-    abstract singleBase: string;
-    abstract multipleBase: string;
-
+export abstract class BaseModel {
     @observable
     loading = false;
+}
+
+export function loading(target: any, key: string, meta: PropertyDescriptor) {
+    const origin: (...data: any[]) => Promise<any> = meta.value;
+
+    meta.value = async function (this: BaseModel, ...data: any[]) {
+        this.loading = true;
+        try {
+            return await origin.apply(this, data);
+        } finally {
+            this.loading = false;
+        }
+    };
+}
+
+export abstract class TableModel<
+    T extends DataItem = DataItem,
+    F extends ListFilter = ListFilter
+> extends BaseModel {
+    abstract singleBase: string;
+    abstract multipleBase: string;
 
     @observable
     noMore = false;
@@ -66,17 +81,4 @@ export abstract class BaseModel<
     }
 
     abstract getOne(...params: any[]): Promise<T>;
-}
-
-export function loading(target: any, key: string, meta: PropertyDescriptor) {
-    const origin: (...data: any[]) => Promise<any> = meta.value;
-
-    meta.value = async function (this: BaseModel, ...data: any[]) {
-        this.loading = true;
-        try {
-            return await origin.apply(this, data);
-        } finally {
-            this.loading = false;
-        }
-    };
 }

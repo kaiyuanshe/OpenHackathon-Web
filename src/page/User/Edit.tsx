@@ -1,10 +1,13 @@
 import { component, mixin, createCell } from 'web-cell';
+import { observer } from 'mobx-web-cell';
+import { formToJSON } from 'web-utility/source/DOM';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { FileInput } from 'boot-cell/source/Form/FileInput';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { Gender, session } from '../../model';
+import { Gender, session, UserProfile } from '../../model';
 
+@observer
 @component({
     tagName: 'user-edit',
     renderTarget: 'children'
@@ -15,19 +18,36 @@ export class UserEdit extends mixin() {
         this.style.background =
             'url(https://hacking.kaiyuanshe.cn/static/pic/profile-back-pattern.png)';
 
+        session.getUser();
+
         super.connectedCallback();
     }
 
-    handleSave = (event: Event) => {
+    handleSave = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
+
+        const { avatar, ...data } = formToJSON<
+            Partial<{ avatar: File | string } & UserProfile>
+        >(event.target as HTMLFormElement);
+
+        await session.updateProfile({
+            avatar: avatar instanceof File ? avatar : null,
+            ...data
+        });
+        self.alert('个人信息更新成功！');
     };
 
     render() {
+        const { loading } = session;
         const {
             avatar_url,
-            nickname,
-            phone,
-            profile: { gender = Gender.other, age = 0, address = '' } = {}
+            profile: {
+                real_name = '',
+                phone = '',
+                gender = Gender.other,
+                age = 0,
+                address = ''
+            } = {}
         } = session.user || {};
 
         return (
@@ -40,14 +60,14 @@ export class UserEdit extends mixin() {
 
                 <div className="form-row">
                     <FormField className="col-md-6" label="头像">
-                        <FileInput name="avatar_url" value={avatar_url} />
+                        <FileInput name="avatar" value={avatar_url} />
                     </FormField>
                     <FormField
                         className="col-md-6"
                         label="姓名"
-                        name="nickname"
+                        name="real_name"
                         required
-                        value={nickname}
+                        value={real_name}
                     />
                 </div>
                 <div className="form-row">
@@ -105,12 +125,17 @@ export class UserEdit extends mixin() {
                 </div>
                 <div className="form-row">
                     <div className="col-md-6 my-2 my-md-0">
-                        <Button block type="submit">
+                        <Button block type="submit" disabled={loading}>
                             保存
                         </Button>
                     </div>
                     <div className="col-md-6">
-                        <Button block type="reset" color="danger">
+                        <Button
+                            block
+                            type="reset"
+                            color="danger"
+                            disabled={loading}
+                        >
                             取消
                         </Button>
                     </div>

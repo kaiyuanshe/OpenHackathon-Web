@@ -12,12 +12,16 @@ export const service = new HTTPClient({
         'http://139.219.9.2:30150/api/',
     // : 'https://hacking.kaiyuanshe.cn:15000/api/',
     responseType: 'json'
-}).use(({ request }, next) => {
-    if (token) {
+}).use(async ({ request, response }, next) => {
+    if (token)
         (request.headers = request.headers || {})['Authorization'] = token;
-    }
 
-    return next();
+    await next();
+
+    const { body } = response;
+
+    if (body?.error?.code > 299)
+        throw Object.assign(URIError(body.error.message), body.error);
 });
 
 export interface ListFilter {

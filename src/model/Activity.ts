@@ -1,5 +1,5 @@
 import { DataItem, service, PageData } from './service';
-import { BaseModel, loading } from './BaseModel';
+import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { Team } from './Team';
 
@@ -44,7 +44,7 @@ export interface Activity extends DataItem {
     teams?: Team[];
 }
 
-export class ActivityModel extends BaseModel<Activity> {
+export class ActivityModel extends TableModel<Activity> {
     singleBase = 'hackathon';
     multipleBase = 'hackathon/list';
 

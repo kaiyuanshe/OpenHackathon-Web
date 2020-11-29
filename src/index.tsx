@@ -3,18 +3,20 @@ import { auto } from 'browser-unhandled-rejection';
 import { serviceWorkerUpdate } from 'web-utility/source/event';
 import { documentReady, render, createCell } from 'web-cell';
 
+import { session } from './model';
 import { PageRouter } from './page';
 
 auto();
 
 self.addEventListener('unhandledrejection', event => {
-    const { message } = event.reason;
+    const { reason } = event;
+    const message: string = reason instanceof Error ? reason.message : reason;
 
-    if (!message) return;
-
-    event.preventDefault();
-
-    self.alert(message);
+    if (message)
+        if (reason.code === 400 && message.startsWith('must login')) {
+            if (self.confirm('会话超时，马上退出系统去重新登录？'))
+                session.signOut();
+        } else self.alert(message);
 });
 
 const { serviceWorker } = window.navigator;
