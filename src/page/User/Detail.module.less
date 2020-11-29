@@ -1,0 +1,27 @@
+.avatar {
+    width: 6.5rem;
+    margin-right: 1rem;
+}
+.picture {
+    display: block;
+    min-height: 10rem;
+    background-position: center;
+    background-size: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: 0.25s;
+
+    &::before {
+        content: attr(title);
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.5rem;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+    &:hover {
+        background-size: 120%;
+    }
+}

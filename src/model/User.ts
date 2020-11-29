@@ -4,6 +4,12 @@ import { DataItem, service } from './service';
 import { BaseModel, loading } from './BaseModel';
 import { Activity } from './Activity';
 
+export enum Gender {
+    male = 1,
+    female = 0,
+    other = -1
+}
+
 export interface Email {
     verified: boolean;
     email: string;
@@ -21,7 +27,7 @@ export interface UserProfile {
     user_id: string;
     real_name: string;
     age: number;
-    gender: number;
+    gender: Gender;
     phone: string;
     address: string;
     career_type: string;

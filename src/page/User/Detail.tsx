@@ -6,9 +6,9 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
-import { ActivityCard, ActivityGallery } from '../component';
-import { Provider, Registration, session, user } from '../model';
-import style from './User.module.less';
+import { ActivityCard, ActivityGallery } from '../../component';
+import { Provider, Registration, session, user } from '../../model';
+import style from './Detail.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
     provider_link = {
@@ -19,10 +19,10 @@ const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
 
 @observer
 @component({
-    tagName: 'user-page',
+    tagName: 'user-detail',
     renderTarget: 'children'
 })
-export class UserPage extends mixin() {
+export class UserDetail extends mixin() {
     @attribute
     @watch
     uid = '';
@@ -109,7 +109,7 @@ export class UserPage extends mixin() {
                     </div>
                     {!isSelf ? null : (
                         <div className="p-3 border-top text-center">
-                            <Button>编辑个人信息</Button>
+                            <Button href="user/edit">编辑个人信息</Button>
                         </div>
                     )}
                 </div>

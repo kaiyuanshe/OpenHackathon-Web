@@ -12,7 +12,7 @@ import logo from '../image/logo.png';
 import { history, session, User } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
-import { UserPage } from './User';
+import { UserDetail } from './User/Detail';
 import { TeamPage } from './Team';
 
 interface PageRouterState {
@@ -42,7 +42,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         },
         {
             paths: ['user'],
-            component: UserPage
+            component: UserDetail
+        },
+        {
+            paths: ['user/edit'],
+            component: async () => (await import('./User/Edit')).UserEdit
         },
         {
             paths: ['team'],
