@@ -72,7 +72,7 @@ export class SessionModel extends BaseModel {
     }
 
     @loading
-    async upload(file: Blob | string | URL) {
+    async upload(file: Blob | string | URL, scope: 'user' | 'team') {
         const form = new FormData();
 
         if (file instanceof Blob) form.append('files[]', file);
@@ -81,7 +81,7 @@ export class SessionModel extends BaseModel {
         const {
             body: { files }
         } = await service.post<{ files: FileData[] }>(
-            'user/file?file_type=user_file',
+            `user/file?file_type=${scope}_file`,
             form
         );
         return files[0];
@@ -93,7 +93,7 @@ export class SessionModel extends BaseModel {
         ...data
     }: Partial<{ avatar: Blob } & UserProfile>) {
         if (avatar) {
-            const { url } = await this.upload(avatar);
+            const { url } = await this.upload(avatar, 'user');
 
             await service.put<boolean>('user/picture', { url });
         }

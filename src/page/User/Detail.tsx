@@ -53,44 +53,13 @@ export class UserDetail extends mixin() {
         );
     };
 
-    renderOwnActivity = ({ hackathon_info }: Registration) => (
-        <div className="flex-column">
-            <ActivityCard {...hackathon_info} />
-            <div className="row justify-content-between">
-                <Button
-                    outline
-                    href="manage/activity"
-                    className="col-auto ml-4"
-                >
-                    编辑活动
-                </Button>
-                {hackathon_info.status === 3 ? (
-                    <Button
-                        outline
-                        className="col-auto mr-4"
-                        onClick={event => event.preventDefault()}
-                    >
-                        申请下线
-                    </Button>
-                ) : (
-                    <Button
-                        outline
-                        className="col-auto mr-4"
-                        onClick={event => event.preventDefault()}
-                    >
-                        申请上线
-                    </Button>
-                )}
-            </div>
-        </div>
-    );
-
     render() {
         const {
             loading,
             current: { id, nickname, avatar_url, profile, likes, registrations }
         } = user;
-        const isSelf = session.user?.id === id;
+        const isSelf = session.user?.id === id,
+            owns = likes?.filter(({ remark }) => remark === 'creator');
 
         return (
             <SpinnerBox className="container d-lg-flex" cover={loading}>
@@ -126,11 +95,14 @@ export class UserDetail extends mixin() {
                     </TabPanel>
                     <NavLink>创建的活动</NavLink>
                     <TabPanel>
-                        <div className="d-flex justify-content-around flex-wrap">
-                            {likes
-                                ?.filter(({ remark }) => remark === 'creator')
-                                .map(this.renderOwnActivity)}
-                        </div>
+                        {owns?.[0] && (
+                            <ActivityGallery
+                                manage
+                                list={owns.map(
+                                    ({ hackathon_info }) => hackathon_info
+                                )}
+                            />
+                        )}
                     </TabPanel>
                     <NavLink>参与的活动</NavLink>
                     <TabPanel>

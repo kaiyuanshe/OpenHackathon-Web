@@ -1,13 +1,15 @@
-import { createCell } from 'web-cell';
+import { createCell, Fragment } from 'web-cell';
 import { Day } from 'web-utility/source/date';
 import classNames from 'classnames';
-import { CardProps, Card } from 'boot-cell/source/Content/Card';
+import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { Activity } from '../model';
+import { Activity, session } from '../model';
 
-export type ActivityCardProps = Omit<Activity, 'id'> & CardProps;
+export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
+    manage?: boolean;
+}
 
 export function ActivityCard({
     className,
@@ -17,11 +19,42 @@ export function ActivityCard({
     location,
     tags,
     registration_end_time,
+    status,
     stat,
+    creator,
+    manage,
     ...rest
 }: ActivityCardProps) {
     const event_start = new Date(event_start_time),
         days = Math.ceil((registration_end_time - Date.now()) / Day);
+
+    const toolbar =
+        !manage || creator !== session.user?.id ? (
+            days > 0 ? (
+                <Button block color="primary">
+                    报名参加
+                </Button>
+            ) : (
+                <Button block color="secondary" disabled>
+                    报名已截止
+                </Button>
+            )
+        ) : (
+            <>
+                <Button block color="warning" href="manage/activity">
+                    编辑活动
+                </Button>
+                {status === 3 ? (
+                    <Button block color="danger" className="mt-2">
+                        申请下线
+                    </Button>
+                ) : (
+                    <Button block color="success" className="mt-2">
+                        申请上线
+                    </Button>
+                )}
+            </>
+        );
 
     return (
         <Card
@@ -35,37 +68,6 @@ export function ActivityCard({
                 className
             )}
             title={<a href={'activity?name=' + name}>{display_name}</a>}
-            footer={
-                <div>
-                    <small className="d-flex justify-content-between mb-2">
-                        <time
-                            datetime={new Date(registration_end_time).toJSON()}
-                        >
-                            报名截止 {days < 0 ? '--' : days} 天
-                        </time>
-                        <span>
-                            <FAIcon name="heart" color="danger" /> {stat?.like}
-                        </span>
-                        <span>{stat?.register}人报名</span>
-                    </small>
-                    {days > 0 ? (
-                        <Button
-                            className="w-75 m-auto d-block justify-content-center"
-                            color="primary"
-                        >
-                            报名参加
-                        </Button>
-                    ) : (
-                        <Button
-                            className="w-75 m-auto d-block justify-content-center"
-                            color="secondary"
-                            disabled
-                        >
-                            报名已截止
-                        </Button>
-                    )}
-                </div>
-            }
         >
             <small className="d-flex justify-content-between">
                 <time datetime={event_start.toJSON()}>
@@ -85,6 +87,19 @@ export function ActivityCard({
                     </li>
                 ))}
             </ul>
+            <CardFooter>
+                <small className="d-flex justify-content-between mb-2">
+                    <time datetime={new Date(registration_end_time).toJSON()}>
+                        报名截止 {days < 0 ? '--' : days} 天
+                    </time>
+                    <span>
+                        <FAIcon name="heart" color="danger" /> {stat?.like}
+                    </span>
+                    <span>{stat?.register}人报名</span>
+                </small>
+
+                {toolbar}
+            </CardFooter>
         </Card>
     );
 }

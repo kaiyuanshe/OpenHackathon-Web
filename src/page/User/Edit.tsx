@@ -26,12 +26,13 @@ export class UserEdit extends mixin() {
     handleSave = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
 
-        const { avatar, ...data } = formToJSON<
+        const { avatar, phone, ...data } = formToJSON<
             Partial<{ avatar: File | string } & UserProfile>
         >(event.target as HTMLFormElement);
 
         await session.updateProfile({
             avatar: avatar instanceof File ? avatar : null,
+            phone: phone + '',
             ...data
         });
         self.alert('个人信息更新成功！');
@@ -45,7 +46,7 @@ export class UserEdit extends mixin() {
                 real_name = '',
                 phone = '',
                 gender = Gender.other,
-                age = 0,
+                age = 1,
                 address = ''
             } = {}
         } = session.user || {};
@@ -119,7 +120,7 @@ export class UserEdit extends mixin() {
                         label="年龄"
                         type="number"
                         name="age"
-                        min={0}
+                        min={1}
                         value={age + ''}
                     />
                 </div>

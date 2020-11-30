@@ -14,7 +14,9 @@ export const service = new HTTPClient({
     responseType: 'json'
 }).use(async ({ request, response }, next) => {
     if (token)
-        (request.headers = request.headers || {})['Authorization'] = token;
+        (request.headers = request.headers || {})[
+            'Authorization'
+        ] = `token ${token}`;
 
     await next();
 

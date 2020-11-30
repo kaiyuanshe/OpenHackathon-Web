@@ -1,4 +1,11 @@
-import { component, mixin, watch, attribute, createCell } from 'web-cell';
+import {
+    component,
+    mixin,
+    watch,
+    attribute,
+    createCell,
+    Fragment
+} from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { diffTime } from 'web-utility/source/date';
 
@@ -47,7 +54,7 @@ export class ActivityDetail extends mixin() {
         } = activity.current;
 
         return (
-            <div className="ml-3">
+            <>
                 <h2 className="my-3">{display_name}</h2>
                 <aside className="my-2">
                     {tags?.map(tag => (
@@ -92,7 +99,7 @@ export class ActivityDetail extends mixin() {
                         {stat?.register}人
                     </li>
                 </ul>
-            </div>
+            </>
         );
     }
 
@@ -183,16 +190,20 @@ export class ActivityDetail extends mixin() {
 
         return (
             <SpinnerBox cover={loading}>
-                <header className="d-lg-flex py-3">
-                    <CarouselView controls indicators={!isMobile}>
+                <header className="row py-3">
+                    <CarouselView
+                        className="col-12 col-lg-7"
+                        controls
+                        indicators={!isMobile}
+                    >
                         {banners?.map(image => (
                             <CarouselItem image={image} />
                         ))}
                     </CarouselView>
-                    {this.renderMeta()}
+                    <div className="col-12 col-lg-5">{this.renderMeta()}</div>
                 </header>
-                <div className="d-lg-flex">
-                    <TabView>
+                <div className="row">
+                    <TabView className="col-12 col-lg-9">
                         <NavLink>活动详情</NavLink>
                         <TabPanel innerHTML={description} />
 
@@ -202,7 +213,7 @@ export class ActivityDetail extends mixin() {
                         <NavLink>所有团队</NavLink>
                         <TabPanel>{this.renderTeamList()}</TabPanel>
                     </TabView>
-                    <aside className="ml-3">
+                    <aside className="col-12 col-lg-3">
                         <h3>主办方</h3>
                         {organizers?.map(({ logo, name, homepage }) => (
                             <MediaObject
