@@ -29,6 +29,7 @@ export interface Activity extends DataItem {
     tags: string[];
     banners: string[];
     location: string;
+    headcount_limit: number;
     coord?: Coord;
     registration_start_time: number;
     registration_end_time: number;
@@ -85,6 +86,13 @@ export class ActivityModel extends TableModel<Activity> {
     @loading
     async createActivity(data: Partial<Activity>) {
         const { body } = await service.post<Activity>('admin/hackathon', data);
+
+        return (this.current = body);
+    }
+
+    @loading
+    async updateActivity(data: Partial<Activity>) {
+        const { body } = await service.put<Activity>('admin/hackathon', data);
 
         return (this.current = body);
     }
