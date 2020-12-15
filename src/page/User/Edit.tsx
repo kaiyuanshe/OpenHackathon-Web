@@ -126,15 +126,20 @@ export class UserEdit extends mixin() {
                 </div>
                 <div className="form-row">
                     <div className="col-md-6 my-2 my-md-0">
-                        <Button block type="submit" disabled={loading}>
+                        <Button
+                            type="submit"
+                            color="success"
+                            block
+                            disabled={loading}
+                        >
                             保存
                         </Button>
                     </div>
                     <div className="col-md-6">
                         <Button
-                            block
                             type="reset"
                             color="danger"
+                            block
                             disabled={loading}
                         >
                             取消

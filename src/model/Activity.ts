@@ -91,11 +91,10 @@ export class ActivityModel extends TableModel<Activity> {
     }
 
     @loading
-    async updateActivity(data: Partial<Activity>) {
-        const { body } = await service.put<Activity>('admin/hackathon', data, {
-            hackathon_name: data.name
+    async updateActivity({ name, ...data }: Partial<Activity>) {
+        await service.put('admin/hackathon', data, {
+            hackathon_name: name
         });
-
-        return (this.current = body);
+        return Object.assign(this.current, data);
     }
 }

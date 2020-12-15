@@ -118,6 +118,7 @@ export class HomePage extends mixin() {
                     </SpinnerBox>
                     <Button
                         outline
+                        color="primary"
                         block
                         size="sm"
                         className="w-25 m-auto"

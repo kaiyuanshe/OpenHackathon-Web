@@ -1,17 +1,13 @@
-import { importCSS, formToJSON } from 'web-utility/source/DOM';
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { formToJSON } from 'web-utility/source/DOM';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
-import { FormField } from 'boot-cell/source/Form/FormField';
 import { Button } from 'boot-cell/source/Form/Button';
-import Quill from 'quill';
 
+import { HTMLEditor } from '../../component/HTMLEditor';
 import { ActivityBasicForm } from './ActivityBasicForm';
-import { bootEditor } from '../../component/HTMLEditor';
 import { activity, Activity } from '../../model';
-
-importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 
 @observer
 @component({
@@ -20,7 +16,6 @@ importCSS('https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css');
 })
 export class CreateActivity extends mixin() {
     private tabView: TabView;
-    private description: Quill;
 
     connectedCallback() {
         this.classList.add('d-block', 'container');
@@ -31,46 +26,23 @@ export class CreateActivity extends mixin() {
     saveBasicForm = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
 
+        const form = event.target as HTMLFormElement;
         const data = formToJSON<
             Partial<Omit<Activity, 'tags' | 'description'> & { tags: string }>
-        >(event.target as HTMLFormElement);
+        >(form);
+        const editor = form.querySelector('html-editor') as HTMLEditor;
 
         await activity.createActivity({
             ...data,
-            description: this.description.root.innerHTML,
+            description: editor.value,
             tags: data.tags.split(' ')
         });
-
         this.tabView.activeIndex++;
     };
 
-    renderBasicForm() {
-        return (
-            <form className="text-center" onSubmit={this.saveBasicForm}>
-                <FormField
-                    label="名称"
-                    name="name"
-                    labelColumn={2}
-                    placeholder="名称，仅限字母和数字"
-                    required
-                />
-                <ActivityBasicForm />
-
-                <div
-                    ref={(box: HTMLElement) => {
-                        this.description = bootEditor(box, {
-                            placeholder: '活动详情'
-                        });
-                    }}
-                />
-                <Button type="submit" className="mt-3">
-                    下一步
-                </Button>
-            </form>
-        );
-    }
-
     render() {
+        const { loading } = activity;
+
         return (
             <>
                 <h2 className="mt-4">创建活动</h2>
@@ -80,7 +52,18 @@ export class CreateActivity extends mixin() {
                     ref={(element: TabView) => (this.tabView = element)}
                 >
                     <Step icon={1}>填写基本信息</Step>
-                    <TabPanel>{this.renderBasicForm()}</TabPanel>
+                    <TabPanel>
+                        <ActivityBasicForm onSubmit={this.saveBasicForm}>
+                            <Button
+                                type="submit"
+                                color="primary"
+                                className="mt-3"
+                                disabled={loading}
+                            >
+                                下一步
+                            </Button>
+                        </ActivityBasicForm>
+                    </TabPanel>
 
                     <Step icon={2}>选择云服务商</Step>
                     <TabPanel>
@@ -95,7 +78,9 @@ export class CreateActivity extends mixin() {
                             >
                                 上一步
                             </Button>
-                            <Button type="submit">下一步</Button>
+                            <Button type="submit" color="primary">
+                                下一步
+                            </Button>
                         </form>
                     </TabPanel>
                     <Step icon={3}>选择虚拟环境</Step>
@@ -111,7 +96,9 @@ export class CreateActivity extends mixin() {
                             >
                                 上一步
                             </Button>
-                            <Button type="submit">下一步</Button>
+                            <Button type="submit" color="primary">
+                                下一步
+                            </Button>
                         </form>
                     </TabPanel>
                     <Step icon={4}>完成</Step>
@@ -127,7 +114,9 @@ export class CreateActivity extends mixin() {
                             >
                                 上一步
                             </Button>
-                            <Button type="submit">提交</Button>
+                            <Button type="submit" color="success">
+                                提交
+                            </Button>
                         </form>
                     </TabPanel>
                 </TabView>

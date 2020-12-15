@@ -78,7 +78,9 @@ export class UserDetail extends mixin() {
                     </div>
                     {!isSelf ? null : (
                         <div className="p-3 border-top text-center">
-                            <Button href="user/edit">编辑个人信息</Button>
+                            <Button color="warning" href="user/edit">
+                                编辑个人信息
+                            </Button>
                         </div>
                     )}
                 </div>

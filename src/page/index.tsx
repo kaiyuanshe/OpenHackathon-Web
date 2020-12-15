@@ -102,7 +102,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                 <Button className="mr-3" color="success" href="create">
                     创建黑客松
                 </Button>
-                <DropMenu caption={nickname}>
+                <DropMenu buttonColor="primary" caption={nickname}>
                     <DropMenuItem href={'user?uid=' + id}>
                         个人主页
                     </DropMenuItem>
@@ -134,7 +134,9 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                         <NavLink {...rest}>{title}</NavLink>
                     ))}
                     {!user ? (
-                        <Button onClick={this.signIn}>登录</Button>
+                        <Button color="primary" onClick={this.signIn}>
+                            登录
+                        </Button>
                     ) : (
                         this.renderUserBar(user)
                     )}

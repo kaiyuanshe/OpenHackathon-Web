@@ -4,8 +4,7 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "boot-cell": "^1.4.0",
-        "bootstrap-icons": "^1.2.0",
+        "boot-cell": "^1.6.1",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.2",
         "classnames": "^2.2.6",
@@ -31,7 +30,7 @@
         "postcss-modules": "^3.2.2",
         "prettier": "^2.2.1",
         "typescript": "^4.1.3",
-        "workbox-cli": "^4.3.1"
+        "workbox-cli": "^6.0.2"
     },
     "prettier": {
         "singleQuote": true,
@@ -40,9 +39,7 @@
         "tabWidth": 4
     },
     "lint-staged": {
-        "*.{html,md,css,less,json,yml}": [
-            "prettier --write"
-        ],
+        "*.{html,md,css,less,json,yml}": "prettier --write",
         "*.{js,ts,tsx}": [
             "prettier --write",
             "eslint --fix"
@@ -58,7 +55,7 @@
     },
     "scripts": {
         "test": "lint-staged",
-        "start": "workbox generateSW  &&  parcel src/index.html --open",
+        "start": "parcel src/index.html --open",
         "pack": "parcel build src/index.html --public-url .",
         "build": "rm -rf dist/  &&  npm run pack  &&  workbox generateSW"
     },

@@ -1,26 +1,49 @@
-import { createCell, Fragment } from 'web-cell';
+import { createCell } from 'web-cell';
+import classNames from 'classnames';
+import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
-import { formatDate } from 'web-utility/source/date';
 
 import { Activity } from '../../model';
 import { TimeRange } from '../../component/TimeRange';
+import { HTMLEditor } from '../../component/HTMLEditor';
+
+export interface ActivityBasicFormProps extends FormProps {
+    data?: Partial<Activity>;
+}
 
 export function ActivityBasicForm({
-    display_name,
-    tags,
-    short_description,
-    ribbon,
-    headcount_limit,
-    registration_start_time,
-    registration_end_time,
-    event_start_time,
-    event_end_time,
-    judge_start_time,
-    judge_end_time,
-    location
-}: Partial<Activity>) {
+    className,
+    data: {
+        id,
+        name,
+        display_name,
+        tags,
+        short_description,
+        ribbon,
+        headcount_limit,
+        registration_start_time,
+        registration_end_time,
+        event_start_time,
+        event_end_time,
+        judge_start_time,
+        judge_end_time,
+        location,
+        description
+    } = {},
+    defaultSlot,
+    ...rest
+}: ActivityBasicFormProps) {
     return (
-        <>
+        <Form {...rest} className={classNames('text-center', className)}>
+            <FormField
+                label="名称"
+                name="name"
+                labelColumn={2}
+                placeholder="名称，仅限字母和数字"
+                value={name}
+                required
+                readOnly={!!id}
+            />
             <FormField
                 label="显示名称"
                 name="display_name"
@@ -47,20 +70,10 @@ export function ActivityBasicForm({
                 <label className="col-2 align-self-center mb-0">报名时间</label>
                 <div className="col-10">
                     <TimeRange
-                        parent_name="registration"
-                        start_time={
-                            registration_start_time &&
-                            formatDate(
-                                new Date(registration_start_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
-                        }
-                        end_time={
-                            registration_end_time &&
-                            formatDate(
-                                new Date(registration_end_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
+                        name="registration"
+                        value={
+                            [registration_start_time, registration_end_time] +
+                            ''
                         }
                     />
                 </div>
@@ -69,21 +82,8 @@ export function ActivityBasicForm({
                 <label className="col-2 align-self-center mb-0">活动时间</label>
                 <div className="col-10">
                     <TimeRange
-                        parent_name="event"
-                        start_time={
-                            event_start_time &&
-                            formatDate(
-                                new Date(event_start_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
-                        }
-                        end_time={
-                            event_end_time &&
-                            formatDate(
-                                new Date(event_end_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
-                        }
+                        name="event"
+                        value={[event_start_time, event_end_time] + ''}
                     />
                 </div>
             </div>
@@ -91,21 +91,8 @@ export function ActivityBasicForm({
                 <label className="col-2 align-self-center mb-0">评分时间</label>
                 <div className="col-10">
                     <TimeRange
-                        parent_name="judge"
-                        start_time={
-                            judge_start_time &&
-                            formatDate(
-                                new Date(judge_start_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
-                        }
-                        end_time={
-                            judge_end_time &&
-                            formatDate(
-                                new Date(judge_end_time),
-                                'YYYY-MM-DDTHH:mm'
-                            )
-                        }
+                        name="judge"
+                        value={[judge_start_time, judge_end_time] + ''}
                     />
                 </div>
             </div>
@@ -131,6 +118,11 @@ export function ActivityBasicForm({
                 placeholder="活动简介"
                 value={short_description}
             />
-        </>
+            <HTMLEditor
+                options={{ placeholder: '活动详情' }}
+                value={description}
+            />
+            {defaultSlot}
+        </Form>
     );
 }

@@ -19,7 +19,7 @@
 -   Component engine: [WebCell v2][6]
 -   Component suite: [BootCell v1][7]
 -   State management: [MobX v5][8]
--   PWA framework: [Workbox v4][9]
+-   PWA framework: [Workbox v6][9]
 -   Package bundler: [Parcel v1][10]
 -   CI / CD: GitHub [Actions][11] + [Pages][12]
 
