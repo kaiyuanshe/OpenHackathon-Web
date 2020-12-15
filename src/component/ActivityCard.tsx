@@ -41,7 +41,11 @@ export function ActivityCard({
             )
         ) : (
             <>
-                <Button block color="warning" href="manage/activity">
+                <Button
+                    block
+                    color="warning"
+                    href={'manage/activity?name=' + name}
+                >
                     编辑活动
                 </Button>
                 {status === 3 ? (

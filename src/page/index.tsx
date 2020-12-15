@@ -56,6 +56,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             paths: ['create'],
             component: async () =>
                 (await import('./Activity/CreateActivity')).CreateActivity
+        },
+        {
+            paths: ['manage/activity'],
+            component: async () =>
+                (await import('./Activity/EditActivity')).EditActivity
         }
     ];
 
