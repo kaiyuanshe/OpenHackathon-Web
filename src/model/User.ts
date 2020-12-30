@@ -98,4 +98,11 @@ export class UserModel extends TableModel<User> {
 
         return (this.current = body);
     }
+
+    async getRegistratiors(hackathon_name: string) {
+        const { body } = await service.get<User[]>('admin/registration/list', {
+            hackathon_name: hackathon_name
+        });
+        return body;
+    }
 }

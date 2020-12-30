@@ -1,11 +1,4 @@
-import {
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell,
-    Fragment
-} from 'web-cell';
+import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { formToJSON } from 'web-utility/source/DOM';
 import { observer } from 'mobx-web-cell';
 import { Button } from 'boot-cell/source/Form/Button';
@@ -56,23 +49,21 @@ export class EditActivity extends mixin() {
         const { loading } = activity;
 
         return (
-            <>
-                <PageFrame menu={menu}>
-                    <ActivityBasicForm
-                        data={activity.current}
-                        onSubmit={this.saveBasicForm}
+            <PageFrame menu={menu}>
+                <ActivityBasicForm
+                    data={activity.current}
+                    onSubmit={this.saveBasicForm}
+                >
+                    <Button
+                        type="submit"
+                        color="success"
+                        className="mt-3"
+                        disabled={loading}
                     >
-                        <Button
-                            type="submit"
-                            color="success"
-                            className="mt-3"
-                            disabled={loading}
-                        >
-                            保存
-                        </Button>
-                    </ActivityBasicForm>
-                </PageFrame>
-            </>
+                        保存
+                    </Button>
+                </ActivityBasicForm>
+            </PageFrame>
         );
     }
 }
