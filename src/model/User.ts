@@ -59,6 +59,10 @@ export interface User extends DataItem {
     registrations?: Registration[];
 }
 
+export interface RegistrationList extends Partial<Omit<Registration, 'user'>> {
+    user: Partial<Omit<User, 'registration' & 'likes'>>;
+}
+
 export class UserModel extends TableModel<User> {
     singleBase = 'user';
     multipleBase = 'admin/user/list';
@@ -97,12 +101,5 @@ export class UserModel extends TableModel<User> {
         (body.likes = likes), (body.registrations = registrations);
 
         return (this.current = body);
-    }
-
-    async getRegistratiors(hackathon_name: string) {
-        const { body } = await service.get<User[]>('admin/registration/list', {
-            hackathon_name: hackathon_name
-        });
-        return body;
     }
 }

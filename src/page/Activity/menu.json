@@ -15,27 +15,27 @@
             {
                 "title": "管理员",
                 "href": "manage/administrator",
-                "icon": "edit"
+                "icon": "user-secret"
             },
             {
                 "title": "奖项设置",
                 "href": "manage/prize",
-                "icon": "user"
+                "icon": "trophy"
             },
             {
                 "title": "作品评奖",
                 "href": "manage/award",
-                "icon": "edit"
+                "icon": "star"
             },
             {
                 "title": "主办方信息",
                 "href": "manage/organization",
-                "icon": "user"
+                "icon": "sitemap"
             },
             {
                 "title": "公告",
                 "href": "manage/message",
-                "icon": "user"
+                "icon": "bullhorn"
             }
         ]
     },
@@ -45,17 +45,17 @@
             {
                 "title": "云资源",
                 "href": "manage/cloud",
-                "icon": "edit"
+                "icon": "upload"
             },
             {
                 "title": "虚拟环境",
                 "href": "manage/virtualenv",
-                "icon": "user"
+                "icon": "th-large"
             },
             {
                 "title": "环境监控",
                 "href": "manage/monitorenv",
-                "icon": "user"
+                "icon": "desktop"
             }
         ]
     }
