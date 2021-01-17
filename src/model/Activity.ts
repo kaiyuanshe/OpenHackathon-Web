@@ -4,7 +4,7 @@ import { DataItem, service, PageData } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { Team } from './Team';
-import { User, Registration, RegistrationList } from './User';
+import { Registration, RegistrationList } from './User';
 
 export interface Organization extends DataItem {
     name: string;
@@ -165,22 +165,21 @@ export class ActivityModel extends TableModel<Activity> {
     }
 
     @loading
-    async addActivityConfig(hackathon_name: string, data: any) {
-        const { body } = await service.post<ActivityConfig>(
-            'admin/hackathon/config',
-            data,
-            { hackathon_name }
-        );
-        return (this.config = body);
-    }
-
-    @loading
     async updateActivityConfig(hackathon_name: string, data: any) {
-        const { body } = await service.put<ActivityConfig>(
-            'admin/hackathon/config',
-            data,
-            { hackathon_name }
-        );
-        return (this.config = body);
+        if (Object.keys(this.config).length === 0) {
+            const { body } = await service.post<ActivityConfig>(
+                'admin/hackathon/config',
+                data,
+                { hackathon_name }
+            );
+            return (this.config = body);
+        } else {
+            const { body } = await service.put<ActivityConfig>(
+                'admin/hackathon/config',
+                data,
+                { hackathon_name }
+            );
+            return (this.config = body);
+        }
     }
 }

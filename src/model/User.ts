@@ -60,7 +60,7 @@ export interface User extends DataItem {
 }
 
 export interface RegistrationList extends Partial<Omit<Registration, 'user'>> {
-    user: Partial<Omit<User, 'registration' & 'likes'>>;
+    user: Partial<Omit<User, 'registration' | 'likes'>>;
 }
 
 export class UserModel extends TableModel<User> {
