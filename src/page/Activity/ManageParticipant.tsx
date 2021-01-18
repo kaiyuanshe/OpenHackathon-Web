@@ -1,85 +1,129 @@
-import { component, mixin, watch, attribute, createCell } from 'web-cell';
+import {
+    WebCellProps,
+    component,
+    mixin,
+    watch,
+    attribute,
+    createCell
+} from 'web-cell';
 import { observer } from 'mobx-web-cell';
-import { FormField } from 'boot-cell/source/Form/FormField';
 import { ToggleField } from 'boot-cell/source/Form/ToggleField';
 import { Field } from 'boot-cell/source/Form/Field';
 import { Table, TableRow } from 'boot-cell/source/Content/Table';
 
-import { activity } from '../../model';
-import { RegistrationList } from '../../model/User';
-import { PageFrame } from '../../component/Navbar';
+import { AdminFrame } from '../../component/AdminFrame';
 import menu from './menu.json';
+import { activity, RegistrationList } from '../../model';
 
-const status = ['未审核', '通过', '拒绝', '自动通过'];
+const Status = ['未审核', '通过', '拒绝', '自动通过'];
+
+export interface ManageParticipantProps extends WebCellProps {
+    name: string;
+}
 
 @observer
 @component({
     tagName: 'manage-participant',
     renderTarget: 'children'
 })
-export class ManageParticipant extends mixin() {
+export class ManageParticipant extends mixin<ManageParticipantProps>() {
     @attribute
     @watch
     name = '';
 
     connectedCallback() {
-        this.classList.add('d-block', 'container-md');
+        const { name } = this;
 
-        activity.getRegistrations(this.name);
-        activity.getActivityConfig(this.name);
+        activity.getRegistrations(name);
+        activity.getActivityConfig(name);
 
         super.connectedCallback();
     }
 
-    handleTeamFreedom = async (event: Event) => {
-        activity.updateActivityConfig(this.name, {
-            freedom_team: (event.target as HTMLFormElement).checked
-        });
-    };
+    handleTeamFreedom = async ({ target }: Event) =>
+        activity.updateActivityConfig(
+            { freedom_team: (target as HTMLFormElement).checked },
+            this.name
+        );
 
-    handleAutoApprove = async (event: Event) => {
-        activity.updateActivityConfig(this.name, {
-            auto_approve: (event.target as HTMLFormElement).checked
-        });
-    };
+    handleAutoApprove = async ({ target }: Event) =>
+        activity.updateActivityConfig(
+            { auto_approve: (target as HTMLFormElement).checked },
+            this.name
+        );
 
-    handleStatus = async (event: Event, e: RegistrationList) => {
-        const status = Number((event.target as HTMLFormElement).value);
-        if (status != e.status) {
-            activity.updateRegistration(e.id, status, this.name);
-        }
-    };
+    handleStatus(id: string, oldStatus: number) {
+        return ({ target }: Event) => {
+            const status = +(target as HTMLFormElement).value;
 
-    render() {
-        const { freedom_team, auto_approve } = activity.config;
+            if (status !== oldStatus)
+                activity.updateRegistration(id, status, this.name);
+        };
+    }
+
+    renderUser = (
+        {
+            user: {
+                name,
+                emails: [{ email }],
+                provider,
+                profile
+            },
+            create_time,
+            status,
+            id
+        }: RegistrationList,
+        i: number
+    ) => (
+        <TableRow checked={false}>
+            <th scope="col">{i + 1}</th>
+            <th scope="col">{name}</th>
+            <th scope="col">{email}</th>
+            <th scope="col">{provider}</th>
+            <th scope="col">{profile?.phone}</th>
+            <th scope="col">{profile?.address}</th>
+            <th scope="col">{create_time}</th>
+            <th scope="col" style={{ width: '150px' }}>
+                <Field is="select" onChange={this.handleStatus(id, status)}>
+                    <option selected>{Status[status]}</option>
+                    {Status.map((e, i) => (
+                        <option value={i + ''}>{e}</option>
+                    ))}
+                </Field>
+            </th>
+        </TableRow>
+    );
+
+    render({ name }: ManageParticipantProps) {
+        const {
+            config: { freedom_team, auto_approve },
+            userList
+        } = activity;
+
         return (
-            <PageFrame menu={menu}>
-                <ToggleField
-                    type="checkbox"
-                    switch
-                    className="float-right mt-3"
-                    checked={freedom_team}
-                    onChange={this.handleTeamFreedom}
-                >
-                    允许组队
-                </ToggleField>
-                <ToggleField
-                    type="checkbox"
-                    switch
-                    className="float-right mt-3"
-                    checked={auto_approve}
-                    onChange={this.handleAutoApprove}
-                >
-                    自动通过
-                </ToggleField>
-                <Table className="mt-2" small>
-                    <TableRow type="head">
-                        <th scope="col">
-                            <Field
-                                type="checkbox"
-                                style={{ width: '12px', height: '12px' }}
-                            />
-                        </th>
+            <AdminFrame menu={menu} name={name}>
+                <header className="d-flex justify-content-end">
+                    <ToggleField
+                        type="checkbox"
+                        switch
+                        className="m-2"
+                        checked={freedom_team}
+                        onChange={this.handleTeamFreedom}
+                    >
+                        允许组队
+                    </ToggleField>
+                    <ToggleField
+                        type="checkbox"
+                        switch
+                        className="m-2"
+                        checked={auto_approve}
+                        onChange={this.handleAutoApprove}
+                    >
+                        自动通过
+                    </ToggleField>
+                </header>
+                <Table className="mt-2" small center>
+                    <TableRow type="head" checked={false}>
                         <th scope="col">#</th>
                         <th scope="col">注册名</th>
                         <th scope="col">邮箱</th>
@@ -90,35 +134,9 @@ export class ManageParticipant extends mixin() {
                         <th scope="col">状态</th>
                     </TableRow>
 
-                    {activity.userList.map((e, i) => (
-                        <TableRow>
-                            <th scope="col">
-                                <Field type="checkbox" />
-                            </th>
-                            <th scope="col">{i + 1}</th>
-                            <td scope="col">{e.user.name}</td>
-                            <td scope="col">{e.user.emails[0].email}</td>
-                            <td scope="col">{e.user.provider}</td>
-                            <td scope="col">{e.user.profile?.phone}</td>
-                            <td scope="col">{e.user.profile?.address}</td>
-                            <td scope="col">{e.create_time}</td>
-                            <td scope="col" style={{ width: '150px' }}>
-                                <FormField
-                                    is="select"
-                                    onChange={event =>
-                                        this.handleStatus(event, e)
-                                    }
-                                >
-                                    <option selected>{status[e.status]}</option>
-                                    {status.map((e, i) => (
-                                        <option value={i}>{e}</option>
-                                    ))}
-                                </FormField>
-                            </td>
-                        </TableRow>
-                    ))}
+                    {userList.map(this.renderUser)}
                 </Table>
-            </PageFrame>
+            </AdminFrame>
         );
     }
 }

@@ -5,7 +5,6 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { HTMLEditor } from '../../component/HTMLEditor';
 import { ActivityBasicForm } from './ActivityBasicForm';
 import { activity, Activity } from '../../model';
 
@@ -30,11 +29,9 @@ export class CreateActivity extends mixin() {
         const data = formToJSON<
             Partial<Omit<Activity, 'tags' | 'description'> & { tags: string }>
         >(form);
-        const editor = form.querySelector('html-editor') as HTMLEditor;
 
         await activity.createActivity({
             ...data,
-            description: editor.value,
             tags: data.tags.split(' ')
         });
         this.tabView.activeIndex++;

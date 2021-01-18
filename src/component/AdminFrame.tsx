@@ -4,21 +4,23 @@ import {
     createCell,
     Fragment
 } from 'web-cell';
+import { parseURLData, buildURLData } from 'web-utility/source/URL';
 import { Nav } from 'boot-cell/source/Navigator/Nav';
 
 import { IconNavLinkProps, IconNavLink } from './IconNavLink';
-import style from './PageFrame.less';
+import style from './AdminFrame.module.less';
 
 interface MenuSection {
     title?: VNodeChildElement;
     list: IconNavLinkProps[];
 }
 
-export interface PageFrameProps extends WebCellProps {
-    menu?: MenuSection[];
+export interface AdminFrameProps extends WebCellProps {
+    menu: MenuSection[];
+    name: string;
 }
 
-export function PageFrame({ menu = [], defaultSlot }: PageFrameProps) {
+export function AdminFrame({ menu, name, defaultSlot }: AdminFrameProps) {
     return (
         <div className={style.body}>
             <Nav direction="column" className="py-2 bg-light border-right">
@@ -29,15 +31,21 @@ export function PageFrame({ menu = [], defaultSlot }: PageFrameProps) {
                                 {title}
                             </h6>
                         )}
-                        {list.map(({ title, ...rest }) => (
-                            <IconNavLink {...rest}>{title}</IconNavLink>
+                        {list.map(({ href, title, ...rest }) => (
+                            <IconNavLink
+                                {...rest}
+                                href={`${href.split('?')[0]}?${buildURLData({
+                                    ...parseURLData(href),
+                                    name
+                                })}`}
+                            >
+                                {title}
+                            </IconNavLink>
                         ))}
                     </>
                 ))}
             </Nav>
-            <main className="flex-fill h-100 p-4 overflow-auto">
-                {defaultSlot}
-            </main>
+            <main className="flex-fill p-4">{defaultSlot}</main>
         </div>
     );
 }

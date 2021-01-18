@@ -1,10 +1,10 @@
 import { createCell } from 'web-cell';
-import { BaseFieldProps } from 'web-utility/source/DOM-type';
+import { HTMLFieldProps } from 'web-utility/source/DOM-type';
 import { formatDate } from 'web-utility/source/date';
 import { InputGroup, InputGroupProps } from 'boot-cell/source/Form/InputGroup';
 import { Field } from 'boot-cell/source/Form/Field';
 
-export interface TimeRangeProps extends BaseFieldProps, InputGroupProps {}
+export interface TimeRangeProps extends HTMLFieldProps, InputGroupProps {}
 
 export function TimeRange({
     name,

@@ -44,7 +44,7 @@ export class UserDetail extends mixin() {
             <a target="_blank" href={provider_link[key]?.(userName)}>
                 <BGIcon
                     type="square"
-                    kind="brands"
+                    group="brands"
                     name={name}
                     size="lg"
                     color={provider === key ? 'success' : 'secondary'}

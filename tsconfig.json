@@ -1,16 +1,17 @@
 {
     "compilerOptions": {
         "target": "ES6",
-        "module": "ESNext",
+        "module": "ES2020",
         "moduleResolution": "Node",
         "esModuleInterop": true,
+        "resolveJsonModule": true,
         "experimentalDecorators": true,
         "allowJs": true,
         "sourceMap": true,
         "jsx": "react",
         "jsxFactory": "createCell",
         "jsxFragmentFactory": "Fragment",
-        "lib": ["ES2019", "DOM", "DOM.Iterable"],
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "rootDir": "src"
     },
     "include": ["src/**/*"]

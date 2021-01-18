@@ -2,10 +2,10 @@ import { createCell } from 'web-cell';
 import classNames from 'classnames';
 import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
+import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
 
 import { Activity } from '../../model';
 import { TimeRange } from '../../component/TimeRange';
-import { HTMLEditor } from '../../component/HTMLEditor';
 
 export interface ActivityBasicFormProps extends FormProps {
     data?: Partial<Activity>;
@@ -119,7 +119,9 @@ export function ActivityBasicForm({
                 value={short_description}
             />
             <HTMLEditor
-                options={{ placeholder: '活动详情' }}
+                theme="snow"
+                name="description"
+                placeholder="活动详情"
                 value={description}
             />
             {defaultSlot}

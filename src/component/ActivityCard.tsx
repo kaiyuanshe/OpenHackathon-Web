@@ -78,7 +78,7 @@ export function ActivityCard({
             title={<a href={'activity?name=' + name}>{display_name}</a>}
         >
             <small className="d-flex justify-content-between">
-                <time datetime={event_start.toJSON()}>
+                <time dateTime={event_start.toJSON()}>
                     <FAIcon name="calendar-alt" color="success" />{' '}
                     {event_start.toLocaleString()}
                 </time>
@@ -97,7 +97,7 @@ export function ActivityCard({
             </ul>
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
-                    <time datetime={new Date(registration_end_time).toJSON()}>
+                    <time dateTime={new Date(registration_end_time).toJSON()}>
                         报名截止 {days < 0 ? '--' : days} 天
                     </time>
                     <span>

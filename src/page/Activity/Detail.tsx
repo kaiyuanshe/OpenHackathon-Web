@@ -117,7 +117,7 @@ export class ActivityDetail extends mixin() {
                             className="d-flex align-items-center"
                             href={link}
                         >
-                            <time datetime={date.toJSON()}>
+                            <time dateTime={date.toJSON()}>
                                 {Math.abs(distance)} {TimeUnitName[unit]}前
                             </time>
                             <Badge color="primary" className="mx-2">

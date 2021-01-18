@@ -68,7 +68,7 @@ export class ActivityModel extends TableModel<Activity> {
     userList: RegistrationList[] = [];
 
     @observable
-    config: ActivityConfig;
+    config: ActivityConfig = {} as ActivityConfig;
 
     async getEventList(name: string) {
         const {
@@ -120,22 +120,20 @@ export class ActivityModel extends TableModel<Activity> {
     }
 
     @loading
-    async getRegistrations(hackathon_name: string) {
+    async getRegistrations(name = this.current.name) {
         const { body } = await service.get<RegistrationList[]>(
             'admin/registration/list',
-            {
-                hackathon_name
-            }
+            { hackathon_name: name }
         );
         return (this.userList = body);
     }
 
     @loading
-    async addRegistration(hackathon_name: string) {
+    async addRegistration(name = this.current.name) {
         const { body } = await service.post<Registration>(
             'user/registration',
             {},
-            { hackathon_name }
+            { hackathon_name: name }
         );
         return body;
     }
@@ -144,42 +142,37 @@ export class ActivityModel extends TableModel<Activity> {
     async updateRegistration(
         id: string,
         status: number,
-        hackathon_name: string
+        name = this.current.name
     ) {
         const { body } = await service.put<Registration>(
             'admin/registration',
             { id, status },
-            { hackathon_name }
+            { hackathon_name: name }
         );
-
         return body;
     }
 
     @loading
-    async getActivityConfig(hackathon_name: string) {
+    async getActivityConfig(name = this.current.name) {
         const { body } = await service.get<ActivityConfig>(
             'admin/hackathon/config',
-            { hackathon_name }
+            { hackathon_name: name }
         );
         return (this.config = body);
     }
 
     @loading
-    async updateActivityConfig(hackathon_name: string, data: any) {
-        if (Object.keys(this.config).length === 0) {
-            const { body } = await service.post<ActivityConfig>(
-                'admin/hackathon/config',
-                data,
-                { hackathon_name }
-            );
-            return (this.config = body);
-        } else {
-            const { body } = await service.put<ActivityConfig>(
-                'admin/hackathon/config',
-                data,
-                { hackathon_name }
-            );
-            return (this.config = body);
-        }
+    async updateActivityConfig(
+        data: Partial<ActivityConfig>,
+        name = this.current.name
+    ) {
+        const { body } = await (Object.keys(this.config)[0]
+            ? service.put<ActivityConfig>('admin/hackathon/config', data, {
+                  hackathon_name: name
+              })
+            : service.post<ActivityConfig>('admin/hackathon/config', data, {
+                  hackathon_name: name
+              }));
+        return (this.config = body);
     }
 }

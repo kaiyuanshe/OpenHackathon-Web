@@ -151,7 +151,7 @@ export class HomePage extends mixin() {
                         title="最新活动"
                         style={{ top: '-10px' }}
                     >
-                        <Icon name="circle-fill" width={20} />
+                        <Icon name="circle-fill" size={1.25} />
                     </a>
                     <a
                         href="#sponsors"
@@ -159,7 +159,7 @@ export class HomePage extends mixin() {
                         title="赞助合作"
                         style={{ top: '60px' }}
                     >
-                        <Icon name="circle-fill" width={20} />
+                        <Icon name="circle-fill" size={1.25} />
                     </a>
                     <a
                         href="#activeUsers"
@@ -167,7 +167,7 @@ export class HomePage extends mixin() {
                         title="活跃用户"
                         style={{ top: '130px' }}
                     >
-                        <Icon name="circle-fill" width={20} />
+                        <Icon name="circle-fill" size={1.25} />
                     </a>
                 </div>
             </>

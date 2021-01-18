@@ -97,19 +97,19 @@ export class UserEdit extends mixin() {
                         name="gender"
                     >
                         <option
-                            value={Gender.female}
+                            value={Gender.female + ''}
                             selected={gender === Gender.female}
                         >
                             女
                         </option>
                         <option
-                            value={Gender.male}
+                            value={Gender.male + ''}
                             selected={gender === Gender.male}
                         >
                             男
                         </option>
                         <option
-                            value={Gender.other}
+                            value={Gender.other + ''}
                             selected={gender === Gender.other}
                         >
                             其它
@@ -120,7 +120,7 @@ export class UserEdit extends mixin() {
                         label="年龄"
                         type="number"
                         name="age"
-                        min={1}
+                        min="1"
                         value={age + ''}
                     />
                 </div>
