@@ -5,7 +5,7 @@ import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { Activity, session } from '../model';
+import { Activity, session, activity } from '../model';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
     manage?: boolean;
@@ -31,7 +31,11 @@ export function ActivityCard({
     const toolbar =
         !manage || creator !== session.user?.id ? (
             days > 0 ? (
-                <Button block color="primary">
+                <Button
+                    block
+                    color="primary"
+                    onClick={() => activity.addRegistration(name)}
+                >
                     报名参加
                 </Button>
             ) : (

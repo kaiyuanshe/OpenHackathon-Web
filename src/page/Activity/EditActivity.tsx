@@ -1,20 +1,13 @@
-import {
-    component,
-    mixin,
-    watch,
-    attribute,
-    createCell,
-    Fragment
-} from 'web-cell';
+import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { formToJSON } from 'web-utility/source/DOM';
 import { observer } from 'mobx-web-cell';
-import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
-import { ListItem } from 'boot-cell/source/Content/ListGroup';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { HTMLEditor } from '../../component/HTMLEditor';
 import { ActivityBasicForm } from './ActivityBasicForm';
 import { activity, Activity } from '../../model';
+import { PageFrame } from '../../component/Navbar';
+import menu from './menu.json';
 
 @observer
 @component({
@@ -56,41 +49,21 @@ export class EditActivity extends mixin() {
         const { loading } = activity;
 
         return (
-            <>
-                <TabView mode="list" direction="column" className="mt-3">
-                    <ListItem>编辑活动</ListItem>
-                    <TabPanel>
-                        <ActivityBasicForm
-                            data={activity.current}
-                            onSubmit={this.saveBasicForm}
-                        >
-                            <Button
-                                type="submit"
-                                color="success"
-                                className="mt-3"
-                                disabled={loading}
-                            >
-                                保存
-                            </Button>
-                        </ActivityBasicForm>
-                    </TabPanel>
-                    <ListItem>报名用户</ListItem>
-                    <TabPanel>
-                        To implement{/* 包括选手，导师，评委 */}
-                    </TabPanel>
-                    <ListItem>管理员</ListItem>
-                    <TabPanel>To implement</TabPanel>
-
-                    <ListItem>奖项设置</ListItem>
-                    <TabPanel>To implement</TabPanel>
-                    <ListItem>作品评奖</ListItem>
-                    <TabPanel> To implement</TabPanel>
-                    <ListItem className="text-nowrap">主办方信息</ListItem>
-                    <TabPanel> To implement</TabPanel>
-                    <ListItem>公告</ListItem>
-                    <TabPanel> To implement</TabPanel>
-                </TabView>
-            </>
+            <PageFrame menu={menu}>
+                <ActivityBasicForm
+                    data={activity.current}
+                    onSubmit={this.saveBasicForm}
+                >
+                    <Button
+                        type="submit"
+                        color="success"
+                        className="mt-3"
+                        disabled={loading}
+                    >
+                        保存
+                    </Button>
+                </ActivityBasicForm>
+            </PageFrame>
         );
     }
 }

@@ -1,0 +1,62 @@
+[
+    {
+        "title": "基础设置",
+        "list": [
+            {
+                "title": "编辑活动",
+                "href": "manage/activity",
+                "icon": "edit"
+            },
+            {
+                "title": "报名用户",
+                "href": "manage/participant",
+                "icon": "user"
+            },
+            {
+                "title": "管理员",
+                "href": "manage/administrator",
+                "icon": "user-secret"
+            },
+            {
+                "title": "奖项设置",
+                "href": "manage/prize",
+                "icon": "trophy"
+            },
+            {
+                "title": "作品评奖",
+                "href": "manage/award",
+                "icon": "star"
+            },
+            {
+                "title": "主办方信息",
+                "href": "manage/organization",
+                "icon": "sitemap"
+            },
+            {
+                "title": "公告",
+                "href": "manage/message",
+                "icon": "bullhorn"
+            }
+        ]
+    },
+    {
+        "title": "高级设置",
+        "list": [
+            {
+                "title": "云资源",
+                "href": "manage/cloud",
+                "icon": "upload"
+            },
+            {
+                "title": "虚拟环境",
+                "href": "manage/virtualenv",
+                "icon": "th-large"
+            },
+            {
+                "title": "环境监控",
+                "href": "manage/monitorenv",
+                "icon": "desktop"
+            }
+        ]
+    }
+]

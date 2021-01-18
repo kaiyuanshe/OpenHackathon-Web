@@ -1,7 +1,10 @@
+import { observable } from 'mobx';
+
 import { DataItem, service, PageData } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { Team } from './Team';
+import { Registration, RegistrationList } from './User';
 
 export interface Organization extends DataItem {
     name: string;
@@ -45,9 +48,27 @@ export interface Activity extends DataItem {
     teams?: Team[];
 }
 
+export interface ActivityConfig {
+    pre_allocate_number: number;
+    freedom_team: boolean;
+    login_provider: number;
+    pre_allocate_enabled: boolean;
+    recycle_enabled: boolean;
+    max_enrollment: number;
+    cloud_provide: string;
+    recycle_minutes: number;
+    auto_approve: boolean;
+}
+
 export class ActivityModel extends TableModel<Activity> {
     singleBase = 'hackathon';
     multipleBase = 'hackathon/list';
+
+    @observable
+    userList: RegistrationList[] = [];
+
+    @observable
+    config: ActivityConfig;
 
     async getEventList(name: string) {
         const {
@@ -96,5 +117,69 @@ export class ActivityModel extends TableModel<Activity> {
             hackathon_name: name
         });
         return Object.assign(this.current, data);
+    }
+
+    @loading
+    async getRegistrations(hackathon_name: string) {
+        const { body } = await service.get<RegistrationList[]>(
+            'admin/registration/list',
+            {
+                hackathon_name
+            }
+        );
+        return (this.userList = body);
+    }
+
+    @loading
+    async addRegistration(hackathon_name: string) {
+        const { body } = await service.post<Registration>(
+            'user/registration',
+            {},
+            { hackathon_name }
+        );
+        return body;
+    }
+
+    @loading
+    async updateRegistration(
+        id: string,
+        status: number,
+        hackathon_name: string
+    ) {
+        const { body } = await service.put<Registration>(
+            'admin/registration',
+            { id, status },
+            { hackathon_name }
+        );
+
+        return body;
+    }
+
+    @loading
+    async getActivityConfig(hackathon_name: string) {
+        const { body } = await service.get<ActivityConfig>(
+            'admin/hackathon/config',
+            { hackathon_name }
+        );
+        return (this.config = body);
+    }
+
+    @loading
+    async updateActivityConfig(hackathon_name: string, data: any) {
+        if (Object.keys(this.config).length === 0) {
+            const { body } = await service.post<ActivityConfig>(
+                'admin/hackathon/config',
+                data,
+                { hackathon_name }
+            );
+            return (this.config = body);
+        } else {
+            const { body } = await service.put<ActivityConfig>(
+                'admin/hackathon/config',
+                data,
+                { hackathon_name }
+            );
+            return (this.config = body);
+        }
     }
 }
