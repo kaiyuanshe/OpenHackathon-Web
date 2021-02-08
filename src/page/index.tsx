@@ -93,8 +93,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             title: document.title,
             logo
         });
-        const { data } = await new Promise(resolve =>
-            dialog.on('login', resolve)
+        const data = await new Promise(resolve =>
+            dialog.on('login', loginData => {
+                const { data } = loginData;
+                resolve(data || loginData);
+            })
         );
         await session.signIn(data);
 
