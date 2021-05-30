@@ -84,24 +84,27 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
     signIn = async () => {
         this.setState({ loading: true });
         await importJS(
-            'https://cdn.jsdelivr.net/npm/@authing/guard@1.16.4/dist/Guard.umd.min.js'
+            'https://cdn.jsdelivr.net/npm/@authing/native-js-ui-components'
         );
         this.setState({ loading: false });
         // @ts-ignore
-        const dialog = new self.Guard('5f0e628e4ba608e9a69533ae', {
-            mountId: 'sign-in',
-            title: document.title,
-            logo
-        });
+        const dialog = new self.AuthingNativeJsUIComponents.AuthingGuard(
+            '60178760106d5f26cb267ac1',
+            {
+                target: '#sign-in',
+                title: document.title,
+                logo
+            }
+        );
+        dialog.on('load', authClient => console.log(authClient));
         const data = await new Promise(resolve =>
             dialog.on('login', loginData => {
-                const { data } = loginData;
-                resolve(data || loginData);
+                resolve(loginData);
             })
         );
         await session.signIn(data);
 
-        dialog.hide();
+        document.querySelector('#sign-in').innerHTML = '';
     };
 
     renderUserBar({ nickname, id }: User) {

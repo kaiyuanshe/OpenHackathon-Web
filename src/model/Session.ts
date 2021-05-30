@@ -52,7 +52,7 @@ export class SessionModel extends BaseModel {
 
     @loading
     async signIn(data: Record<string, any>) {
-        const { body } = await service.post<Session>('user/authing', data);
+        const { body } = await service.post<Session>('login', data);
 
         setToken(data.token);
 

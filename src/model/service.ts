@@ -7,10 +7,7 @@ var token: string = localStorage.token || '';
 export const setToken = (raw: string) => (localStorage.token = token = raw);
 
 export const service = new HTTPClient({
-    baseURI:
-        // location.hostname === 'localhost'
-        'http://139.219.9.2:30150/api/',
-    // : 'https://hacking.kaiyuanshe.cn:15000/api/',
+    baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/', //'http://hackathon.cooltools.cc',//
     responseType: 'json'
 }).use(async ({ request, response }, next) => {
     if (token)
