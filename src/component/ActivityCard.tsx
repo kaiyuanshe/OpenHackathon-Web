@@ -14,19 +14,20 @@ export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
 export function ActivityCard({
     className,
     name,
-    display_name,
-    event_start_time,
+    displayName,
+    eventStartedAt,
     location,
     tags,
-    registration_end_time,
+    enrollmentEndedAt,
     status,
     stat,
     creatorId,
     manage,
     ...rest
 }: ActivityCardProps) {
-    const event_start = new Date(event_start_time),
-        days = Math.ceil((registration_end_time - Date.now()) / Day);
+    const event_start = new Date(eventStartedAt),
+        event_end = new Date(enrollmentEndedAt);
+    const days = Math.ceil((+event_end - Date.now()) / Day);
 
     const toolbar =
         !manage || creatorId !== session.user?.id ? (
@@ -52,7 +53,7 @@ export function ActivityCard({
                 >
                     编辑活动
                 </Button>
-                {status === 3 ? (
+                {status === 'online' ? (
                     <Button block color="danger" className="mt-2">
                         申请下线
                     </Button>
@@ -75,7 +76,7 @@ export function ActivityCard({
                 'rounded-lg',
                 className
             )}
-            title={<a href={'activity?name=' + name}>{display_name}</a>}
+            title={<a href={'activity?name=' + name}>{displayName}</a>}
         >
             <small className="d-flex justify-content-between">
                 <time dateTime={event_start.toJSON()}>
@@ -97,7 +98,7 @@ export function ActivityCard({
             </ul>
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
-                    <time dateTime={new Date(registration_end_time).toJSON()}>
+                    <time dateTime={event_end.toJSON()}>
                         报名截止 {days < 0 ? '--' : days} 天
                     </time>
                     <span>

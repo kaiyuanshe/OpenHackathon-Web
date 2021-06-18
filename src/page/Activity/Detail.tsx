@@ -43,19 +43,19 @@ export class ActivityDetail extends mixin() {
 
     renderMeta() {
         const {
-            display_name,
+            displayName,
             tags,
-            registration_start_time,
-            registration_end_time,
-            event_start_time,
-            event_end_time,
+            enrollmentStartedAt,
+            enrollmentEndedAt,
+            eventStartedAt,
+            eventEndedAt,
             location,
             stat
         } = activity.current;
 
         return (
             <>
-                <h2 className="my-3">{display_name}</h2>
+                <h2 className="my-3">{displayName}</h2>
                 <aside className="my-2">
                     {tags?.map(tag => (
                         <Badge color="success" className="mr-1">
@@ -71,8 +71,8 @@ export class ActivityDetail extends mixin() {
                             color="success"
                             className="mx-2"
                         />
-                        {new Date(registration_start_time).toLocaleString()} ~{' '}
-                        {new Date(registration_end_time).toLocaleString()}
+                        {new Date(enrollmentStartedAt).toLocaleString()} ~{' '}
+                        {new Date(enrollmentEndedAt).toLocaleString()}
                     </li>
                     <li>
                         活动时间
@@ -81,8 +81,8 @@ export class ActivityDetail extends mixin() {
                             color="success"
                             className="mx-2"
                         />
-                        {new Date(event_start_time).toLocaleString()} ~{' '}
-                        {new Date(event_end_time).toLocaleString()}
+                        {new Date(eventStartedAt).toLocaleString()} ~{' '}
+                        {new Date(eventEndedAt).toLocaleString()}
                     </li>
                     <li>
                         活动地址
@@ -185,7 +185,7 @@ export class ActivityDetail extends mixin() {
     render() {
         const {
             loading,
-            current: { banners, location, organizers, description, coord }
+            current: { banners, location, organizers, detail, coord }
         } = activity;
 
         return (
@@ -197,7 +197,7 @@ export class ActivityDetail extends mixin() {
                         indicators={!isMobile}
                     >
                         {banners?.map(image => (
-                            <CarouselItem image={image} />
+                            <CarouselItem image={image.uri} />
                         ))}
                     </CarouselView>
                     <div className="col-12 col-lg-5">{this.renderMeta()}</div>
@@ -205,7 +205,7 @@ export class ActivityDetail extends mixin() {
                 <div className="row">
                     <TabView className="col-12 col-lg-9">
                         <NavLink>活动详情</NavLink>
-                        <TabPanel innerHTML={description} />
+                        <TabPanel innerHTML={detail} />
 
                         <NavLink>最新动态</NavLink>
                         <TabPanel>{this.renderEventList()}</TabPanel>

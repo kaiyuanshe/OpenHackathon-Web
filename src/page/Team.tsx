@@ -32,7 +32,7 @@ export class TeamPage extends mixin() {
     }
 
     render() {
-        const { display_name, name: hackathon } = activity.current;
+        const { displayName, name: hackathon } = activity.current;
         const { logo, name, members, project_name, cover } = team.current;
         const loading = activity.loading || team.loading;
 
@@ -41,7 +41,7 @@ export class TeamPage extends mixin() {
                 <BreadCrumb
                     path={[
                         {
-                            title: display_name,
+                            title: displayName,
                             href: 'activity?name=' + hackathon
                         },
                         { title: name }

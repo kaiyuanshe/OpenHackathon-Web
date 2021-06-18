@@ -41,3 +41,9 @@ export interface PageData<T> {
     value: T[];
     nextLink?: string;
 }
+
+export interface Asset {
+    name: string;
+    description: string;
+    uri: string;
+}

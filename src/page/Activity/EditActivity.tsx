@@ -11,9 +11,9 @@ import { observer } from 'mobx-web-cell';
 import { Button } from 'boot-cell/source/Form/Button';
 
 import { AdminFrame } from '../../component/AdminFrame';
-import { ActivityBasicForm } from './ActivityBasicForm';
+import { ActivityBasicForm, ActivityBasicFormData } from './ActivityBasicForm';
 import menu from './menu.json';
-import { activity, Activity } from '../../model';
+import { activity } from '../../model';
 
 export interface EditActivityProps extends WebCellProps {
     name: string;
@@ -39,16 +39,14 @@ export class EditActivity extends mixin<EditActivityProps>() {
         event.preventDefault(), event.stopPropagation();
 
         const form = event.target as HTMLFormElement;
-        const data = formToJSON<
-            Partial<Omit<Activity, 'tags' | 'description'> & { tags: string }>
-        >(form);
+        const data = formToJSON<ActivityBasicFormData>(form);
 
-        const { display_name } = await activity.updateActivity({
+        const { displayName } = await activity.updateOne({
             ...data,
             name: activity.current.name,
             tags: data.tags.split(' ')
         });
-        self.alert(`黑客松 ${display_name} 更新成功！`);
+        self.alert(`黑客松 ${displayName} 更新成功！`);
     };
 
     render({ name }: EditActivityProps) {

@@ -5,8 +5,8 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { ActivityBasicForm } from './ActivityBasicForm';
-import { activity, Activity } from '../../model';
+import { ActivityBasicForm, ActivityBasicFormData } from './ActivityBasicForm';
+import { activity, history } from '../../model';
 
 @observer
 @component({
@@ -26,15 +26,24 @@ export class CreateActivity extends mixin() {
         event.preventDefault(), event.stopPropagation();
 
         const form = event.target as HTMLFormElement;
-        const data = formToJSON<
-            Partial<Omit<Activity, 'tags' | 'description'> & { tags: string }>
-        >(form);
+        const data = formToJSON<ActivityBasicFormData>(form);
 
-        await activity.createActivity({
+        await activity.updateOne({
             ...data,
             tags: data.tags.split(' ')
         });
         this.tabView.activeIndex++;
+    };
+
+    handleFinish = async (event: Event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        await activity.publishOne();
+
+        self.alert('已提交审核，请耐心等候~');
+
+        return history.replace('/');
     };
 
     render() {
@@ -102,7 +111,7 @@ export class CreateActivity extends mixin() {
                     <TabPanel>
                         <form
                             className="text-center"
-                            onSubmit={event => event.preventDefault()}
+                            onSubmit={this.handleFinish}
                         >
                             <Button
                                 type="reset"

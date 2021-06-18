@@ -7,6 +7,10 @@ import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
 import { Activity } from '../../model';
 import { TimeRange } from '../../component/TimeRange';
 
+export type ActivityBasicFormData = Partial<
+    Omit<Activity, 'tags' | 'description'> & { tags: string }
+>;
+
 export interface ActivityBasicFormProps extends FormProps {
     data?: Partial<Activity>;
 }
@@ -16,19 +20,19 @@ export function ActivityBasicForm({
     data: {
         id,
         name,
-        display_name,
+        displayName,
         tags,
-        short_description,
+        summary,
         ribbon,
-        headcount_limit,
-        registration_start_time,
-        registration_end_time,
-        event_start_time,
-        event_end_time,
-        judge_start_time,
-        judge_end_time,
+        maxEnrollment,
+        enrollmentStartedAt,
+        enrollmentEndedAt,
+        eventStartedAt,
+        eventEndedAt,
+        judgeStartedAt,
+        judgeEndedAt,
         location,
-        description
+        detail
     } = {},
     defaultSlot,
     ...rest
@@ -46,10 +50,10 @@ export function ActivityBasicForm({
             />
             <FormField
                 label="显示名称"
-                name="display_name"
+                name="displayName"
                 labelColumn={2}
                 placeholder="显示名称"
-                value={display_name}
+                value={displayName}
                 required
             />
             <FormField
@@ -70,11 +74,8 @@ export function ActivityBasicForm({
                 <label className="col-2 align-self-center mb-0">报名时间</label>
                 <div className="col-10">
                     <TimeRange
-                        name="registration"
-                        value={
-                            [registration_start_time, registration_end_time] +
-                            ''
-                        }
+                        name="enrollment"
+                        value={[enrollmentStartedAt, enrollmentEndedAt] + ''}
                     />
                 </div>
             </div>
@@ -83,7 +84,7 @@ export function ActivityBasicForm({
                 <div className="col-10">
                     <TimeRange
                         name="event"
-                        value={[event_start_time, event_end_time] + ''}
+                        value={[eventStartedAt, eventEndedAt] + ''}
                     />
                 </div>
             </div>
@@ -92,7 +93,7 @@ export function ActivityBasicForm({
                 <div className="col-10">
                     <TimeRange
                         name="judge"
-                        value={[judge_start_time, judge_end_time] + ''}
+                        value={[judgeStartedAt, judgeEndedAt] + ''}
                     />
                 </div>
             </div>
@@ -104,25 +105,26 @@ export function ActivityBasicForm({
                 value={ribbon}
             />
             <FormField
-                label="报名人数限制"
-                name="headcount_limit"
-                labelColumn={2}
-                placeholder="报名人数限制（0表示无限）"
                 type="number"
-                value={headcount_limit?.toString()}
+                name="maxEnrollment"
+                labelColumn={2}
+                label="报名人数限制"
+                placeholder="0 表示无限"
+                required
+                value={maxEnrollment?.toString()}
             />
             <FormField
                 label="活动简介"
-                name="short_description"
+                name="summary"
                 labelColumn={2}
                 placeholder="活动简介"
-                value={short_description}
+                value={summary}
             />
             <HTMLEditor
                 theme="snow"
-                name="description"
+                name="detail"
                 placeholder="活动详情"
-                value={description}
+                value={detail}
             />
             {defaultSlot}
         </Form>
