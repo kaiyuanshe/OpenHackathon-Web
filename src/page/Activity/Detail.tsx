@@ -108,8 +108,8 @@ export class ActivityDetail extends mixin() {
 
         return (
             <ListGroup key="news" flush>
-                {events.map(({ create_time, link, content }) => {
-                    const date = new Date(create_time);
+                {events.map(({ createdAt, link, content }) => {
+                    const date = new Date(createdAt);
                     const { distance, unit } = diffTime(date);
 
                     return (

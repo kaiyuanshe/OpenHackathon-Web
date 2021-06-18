@@ -69,7 +69,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
                 provider,
                 profile
             },
-            create_time,
+            createdAt,
             status,
             id
         }: RegistrationList,
@@ -82,7 +82,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
             <th scope="col">{provider}</th>
             <th scope="col">{profile?.phone}</th>
             <th scope="col">{profile?.address}</th>
-            <th scope="col">{create_time}</th>
+            <th scope="col">{createdAt}</th>
             <th scope="col" style={{ width: '150px' }}>
                 <Field is="select" onChange={this.handleStatus(id, status)}>
                     <option selected>{Status[status]}</option>

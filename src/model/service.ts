@@ -1,13 +1,13 @@
 import { HTTPClient } from 'koajax';
 
-const { localStorage, location } = self;
+const { localStorage } = self;
 
 var token: string = localStorage.token || '';
 
 export const setToken = (raw: string) => (localStorage.token = token = raw);
 
 export const service = new HTTPClient({
-    baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/', //'http://hackathon.cooltools.cc',//
+    baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/',
     responseType: 'json'
 }).use(async ({ request, response }, next) => {
     if (token)
@@ -24,23 +24,20 @@ export const service = new HTTPClient({
 });
 
 export interface ListFilter {
-    order_by?: 'time';
-    page?: string;
-    per_page?: string;
-    [key: string]: string;
+    orderby?: string;
+    top?: number;
+    [key: string]: any;
 }
 
 export interface DataItem {
     id: string;
     name: string;
-    creator: string;
-    create_time: number;
-    update_time: number;
+    creatorId: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PageData<T> {
-    items: T[];
-    total: number;
-    page: number;
-    per_page: number;
+    value: T[];
+    nextLink?: string;
 }

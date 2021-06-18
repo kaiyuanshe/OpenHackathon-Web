@@ -62,7 +62,7 @@ export interface ActivityConfig {
 
 export class ActivityModel extends TableModel<Activity> {
     singleBase = 'hackathon';
-    multipleBase = 'hackathon/list';
+    multipleBase = 'hackathons';
 
     @observable
     userList: RegistrationList[] = [];
@@ -72,14 +72,14 @@ export class ActivityModel extends TableModel<Activity> {
 
     async getEventList(name: string) {
         const {
-            body: { items }
+            body: { value }
         } = await service.get<PageData<Event>>(
             `${this.singleBase}/notice/list?${new URLSearchParams({
                 hackathon_name: name,
                 order_by: 'time'
             })}`
         );
-        return items;
+        return value;
     }
 
     async getTeamList(name: string) {

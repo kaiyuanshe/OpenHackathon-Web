@@ -21,7 +21,7 @@ export function ActivityCard({
     registration_end_time,
     status,
     stat,
-    creator,
+    creatorId,
     manage,
     ...rest
 }: ActivityCardProps) {
@@ -29,7 +29,7 @@ export function ActivityCard({
         days = Math.ceil((registration_end_time - Date.now()) / Day);
 
     const toolbar =
-        !manage || creator !== session.user?.id ? (
+        !manage || creatorId !== session.user?.id ? (
             days > 0 ? (
                 <Button
                     block

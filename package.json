@@ -4,34 +4,35 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "boot-cell": "^1.9.4",
+        "@authing/native-js-ui-components": "^2.4.24",
+        "boot-cell": "^1.9.5",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.4",
-        "classnames": "^2.2.6",
-        "koajax": "^0.6.4",
+        "classnames": "^2.3.1",
+        "koajax": "^0.6.5",
         "mobx": "^5.15.7",
-        "mobx-web-cell": "^0.3.4",
+        "mobx-web-cell": "^0.3.5",
         "quill": "^1.3.7",
         "quill-image-uploader": "^1.2.2",
-        "web-cell": "^2.3.0-rc.2",
+        "web-cell": "^2.3.0",
         "web-utility": "^2.4.4"
     },
     "devDependencies": {
-        "@types/classnames": "^2.2.11",
-        "@types/quill": "^2.0.4",
-        "@typescript-eslint/parser": "^4.13.0",
+        "@types/classnames": "^2.3.1",
+        "@types/quill": "^2.0.8",
+        "@typescript-eslint/parser": "^4.27.0",
         "autoprefixer": "^9.8.6",
-        "eslint": "^7.18.0",
-        "eslint-config-prettier": "^7.1.0",
-        "eslint-plugin-prettier": "^3.3.1",
-        "husky": "^4.3.8",
-        "less": "^4.1.0",
-        "lint-staged": "^10.5.3",
-        "parcel-bundler": "^1.12.4",
+        "eslint": "^7.28.0",
+        "eslint-config-prettier": "^7.2.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "husky": "^6.0.0",
+        "less": "^4.1.1",
+        "lint-staged": "^11.0.0",
+        "parcel-bundler": "^1.12.5",
         "postcss-modules": "^3.2.2",
-        "prettier": "^2.2.1",
-        "typescript": "^4.1.3",
-        "workbox-cli": "^6.0.2"
+        "prettier": "^2.3.1",
+        "typescript": "^4.3.3",
+        "workbox-cli": "^6.1.5"
     },
     "prettier": {
         "singleQuote": true,
@@ -55,15 +56,10 @@
         }
     },
     "scripts": {
+        "prepare": "husky install",
         "test": "lint-staged",
         "start": "parcel src/index.html --open",
         "pack": "parcel build src/index.html --public-url .",
         "build": "rm -rf dist/  &&  npm run pack  &&  workbox generateSW"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm test",
-            "pre-push": "npm run build"
-        }
     }
 }

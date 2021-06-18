@@ -60,22 +60,20 @@ export abstract class TableModel<
         this.loading = true;
 
         const {
-            body: { total, items }
+            body: { value }
         } = await service.get<PageData<T>>(
             `${this.multipleBase}?${new URLSearchParams({
-                order_by: 'time',
                 ...filter,
-                page: this.pageIndex + 1 + '',
-                per_page: this.pageSize + ''
+                top: this.pageSize + ''
             })}`
         );
-        this.pageIndex++, (this.totalCount = total);
+        this.pageIndex++;
 
-        this.list = this.list.concat(items);
+        this.list = this.list.concat(value);
 
         this.loading = false;
 
-        if (items[0]) return items;
+        if (value[0]) return value;
 
         this.noMore = true;
     }
