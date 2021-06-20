@@ -21,7 +21,7 @@ import { Embed } from 'boot-cell/source/Media/Embed';
 
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
-import { activity } from '../../model';
+import { activity, Team } from '../../model';
 
 @observer
 @component({
@@ -33,29 +33,30 @@ export class ActivityDetail extends mixin() {
     @watch
     name = '';
 
-    connectedCallback() {
+    async connectedCallback() {
         this.classList.add('d-block', 'container');
 
-        activity.getOne(this.name);
-
         super.connectedCallback();
+
+        await activity.getOne(this.name);
+        await activity.team.getNextPage({}, true);
     }
 
     renderMeta() {
         const {
-            display_name,
+            displayName,
             tags,
-            registration_start_time,
-            registration_end_time,
-            event_start_time,
-            event_end_time,
+            enrollmentStartedAt,
+            enrollmentEndedAt,
+            eventStartedAt,
+            eventEndedAt,
             location,
             stat
         } = activity.current;
 
         return (
             <>
-                <h2 className="my-3">{display_name}</h2>
+                <h2 className="my-3">{displayName}</h2>
                 <aside className="my-2">
                     {tags?.map(tag => (
                         <Badge color="success" className="mr-1">
@@ -71,8 +72,8 @@ export class ActivityDetail extends mixin() {
                             color="success"
                             className="mx-2"
                         />
-                        {new Date(registration_start_time).toLocaleString()} ~{' '}
-                        {new Date(registration_end_time).toLocaleString()}
+                        {new Date(enrollmentStartedAt).toLocaleString()} ~{' '}
+                        {new Date(enrollmentEndedAt).toLocaleString()}
                     </li>
                     <li>
                         活动时间
@@ -81,8 +82,8 @@ export class ActivityDetail extends mixin() {
                             color="success"
                             className="mx-2"
                         />
-                        {new Date(event_start_time).toLocaleString()} ~{' '}
-                        {new Date(event_end_time).toLocaleString()}
+                        {new Date(eventStartedAt).toLocaleString()} ~{' '}
+                        {new Date(eventEndedAt).toLocaleString()}
                     </li>
                     <li>
                         活动地址
@@ -108,8 +109,8 @@ export class ActivityDetail extends mixin() {
 
         return (
             <ListGroup key="news" flush>
-                {events.map(({ create_time, link, content }) => {
-                    const date = new Date(create_time);
+                {events.map(({ createdAt, link, content }) => {
+                    const date = new Date(createdAt);
                     const { distance, unit } = diffTime(date);
 
                     return (
@@ -131,61 +132,41 @@ export class ActivityDetail extends mixin() {
         );
     }
 
-    renderTeamList() {
-        const { teams = [], name: hackathon } = activity.current;
-
-        return (
-            <ol className="list-unstyled d-flex flex-wrap justify-content-around">
-                {teams.map(
-                    ({
-                        logo,
-                        id: tid,
-                        name,
-                        member_count,
-                        leader: { id, avatar_url, nickname }
-                    }) => (
-                        <li
-                            className="border overflow-hidden mb-3"
-                            style={{ width: '200' }}
-                        >
-                            <div className="d-flex border-bottom">
-                                <img className={style.logo} src={logo} />
-                                <div className="flex-shrink-1">
-                                    <h4 className="text-nowrap my-1">
-                                        <a
-                                            href={`team?activity=${hackathon}&tid=${tid}`}
-                                        >
-                                            {name}
-                                        </a>
-                                    </h4>
-                                    共{' '}
-                                    <span className="text-success">
-                                        {member_count}
-                                    </span>{' '}
-                                    人
-                                </div>
-                            </div>
-                            <div className="p-2">
-                                队长：
-                                <a href={'user?uid=' + id}>
-                                    <img
-                                        className={style.icon}
-                                        src={avatar_url}
-                                    />{' '}
-                                    {nickname}
-                                </a>
-                            </div>
-                        </li>
-                    )
-                )}
-            </ol>
-        );
-    }
+    renderTeam = ({
+        hackathonName,
+        logo,
+        id,
+        name,
+        member_count,
+        leader
+    }: Team) => (
+        <li className="border overflow-hidden mb-3" style={{ width: '200' }}>
+            <div className="d-flex border-bottom">
+                <img className={style.logo} src={logo} />
+                <div className="flex-shrink-1">
+                    <h4 className="text-nowrap my-1">
+                        <a href={`team?activity=${hackathonName}&tid=${id}`}>
+                            {name}
+                        </a>
+                    </h4>
+                    共 <span className="text-success">{member_count}</span> 人
+                </div>
+            </div>
+            <div className="p-2">
+                队长：
+                <a href={'user?uid=' + leader?.id}>
+                    <img className={style.icon} src={leader?.phone} />{' '}
+                    {leader?.nickname}
+                </a>
+            </div>
+        </li>
+    );
 
     render() {
         const {
             loading,
-            current: { banners, location, organizers, description, coord }
+            current: { banners, location, organizers, detail, coord },
+            team
         } = activity;
 
         return (
@@ -197,7 +178,7 @@ export class ActivityDetail extends mixin() {
                         indicators={!isMobile}
                     >
                         {banners?.map(image => (
-                            <CarouselItem image={image} />
+                            <CarouselItem image={image.uri} />
                         ))}
                     </CarouselView>
                     <div className="col-12 col-lg-5">{this.renderMeta()}</div>
@@ -205,13 +186,17 @@ export class ActivityDetail extends mixin() {
                 <div className="row">
                     <TabView className="col-12 col-lg-9">
                         <NavLink>活动详情</NavLink>
-                        <TabPanel innerHTML={description} />
+                        <TabPanel innerHTML={detail} />
 
                         <NavLink>最新动态</NavLink>
                         <TabPanel>{this.renderEventList()}</TabPanel>
 
                         <NavLink>所有团队</NavLink>
-                        <TabPanel>{this.renderTeamList()}</TabPanel>
+                        <TabPanel>
+                            <ol className="list-unstyled d-flex flex-wrap justify-content-around">
+                                {team?.list.map(this.renderTeam)}
+                            </ol>
+                        </TabPanel>
                     </TabView>
                     <aside className="col-12 col-lg-3">
                         <h3>主办方</h3>
@@ -230,13 +215,17 @@ export class ActivityDetail extends mixin() {
                                 }
                             />
                         ))}
-                        <h3 className="mt-3">活动地点</h3>
-                        <Embed
-                            is="iframe"
-                            style={{ height: '20rem' }}
-                            scrolling="no"
-                            src={`//uri.amap.com/marker?src=OHP&callnative=1&position=${coord?.longitude},${coord?.latitude}&name=${location}`}
-                        />
+                        {location && (
+                            <>
+                                <h3 className="mt-3">活动地点</h3>
+                                <Embed
+                                    is="iframe"
+                                    style={{ height: '20rem' }}
+                                    scrolling="no"
+                                    src={`//uri.amap.com/marker?src=OHP&callnative=1&position=${coord?.longitude},${coord?.latitude}&name=${location}`}
+                                />
+                            </>
+                        )}
                     </aside>
                 </div>
             </SpinnerBox>

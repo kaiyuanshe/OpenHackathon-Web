@@ -33,13 +33,13 @@ export function TimeRange({
             时间范围
             <Field
                 type="datetime-local"
-                name={name + '_start_time'}
+                name={name + 'StartedAt'}
                 value={start && formatDate(startTime, 'YYYY-MM-DDTHH:mm')}
                 {...input_props}
             />
             <Field
                 type="datetime-local"
-                name={name + '_end_time'}
+                name={name + 'EndedAt'}
                 value={end && formatDate(endTime, 'YYYY-MM-DDTHH:mm')}
                 {...input_props}
             />

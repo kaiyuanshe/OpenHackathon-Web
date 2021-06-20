@@ -56,7 +56,7 @@ export class UserDetail extends mixin() {
     render() {
         const {
             loading,
-            current: { id, nickname, avatar_url, profile, likes, registrations }
+            current: { id, nickname, photo, likes, registrations }
         } = user;
         const isSelf = session.user?.id === id,
             owns = likes?.filter(({ remark }) => remark === 'creator');
@@ -67,10 +67,7 @@ export class UserDetail extends mixin() {
                     <header className="p-3">
                         <h2 className="text-nowrap">{nickname}</h2>
                         <div className="d-flex">
-                            <img className={style.avatar} src={avatar_url} />
-                            <span className="text-nowrap">
-                                {profile?.career_type}
-                            </span>
+                            <img className={style.avatar} src={photo} />
                         </div>
                     </header>
                     <div className="p-3 border-top text-nowrap">

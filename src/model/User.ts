@@ -1,19 +1,21 @@
 import { observable } from 'mobx';
 
-import { DataItem, service } from './service';
+import { DataItem, ListBox, service } from './service';
 import { TableModel, loading } from './BaseModel';
-import { Activity } from './Activity';
+import { Registration } from './Registration';
 
 export enum Gender {
-    male = 1,
-    female = 0,
-    other = -1
+    male = 'M',
+    female = 'F',
+    other = 'U'
 }
 
-export interface Email {
-    verified: boolean;
+export interface Contact {
     email: string;
-    primary_email: boolean;
+    emailVerified: boolean;
+    phone?: string;
+    phoneVerified: boolean;
+    website?: string;
 }
 
 export enum Provider {
@@ -23,38 +25,86 @@ export enum Provider {
     weibo = 'weibo'
 }
 
-export interface UserProfile {
-    user_id: string;
-    real_name: string;
-    age: number;
-    gender: Gender;
-    phone: string;
+export interface Identity {
+    openid: string;
+    userId: string;
+    userIdInIdp: string;
+    connectionId: string;
+    isSocial: boolean;
+    provider: Provider;
+    userPoolId: string;
+}
+
+export interface Group extends Omit<DataItem, 'id' | 'creatorId'> {
+    code: string;
+    description: string;
+    users: ListBox<User>;
+}
+
+export interface Role extends Omit<DataItem, 'id' | 'name' | 'creatorId'> {
+    code: string;
+    arn: string;
+    description: string;
+    isSystem: boolean;
+    users: ListBox<User>;
+    parent: Role;
+}
+
+export interface UserName {
+    familyName: string;
+    givenName: string;
+    middleName: string;
+}
+
+export interface Address {
+    country: string;
+    province: string;
+    city: string;
+    region: string;
     address: string;
-    career_type: string;
+    streetAddress: string;
+    locality: string;
+    postalCode: string;
 }
 
-export interface Registration extends DataItem {
-    status: number;
-    like: boolean;
-    deleted: boolean;
-    hackathon_info: Activity;
-    assets: any;
-    role: number;
-    user: string;
-    hackathon: string;
-    remark: string;
-}
-
-export interface User extends DataItem {
+export interface UserProfile
+    extends Partial<UserName>,
+        Partial<Address>,
+        Contact {
+    username: string;
+    preferredUsername?: string;
     nickname: string;
-    emails: Email[];
-    avatar_url: string;
-    login_times: number;
-    last_login_time: number;
-    online: boolean;
-    provider: keyof typeof Provider;
-    is_super: boolean;
-    profile?: UserProfile;
+    photo: string;
+    profile: string;
+    formatted?: string;
+    birthdate?: string;
+    gender: Gender;
+    company?: string;
+}
+
+export interface UserMeta {
+    userPoolId: string;
+    openId: string;
+    unionid: string;
+    token: string;
+    tokenExpiredAt: string;
+    registerSource: string[];
+    identities: Identity[];
+    groups?: ListBox<Group>;
+    roles?: ListBox<Role>;
+    arn?: string;
+    blocked: boolean;
+    isDeleted: boolean;
+    loginsCount: number;
+    locale?: string;
+    zoneinfo?: string;
+    signedUp: string;
+    browser?: string;
+    device?: string;
+    oAuth: string;
+}
+
+export interface User extends DataItem, UserProfile, UserMeta {
     likes?: Registration[];
     registrations?: Registration[];
 }
@@ -94,11 +144,11 @@ export class UserModel extends TableModel<User> {
     @loading
     async getOne(id: string) {
         const [{ body }, likes, registrations] = await Promise.all([
-            service.get<User>(`${this.singleBase}?user_id=${id}`),
-            this.getLikeList(id),
-            this.getRegistrationList(id)
+            service.get<User>(`${this.singleBase}/${id}`)
+            // this.getLikeList(id),
+            // this.getRegistrationList(id)
         ]);
-        (body.likes = likes), (body.registrations = registrations);
+        // (body.likes = likes), (body.registrations = registrations);
 
         return (this.current = body);
     }

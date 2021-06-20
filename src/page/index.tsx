@@ -7,7 +7,6 @@ import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
-import { importJS } from '../utility';
 import logo from '../image/logo.png';
 import { history, session, User } from '../model';
 import { HomePage } from './Home';
@@ -76,45 +75,41 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         },
         {
             title: '新手帮助',
-            href:
-                'https://github.com/kaiyuanshe/open-hackathon/wiki/%E5%BC%80%E6%94%BE%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
+            href: 'https://github.com/kaiyuanshe/open-hackathon/wiki/%E5%BC%80%E6%94%BE%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
         }
     ];
 
     signIn = async () => {
         this.setState({ loading: true });
-        await importJS(
-            'https://cdn.jsdelivr.net/npm/@authing/native-js-ui-components'
+
+        const { AuthingGuard } = await import(
+            '@authing/native-js-ui-components'
         );
         this.setState({ loading: false });
-        // @ts-ignore
-        const dialog = new self.AuthingNativeJsUIComponents.AuthingGuard(
-            '60178760106d5f26cb267ac1',
-            {
-                target: '#sign-in',
-                title: document.title,
-                logo
-            }
-        );
-        dialog.on('load', authClient => console.log(authClient));
-        const data = await new Promise(resolve =>
-            dialog.on('login', loginData => {
-                resolve(loginData);
-            })
-        );
+
+        const dialog = new AuthingGuard('60178760106d5f26cb267ac1', {
+            target: '#sign-in',
+            title: document.title,
+            logo
+        });
+        const data = await new Promise(resolve => dialog.on('login', resolve));
+
         await session.signIn(data);
 
         document.querySelector('#sign-in').innerHTML = '';
     };
 
-    renderUserBar({ nickname, id }: User) {
+    renderUserBar({ nickname }: User) {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
                     创建黑客松
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
-                    <DropMenuItem href={'user?uid=' + id}>
+                    <DropMenuItem
+                        target="_blank"
+                        href="https://ophapiv2-demo.authing.cn/u"
+                    >
                         个人主页
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>
@@ -133,6 +128,9 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             <SpinnerBox cover={loading}>
                 <NavBar
                     narrow
+                    expand="md"
+                    theme="dark"
+                    background="dark"
                     brand={
                         <img
                             alt="开放黑客松"

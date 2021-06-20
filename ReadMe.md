@@ -11,7 +11,7 @@
 -   UI design
     -   [Old site](https://hacking.kaiyuanshe.cn/)
     -   [New design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
--   [RESTful API](https://github.com/kaiyuanshe/open-hackathon/wiki/Open-hackathon-Restful-API)
+-   [RESTful API](https://hackathon-api.kaiyuanshe.cn/swagger/)
 
 ## Technology stack
 
@@ -47,7 +47,7 @@ npm run build
 [5]: https://typescriptlang.org
 [6]: https://web-cell.dev/
 [7]: https://bootstrap.web-cell.dev/
-[8]: https://mobx.js.org
+[8]: https://cn.mobx.js.org/
 [9]: https://developers.google.com/web/tools/workbox
 [10]: https://parceljs.org
 [11]: https://github.com/features/actions

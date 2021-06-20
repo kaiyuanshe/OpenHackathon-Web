@@ -1,5 +1,5 @@
-import { DataItem, service } from './service';
-import { TableModel, loading } from './BaseModel';
+import { DataItem } from './service';
+import { TableModel } from './BaseModel';
 import { User } from './User';
 
 interface Membership {
@@ -11,30 +11,29 @@ interface Membership {
 export interface Team extends DataItem {
     works: any[];
     member_count: number;
-    project_name: string;
+    displayName: string;
+    description: string;
     cover: string;
     members: Membership[];
     awards: any[];
     logo: string;
     leader: User;
-    hackathon: string;
+    hackathonName: string;
     azure_keys: any[];
     templates: any[];
     assets: any;
     scores: any[];
     is_frozen: boolean;
+    autoApprove: boolean;
 }
 
 export class TeamModel extends TableModel<Team> {
-    singleBase = 'team';
-    multipleBase = 'team/list';
+    singleBase = '';
+    multipleBase = '';
 
-    @loading
-    async getOne(activity: string, id: string) {
-        const { body } = await service.get<Team>(
-            `${this.singleBase}?id=${id}`,
-            { hackathon_name: activity }
-        );
-        return (this.current = body);
+    constructor(activityName: string) {
+        super();
+        this.singleBase = `hackathon/${activityName}/team`;
+        this.multipleBase = `${this.singleBase}s`;
     }
 }

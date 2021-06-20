@@ -41,14 +41,12 @@ export class UserEdit extends mixin() {
     render() {
         const { loading } = session;
         const {
-            avatar_url,
-            profile: {
-                real_name = '',
-                phone = '',
-                gender = Gender.other,
-                age = 1,
-                address = ''
-            } = {}
+            photo,
+            nickname = '',
+            phone,
+            gender = Gender.other,
+            birthdate,
+            address = ''
         } = session.user || {};
 
         return (
@@ -61,14 +59,14 @@ export class UserEdit extends mixin() {
 
                 <div className="form-row">
                     <FormField className="col-md-6" label="头像">
-                        <FileInput name="avatar" value={avatar_url} />
+                        <FileInput name="avatar" value={photo} />
                     </FormField>
                     <FormField
                         className="col-md-6"
                         label="姓名"
-                        name="real_name"
+                        name="nickname"
                         required
-                        value={real_name}
+                        value={nickname}
                     />
                 </div>
                 <div className="form-row">
@@ -119,9 +117,9 @@ export class UserEdit extends mixin() {
                         className="col-md-6"
                         label="年龄"
                         type="number"
-                        name="age"
+                        name="birthdate"
                         min="1"
-                        value={age + ''}
+                        value={birthdate}
                     />
                 </div>
                 <div className="form-row">

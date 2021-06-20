@@ -3,4 +3,5 @@ package-lock.json
 yarn.lock
 .cache/
 dist/
+.husky/_/
 .vscode/

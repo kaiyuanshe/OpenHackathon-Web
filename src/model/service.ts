@@ -1,13 +1,25 @@
-import { HTTPClient } from 'koajax';
+import { HTTPClient, HTTPError, Response } from 'koajax';
 
-const { localStorage, location } = self;
+export interface ErrorData {
+    Status: number;
+    Title: string;
+    Type: string;
+    traceId: string;
+    Detail: string;
+    Extensions: { traceId: string };
+    Instance?: any;
+}
+
+export type APIError = HTTPError<ErrorData>;
+
+const { localStorage } = self;
 
 var token: string = localStorage.token || '';
 
 export const setToken = (raw: string) => (localStorage.token = token = raw);
 
 export const service = new HTTPClient({
-    baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/', //'http://hackathon.cooltools.cc',//
+    baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/',
     responseType: 'json'
 }).use(async ({ request, response }, next) => {
     if (token)
@@ -17,30 +29,39 @@ export const service = new HTTPClient({
 
     await next();
 
-    const { body } = response;
+    const { body } = response as Response<ErrorData>;
 
-    if (body?.error?.code > 299)
-        throw Object.assign(URIError(body.error.message), body.error);
+    if (body?.Status > 299)
+        throw Object.assign(new URIError(body.Detail), response);
 });
 
-export interface ListFilter {
-    order_by?: 'time';
-    page?: string;
-    per_page?: string;
-    [key: string]: string;
+export interface ListFilter<T extends DataItem = DataItem> {
+    search?: string;
+    orderby?: keyof T;
+    top?: number;
+    [key: string]: any;
 }
 
 export interface DataItem {
     id: string;
     name: string;
-    creator: string;
-    create_time: number;
-    update_time: number;
+    creatorId: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ListBox<T> {
+    totalCount: number;
+    list: T[];
 }
 
 export interface PageData<T> {
-    items: T[];
-    total: number;
-    page: number;
-    per_page: number;
+    value: T[];
+    nextLink?: string;
+}
+
+export interface Asset {
+    name: string;
+    description: string;
+    uri: string;
 }

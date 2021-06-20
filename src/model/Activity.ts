@@ -1,10 +1,11 @@
 import { observable } from 'mobx';
 
-import { DataItem, service, PageData } from './service';
+import { DataItem, service, PageData, Asset } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
-import { Team } from './Team';
-import { Registration, RegistrationList } from './User';
+import { TeamModel } from './Team';
+import { RegistrationList } from './User';
+import { Registration, RegistrationModel } from './Registration';
 
 export interface Organization extends DataItem {
     name: string;
@@ -23,30 +24,50 @@ export interface Event extends DataItem {
     link: string;
 }
 
+export type ActivityStatus =
+    | 'planning'
+    | 'pendingApproval'
+    | 'online'
+    | 'offline';
+
 export interface Activity extends DataItem {
-    type: number;
-    display_name: string;
+    displayName: string;
     ribbon: string;
-    short_description: string;
-    description: string;
-    tags: string[];
-    banners: string[];
-    location: string;
-    headcount_limit: number;
+    summary: string;
+    detail: string;
+    tags?: string[];
+    banners: Asset[];
+    location?: string;
+    maxEnrollment: number;
     coord?: Coord;
-    registration_start_time: number;
-    registration_end_time: number;
-    event_start_time: number;
-    event_end_time: number;
-    judge_start_time: number;
-    judge_end_time: number;
-    awards: any[];
-    status: number;
+    enrollmentStartedAt: string;
+    enrollmentEndedAt: string;
+    eventStartedAt: string;
+    eventEndedAt: string;
+    judgeStartedAt: string;
+    judgeEndedAt: string;
+    status: ActivityStatus;
     organizers?: Organization[];
-    stat: { register: number; like: number };
     events?: Event[];
-    teams?: Team[];
+    autoApprove: boolean;
+    roles: {
+        isAdmin: boolean;
+        isJudge: boolean;
+        isEnrolled: boolean;
+    };
 }
+
+export type ActivityData = Omit<
+    Activity,
+    | 'creatorId'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'status'
+    | 'coord'
+    | 'events'
+    | 'teams'
+    | 'roles'
+>;
 
 export interface ActivityConfig {
     pre_allocate_number: number;
@@ -60,9 +81,19 @@ export interface ActivityConfig {
     auto_approve: boolean;
 }
 
+interface NameCheckResult {
+    name: string;
+    nameAvailable: boolean;
+    reason: string;
+    message: string;
+}
+
 export class ActivityModel extends TableModel<Activity> {
     singleBase = 'hackathon';
-    multipleBase = 'hackathon/list';
+    multipleBase = 'hackathons';
+
+    team?: TeamModel;
+    registration?: RegistrationModel;
 
     @observable
     userList: RegistrationList[] = [];
@@ -72,51 +103,51 @@ export class ActivityModel extends TableModel<Activity> {
 
     async getEventList(name: string) {
         const {
-            body: { items }
+            body: { value }
         } = await service.get<PageData<Event>>(
             `${this.singleBase}/notice/list?${new URLSearchParams({
                 hackathon_name: name,
                 order_by: 'time'
             })}`
         );
-        return items;
-    }
-
-    async getTeamList(name: string) {
-        const { body } = await service.get<Team[]>(
-            `${this.singleBase}/team/list`,
-            { hackathon_name: name }
-        );
-        return body;
+        return value;
     }
 
     @loading
     async getOne(name: string) {
-        const [{ body }, events, teams] = await Promise.all([
-            service.get<Activity>(this.singleBase, { hackathon_name: name }),
-            this.getEventList(name),
-            this.getTeamList(name)
-        ]);
-        (body.events = events), (body.teams = teams);
+        const body = await super.getOne(name);
 
         if (body.location) body.coord = (await coordsOf(body.location))[0];
 
-        return (this.current = body);
-    }
-
-    @loading
-    async createActivity(data: Partial<Activity>) {
-        const { body } = await service.post<Activity>('admin/hackathon', data);
+        this.team = new TeamModel(name);
+        this.registration = new RegistrationModel(name);
 
         return (this.current = body);
     }
 
     @loading
-    async updateActivity({ name, ...data }: Partial<Activity>) {
-        await service.put('admin/hackathon', data, {
-            hackathon_name: name
-        });
-        return Object.assign(this.current, data);
+    async updateOne({ name, ...data }: Partial<ActivityData>) {
+        const {
+                body: { nameAvailable }
+            } = await service.post<NameCheckResult>(
+                'hackathon/checkNameAvailability',
+                { name }
+            ),
+            path = `hackathon/${name}`;
+
+        const { body } = await (nameAvailable
+            ? service.put<Activity>(path, data)
+            : service.patch<Activity>(path, data));
+
+        return (this.current = body);
+    }
+
+    @loading
+    async publishOne(name = this.current.name, isAdmin = false) {
+        const { body } = await service.post<Activity>(
+            `hackathon/${name}/${isAdmin ? 'publish' : 'requestPublish'}`
+        );
+        return (this.current = body);
     }
 
     @loading
@@ -126,16 +157,6 @@ export class ActivityModel extends TableModel<Activity> {
             { hackathon_name: name }
         );
         return (this.userList = body);
-    }
-
-    @loading
-    async addRegistration(name = this.current.name) {
-        const { body } = await service.post<Registration>(
-            'user/registration',
-            {},
-            { hackathon_name: name }
-        );
-        return body;
     }
 
     @loading

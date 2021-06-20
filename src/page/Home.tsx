@@ -20,7 +20,7 @@ import style from './Home.module.less';
 export class HomePage extends mixin() {
     connectedCallback() {
         activity.getNextPage({}, true);
-        user.getActiveList();
+        // user.getActiveList();
 
         super.connectedCallback();
     }
@@ -29,10 +29,10 @@ export class HomePage extends mixin() {
         const now = Date.now();
 
         list = list
-            .filter(({ event_start_time: start }) => start > now)
+            .filter(({ eventStartedAt: start }) => +new Date(start) > now)
             .sort(
-                ({ registration_end_time: A }, { registration_end_time: B }) =>
-                    B - A
+                ({ enrollmentEndedAt: A }, { enrollmentEndedAt: B }) =>
+                    +new Date(B) - +new Date(A)
             );
         return <ActivityGallery list={list} />;
     }
@@ -60,10 +60,10 @@ export class HomePage extends mixin() {
         );
     }
 
-    renderUser = ({ avatar_url, id, nickname, profile }: User) => (
+    renderUser = ({ photo, id, nickname }: User) => (
         <MediaObject
             className="position-relative"
-            image={avatar_url}
+            image={photo}
             title={
                 <a
                     className="stretched-link text-nowrap"
@@ -72,9 +72,7 @@ export class HomePage extends mixin() {
                     {nickname}
                 </a>
             }
-        >
-            <p className="text-nowrap">{profile?.career_type}</p>
-        </MediaObject>
+        />
     );
 
     render() {
@@ -82,9 +80,9 @@ export class HomePage extends mixin() {
         const banner = list
                 .filter(({ banners }) => banners?.[0])
                 .slice(0, 3)
-                .map(({ display_name, banners, ribbon }) => ({
-                    title: display_name,
-                    image: banners[0],
+                .map(({ displayName, banners, ribbon }) => ({
+                    title: displayName,
+                    image: banners[0]?.uri,
                     detail: ribbon
                 })),
             popular_activities = [...list].sort(
