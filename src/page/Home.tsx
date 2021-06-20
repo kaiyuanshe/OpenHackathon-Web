@@ -60,10 +60,10 @@ export class HomePage extends mixin() {
         );
     }
 
-    renderUser = ({ avatar_url, id, nickname, profile }: User) => (
+    renderUser = ({ photo, id, nickname }: User) => (
         <MediaObject
             className="position-relative"
-            image={avatar_url}
+            image={photo}
             title={
                 <a
                     className="stretched-link text-nowrap"
@@ -72,9 +72,7 @@ export class HomePage extends mixin() {
                     {nickname}
                 </a>
             }
-        >
-            <p className="text-nowrap">{profile?.career_type}</p>
-        </MediaObject>
+        />
     );
 
     render() {

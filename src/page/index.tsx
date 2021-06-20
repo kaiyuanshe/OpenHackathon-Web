@@ -7,7 +7,6 @@ import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
-import { importJS } from '../utility';
 import logo from '../image/logo.png';
 import { history, session, User } from '../model';
 import { HomePage } from './Home';
@@ -100,14 +99,17 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         document.querySelector('#sign-in').innerHTML = '';
     };
 
-    renderUserBar({ nickname, id }: User) {
+    renderUserBar({ nickname }: User) {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
                     创建黑客松
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
-                    <DropMenuItem href={'user?uid=' + id}>
+                    <DropMenuItem
+                        target="_blank"
+                        href="https://ophapiv2-demo.authing.cn/u"
+                    >
                         个人主页
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>

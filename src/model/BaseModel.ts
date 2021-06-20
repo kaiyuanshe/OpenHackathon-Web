@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import { buildURLData } from 'web-utility';
 
 import { DataItem, ListFilter, PageData, service } from './service';
 
@@ -27,14 +28,14 @@ export abstract class TableModel<
     abstract singleBase: string;
     abstract multipleBase: string;
 
-    @observable
-    noMore = false;
+    keyWord?: string;
 
-    pageIndex = 0;
+    orderBy?: F['orderby'];
 
     pageSize = 10;
 
-    totalCount = 0;
+    @observable
+    nextPage?: string;
 
     @observable
     list: T[] = [];
@@ -43,40 +44,41 @@ export abstract class TableModel<
     current: T = {} as T;
 
     reset() {
-        this.loading = this.noMore = false;
-
-        this.list.length = this.pageIndex = this.totalCount = 0;
+        this.keyWord = this.orderBy = this.nextPage = undefined;
+        this.pageSize = 10;
+        this.current = {} as T;
+        this.list = [];
     }
 
-    async getNextPage(filter: F, reset?: boolean) {
+    async getNextPage({ search, orderby, top }: F = {} as F, reset = false) {
         if (reset) this.reset();
+        else if (!this.nextPage) return this.list;
 
-        if (this.loading || this.noMore) return;
-
-        if (this.pageIndex && this.list.length === this.totalCount) {
-            this.noMore = true;
-            return;
-        }
-        this.loading = true;
+        search ??= this.keyWord;
+        orderby ??= this.orderBy;
+        top ??= this.pageSize;
 
         const {
-            body: { value }
+            body: { nextLink, value }
         } = await service.get<PageData<T>>(
-            `${this.multipleBase}?${new URLSearchParams({
-                ...filter,
-                top: this.pageSize + ''
+            `${this.nextPage || this.multipleBase}?${buildURLData({
+                search,
+                orderby,
+                top
             })}`
         );
-        this.pageIndex++;
+        this.keyWord = search;
+        this.orderBy = orderby;
+        this.pageSize = top;
+        this.nextPage = nextLink;
 
-        this.list = this.list.concat(value);
-
-        this.loading = false;
-
-        if (value[0]) return value;
-
-        this.noMore = true;
+        return (this.list = value);
     }
 
-    abstract getOne(...params: any[]): Promise<T>;
+    @loading
+    async getOne(id: string) {
+        const { body } = await service.get<T>(`${this.singleBase}/${id}`);
+
+        return (this.current = body);
+    }
 }

@@ -5,7 +5,8 @@ import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { Activity, session, activity } from '../model';
+import { Activity, session, history } from '../model';
+import { RegistrationModel } from '../model/Registration';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
     manage?: boolean;
@@ -35,7 +36,11 @@ export function ActivityCard({
                 <Button
                     block
                     color="primary"
-                    onClick={() => activity.addRegistration(name)}
+                    onClick={async () => {
+                        await new RegistrationModel(name).createOne();
+
+                        history.push(`activity?name=${name}`);
+                    }}
                 >
                     报名参加
                 </Button>
@@ -85,12 +90,12 @@ export function ActivityCard({
                 </time>
                 <span>
                     <FAIcon name="map-marker-alt" color="success" />{' '}
-                    {location.split(' ')[0]}
+                    {location?.split(' ')[0]}
                 </span>
             </small>
             <hr />
             <ul className="list-inline text-success">
-                {tags.map(tag => (
+                {tags?.map(tag => (
                     <li className="list-inline-item">
                         <small>{tag}</small>
                     </li>

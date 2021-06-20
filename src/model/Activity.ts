@@ -3,8 +3,9 @@ import { observable } from 'mobx';
 import { DataItem, service, PageData, Asset } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
-import { Team } from './Team';
-import { Registration, RegistrationList } from './User';
+import { TeamModel } from './Team';
+import { RegistrationList } from './User';
+import { Registration, RegistrationModel } from './Registration';
 
 export interface Organization extends DataItem {
     name: string;
@@ -34,9 +35,9 @@ export interface Activity extends DataItem {
     ribbon: string;
     summary: string;
     detail: string;
-    tags: string[];
+    tags?: string[];
     banners: Asset[];
-    location: string;
+    location?: string;
     maxEnrollment: number;
     coord?: Coord;
     enrollmentStartedAt: string;
@@ -48,7 +49,6 @@ export interface Activity extends DataItem {
     status: ActivityStatus;
     organizers?: Organization[];
     events?: Event[];
-    teams?: Team[];
     autoApprove: boolean;
     roles: {
         isAdmin: boolean;
@@ -92,6 +92,9 @@ export class ActivityModel extends TableModel<Activity> {
     singleBase = 'hackathon';
     multipleBase = 'hackathons';
 
+    team?: TeamModel;
+    registration?: RegistrationModel;
+
     @observable
     userList: RegistrationList[] = [];
 
@@ -110,24 +113,14 @@ export class ActivityModel extends TableModel<Activity> {
         return value;
     }
 
-    async getTeamList(name: string) {
-        const { body } = await service.get<Team[]>(
-            `${this.singleBase}/team/list`,
-            { hackathon_name: name }
-        );
-        return body;
-    }
-
     @loading
     async getOne(name: string) {
-        const [{ body }, events, teams] = await Promise.all([
-            service.get<Activity>(`${this.singleBase}/${name}`),
-            this.getEventList(name),
-            this.getTeamList(name)
-        ]);
-        (body.events = events), (body.teams = teams);
+        const body = await super.getOne(name);
 
         if (body.location) body.coord = (await coordsOf(body.location))[0];
+
+        this.team = new TeamModel(name);
+        this.registration = new RegistrationModel(name);
 
         return (this.current = body);
     }
@@ -150,11 +143,7 @@ export class ActivityModel extends TableModel<Activity> {
     }
 
     @loading
-    async publishOne(name = this.current.name) {
-        if (name !== this.current.name) await this.getOne(name);
-
-        const { isAdmin } = this.current.roles;
-
+    async publishOne(name = this.current.name, isAdmin = false) {
         const { body } = await service.post<Activity>(
             `hackathon/${name}/${isAdmin ? 'publish' : 'requestPublish'}`
         );
@@ -168,16 +157,6 @@ export class ActivityModel extends TableModel<Activity> {
             { hackathon_name: name }
         );
         return (this.userList = body);
-    }
-
-    @loading
-    async addRegistration(name = this.current.name) {
-        const { body } = await service.post<Registration>(
-            'user/registration',
-            {},
-            { hackathon_name: name }
-        );
-        return body;
     }
 
     @loading

@@ -1,4 +1,4 @@
-const key = '8325164e247e15eea68b59e89200988b';
+const key = 'f2d1df02fc1c58d8a4ed23bfc0b584bd';
 
 async function requestAMap<T = {}>(path: string, data: any): Promise<T> {
     const response = await fetch(

@@ -26,7 +26,7 @@ export class ActivityList extends mixin() {
     };
 
     render() {
-        const { loading, list, noMore } = activity;
+        const { loading, list, nextPage } = activity;
 
         return (
             <>
@@ -37,7 +37,7 @@ export class ActivityList extends mixin() {
                         <ActivityGallery list={list} />
                     </SpinnerBox>
                     <p slot="bottom" className="text-center">
-                        {noMore ? '没有更多了' : '加载中……'}
+                        {!nextPage ? '没有更多了' : '加载中……'}
                     </p>
                 </edge-detector>
             </>

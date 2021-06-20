@@ -1,4 +1,16 @@
-import { HTTPClient } from 'koajax';
+import { HTTPClient, HTTPError, Response } from 'koajax';
+
+export interface ErrorData {
+    Status: number;
+    Title: string;
+    Type: string;
+    traceId: string;
+    Detail: string;
+    Extensions: { traceId: string };
+    Instance?: any;
+}
+
+export type APIError = HTTPError<ErrorData>;
 
 const { localStorage } = self;
 
@@ -17,14 +29,15 @@ export const service = new HTTPClient({
 
     await next();
 
-    const { body } = response;
+    const { body } = response as Response<ErrorData>;
 
-    if (body?.error?.code > 299)
-        throw Object.assign(URIError(body.error.message), body.error);
+    if (body?.Status > 299)
+        throw Object.assign(new URIError(body.Detail), response);
 });
 
-export interface ListFilter {
-    orderby?: string;
+export interface ListFilter<T extends DataItem = DataItem> {
+    search?: string;
+    orderby?: keyof T;
     top?: number;
     [key: string]: any;
 }
@@ -35,6 +48,11 @@ export interface DataItem {
     creatorId: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface ListBox<T> {
+    totalCount: number;
+    list: T[];
 }
 
 export interface PageData<T> {

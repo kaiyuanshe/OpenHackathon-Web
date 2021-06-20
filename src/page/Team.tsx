@@ -4,7 +4,7 @@ import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
-import { team, activity } from '../model';
+import { activity } from '../model';
 
 @observer
 @component({
@@ -20,21 +20,27 @@ export class TeamPage extends mixin() {
     @watch
     tid = '';
 
-    connectedCallback() {
+    async connectedCallback() {
         this.classList.add('d-block', 'py-4', 'bg-light');
 
-        if (this.activity !== activity.current.name)
-            activity.getOne(this.activity);
-
-        team.getOne(this.activity, this.tid);
-
         super.connectedCallback();
+
+        if (this.activity !== activity.current.name)
+            await activity.getOne(this.activity);
+
+        await activity.team.getOne(this.tid);
     }
 
     render() {
         const { displayName, name: hackathon } = activity.current;
-        const { logo, name, members, project_name, cover } = team.current;
-        const loading = activity.loading || team.loading;
+        const {
+            logo,
+            name,
+            members,
+            displayName: title,
+            cover
+        } = activity.team.current;
+        const loading = activity.loading || activity.team.loading;
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -81,7 +87,7 @@ export class TeamPage extends mixin() {
                                 <tbody>
                                     <tr>
                                         <th>项目名称</th>
-                                        <td>{project_name}</td>
+                                        <td>{title}</td>
                                     </tr>
                                     <tr>
                                         <th>项目封面图</th>
