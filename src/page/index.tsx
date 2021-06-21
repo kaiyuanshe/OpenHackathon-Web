@@ -99,17 +99,14 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         document.querySelector('#sign-in').innerHTML = '';
     };
 
-    renderUserBar({ nickname }: User) {
+    renderUserBar({ nickname, id }: User) {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
                     创建黑客松
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
-                    <DropMenuItem
-                        target="_blank"
-                        href="https://ophapiv2-demo.authing.cn/u"
-                    >
+                    <DropMenuItem href={'user?uid=' + id}>
                         个人主页
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>

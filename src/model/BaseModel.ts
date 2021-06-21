@@ -23,7 +23,7 @@ export function loading(target: any, key: string, meta: PropertyDescriptor) {
 
 export abstract class TableModel<
     T extends DataItem = DataItem,
-    F extends ListFilter = ListFilter
+    F extends ListFilter<T> = ListFilter<T>
 > extends BaseModel {
     abstract singleBase: string;
     abstract multipleBase: string;

@@ -77,6 +77,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={event => event.preventDefault()}
                         >
+                            （暂无）
                             <Button
                                 type="reset"
                                 color="danger"
@@ -95,6 +96,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={event => event.preventDefault()}
                         >
+                            （暂无）
                             <Button
                                 type="reset"
                                 color="danger"
@@ -113,6 +115,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={this.handleFinish}
                         >
+                            提交后，请等待管理员审核~
                             <Button
                                 type="reset"
                                 color="danger"

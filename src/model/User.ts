@@ -109,10 +109,6 @@ export interface User extends DataItem, UserProfile, UserMeta {
     registrations?: Registration[];
 }
 
-export interface RegistrationList extends Partial<Omit<Registration, 'user'>> {
-    user: Partial<Omit<User, 'registration' | 'likes'>>;
-}
-
 export class UserModel extends TableModel<User> {
     singleBase = 'user';
     multipleBase = 'admin/user/list';

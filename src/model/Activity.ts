@@ -4,8 +4,7 @@ import { DataItem, service, PageData, Asset } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { TeamModel } from './Team';
-import { RegistrationList } from './User';
-import { Registration, RegistrationModel } from './Registration';
+import { RegistrationModel } from './Registration';
 
 export interface Organization extends DataItem {
     name: string;
@@ -96,9 +95,6 @@ export class ActivityModel extends TableModel<Activity> {
     registration?: RegistrationModel;
 
     @observable
-    userList: RegistrationList[] = [];
-
-    @observable
     config: ActivityConfig = {} as ActivityConfig;
 
     async getEventList(name: string) {
@@ -148,38 +144,6 @@ export class ActivityModel extends TableModel<Activity> {
             `hackathon/${name}/${isAdmin ? 'publish' : 'requestPublish'}`
         );
         return (this.current = body);
-    }
-
-    @loading
-    async getRegistrations(name = this.current.name) {
-        const { body } = await service.get<RegistrationList[]>(
-            'admin/registration/list',
-            { hackathon_name: name }
-        );
-        return (this.userList = body);
-    }
-
-    @loading
-    async updateRegistration(
-        id: string,
-        status: number,
-        name = this.current.name
-    ) {
-        const { body } = await service.put<Registration>(
-            'admin/registration',
-            { id, status },
-            { hackathon_name: name }
-        );
-        return body;
-    }
-
-    @loading
-    async getActivityConfig(name = this.current.name) {
-        const { body } = await service.get<ActivityConfig>(
-            'admin/hackathon/config',
-            { hackathon_name: name }
-        );
-        return (this.config = body);
     }
 
     @loading

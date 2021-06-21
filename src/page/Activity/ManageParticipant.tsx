@@ -13,9 +13,15 @@ import { Table, TableRow } from 'boot-cell/source/Content/Table';
 
 import { AdminFrame } from '../../component/AdminFrame';
 import menu from './menu.json';
-import { activity, RegistrationList } from '../../model';
+import { activity } from '../../model';
+import { Registration, RegistrationStatus } from '../../model/Registration';
 
-const Status = ['未审核', '通过', '拒绝', '自动通过'];
+const StatusName = {
+    [RegistrationStatus.none]: '未审核',
+    [RegistrationStatus.pending]: '审核中',
+    [RegistrationStatus.approved]: '通过',
+    [RegistrationStatus.rejected]: '拒绝'
+};
 
 export interface ManageParticipantProps extends WebCellProps {
     name: string;
@@ -31,13 +37,15 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
     @watch
     name = '';
 
-    connectedCallback() {
+    async connectedCallback() {
         const { name } = this;
 
-        activity.getRegistrations(name);
-        activity.getActivityConfig(name);
-
         super.connectedCallback();
+
+        if (name !== activity.current.name) await activity.getOne(name);
+
+        await activity.registration.getNextPage({}, true);
+        // activity.getActivityConfig(name);
     }
 
     handleTeamFreedom = async ({ target }: Event) =>
@@ -47,17 +55,17 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
         );
 
     handleAutoApprove = async ({ target }: Event) =>
-        activity.updateActivityConfig(
-            { auto_approve: (target as HTMLFormElement).checked },
-            this.name
-        );
+        activity.updateOne({
+            autoApprove: (target as HTMLInputElement).checked
+        });
 
-    handleStatus(id: string, oldStatus: number) {
+    handleStatus(userId: string, oldStatus: Registration['status']) {
         return ({ target }: Event) => {
-            const status = +(target as HTMLFormElement).value;
+            const status = (target as HTMLInputElement)
+                .value as Registration['status'];
 
             if (status !== oldStatus)
-                activity.updateRegistration(id, status, this.name);
+                activity.registration.updateOne({ userId, status });
         };
     }
 
@@ -71,8 +79,8 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
             },
             createdAt,
             status,
-            id
-        }: RegistrationList,
+            userId
+        }: Registration,
         i: number
     ) => (
         <TableRow checked={false}>
@@ -84,10 +92,10 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
             <th scope="col">{profile?.address}</th>
             <th scope="col">{createdAt}</th>
             <th scope="col" style={{ width: '150px' }}>
-                <Field is="select" onChange={this.handleStatus(id, status)}>
-                    <option selected>{Status[status]}</option>
-                    {Status.map((e, i) => (
-                        <option value={i + ''}>{e}</option>
+                <Field is="select" onChange={this.handleStatus(userId, status)}>
+                    <option selected>{StatusName[status]}</option>
+                    {Object.entries(StatusName).map(([value, name]) => (
+                        <option value={value}>{name}</option>
                     ))}
                 </Field>
             </th>
@@ -95,10 +103,9 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
     );
 
     render({ name }: ManageParticipantProps) {
-        const {
-            config: { freedom_team, auto_approve },
-            userList
-        } = activity;
+        const { freedom_team } = activity.config,
+            { autoApprove } = activity.current,
+            { list } = activity.registration;
 
         return (
             <AdminFrame menu={menu} name={name}>
@@ -116,7 +123,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
                         type="checkbox"
                         switch
                         className="m-2"
-                        checked={auto_approve}
+                        checked={autoApprove}
                         onChange={this.handleAutoApprove}
                     >
                         自动通过
@@ -134,7 +141,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
                         <th scope="col">状态</th>
                     </TableRow>
 
-                    {userList.map(this.renderUser)}
+                    {list.map(this.renderUser)}
                 </Table>
             </AdminFrame>
         );

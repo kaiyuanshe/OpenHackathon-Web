@@ -6,8 +6,8 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
-import { ActivityCard, ActivityGallery } from '../../component';
-import { Provider, Registration, session, user } from '../../model';
+import { ActivityGallery } from '../../component';
+import { Provider, session, user } from '../../model';
 import style from './Detail.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
@@ -38,18 +38,24 @@ export class UserDetail extends mixin() {
     }
 
     renderIcon = ([key, name]: string[]) => {
-        const { name: userName, provider } = user.current;
+        const { username, registerSource } = user.current;
+        const enable = registerSource?.includes(`social:${key}`);
 
-        return (
-            <a target="_blank" href={provider_link[key]?.(userName)}>
-                <BGIcon
-                    type="square"
-                    group="brands"
-                    name={name}
-                    size="lg"
-                    color={provider === key ? 'success' : 'secondary'}
-                />
+        const icon = (
+            <BGIcon
+                type="square"
+                group="brands"
+                name={name}
+                size="lg"
+                color={enable ? 'success' : 'secondary'}
+            />
+        );
+        return enable ? (
+            <a target="_blank" href={provider_link[key]?.(username)}>
+                {icon}
             </a>
+        ) : (
+            icon
         );
     };
 
@@ -75,7 +81,11 @@ export class UserDetail extends mixin() {
                     </div>
                     {!isSelf ? null : (
                         <div className="p-3 border-top text-center">
-                            <Button color="warning" href="user/edit">
+                            <Button
+                                color="warning"
+                                target="_blank"
+                                href="https://ophapiv2-demo.authing.cn/u"
+                            >
                                 编辑个人信息
                             </Button>
                         </div>
