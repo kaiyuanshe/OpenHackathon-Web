@@ -4,8 +4,8 @@ import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
 
-import { Activity } from '../../model';
-import { TimeRange } from '../../component/TimeRange';
+import { Activity } from '../../../model';
+import { TimeRange } from '../../../component/TimeRange';
 
 export type ActivityBasicFormData = Partial<
     Omit<Activity, 'tags' | 'description'> & { tags: string }

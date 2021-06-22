@@ -54,17 +54,23 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         {
             paths: ['create'],
             component: async () =>
-                (await import('./Activity/CreateActivity')).CreateActivity
+                (await import('./Activity/Manage/Creator')).CreateActivity
         },
         {
             paths: ['manage/activity'],
             component: async () =>
-                (await import('./Activity/EditActivity')).EditActivity
+                (await import('./Activity/Manage/Editor')).EditActivity
+        },
+        {
+            paths: ['manage/award'],
+            component: async () =>
+                (await import('./Activity/Manage/Award')).ManageAward
         },
         {
             paths: ['manage/participant'],
             component: async () =>
-                (await import('./Activity/ManageParticipant')).ManageParticipant
+                (await import('./Activity/Manage/Participant'))
+                    .ManageParticipant
         }
     ];
 
@@ -126,6 +132,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                 <NavBar
                     narrow
                     expand="md"
+                    fixed="top"
                     theme="dark"
                     background="dark"
                     brand={

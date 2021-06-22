@@ -11,10 +11,10 @@ import { ToggleField } from 'boot-cell/source/Form/ToggleField';
 import { Field } from 'boot-cell/source/Form/Field';
 import { Table, TableRow } from 'boot-cell/source/Content/Table';
 
-import { AdminFrame } from '../../component/AdminFrame';
+import { AdminFrame } from '../../../component/AdminFrame';
 import menu from './menu.json';
-import { activity } from '../../model';
-import { Registration, RegistrationStatus } from '../../model/Registration';
+import { activity } from '../../../model';
+import { Registration, RegistrationStatus } from '../../../model/Registration';
 
 const StatusName = {
     [RegistrationStatus.none]: '未审核',
@@ -71,12 +71,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
 
     renderUser = (
         {
-            user: {
-                name,
-                emails: [{ email }],
-                provider,
-                profile
-            },
+            user: { name, email, registerSource, phone, address },
             createdAt,
             status,
             userId
@@ -84,28 +79,28 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
         i: number
     ) => (
         <TableRow checked={false}>
-            <th scope="col">{i + 1}</th>
-            <th scope="col">{name}</th>
-            <th scope="col">{email}</th>
-            <th scope="col">{provider}</th>
-            <th scope="col">{profile?.phone}</th>
-            <th scope="col">{profile?.address}</th>
-            <th scope="col">{createdAt}</th>
-            <th scope="col" style={{ width: '150px' }}>
+            <td>{i + 1}</td>
+            <td>{name}</td>
+            <td>{email}</td>
+            <td>{registerSource}</td>
+            <td>{phone}</td>
+            <td>{address}</td>
+            <td>{new Date(createdAt).toLocaleString()}</td>
+            <td>
                 <Field is="select" onChange={this.handleStatus(userId, status)}>
-                    <option selected>{StatusName[status]}</option>
                     {Object.entries(StatusName).map(([value, name]) => (
-                        <option value={value}>{name}</option>
+                        <option value={value} selected={status === value}>
+                            {name}
+                        </option>
                     ))}
                 </Field>
-            </th>
+            </td>
         </TableRow>
     );
 
     render({ name }: ManageParticipantProps) {
         const { freedom_team } = activity.config,
-            { autoApprove } = activity.current,
-            { list } = activity.registration;
+            { autoApprove } = activity.current;
 
         return (
             <AdminFrame menu={menu} name={name}>
@@ -131,17 +126,17 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
                 </header>
                 <Table className="mt-2" small center>
                     <TableRow type="head" checked={false}>
-                        <th scope="col">#</th>
-                        <th scope="col">注册名</th>
-                        <th scope="col">邮箱</th>
-                        <th scope="col">登录方式</th>
-                        <th scope="col">联系电话</th>
-                        <th scope="col">联系地址</th>
-                        <th scope="col">报名时间</th>
-                        <th scope="col">状态</th>
+                        <th>#</th>
+                        <th>注册名</th>
+                        <th>邮箱</th>
+                        <th>登录方式</th>
+                        <th>联系电话</th>
+                        <th>联系地址</th>
+                        <th>报名时间</th>
+                        <th>状态</th>
                     </TableRow>
 
-                    {list.map(this.renderUser)}
+                    {activity.registration?.list.map(this.renderUser)}
                 </Table>
             </AdminFrame>
         );
