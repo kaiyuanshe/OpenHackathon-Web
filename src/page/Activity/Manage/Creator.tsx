@@ -5,8 +5,8 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { ActivityBasicForm, ActivityBasicFormData } from './ActivityBasicForm';
-import { activity, history } from '../../model';
+import { ActivityBasicForm, ActivityBasicFormData } from './BasicForm';
+import { activity, history } from '../../../model';
 
 @observer
 @component({

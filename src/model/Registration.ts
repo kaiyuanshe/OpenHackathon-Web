@@ -1,5 +1,6 @@
 import { DataItem, ListFilter, service } from './service';
 import { loading, TableModel } from './BaseModel';
+import { User } from './User';
 
 export enum RegistrationStatus {
     none = 'none',
@@ -11,6 +12,7 @@ export enum RegistrationStatus {
 export interface Registration extends DataItem {
     hackathonName: string;
     userId: string;
+    user: User;
     status: RegistrationStatus;
 }
 
@@ -45,7 +47,8 @@ export class RegistrationModel extends TableModel<
         const { body } = await service.post<Registration>(
             `${this.singleBase}/${userId}/${
                 status === RegistrationStatus.approved ? 'approve' : 'reject'
-            }`
+            }`,
+            {}
         );
         return (this.current = body);
     }

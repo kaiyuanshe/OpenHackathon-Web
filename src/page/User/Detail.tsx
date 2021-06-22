@@ -7,7 +7,7 @@ import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { ActivityGallery } from '../../component';
-import { Provider, session, user } from '../../model';
+import { Provider, session, user, ownActivity } from '../../model';
 import style from './Detail.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
@@ -33,6 +33,7 @@ export class UserDetail extends mixin() {
             'url(https://hacking.kaiyuanshe.cn/static/pic/profile-back-pattern.png)';
 
         user.getOne(this.uid);
+        ownActivity.getNextPage({}, true);
 
         super.connectedCallback();
     }
@@ -64,8 +65,7 @@ export class UserDetail extends mixin() {
             loading,
             current: { id, nickname, photo, likes, registrations }
         } = user;
-        const isSelf = session.user?.id === id,
-            owns = likes?.filter(({ remark }) => remark === 'creator');
+        const isSelf = session.user?.id === id;
 
         return (
             <SpinnerBox className="container d-lg-flex" cover={loading}>
@@ -104,14 +104,7 @@ export class UserDetail extends mixin() {
                     </TabPanel>
                     <NavLink>创建的活动</NavLink>
                     <TabPanel>
-                        {owns?.[0] && (
-                            <ActivityGallery
-                                manage
-                                list={owns.map(
-                                    ({ hackathon_info }) => hackathon_info
-                                )}
-                            />
-                        )}
+                        <ActivityGallery manage list={ownActivity.list} />
                     </TabPanel>
                     <NavLink>参与的活动</NavLink>
                     <TabPanel>

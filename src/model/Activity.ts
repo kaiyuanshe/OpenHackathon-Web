@@ -5,6 +5,7 @@ import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { TeamModel } from './Team';
 import { RegistrationModel } from './Registration';
+import { AwardModel } from './Award';
 
 export interface Organization extends DataItem {
     name: string;
@@ -93,6 +94,7 @@ export class ActivityModel extends TableModel<Activity> {
 
     team?: TeamModel;
     registration?: RegistrationModel;
+    award?: AwardModel;
 
     @observable
     config: ActivityConfig = {} as ActivityConfig;
@@ -117,6 +119,7 @@ export class ActivityModel extends TableModel<Activity> {
 
         this.team = new TeamModel(name);
         this.registration = new RegistrationModel(name);
+        this.award = new AwardModel(name);
 
         return (this.current = body);
     }
@@ -160,4 +163,9 @@ export class ActivityModel extends TableModel<Activity> {
               }));
         return (this.config = body);
     }
+}
+
+export class OwnActivityModel extends TableModel<Activity> {
+    singleBase = '';
+    multipleBase = 'hackathons/managable';
 }

@@ -19,12 +19,12 @@
             },
             {
                 "title": "奖项设置",
-                "href": "manage/prize",
+                "href": "manage/award",
                 "icon": "trophy"
             },
             {
                 "title": "作品评奖",
-                "href": "manage/award",
+                "href": "manage/evaluation",
                 "icon": "star"
             },
             {
