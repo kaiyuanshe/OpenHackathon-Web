@@ -18,6 +18,7 @@ import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { MediaObject } from 'boot-cell/source/Content/MediaObject';
 import { Embed } from 'boot-cell/source/Media/Embed';
+import { Button } from 'boot-cell/source/Form/Button';
 
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
@@ -100,6 +101,7 @@ export class ActivityDetail extends mixin() {
                         {stat?.register}人
                     </li>
                 </ul>
+                <Button href={"team?activity=" + this.name} color="success">创建团队</Button>
             </>
         );
     }

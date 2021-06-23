@@ -1,5 +1,5 @@
-import { DataItem } from './service';
-import { TableModel } from './BaseModel';
+import { DataItem, service } from './service';
+import { TableModel, loading } from './BaseModel';
 import { User } from './User';
 
 interface Membership {
@@ -35,5 +35,21 @@ export class TeamModel extends TableModel<Team> {
         super();
         this.singleBase = `hackathon/${activityName}/team`;
         this.multipleBase = `${this.singleBase}s`;
+    }
+
+    @loading
+    async createOne(team: Team) {
+        const { body } = await service.put<Team>(
+            this.singleBase
+        , team);
+        return (this.current = body);
+    }
+
+    @loading
+    async updateOne(id: string, team: Team) {
+        const { body } = await service.patch<Team>(
+            this.singleBase + '/' + id
+        , team);
+        return (this.current = body);
     }
 }
