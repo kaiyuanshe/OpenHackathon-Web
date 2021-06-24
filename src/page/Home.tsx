@@ -19,7 +19,7 @@ import style from './Home.module.less';
 })
 export class HomePage extends mixin() {
     connectedCallback() {
-        activity.getNextPage({}, true);
+        activity.getNextPage({ listType: 'fresh' }, true);
         // user.getActiveList();
 
         super.connectedCallback();

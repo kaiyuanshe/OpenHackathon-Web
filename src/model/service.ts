@@ -1,13 +1,11 @@
 import { HTTPClient, HTTPError, Response } from 'koajax';
 
 export interface ErrorData {
-    Status: number;
-    Title: string;
-    Type: string;
+    status: number;
+    title: string;
+    type: string;
     traceId: string;
-    Detail: string;
-    Extensions: { traceId: string };
-    Instance?: any;
+    errors: Record<string, string[]>;
 }
 
 export type APIError = HTTPError<ErrorData>;
@@ -27,12 +25,17 @@ export const service = new HTTPClient({
             'Authorization'
         ] = `token ${token}`;
 
-    await next();
+    try {
+        await next();
+    } catch {
+        const { body } = response as Response<ErrorData>;
 
-    const { body } = response as Response<ErrorData>;
-
-    if (body?.Status > 299)
-        throw Object.assign(new URIError(body.Detail), response);
+        if (body?.status > 299)
+            throw Object.assign(
+                new URIError(Object.values(body.errors).flat().join('\n')),
+                response
+            );
+    }
 });
 
 export interface ListFilter<T extends DataItem = DataItem> {

@@ -11,7 +11,7 @@ auto();
 self.addEventListener('unhandledrejection', event => {
     const { reason } = event;
     const message: string =
-        reason instanceof Error ? (reason as APIError).body.Detail : reason;
+        reason instanceof Error ? (reason as APIError).message : reason;
 
     if (message)
         if ((reason as APIError).status === 401) {

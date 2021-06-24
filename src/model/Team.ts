@@ -1,5 +1,5 @@
 import { DataItem } from './service';
-import { TableModel } from './BaseModel';
+import { ActivitySubModel } from './BaseModel';
 import { User } from './User';
 
 interface Membership {
@@ -27,13 +27,6 @@ export interface Team extends DataItem {
     autoApprove: boolean;
 }
 
-export class TeamModel extends TableModel<Team> {
-    singleBase = '';
-    multipleBase = '';
-
-    constructor(activityName: string) {
-        super();
-        this.singleBase = `hackathon/${activityName}/team`;
-        this.multipleBase = `${this.singleBase}s`;
-    }
+export class TeamModel extends ActivitySubModel<Team> {
+    subBase = 'team';
 }

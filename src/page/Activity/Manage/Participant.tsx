@@ -100,7 +100,8 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
 
     render({ name }: ManageParticipantProps) {
         const { freedom_team } = activity.config,
-            { autoApprove } = activity.current;
+            { autoApprove } = activity.current,
+            { list } = activity.registration;
 
         return (
             <AdminFrame menu={menu} name={name}>
@@ -136,7 +137,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
                         <th>状态</th>
                     </TableRow>
 
-                    {activity.registration?.list.map(this.renderUser)}
+                    {list.map(this.renderUser)}
                 </Table>
             </AdminFrame>
         );
