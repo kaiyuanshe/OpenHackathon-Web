@@ -94,6 +94,8 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         });
         const data = await new Promise(resolve => dialog.on('login', resolve));
 
+        if(!data.nickname)
+            data.nickname = data.email || data.phone
         await session.signIn(data);
 
         document.querySelector('#sign-in').innerHTML = '';
