@@ -81,4 +81,26 @@ export abstract class TableModel<
 
         return (this.current = body);
     }
+
+    async updateOne({ id, ...data }: Partial<T>) {
+        const { body } = await (id
+            ? service.patch<T>(this.singleBase, data)
+            : service.put<T>(this.singleBase, data));
+
+        return (this.current = body);
+    }
+}
+
+export abstract class ActivitySubModel<
+    D extends DataItem = DataItem,
+    F extends ListFilter<D> = ListFilter<D>
+> extends TableModel<D, F> {
+    singleBase = '';
+    multipleBase = '';
+    abstract subBase: string;
+
+    boot(activityName: string) {
+        this.singleBase = `hackathon/${activityName}/${this.subBase}`;
+        this.multipleBase = `${this.singleBase}s`;
+    }
 }

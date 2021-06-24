@@ -6,9 +6,11 @@ import {
 } from 'web-cell';
 import { parseURLData, buildURLData } from 'web-utility/source/URL';
 import { Nav } from 'boot-cell/source/Navigator/Nav';
+import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 
 import { IconNavLinkProps, IconNavLink } from './IconNavLink';
 import style from './AdminFrame.module.less';
+import { history } from '../model';
 
 interface MenuSection {
     title?: VNodeChildElement;
@@ -21,6 +23,15 @@ export interface AdminFrameProps extends WebCellProps {
 }
 
 export function AdminFrame({ menu, name, defaultSlot }: AdminFrameProps) {
+    var innerIndex = -1;
+    const current = menu.find(({ list }) =>
+        list.find(({ href }, index) => {
+            if (history.path.includes(href)) {
+                innerIndex = index;
+                return true;
+            }
+        })
+    );
     return (
         <div className={style.body}>
             <Nav direction="column" className="py-2 bg-light border-right">
@@ -45,7 +56,15 @@ export function AdminFrame({ menu, name, defaultSlot }: AdminFrameProps) {
                     </>
                 ))}
             </Nav>
-            <main className="flex-fill p-4">{defaultSlot}</main>
+            <main className="flex-fill p-4">
+                <BreadCrumb
+                    path={[
+                        { title: current?.title },
+                        { title: current?.list[innerIndex]?.title }
+                    ]}
+                />
+                {defaultSlot}
+            </main>
         </div>
     );
 }
