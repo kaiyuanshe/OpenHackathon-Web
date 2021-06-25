@@ -101,7 +101,7 @@ export class ActivityDetail extends mixin() {
                         {stat?.register}人
                     </li>
                 </ul>
-                <Button href={"team?activity=" + this.name} color="success">创建团队</Button>
+                <Button href={"team/edit?activity=" + this.name} color="success">创建团队</Button>
             </>
         );
     }
@@ -138,7 +138,7 @@ export class ActivityDetail extends mixin() {
         hackathonName,
         logo,
         id,
-        name,
+        displayName,
         member_count,
         leader
     }: Team) => (
@@ -148,7 +148,7 @@ export class ActivityDetail extends mixin() {
                 <div className="flex-shrink-1">
                     <h4 className="text-nowrap my-1">
                         <a href={`team?activity=${hackathonName}&tid=${id}`}>
-                            {name}
+                            {displayName}
                         </a>
                     </h4>
                     共 <span className="text-success">{member_count}</span> 人

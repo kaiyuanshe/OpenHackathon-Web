@@ -12,7 +12,7 @@ import { history, session, User } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
 import { UserDetail } from './User/Detail';
-import { TeamPage } from './Team';
+import { TeamDetail, TeamEdit } from './Team';
 
 interface PageRouterState {
     loading: boolean;
@@ -49,7 +49,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         },
         {
             paths: ['team'],
-            component: TeamPage
+            component: TeamDetail
+        },
+        {
+            paths: ['team/edit'],
+            component: TeamEdit
         },
         {
             paths: ['create'],

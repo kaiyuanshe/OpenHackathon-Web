@@ -38,18 +38,14 @@ export class TeamModel extends TableModel<Team> {
     }
 
     @loading
-    async createOne(team: Team) {
-        const { body } = await service.put<Team>(
-            this.singleBase
-        , team);
-        return (this.current = body);
-    }
-
-    @loading
     async updateOne(id: string, team: Team) {
-        const { body } = await service.patch<Team>(
-            this.singleBase + '/' + id
-        , team);
+        const { body } = id ? 
+            await service.patch<Team>(
+                this.singleBase + '/' + id
+            , team) :
+            await service.put<Team>(
+                this.singleBase
+            , team);
         return (this.current = body);
     }
 }
