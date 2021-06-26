@@ -7,10 +7,10 @@ import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { Button } from 'boot-cell/source/Form/Button';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
 
-import { isMobile } from '../utility';
-import { ActivityGallery, GalleryView } from '../component';
-import { activity, user, Activity, User, partner } from '../model';
-import style from './Home.module.less';
+import { isMobile } from '../../utility';
+import { ActivityGallery, GalleryView } from '../../component';
+import { activity, user, Activity, User, partner } from '../../model';
+import style from './index.module.less';
 
 @observer
 @component({

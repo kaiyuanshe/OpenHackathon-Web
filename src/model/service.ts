@@ -2,10 +2,11 @@ import { HTTPClient, HTTPError, Response } from 'koajax';
 
 export interface ErrorData {
     status: number;
-    title: string;
+    title?: string;
     type: string;
     traceId: string;
-    errors: Record<string, string[]>;
+    detail?: string;
+    errors?: Record<string, string[]>;
 }
 
 export type APIError = HTTPError<ErrorData>;
@@ -30,11 +31,13 @@ export const service = new HTTPClient({
     } catch {
         const { body } = response as Response<ErrorData>;
 
-        if (body?.status > 299)
-            throw Object.assign(
-                new URIError(Object.values(body.errors).flat().join('\n')),
-                response
-            );
+        if (body?.status > 299) {
+            const message = body.errors
+                ? Object.values(body.errors).flat().join('\n')
+                : body.detail;
+
+            throw Object.assign(new URIError(message), response);
+        }
     }
 });
 

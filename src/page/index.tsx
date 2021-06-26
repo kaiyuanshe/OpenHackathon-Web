@@ -1,5 +1,5 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
-import { CellRouter } from 'cell-router/source';
+import { Route, CellRouter } from 'cell-router/source';
 import { observer } from 'mobx-web-cell';
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
@@ -12,7 +12,7 @@ import { history, session, User } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
 import { UserDetail } from './User/Detail';
-import { TeamDetail, TeamEdit } from './Team';
+import { TeamDetail } from './Team';
 
 interface PageRouterState {
     loading: boolean;
@@ -26,7 +26,7 @@ interface PageRouterState {
 export class PageRouter extends mixin<{}, PageRouterState>() {
     state = { loading: false };
 
-    routes = [
+    routes: Route[] = [
         {
             paths: [''],
             component: HomePage
@@ -53,7 +53,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         },
         {
             paths: ['team/edit'],
-            component: TeamEdit
+            component: async () => (await import('./Team/Edit')).TeamEdit
         },
         {
             paths: ['create'],
@@ -75,6 +75,10 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             component: async () =>
                 (await import('./Activity/Manage/Participant'))
                     .ManageParticipant
+        },
+        {
+            paths: ['admin'],
+            component: async () => (await import('./Admin')).AdminPage
         }
     ];
 
@@ -102,10 +106,12 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             title: document.title,
             logo
         });
-        const data = await new Promise(resolve => dialog.on('login', resolve));
+        const data = await new Promise<Partial<User>>(resolve =>
+            // @ts-ignore
+            dialog.on('login', resolve)
+        );
+        data.nickname ||= data.email || data.phone;
 
-        if(!data.nickname)
-            data.nickname = data.email || data.phone
         await session.signIn(data);
 
         document.querySelector('#sign-in').innerHTML = '';

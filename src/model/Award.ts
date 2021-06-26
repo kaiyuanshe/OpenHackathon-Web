@@ -19,7 +19,7 @@ export class AwardModel extends ActivitySubModel<Award> {
 
     async updateOne(data: Partial<Award>) {
         await super.updateOne(data);
-        await this.getNextPage({}, true);
+        await this.updateList();
 
         return this.current;
     }

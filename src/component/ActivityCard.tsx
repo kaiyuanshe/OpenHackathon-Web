@@ -5,11 +5,11 @@ import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { Activity, session, history } from '../model';
-import { RegistrationModel } from '../model/Registration';
+import { Activity, session } from '../model';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
     manage?: boolean;
+    onPublish?(name: string): any;
 }
 
 export function ActivityCard({
@@ -24,6 +24,7 @@ export function ActivityCard({
     stat,
     creatorId,
     manage,
+    onPublish,
     ...rest
 }: ActivityCardProps) {
     const event_start = new Date(eventStartedAt),
@@ -33,15 +34,7 @@ export function ActivityCard({
     const toolbar =
         !manage || creatorId !== session.user?.id ? (
             days > 0 ? (
-                <Button
-                    block
-                    color="primary"
-                    onClick={async () => {
-                        await new RegistrationModel(name).createOne();
-
-                        history.push(`activity?name=${name}`);
-                    }}
-                >
+                <Button block color="primary" href={`activity?name=${name}`}>
                     报名参加
                 </Button>
             ) : (
@@ -56,14 +49,19 @@ export function ActivityCard({
                     color="warning"
                     href={'manage/activity?name=' + name}
                 >
-                    编辑活动
+                    管理活动
                 </Button>
                 {status === 'online' ? (
                     <Button block color="danger" className="mt-2">
                         申请下线
                     </Button>
                 ) : (
-                    <Button block color="success" className="mt-2">
+                    <Button
+                        block
+                        color="success"
+                        className="mt-2"
+                        onClick={() => onPublish(name)}
+                    >
                         申请上线
                     </Button>
                 )}

@@ -34,6 +34,8 @@ export abstract class TableModel<
 
     pageSize = 10;
 
+    prevPage?: string;
+
     @observable
     nextPage?: string;
 
@@ -50,7 +52,11 @@ export abstract class TableModel<
         this.list = [];
     }
 
-    async getNextPage({ search, orderby, top }: F = {} as F, reset = false) {
+    @loading
+    async getNextPage(
+        { search, orderby, top, ...filter }: F = {} as F,
+        reset = false
+    ) {
         if (reset) this.reset();
         else if (!this.nextPage) return this.list;
 
@@ -58,10 +64,12 @@ export abstract class TableModel<
         orderby ??= this.orderBy;
         top ??= this.pageSize;
 
+        const currentLink = this.nextPage || this.multipleBase;
         const {
             body: { nextLink, value }
         } = await service.get<PageData<T>>(
-            `${this.nextPage || this.multipleBase}?${buildURLData({
+            `${currentLink}?${buildURLData({
+                ...filter,
                 search,
                 orderby,
                 top
@@ -70,9 +78,16 @@ export abstract class TableModel<
         this.keyWord = search;
         this.orderBy = orderby;
         this.pageSize = top;
+        this.prevPage = currentLink;
         this.nextPage = nextLink;
 
-        return (this.list = value);
+        return (this.list = [...this.list, ...value]);
+    }
+
+    updateList() {
+        this.list = this.list.slice(0, -this.pageSize);
+        this.nextPage = this.prevPage;
+        return this.getNextPage();
     }
 
     @loading
@@ -82,12 +97,24 @@ export abstract class TableModel<
         return (this.current = body);
     }
 
+    @loading
     async updateOne({ id, ...data }: Partial<T>) {
         const { body } = await (id
-            ? service.patch<T>(this.singleBase, data)
+            ? service.patch<T>(`${this.singleBase}/${id}`, data)
             : service.put<T>(this.singleBase, data));
 
         return (this.current = body);
+    }
+
+    @loading
+    async deleteOne(id: string) {
+        await service.delete(`${this.singleBase}/${id}`);
+
+        await this.updateList();
+    }
+
+    clearCurrent() {
+        this.current = {} as T;
     }
 }
 
@@ -102,5 +129,7 @@ export abstract class ActivitySubModel<
     boot(activityName: string) {
         this.singleBase = `hackathon/${activityName}/${this.subBase}`;
         this.multipleBase = `${this.singleBase}s`;
+
+        return this;
     }
 }

@@ -7,6 +7,7 @@ import {
 import { parseURLData, buildURLData } from 'web-utility/source/URL';
 import { Nav } from 'boot-cell/source/Navigator/Nav';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
+import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 
 import { IconNavLinkProps, IconNavLink } from './IconNavLink';
 import style from './AdminFrame.module.less';
@@ -20,9 +21,15 @@ interface MenuSection {
 export interface AdminFrameProps extends WebCellProps {
     menu: MenuSection[];
     name: string;
+    loading?: boolean;
 }
 
-export function AdminFrame({ menu, name, defaultSlot }: AdminFrameProps) {
+export function AdminFrame({
+    menu,
+    name,
+    loading,
+    defaultSlot
+}: AdminFrameProps) {
     var innerIndex = -1;
     const current = menu.find(({ list }) =>
         list.find(({ href }, index) => {
@@ -63,7 +70,7 @@ export function AdminFrame({ menu, name, defaultSlot }: AdminFrameProps) {
                         { title: current?.list[innerIndex]?.title }
                     ]}
                 />
-                {defaultSlot}
+                <SpinnerBox cover={loading}>{defaultSlot}</SpinnerBox>
             </main>
         </div>
     );

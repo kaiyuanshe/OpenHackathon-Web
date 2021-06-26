@@ -116,7 +116,7 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     }
 
     @loading
-    async getOne(name: string) {
+    async getOne(name = this.current.name) {
         const body = await super.getOne(name);
 
         if (body.location) body.coord = (await coordsOf(body.location))[0];
@@ -132,13 +132,12 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     async updateOne({ name, id, ...data }: Partial<ActivityData>) {
         if (!id) {
             const {
-                body: { nameAvailable }
+                body: { nameAvailable, message }
             } = await service.post<NameCheckResult>(
                 'hackathon/checkNameAvailability',
                 { name }
             );
-            if (!nameAvailable)
-                throw new URIError(`${name} can't be an Activity name`);
+            if (!nameAvailable) throw new URIError(message);
         }
         const path = `hackathon/${name}`;
 
@@ -152,8 +151,17 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     @loading
     async publishOne(name = this.current.name, isAdmin = false) {
         const { body } = await service.post<Activity>(
-            `hackathon/${name}/${isAdmin ? 'publish' : 'requestPublish'}`
-        );
+                `hackathon/${name}/${isAdmin ? 'publish' : 'requestPublish'}`
+            ),
+            { list } = this;
+        const index = list.findIndex(item => item.name === name);
+
+        if (index > -1)
+            this.list = [
+                ...list.slice(0, index),
+                { ...list[index], status: body.status },
+                ...list.slice(index + 1)
+            ];
         return (this.current = body);
     }
 

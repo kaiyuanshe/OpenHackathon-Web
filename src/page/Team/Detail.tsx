@@ -4,11 +4,12 @@ import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
+
 import { activity } from '../../model';
 
 @observer
 @component({
-    tagName: 'team-page',
+    tagName: 'team-detail',
     renderTarget: 'children'
 })
 export class TeamDetail extends mixin() {
@@ -28,20 +29,15 @@ export class TeamDetail extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        if (this.tid)
-            await activity.team.getOne(this.tid);
+        if (this.tid) await activity.team.getOne(this.tid);
     }
 
     render() {
-        const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
-        const {
-            id,
-            logo,
-            members,
-            displayName,
-            description
-        } = (activity.team && activity.team.current) || {}
-        const loading = activity.loading || (activity.team && activity.team.loading);
+        const { displayName: hackathonDisplayName, name: hackathonName } =
+            activity.current;
+        const { id, logo, members, displayName, description } =
+            activity.team.current;
+        const loading = activity.loading || activity.team.loading;
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -60,7 +56,12 @@ export class TeamDetail extends mixin() {
                             <img className="d-block m-auto" src={logo} />
                             <h2>{displayName}</h2>
                             <p>{description}</p>
-                            <Button href={"team/edit?activity=" + hackathonName + "&tid=" + id} color="link">编辑团队信息</Button>
+                            <Button
+                                href={`team/edit?activity=${hackathonName}&tid=${id}`}
+                                color="link"
+                            >
+                                编辑团队信息
+                            </Button>
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />

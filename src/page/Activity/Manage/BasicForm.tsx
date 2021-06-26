@@ -39,6 +39,7 @@ export function ActivityBasicForm({
 }: ActivityBasicFormProps) {
     return (
         <Form {...rest} className={classNames('text-center', className)}>
+            <input type="hidden" name="id" value={id} />
             <FormField
                 label="名称"
                 name="name"
