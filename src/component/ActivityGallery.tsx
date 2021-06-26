@@ -3,22 +3,22 @@ import { createCell } from 'web-cell';
 import { ActivityCardProps, ActivityCard } from './ActivityCard';
 import { Activity } from '../model';
 
-export interface ActivityGalleryProps {
+export interface ActivityGalleryProps
+    extends Pick<ActivityCardProps, 'manage' | 'onPublish'> {
     list: Activity[];
-    manage?: ActivityCardProps['manage'];
 }
 
-export function ActivityGallery({ list, manage }: ActivityGalleryProps) {
+export function ActivityGallery({ list, ...props }: ActivityGalleryProps) {
     return (
-        <div className="row">
+        <ol className="row">
             {list.map(item => (
-                <div className="col-12 col-sm-6 col-md-4 mb-4 d-flex">
+                <li className="col-12 col-sm-6 col-md-4 mb-4 d-flex">
                     <ActivityCard
                         style={{ flex: '1' }}
-                        {...{ ...item, manage }}
+                        {...{ ...item, ...props }}
                     />
-                </div>
+                </li>
             ))}
-        </div>
+        </ol>
     );
 }

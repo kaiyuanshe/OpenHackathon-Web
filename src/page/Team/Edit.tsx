@@ -1,13 +1,15 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { formToJSON } from 'web-utility/source/DOM';
+
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 import { Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { ToggleField } from 'boot-cell/source/Form/ToggleField';
 import { Button } from 'boot-cell/source/Form/Button';
-import { formToJSON } from 'web-utility/source/DOM';
-import { activity, Team } from '../../model';
+
+import { activity, history, Team } from '../../model';
 
 @observer
 @component({
@@ -31,37 +33,30 @@ export class TeamEdit extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        if (this.tid)
-            await activity.team.getOne(this.tid);
+        if (this.tid) await activity.team.getOne(this.tid);
     }
 
     saveTeam = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
 
-        const form = event.target as HTMLFormElement;
-        const data = formToJSON<Team>(form);
+        const { tid } = this,
+            form = event.target as HTMLFormElement;
+        const data = formToJSON<Team>(form),
+            operation = tid ? '更新' : '创建';
 
-        const operation = this.tid ? '更新' : '创建'
-        try {
-            const { id } = await activity.team.updateOne(this.tid, data);
-            if(!this.tid)
-                this.tid = id
-            self.alert(`团队${operation}成功！`);    
-        }
-        catch(err) {
-            let detail = err && err.body && err.body.detail
-            self.alert(detail || `团队${operation}失败！`)
-        }
+        const { id } = await activity.team.updateOne({ ...data, id: tid });
+
+        self.alert(`团队${operation}成功！`);
+
+        history.push(`team?id=${id}`);
     };
 
     render() {
-        const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
-        const {
-            displayName,
-            description,
-            autoApprove
-        } = (activity.team && activity.team.current) || {}
-        const loading = activity.loading || (activity.team && activity.team.loading);
+        const { displayName: hackathonDisplayName, name: hackathonName } =
+            activity.current;
+        const { displayName, description, autoApprove } =
+            (activity.team && activity.team.current) || {};
+        const loading = activity.loading || activity.team.loading;
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -71,7 +66,7 @@ export class TeamEdit extends mixin() {
                             title: hackathonDisplayName,
                             href: 'activity?name=' + hackathonName
                         },
-                        { title: displayName || '创建团队'}
+                        { title: displayName || '创建团队' }
                     ]}
                 />
                 <div className="d-lg-flex">
@@ -102,7 +97,9 @@ export class TeamEdit extends mixin() {
                                     checked={autoApprove}
                                 >
                                     自动通过
-                                    <span>（申请加入团队的人无需团队管理员批准，自动成为团队成员。）</span>
+                                    <span>
+                                        （申请加入团队的人无需团队管理员批准，自动成为团队成员。）
+                                    </span>
                                 </ToggleField>
                                 <Button
                                     type="submit"

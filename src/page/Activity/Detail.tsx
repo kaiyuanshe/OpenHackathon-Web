@@ -22,7 +22,12 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
-import { activity, Team } from '../../model';
+import {
+    activity,
+    RegistrationModel,
+    RegistrationStatus,
+    Team
+} from '../../model';
 
 @observer
 @component({
@@ -43,8 +48,17 @@ export class ActivityDetail extends mixin() {
         await activity.team.getNextPage({}, true);
     }
 
+    handleRegister = async () => {
+        const { status } = await activity.registration.createOne();
+
+        if (status === RegistrationStatus.approved) return activity.getOne();
+
+        self.alert(`活动 ${this.name} 报名须管理员审核，请耐心等候~`);
+    };
+
     renderMeta() {
         const {
+            name,
             displayName,
             tags,
             enrollmentStartedAt,
@@ -52,6 +66,7 @@ export class ActivityDetail extends mixin() {
             eventStartedAt,
             eventEndedAt,
             location,
+            roles: { isEnrolled, isJudge } = {},
             stat
         } = activity.current;
 
@@ -101,7 +116,15 @@ export class ActivityDetail extends mixin() {
                         {stat?.register}人
                     </li>
                 </ul>
-                <Button href={"team/edit?activity=" + this.name} color="success">创建团队</Button>
+                {!isEnrolled ? (
+                    <Button color="success" onClick={this.handleRegister}>
+                        报名参加
+                    </Button>
+                ) : !isJudge ? (
+                    <Button color="primary" href={`team/edit?activity=${name}`}>
+                        创建团队
+                    </Button>
+                ) : null}
             </>
         );
     }

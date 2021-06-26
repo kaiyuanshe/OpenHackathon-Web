@@ -50,7 +50,10 @@ export abstract class TableModel<
         this.list = [];
     }
 
-    async getNextPage({ search, orderby, top }: F = {} as F, reset = false) {
+    async getNextPage(
+        { search, orderby, top, ...filter }: F = {} as F,
+        reset = false
+    ) {
         if (reset) this.reset();
         else if (!this.nextPage) return this.list;
 
@@ -62,6 +65,7 @@ export abstract class TableModel<
             body: { nextLink, value }
         } = await service.get<PageData<T>>(
             `${this.nextPage || this.multipleBase}?${buildURLData({
+                ...filter,
                 search,
                 orderby,
                 top
@@ -84,7 +88,7 @@ export abstract class TableModel<
 
     async updateOne({ id, ...data }: Partial<T>) {
         const { body } = await (id
-            ? service.patch<T>(this.singleBase, data)
+            ? service.patch<T>(`${this.singleBase}/${id}`, data)
             : service.put<T>(this.singleBase, data));
 
         return (this.current = body);
@@ -102,5 +106,7 @@ export abstract class ActivitySubModel<
     boot(activityName: string) {
         this.singleBase = `hackathon/${activityName}/${this.subBase}`;
         this.multipleBase = `${this.singleBase}s`;
+
+        return this;
     }
 }

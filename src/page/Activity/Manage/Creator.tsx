@@ -43,7 +43,7 @@ export class CreateActivity extends mixin() {
 
         self.alert('已提交审核，请耐心等候~');
 
-        return history.replace('/');
+        return history.replace('');
     };
 
     render() {
@@ -77,7 +77,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={event => event.preventDefault()}
                         >
-                            （暂无）
+                            <p>（暂无）</p>
                             <Button
                                 type="reset"
                                 color="danger"
@@ -96,7 +96,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={event => event.preventDefault()}
                         >
-                            （暂无）
+                            <p>（暂无）</p>
                             <Button
                                 type="reset"
                                 color="danger"
@@ -115,7 +115,7 @@ export class CreateActivity extends mixin() {
                             className="text-center"
                             onSubmit={this.handleFinish}
                         >
-                            提交后，请等待管理员审核~
+                            <p>提交后，请等待管理员审核~</p>
                             <Button
                                 type="reset"
                                 color="danger"

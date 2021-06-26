@@ -104,7 +104,11 @@ export class UserDetail extends mixin() {
                     </TabPanel>
                     <NavLink>创建的活动</NavLink>
                     <TabPanel>
-                        <ActivityGallery manage list={activity.list} />
+                        <ActivityGallery
+                            manage
+                            list={activity.list}
+                            onPublish={name => activity.publishOne(name)}
+                        />
                     </TabPanel>
                     <NavLink>参与的活动</NavLink>
                     <TabPanel>
