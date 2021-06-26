@@ -85,7 +85,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
 
     menu = [
         {
-            title: '黑客松活动',
+            title: i18nTextOf('hackathons'),
             href: 'activity/list'
         },
         {
@@ -122,14 +122,14 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
-                    创建黑客松
+                    {i18nTextOf('create_a_hackathon')}
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
                     <DropMenuItem href={'user?uid=' + id}>
-                        个人主页
+                        {i18nTextOf('user_profile')}
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>
-                        退出
+                        {i18nTextOf('sign_out')}
                     </DropMenuItem>
                 </DropMenu>
             </>
@@ -150,7 +150,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     background="dark"
                     brand={
                         <img
-                            alt="开放黑客松"
+                            alt={i18nTextOf('open_hackathon_platform')}
                             src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
                             style={{ width: '2rem' }}
                         />
@@ -161,7 +161,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     ))}
                     {!user ? (
                         <Button color="primary" onClick={this.signIn}>
-                            登录
+                            {i18nTextOf('sign_in')}
                         </Button>
                     ) : (
                         this.renderUserBar(user)
@@ -174,7 +174,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     routes={routes}
                 />
                 <footer className="bg-dark text-white text-center py-5">
-                    Proudly developed with
+                    {i18nTextOf('proudly_developed_with')}
                     <a
                         className="mx-1"
                         target="_blank"

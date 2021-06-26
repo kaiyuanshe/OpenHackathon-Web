@@ -5,6 +5,7 @@ import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
+import { i18nTextOf } from '../i18n';
 import { Activity, session } from '../model';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
@@ -35,7 +36,7 @@ export function ActivityCard({
         !manage || creatorId !== session.user?.id ? (
             days > 0 ? (
                 <Button block color="primary" href={`activity?name=${name}`}>
-                    报名参加
+                    {i18nTextOf('enroll_in')}
                 </Button>
             ) : (
                 <Button block color="secondary" disabled>
@@ -102,12 +103,16 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        报名截止 {days < 0 ? '--' : days} 天
+                        {i18nTextOf('registration_deadline')}{' '}
+                        {days < 0 ? '--' : days} {i18nTextOf('days')}
                     </time>
                     <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
                     </span>
-                    <span>{stat?.register}人报名</span>
+                    <span>
+                        {stat?.register}
+                        {i18nTextOf('people')} {i18nTextOf('registered')}
+                    </span>
                 </small>
 
                 {toolbar}

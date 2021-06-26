@@ -1,3 +1,23 @@
 export enum en_US {
-    get_started = 'Get started'
+    days = 'days',
+    time_range = 'Time range',
+    people = 'people',
+    sign_in = 'Sign in',
+    sign_out = 'Sign out',
+    user_profile = 'User profile',
+    proudly_developed_with = 'Proudly developed with',
+    open_hackathon_platform = 'Open Hackathon Platform',
+    hackathons = 'Hackathons',
+    get_started = 'Get started',
+    create_a_hackathon = 'Create a hackathon',
+    last_events = 'Last event',
+    most_popular = 'Most popular',
+    upcoming_events = 'Upcoming events',
+    more_events = 'More events',
+    registration_deadline = 'Registration deadline',
+    registered = 'registered',
+    enroll_in = 'Enroll in',
+    sponsors = 'Sponsors',
+    partners = 'Partners',
+    active_users = 'Active users'
 }

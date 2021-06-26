@@ -8,6 +8,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
 
 import { isMobile } from '../../utility';
+import { i18nTextOf } from '../../i18n';
 import { ActivityGallery, GalleryView } from '../../component';
 import { activity, user, Activity, User, partner } from '../../model';
 import style from './index.module.less';
@@ -102,15 +103,15 @@ export class HomePage extends mixin() {
                 <section className="py-5 bg-light" id="activities">
                     <SpinnerBox className="container d-flex" cover={loading}>
                         <TabView mode="pills">
-                            <NavLink>最新活动</NavLink>
+                            <NavLink>{i18nTextOf('last_events')}</NavLink>
                             <TabPanel>
                                 <ActivityGallery list={list} />
                             </TabPanel>
-                            <NavLink>人气热点</NavLink>
+                            <NavLink>{i18nTextOf('most_popular')}</NavLink>
                             <TabPanel>
                                 <ActivityGallery list={popular_activities} />
                             </TabPanel>
-                            <NavLink>即将开始</NavLink>
+                            <NavLink>{i18nTextOf('upcoming_events')}</NavLink>
                             <TabPanel>{this.renderTabUpcoming(list)}</TabPanel>
                         </TabView>
                     </SpinnerBox>
@@ -122,19 +123,26 @@ export class HomePage extends mixin() {
                         className="w-25 m-auto"
                         href="activity/list"
                     >
-                        更多活动
+                        {i18nTextOf('more_events')}
                     </Button>
                 </section>
                 <div className="py-5 container d-flex flex-column flex-md-row align-items-center align-items-md-start">
                     <div id="sponsors">
-                        {this.renderLogoSection('赞助伙伴', partner.sponsor)}
-                        {this.renderLogoSection('合作主办', partner.host)}
+                        {this.renderLogoSection(
+                            i18nTextOf('sponsors'),
+                            partner.sponsor
+                        )}
+                        {this.renderLogoSection(
+                            i18nTextOf('partners'),
+                            partner.host
+                        )}
                         <section
                             className="text-center text-md-left"
                             id="activeUsers"
                         >
-                            <h5 className={style.userSectionTitle}>活跃用户</h5>
-
+                            <h5 className={style.userSectionTitle}>
+                                {i18nTextOf('active_users')}
+                            </h5>
                             <div className="d-flex flex-wrap justify-content-around">
                                 {user.activeList.map(this.renderUser)}
                             </div>
@@ -146,7 +154,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#activities"
                         className={style.icons}
-                        title="最新活动"
+                        title={i18nTextOf('last_events')}
                         style={{ top: '-10px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
@@ -154,7 +162,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#sponsors"
                         className={style.icons}
-                        title="赞助合作"
+                        title={i18nTextOf('sponsors')}
                         style={{ top: '60px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
@@ -162,7 +170,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#activeUsers"
                         className={style.icons}
-                        title="活跃用户"
+                        title={i18nTextOf('active_users')}
                         style={{ top: '130px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
