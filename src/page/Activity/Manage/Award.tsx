@@ -47,26 +47,119 @@ export class ManageAward extends mixin<ManageAwardProps>() {
         await activity.award.getNextPage({}, true);
     }
 
-    handleSave = (event: Event) => {
+    handleSave = async (event: Event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        const data = formToJSON(event.target as HTMLFormElement);
+        const form = event.target as HTMLFormElement;
+        const data = formToJSON(form);
 
-        activity.award.updateOne(data);
+        await activity.award.updateOne(data);
+        activity.award.clearCurrent();
+        form.reset();
     };
 
-    renderItem = ({ quantity, target, pictures, name, description }: Award) => (
+    handleClear = (event: Event) => {
+        const { id } = formToJSON<Partial<Award>>(
+            event.target as HTMLFormElement
+        );
+        if (!id) return;
+
+        event.preventDefault();
+        activity.award.clearCurrent();
+    };
+
+    renderForm() {
+        const {
+            id = '',
+            name = '',
+            description = '',
+            quantity,
+            target
+        } = activity.award.current;
+
+        return (
+            <form
+                className="col-4"
+                onSubmit={this.handleSave}
+                onReset={this.handleClear}
+            >
+                <input type="hidden" name="id" value={id} />
+                <FormField
+                    name="name"
+                    required
+                    label="名称"
+                    labelColumn={2}
+                    value={name}
+                />
+                <FormField
+                    name="description"
+                    label="描述"
+                    labelColumn={2}
+                    value={description}
+                />
+                <FormField
+                    type="number"
+                    name="quantity"
+                    label="权重"
+                    labelColumn={2}
+                    value={quantity + ''}
+                />
+                <FormField
+                    is="select"
+                    name="target"
+                    label="类型"
+                    labelColumn={2}
+                >
+                    {Object.entries(AwardTargetName).map(([value, name]) => (
+                        <option value={value} selected={value === target}>
+                            {name}
+                        </option>
+                    ))}
+                </FormField>
+                <footer className="d-flex">
+                    <Button type="reset" color="danger" block>
+                        清空表单
+                    </Button>
+                    <Button
+                        className="mt-0 ml-3"
+                        type="submit"
+                        color={id ? 'warning' : 'success'}
+                        block
+                    >
+                        {id ? '更新' : '新增'}奖项
+                    </Button>
+                </footer>
+            </form>
+        );
+    }
+
+    renderItem = ({
+        quantity,
+        target,
+        pictures,
+        name,
+        description,
+        id
+    }: Award) => (
         <TableRow>
             <td>{quantity}</td>
-            <td>{target}</td>
+            <td>{AwardTargetName[target]}</td>
             <td>
                 <Image fluid src={pictures?.[0].uri} />
             </td>
-            <td>{name}</td>
+            <td>
+                <Button color="link" onClick={() => activity.award.getOne(id)}>
+                    {name}
+                </Button>
+            </td>
             <td>{description}</td>
             <td>
-                <Button size="sm" color="danger">
+                <Button
+                    size="sm"
+                    color="danger"
+                    onClick={() => activity.award.deleteOne(id)}
+                >
                     删除
                 </Button>
             </td>
@@ -74,57 +167,14 @@ export class ManageAward extends mixin<ManageAwardProps>() {
     );
 
     render({ name }: ManageAwardProps) {
-        const { list } = activity.award;
+        const { loading, list } = activity.award;
 
         return (
-            <AdminFrame menu={menu} name={name}>
+            <AdminFrame menu={menu} name={name} loading={loading}>
                 <div className="row">
-                    <form className="col-6" onSubmit={this.handleSave}>
-                        <FormField
-                            name="name"
-                            required
-                            label="名称"
-                            labelColumn={2}
-                        />
-                        <FormField
-                            name="description"
-                            label="描述"
-                            labelColumn={2}
-                        />
-                        <FormField
-                            type="number"
-                            name="quantity"
-                            value="1"
-                            label="权重"
-                            labelColumn={2}
-                        />
-                        <FormField
-                            is="select"
-                            name="target"
-                            label="类型"
-                            labelColumn={2}
-                        >
-                            {Object.entries(AwardTargetName).map(
-                                ([value, name]) => (
-                                    <option value={value}>{name}</option>
-                                )
-                            )}
-                        </FormField>
-                        <footer className="d-flex">
-                            <Button type="reset" color="danger" block>
-                                清空表单
-                            </Button>
-                            <Button
-                                type="submit"
-                                color="success"
-                                block
-                                className="mt-0 ml-3"
-                            >
-                                新增奖项
-                            </Button>
-                        </footer>
-                    </form>
-                    <Table className="col-6 mt-2" small center>
+                    {this.renderForm()}
+
+                    <Table className="col-8 mt-2" small center>
                         <TableRow type="head">
                             <th>权重</th>
                             <th>类型</th>
