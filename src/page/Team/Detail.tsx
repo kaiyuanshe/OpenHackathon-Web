@@ -3,15 +3,15 @@ import { observer } from 'mobx-web-cell';
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
-
-import { activity } from '../model';
+import { Button } from 'boot-cell/source/Form/Button';
+import { activity } from '../../model';
 
 @observer
 @component({
     tagName: 'team-page',
     renderTarget: 'children'
 })
-export class TeamPage extends mixin() {
+export class TeamDetail extends mixin() {
     @attribute
     @watch
     activity = '';
@@ -28,36 +28,39 @@ export class TeamPage extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        await activity.team.getOne(this.tid);
+        if (this.tid)
+            await activity.team.getOne(this.tid);
     }
 
     render() {
-        const { displayName, name: hackathon } = activity.current;
+        const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
         const {
+            id,
             logo,
-            name,
             members,
-            displayName: title,
-            cover
-        } = activity.team.current;
-        const loading = activity.loading || activity.team.loading;
+            displayName,
+            description
+        } = (activity.team && activity.team.current) || {}
+        const loading = activity.loading || (activity.team && activity.team.loading);
 
         return (
             <SpinnerBox className="container" cover={loading}>
                 <BreadCrumb
                     path={[
                         {
-                            title: displayName,
-                            href: 'activity?name=' + hackathon
+                            title: hackathonDisplayName,
+                            href: 'activity?name=' + hackathonName
                         },
-                        { title: name }
+                        { title: displayName }
                     ]}
                 />
                 <div className="d-lg-flex">
                     <div className="border bg-white mr-lg-3 mb-3 mb-lg-0">
                         <header className="p-3">
                             <img className="d-block m-auto" src={logo} />
-                            <h2>{name}</h2>
+                            <h2>{displayName}</h2>
+                            <p>{description}</p>
+                            <Button href={"team/edit?activity=" + hackathonName + "&tid=" + id} color="link">编辑团队信息</Button>
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />
@@ -79,22 +82,6 @@ export class TeamPage extends mixin() {
                                     )
                                 )}
                             </ul>
-                        </div>
-                    </div>
-                    <div className="border bg-white flex-fill">
-                        <div className="p-3">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th>项目名称</th>
-                                        <td>{title}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>项目封面图</th>
-                                        <td>{cover}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
