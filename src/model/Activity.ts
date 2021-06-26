@@ -1,10 +1,11 @@
 import { observable } from 'mobx';
 
-import { DataItem, service, PageData, Asset } from './service';
+import { DataItem, service, PageData, Asset, ListFilter } from './service';
 import { TableModel, loading } from './BaseModel';
 import { Coord, coordsOf } from './AMap';
 import { TeamModel } from './Team';
 import { RegistrationModel } from './Registration';
+import { AwardModel } from './Award';
 
 export interface Organization extends DataItem {
     name: string;
@@ -68,6 +69,10 @@ export type ActivityData = Omit<
     | 'roles'
 >;
 
+export interface ActivityQuery extends ListFilter {
+    listType?: 'online' | 'admin' | 'enrolled' | 'fresh';
+}
+
 export interface ActivityConfig {
     pre_allocate_number: number;
     freedom_team: boolean;
@@ -87,12 +92,13 @@ interface NameCheckResult {
     message: string;
 }
 
-export class ActivityModel extends TableModel<Activity> {
+export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     singleBase = 'hackathon';
     multipleBase = 'hackathons';
 
-    team?: TeamModel;
-    registration?: RegistrationModel;
+    team = new TeamModel();
+    registration = new RegistrationModel();
+    award = new AwardModel();
 
     @observable
     config: ActivityConfig = {} as ActivityConfig;
@@ -115,25 +121,30 @@ export class ActivityModel extends TableModel<Activity> {
 
         if (body.location) body.coord = (await coordsOf(body.location))[0];
 
-        this.team = new TeamModel(name);
-        this.registration = new RegistrationModel(name);
+        this.team.boot(name);
+        this.registration.boot(name);
+        this.award.boot(name);
 
         return (this.current = body);
     }
 
     @loading
-    async updateOne({ name, ...data }: Partial<ActivityData>) {
-        const {
+    async updateOne({ name, id, ...data }: Partial<ActivityData>) {
+        if (!id) {
+            const {
                 body: { nameAvailable }
             } = await service.post<NameCheckResult>(
                 'hackathon/checkNameAvailability',
                 { name }
-            ),
-            path = `hackathon/${name}`;
+            );
+            if (!nameAvailable)
+                throw new URIError(`${name} can't be an Activity name`);
+        }
+        const path = `hackathon/${name}`;
 
-        const { body } = await (nameAvailable
-            ? service.put<Activity>(path, data)
-            : service.patch<Activity>(path, data));
+        const { body } = await (id
+            ? service.patch<Activity>(path, data)
+            : service.put<Activity>(path, data));
 
         return (this.current = body);
     }

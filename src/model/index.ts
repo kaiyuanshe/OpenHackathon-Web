@@ -14,4 +14,6 @@ export * from './service';
 export * from './AMap';
 export * from './User';
 export * from './Activity';
+export * from './Award';
+export * from './Registration';
 export * from './Team';

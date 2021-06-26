@@ -1,5 +1,6 @@
 import { DataItem, ListFilter, service } from './service';
-import { loading, TableModel } from './BaseModel';
+import { ActivitySubModel, loading } from './BaseModel';
+import { User } from './User';
 
 export enum RegistrationStatus {
     none = 'none',
@@ -11,6 +12,7 @@ export enum RegistrationStatus {
 export interface Registration extends DataItem {
     hackathonName: string;
     userId: string;
+    user: User;
     status: RegistrationStatus;
 }
 
@@ -18,18 +20,11 @@ export interface RegistrationQuery extends ListFilter<Registration> {
     status?: RegistrationStatus;
 }
 
-export class RegistrationModel extends TableModel<
+export class RegistrationModel extends ActivitySubModel<
     Registration,
     RegistrationQuery
 > {
-    singleBase = '';
-    multipleBase = '';
-
-    constructor(activityName: string) {
-        super();
-        this.singleBase = `hackathon/${activityName}/enrollment`;
-        this.multipleBase = `${this.singleBase}s`;
-    }
+    subBase = 'enrollment';
 
     @loading
     async createOne() {
@@ -38,6 +33,7 @@ export class RegistrationModel extends TableModel<
         return (this.current = body);
     }
 
+    @loading
     async updateOne({
         userId = this.current.userId,
         status
@@ -45,7 +41,8 @@ export class RegistrationModel extends TableModel<
         const { body } = await service.post<Registration>(
             `${this.singleBase}/${userId}/${
                 status === RegistrationStatus.approved ? 'approve' : 'reject'
-            }`
+            }`,
+            {}
         );
         return (this.current = body);
     }

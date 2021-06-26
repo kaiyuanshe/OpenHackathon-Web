@@ -10,10 +10,10 @@ import { formToJSON } from 'web-utility/source/DOM';
 import { observer } from 'mobx-web-cell';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { AdminFrame } from '../../component/AdminFrame';
-import { ActivityBasicForm, ActivityBasicFormData } from './ActivityBasicForm';
+import { AdminFrame } from '../../../component/AdminFrame';
+import { ActivityBasicForm, ActivityBasicFormData } from './BasicForm';
 import menu from './menu.json';
-import { activity } from '../../model';
+import { activity } from '../../../model';
 
 export interface EditActivityProps extends WebCellProps {
     name: string;
