@@ -22,12 +22,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
-import {
-    activity,
-    RegistrationModel,
-    RegistrationStatus,
-    Team
-} from '../../model';
+import { activity, RegistrationStatus, Team } from '../../model';
 
 @observer
 @component({

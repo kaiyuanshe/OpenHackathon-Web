@@ -8,7 +8,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import { DropMenu, DropMenuItem } from 'boot-cell/source/Navigator/DropMenu';
 
 import logo from '../image/logo.png';
-import { i18nTextOf } from '../i18n';
+import { words } from '../i18n';
 import { history, session, User } from '../model';
 import { HomePage } from './Home';
 import { ActivityDetail, ActivityList } from './Activity';
@@ -85,11 +85,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
 
     menu = [
         {
-            title: i18nTextOf('hackathons'),
+            title: words.hackathons,
             href: 'activity/list'
         },
         {
-            title: i18nTextOf('get_started'),
+            title: words.get_started,
             href: 'https://github.com/kaiyuanshe/open-hackathon/wiki/%E5%BC%80%E6%94%BE%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97'
         }
     ];
@@ -122,14 +122,14 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
-                    {i18nTextOf('create_a_hackathon')}
+                    {words.create_a_hackathon}
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
                     <DropMenuItem href={'user?uid=' + id}>
-                        {i18nTextOf('user_profile')}
+                        {words.user_profile}
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>
-                        {i18nTextOf('sign_out')}
+                        {words.sign_out}
                     </DropMenuItem>
                 </DropMenu>
             </>
@@ -150,7 +150,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     background="dark"
                     brand={
                         <img
-                            alt={i18nTextOf('open_hackathon_platform')}
+                            alt={words.open_hackathon_platform}
                             src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
                             style={{ width: '2rem' }}
                         />
@@ -161,7 +161,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     ))}
                     {!user ? (
                         <Button color="primary" onClick={this.signIn}>
-                            {i18nTextOf('sign_in')}
+                            {words.sign_in}
                         </Button>
                     ) : (
                         this.renderUserBar(user)
@@ -174,7 +174,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     routes={routes}
                 />
                 <footer className="bg-dark text-white text-center py-5">
-                    {i18nTextOf('proudly_developed_with')}
+                    {words.proudly_developed_with}
                     <a
                         className="mx-1"
                         target="_blank"

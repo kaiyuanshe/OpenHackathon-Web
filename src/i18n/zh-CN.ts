@@ -2,6 +2,8 @@ export enum zh_CN {
     days = '天',
     time_range = '时间范围',
     people = '人',
+    loading = '加载中……',
+    no_more = '没有更多了',
     sign_in = '登录',
     sign_out = '退出',
     user_profile = '个人主页',
@@ -17,7 +19,12 @@ export enum zh_CN {
     registration_deadline = '报名截止',
     registered = '已报名',
     enroll_in = '报名参加',
+    registration_closed = '报名已截止',
     sponsors = '赞助伙伴',
     partners = '合作主办',
-    active_users = '活跃用户'
+    active_users = '活跃用户',
+    top_hackathons = '热门活动',
+    manage_this_hackathon = '管理活动',
+    apply_to_offline = '申请下线',
+    apply_to_online = '申请上线'
 }

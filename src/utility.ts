@@ -26,16 +26,3 @@ export function importJS(URI: string) {
         document.head.append(script);
     });
 }
-
-export function createI18nScope<T extends Record<string, string>>(
-    data: Record<string, T>,
-    fallback = 'en-US'
-) {
-    const meta: T = Object.assign(
-        {},
-        ...[...navigator.languages, fallback].reverse().map(name => data[name])
-    );
-    return {
-        i18nTextOf: (key: keyof T) => meta[key] || ''
-    };
-}

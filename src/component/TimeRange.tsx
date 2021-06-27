@@ -4,7 +4,7 @@ import { formatDate } from 'web-utility/source/date';
 import { InputGroup, InputGroupProps } from 'boot-cell/source/Form/InputGroup';
 import { Field } from 'boot-cell/source/Form/Field';
 
-import { i18nTextOf } from '../i18n';
+import { words } from '../i18n';
 
 export interface TimeRangeProps extends HTMLFieldProps, InputGroupProps {}
 
@@ -32,7 +32,7 @@ export function TimeRange({
 
     return (
         <InputGroup {...rest}>
-            {i18nTextOf('time_range')}
+            {words.time_range}
             <Field
                 type="datetime-local"
                 name={name + 'StartedAt'}

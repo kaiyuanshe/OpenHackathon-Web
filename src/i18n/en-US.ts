@@ -2,6 +2,8 @@ export enum en_US {
     days = 'days',
     time_range = 'Time range',
     people = 'people',
+    loading = 'Loading...',
+    no_more = 'No more',
     sign_in = 'Sign in',
     sign_out = 'Sign out',
     user_profile = 'User profile',
@@ -17,7 +19,12 @@ export enum en_US {
     registration_deadline = 'Registration deadline',
     registered = 'registered',
     enroll_in = 'Enroll in',
+    registration_closed = 'Registration Closed',
     sponsors = 'Sponsors',
     partners = 'Partners',
-    active_users = 'Active users'
+    active_users = 'Active users',
+    top_hackathons = 'Top hackathons',
+    manage_this_hackathon = 'Manage this hackathon',
+    apply_to_offline = 'Apply to offline',
+    apply_to_online = 'Apply to online'
 }

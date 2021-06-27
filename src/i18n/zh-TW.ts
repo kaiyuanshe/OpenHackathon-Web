@@ -2,6 +2,8 @@ export enum zh_TW {
     days = '天',
     time_range = '時間範圍',
     people = '人',
+    loading = '加載中……',
+    no_more = '沒有更多了',
     sign_in = '登錄',
     sign_out = '退出',
     user_profile = '個人主頁',
@@ -17,7 +19,12 @@ export enum zh_TW {
     registration_deadline = '報名截止',
     registered = '已報名',
     enroll_in = '報名參加',
+    registration_closed = '報名已截止',
     sponsors = '贊助夥伴',
     partners = '合作主辦',
-    active_users = '活躍用戶'
+    active_users = '活躍用戶',
+    top_hackathons = '熱門活動',
+    manage_this_hackathon = '管理活動',
+    apply_to_offline = '申請下線',
+    apply_to_online = '申請上線'
 }

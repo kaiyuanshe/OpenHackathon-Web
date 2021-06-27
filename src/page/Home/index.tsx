@@ -8,7 +8,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import { Icon } from 'boot-cell/source/Reminder/Icon';
 
 import { isMobile } from '../../utility';
-import { i18nTextOf } from '../../i18n';
+import { words } from '../../i18n';
 import { ActivityGallery, GalleryView } from '../../component';
 import { activity, user, Activity, User, partner } from '../../model';
 import style from './index.module.less';
@@ -20,7 +20,8 @@ import style from './index.module.less';
 })
 export class HomePage extends mixin() {
     connectedCallback() {
-        activity.getNextPage({ listType: 'fresh' }, true);
+        activity.getNextPage({}, true);
+        activity.getComingList();
         // user.getActiveList();
 
         super.connectedCallback();
@@ -77,7 +78,7 @@ export class HomePage extends mixin() {
     );
 
     render() {
-        const { list, loading } = activity;
+        const { list, comingList, loading } = activity;
         const banner = list
                 .filter(({ banners }) => banners?.[0])
                 .slice(0, 3)
@@ -103,16 +104,18 @@ export class HomePage extends mixin() {
                 <section className="py-5 bg-light" id="activities">
                     <SpinnerBox className="container d-flex" cover={loading}>
                         <TabView mode="pills">
-                            <NavLink>{i18nTextOf('last_events')}</NavLink>
+                            <NavLink>{words.last_events}</NavLink>
                             <TabPanel>
                                 <ActivityGallery list={list} />
                             </TabPanel>
-                            <NavLink>{i18nTextOf('most_popular')}</NavLink>
+                            <NavLink>{words.most_popular}</NavLink>
                             <TabPanel>
                                 <ActivityGallery list={popular_activities} />
                             </TabPanel>
-                            <NavLink>{i18nTextOf('upcoming_events')}</NavLink>
-                            <TabPanel>{this.renderTabUpcoming(list)}</TabPanel>
+                            <NavLink>{words.upcoming_events}</NavLink>
+                            <TabPanel>
+                                {this.renderTabUpcoming(comingList)}
+                            </TabPanel>
                         </TabView>
                     </SpinnerBox>
                     <Button
@@ -123,25 +126,22 @@ export class HomePage extends mixin() {
                         className="w-25 m-auto"
                         href="activity/list"
                     >
-                        {i18nTextOf('more_events')}
+                        {words.more_events}
                     </Button>
                 </section>
                 <div className="py-5 container d-flex flex-column flex-md-row align-items-center align-items-md-start">
                     <div id="sponsors">
                         {this.renderLogoSection(
-                            i18nTextOf('sponsors'),
+                            words.sponsors,
                             partner.sponsor
                         )}
-                        {this.renderLogoSection(
-                            i18nTextOf('partners'),
-                            partner.host
-                        )}
+                        {this.renderLogoSection(words.partners, partner.host)}
                         <section
                             className="text-center text-md-left"
                             id="activeUsers"
                         >
                             <h5 className={style.userSectionTitle}>
-                                {i18nTextOf('active_users')}
+                                {words.active_users}
                             </h5>
                             <div className="d-flex flex-wrap justify-content-around">
                                 {user.activeList.map(this.renderUser)}
@@ -154,7 +154,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#activities"
                         className={style.icons}
-                        title={i18nTextOf('last_events')}
+                        title={words.last_events}
                         style={{ top: '-10px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
@@ -162,7 +162,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#sponsors"
                         className={style.icons}
-                        title={i18nTextOf('sponsors')}
+                        title={words.sponsors}
                         style={{ top: '60px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
@@ -170,7 +170,7 @@ export class HomePage extends mixin() {
                     <a
                         href="#activeUsers"
                         className={style.icons}
-                        title={i18nTextOf('active_users')}
+                        title={words.active_users}
                         style={{ top: '130px' }}
                     >
                         <Icon name="circle-fill" size={1.25} />
