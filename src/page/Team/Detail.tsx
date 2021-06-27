@@ -24,6 +24,9 @@ export class TeamDetail extends mixin() {
     @watch
     tid = '';
 
+    @watch
+    members = [];
+
     async connectedCallback() {
         this.classList.add('d-block', 'py-4', 'bg-light');
 
@@ -32,15 +35,22 @@ export class TeamDetail extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        if (this.tid) await activity.team.getOne(this.tid);
+        if (this.tid) {
+            await activity.team.getOne(this.tid);
+            activity.team.members.boot(activity.current.name, activity.team.current.id);
+            this.members = await activity.team.members.getNextPage({}, true);
+        }
     }
 
     render() {
-        const { displayName: hackathonDisplayName, name: hackathonName } =
-            activity.current;
-        const { id, logo, members, displayName, description } =
-            activity.team.current;
-        const loading = activity.loading || activity.team.loading;
+        const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
+        const {
+            id,
+            logo,
+            displayName,
+            description
+        } = (activity.team && activity.team.current) || {}
+        const loading = activity.loading || (activity.team && activity.team.loading);
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -74,15 +84,15 @@ export class TeamDetail extends mixin() {
                             <BGIcon type="square" name="users" />
                             {words.team_members}
                             <ul className="list-unstyled mt-3">
-                                {members?.map(
+                                {this.members?.map(
                                     ({
-                                        user: { id, avatar_url, nickname }
+                                        user: { id, photo, nickname }
                                     }) => (
                                         <li>
                                             <a href={'user?uid=' + id}>
                                                 <img
                                                     style={{ width: '1.5rem' }}
-                                                    src={avatar_url}
+                                                    src={photo}
                                                 />{' '}
                                                 {nickname}
                                             </a>
