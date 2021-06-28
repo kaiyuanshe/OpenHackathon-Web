@@ -7,6 +7,7 @@ import {
     Fragment
 } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { textJoin } from 'web-utility/source/i18n';
 import { diffTime } from 'web-utility/source/date';
 
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
@@ -22,6 +23,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
+import { words } from '../../i18n';
 import { activity, RegistrationStatus, Team } from '../../model';
 
 @observer
@@ -48,7 +50,13 @@ export class ActivityDetail extends mixin() {
 
         if (status === RegistrationStatus.approved) return activity.getOne();
 
-        self.alert(`活动 ${this.name} 报名须管理员审核，请耐心等候~`);
+        self.alert(
+            textJoin(
+                words.hackathons,
+                this.name,
+                words.registration_needs_review
+            )
+        );
     };
 
     renderMeta() {
@@ -77,7 +85,7 @@ export class ActivityDetail extends mixin() {
                 </aside>
                 <ul className="list-unstyled">
                     <li>
-                        报名时间
+                        {textJoin(words.register, words.period)}
                         <FAIcon
                             name="calendar-alt"
                             color="success"
@@ -87,7 +95,7 @@ export class ActivityDetail extends mixin() {
                         {new Date(enrollmentEndedAt).toLocaleString()}
                     </li>
                     <li>
-                        活动时间
+                        {textJoin(words.event, words.period)}
                         <FAIcon
                             name="calendar-alt"
                             color="success"
@@ -97,7 +105,7 @@ export class ActivityDetail extends mixin() {
                         {new Date(eventEndedAt).toLocaleString()}
                     </li>
                     <li>
-                        活动地址
+                        {textJoin(words.event, words.address)}
                         <FAIcon
                             name="map-marker-alt"
                             color="success"
@@ -106,18 +114,18 @@ export class ActivityDetail extends mixin() {
                         {location}
                     </li>
                     <li>
-                        报名人数
+                        {words.registration_count}
                         <FAIcon name="users" color="success" className="mx-2" />
-                        {stat?.register}人
+                        {textJoin(stat?.register, words.people)}
                     </li>
                 </ul>
                 {!isEnrolled ? (
                     <Button color="success" onClick={this.handleRegister}>
-                        报名参加
+                        {words.register}
                     </Button>
                 ) : !isJudge ? (
                     <Button color="primary" href={`team/edit?activity=${name}`}>
-                        创建团队
+                        {textJoin(words.create, words.team)}
                     </Button>
                 ) : null}
             </>
@@ -139,7 +147,11 @@ export class ActivityDetail extends mixin() {
                             href={link}
                         >
                             <time dateTime={date.toJSON()}>
-                                {Math.abs(distance)} {TimeUnitName[unit]}前
+                                {textJoin(
+                                    Math.abs(distance) + '',
+                                    TimeUnitName[unit],
+                                    words.before
+                                )}
                             </time>
                             <Badge color="primary" className="mx-2">
                                 <FAIcon name="volume-down" size={2} />
@@ -169,11 +181,13 @@ export class ActivityDetail extends mixin() {
                             {displayName}
                         </a>
                     </h4>
-                    共 <span className="text-success">{member_count}</span> 人
+                    {words.a_total_of}
+                    <span className="mx-2 text-success">{member_count}</span>
+                    {words.people}
                 </div>
             </div>
             <div className="p-2">
-                队长：
+                {words.team_leader}：
                 <a href={'user?uid=' + leader?.id}>
                     <img className={style.icon} src={leader?.phone} />{' '}
                     {leader?.nickname}
@@ -205,13 +219,13 @@ export class ActivityDetail extends mixin() {
                 </header>
                 <div className="row">
                     <TabView className="col-12 col-lg-9">
-                        <NavLink>活动详情</NavLink>
+                        <NavLink>{words.hackathon_detail}</NavLink>
                         <TabPanel innerHTML={detail} />
 
-                        <NavLink>最新动态</NavLink>
+                        <NavLink>{words.latest_news}</NavLink>
                         <TabPanel>{this.renderEventList()}</TabPanel>
 
-                        <NavLink>所有团队</NavLink>
+                        <NavLink>{words.all_teams}</NavLink>
                         <TabPanel>
                             <ol className="list-unstyled d-flex flex-wrap justify-content-around">
                                 {team?.list.map(this.renderTeam)}
@@ -219,7 +233,7 @@ export class ActivityDetail extends mixin() {
                         </TabPanel>
                     </TabView>
                     <aside className="col-12 col-lg-3">
-                        <h3>主办方</h3>
+                        <h3>{words.organizer}</h3>
                         {organizers?.map(({ logo, name, homepage }) => (
                             <MediaObject
                                 className="border p-3"
@@ -237,7 +251,7 @@ export class ActivityDetail extends mixin() {
                         ))}
                         {location && (
                             <>
-                                <h3 className="mt-3">活动地点</h3>
+                                <h3 className="mt-3">{words.event_location}</h3>
                                 <Embed
                                     is="iframe"
                                     style={{ height: '20rem' }}

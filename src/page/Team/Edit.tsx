@@ -1,5 +1,6 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { textJoin } from 'web-utility/source/i18n';
 import { formToJSON } from 'web-utility/source/DOM';
 
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
@@ -9,6 +10,7 @@ import { FormField } from 'boot-cell/source/Form/FormField';
 import { ToggleField } from 'boot-cell/source/Form/ToggleField';
 import { Button } from 'boot-cell/source/Form/Button';
 
+import { words } from '../../i18n';
 import { activity, history, Team } from '../../model';
 
 @observer
@@ -42,11 +44,13 @@ export class TeamEdit extends mixin() {
         const { tid } = this,
             form = event.target as HTMLFormElement;
         const data = formToJSON<Team>(form),
-            operation = tid ? '更新' : '创建';
+            operation = tid ? words.edit : words.create;
 
-        const { id } = await activity.team.updateOne({ ...data, id: tid });
-
-        self.alert(`团队${operation}成功！`);
+        const { id, name } = await activity.team.updateOne({
+            ...data,
+            id: tid
+        });
+        self.alert(textJoin(operation, name, words.team, words.success));
 
         history.push(`team?id=${id}`);
     };
@@ -66,7 +70,11 @@ export class TeamEdit extends mixin() {
                             title: hackathonDisplayName,
                             href: 'activity?name=' + hackathonName
                         },
-                        { title: displayName || '创建团队' }
+                        {
+                            title:
+                                displayName ||
+                                textJoin(words.create, words.team)
+                        }
                     ]}
                 />
                 <div className="d-lg-flex">

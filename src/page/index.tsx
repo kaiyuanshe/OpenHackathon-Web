@@ -1,6 +1,8 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { Route, CellRouter } from 'cell-router/source';
 import { observer } from 'mobx-web-cell';
+import { textJoin } from 'web-utility/source/i18n';
+
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { NavBar } from 'boot-cell/source/Navigator/NavBar';
 import { NavLink } from 'boot-cell/source/Navigator/Nav';
@@ -122,11 +124,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         return (
             <>
                 <Button className="mr-3" color="success" href="create">
-                    {words.create_a_hackathon}
+                    {textJoin(words.create, words.hackathons)}
                 </Button>
                 <DropMenu buttonColor="primary" caption={nickname}>
                     <DropMenuItem href={'user?uid=' + id}>
-                        {words.user_profile}
+                        {textJoin(words.user, words.profile)}
                     </DropMenuItem>
                     <DropMenuItem onClick={() => session.signOut()}>
                         {words.sign_out}

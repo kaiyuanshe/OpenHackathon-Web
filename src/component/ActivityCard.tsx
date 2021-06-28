@@ -1,5 +1,6 @@
 import { createCell, Fragment } from 'web-cell';
 import { Day } from 'web-utility/source/date';
+import { textJoin } from 'web-utility/source/i18n';
 import classNames from 'classnames';
 import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
@@ -36,7 +37,7 @@ export function ActivityCard({
         !manage || creatorId !== session.user?.id ? (
             days > 0 ? (
                 <Button block color="primary" href={`activity?name=${name}`}>
-                    {words.enroll_in}
+                    {words.register}
                 </Button>
             ) : (
                 <Button block color="secondary" disabled>
@@ -102,15 +103,21 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        {words.registration_deadline} {days < 0 ? '--' : days}{' '}
-                        {words.days}
+                        {textJoin(
+                            words.registration_deadline,
+                            days < 0 ? '--' : days + '',
+                            words.days
+                        )}
                     </time>
                     <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
                     </span>
                     <span>
-                        {stat?.register}
-                        {words.people} {words.registered}
+                        {textJoin(
+                            stat?.register,
+                            words.people,
+                            words.registered
+                        )}
                     </span>
                 </small>
 

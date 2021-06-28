@@ -15,7 +15,7 @@
         "quill": "^1.3.7",
         "quill-image-uploader": "^1.2.2",
         "web-cell": "^2.3.0",
-        "web-utility": "2.5.0"
+        "web-utility": "2.5.1"
     },
     "devDependencies": {
         "@types/classnames": "^2.3.1",
