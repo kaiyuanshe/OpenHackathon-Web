@@ -114,7 +114,7 @@ export function ActivityCard({
                     </span>
                     <span>
                         {textJoin(
-                            stat?.register,
+                            (stat?.register || 0) + '',
                             words.people,
                             words.registered
                         )}
