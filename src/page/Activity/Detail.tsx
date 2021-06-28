@@ -69,7 +69,7 @@ export class ActivityDetail extends mixin() {
             eventStartedAt,
             eventEndedAt,
             location,
-            roles: { isEnrolled, isJudge } = {},
+            roles,
             stat
         } = activity.current;
 
@@ -119,11 +119,11 @@ export class ActivityDetail extends mixin() {
                         {textJoin((stat?.register || 0) + '', words.people)}
                     </li>
                 </ul>
-                {!isEnrolled ? (
+                {!roles?.isEnrolled ? (
                     <Button color="success" onClick={this.handleRegister}>
                         {words.register}
                     </Button>
-                ) : !isJudge ? (
+                ) : !roles?.isJudge ? (
                     <Button color="primary" href={`team/edit?activity=${name}`}>
                         {textJoin(words.create, words.team)}
                     </Button>
