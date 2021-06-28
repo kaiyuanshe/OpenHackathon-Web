@@ -5,7 +5,7 @@ import { zh_TW } from './zh-TW';
 import { en_US } from './en-US';
 
 export const { words } = bootI18n({
-    'zh-CN': en_US,
+    'zh-CN': zh_CN,
     'zh-SG': zh_CN,
     'zh-TW': zh_TW,
     'zh-HK': zh_TW,
