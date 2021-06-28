@@ -4,8 +4,9 @@ import { EdgeEvent } from 'boot-cell/source/Content/EdgeDetector';
 import 'boot-cell/source/Content/EdgeDetector';
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 
-import { activity } from '../../model';
 import { ActivityGallery } from '../../component';
+import { words } from '../../i18n';
+import { activity } from '../../model';
 
 @observer
 @component({
@@ -30,14 +31,13 @@ export class ActivityList extends mixin() {
 
         return (
             <>
-                <h2 className="text-center mb-3">热门活动</h2>
-
+                <h2 className="text-center mb-3">{words.top_hackathons}</h2>
                 <edge-detector onTouchEdge={this.loadMore}>
                     <SpinnerBox cover={loading}>
                         <ActivityGallery list={list} />
                     </SpinnerBox>
                     <p slot="bottom" className="text-center">
-                        {!nextPage ? '没有更多了' : '加载中……'}
+                        {!nextPage ? words.no_more : words.loading}
                     </p>
                 </edge-detector>
             </>

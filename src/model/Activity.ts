@@ -101,6 +101,9 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     award = new AwardModel();
 
     @observable
+    comingList: Activity[] = [];
+
+    @observable
     config: ActivityConfig = {} as ActivityConfig;
 
     async getEventList(name: string) {
@@ -113,6 +116,15 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
             })}`
         );
         return value;
+    }
+
+    @loading
+    async getComingList() {
+        const {
+            body: { value }
+        } = await service.get<PageData<Activity>>('hackathons?listType=fresh');
+
+        return (this.comingList = value);
     }
 
     @loading

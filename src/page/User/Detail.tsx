@@ -1,5 +1,7 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { textJoin } from 'web-utility/source/i18n';
+
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { Button } from 'boot-cell/source/Form/Button';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
@@ -7,6 +9,7 @@ import { NavLink } from 'boot-cell/source/Navigator/Nav';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { ActivityGallery } from '../../component';
+import { words } from '../../i18n';
 import { Provider, session, user, activity } from '../../model';
 import style from './Detail.module.less';
 
@@ -86,13 +89,17 @@ export class UserDetail extends mixin() {
                                 target="_blank"
                                 href="https://ophapiv2-demo.authing.cn/u"
                             >
-                                编辑个人信息
+                                {textJoin(
+                                    words.edit,
+                                    words.user,
+                                    words.profile
+                                )}
                             </Button>
                         </div>
                     )}
                 </div>
                 <TabView mode="masthead" tabAlign="center">
-                    <NavLink>关注的活动</NavLink>
+                    <NavLink>{words.followed_hackathons}</NavLink>
                     <TabPanel>
                         {likes && (
                             <ActivityGallery
@@ -102,7 +109,7 @@ export class UserDetail extends mixin() {
                             />
                         )}
                     </TabPanel>
-                    <NavLink>创建的活动</NavLink>
+                    <NavLink>{words.owned_hackathons}</NavLink>
                     <TabPanel>
                         <ActivityGallery
                             manage
@@ -110,7 +117,7 @@ export class UserDetail extends mixin() {
                             onPublish={name => activity.publishOne(name)}
                         />
                     </TabPanel>
-                    <NavLink>参与的活动</NavLink>
+                    <NavLink>{words.joined_hackathons}</NavLink>
                     <TabPanel>
                         {registrations && (
                             <ActivityGallery

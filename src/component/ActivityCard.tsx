@@ -1,10 +1,12 @@
 import { createCell, Fragment } from 'web-cell';
 import { Day } from 'web-utility/source/date';
+import { textJoin } from 'web-utility/source/i18n';
 import classNames from 'classnames';
 import { CardProps, Card, CardFooter } from 'boot-cell/source/Content/Card';
 import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
+import { words } from '../i18n';
 import { Activity, session } from '../model';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
@@ -35,11 +37,11 @@ export function ActivityCard({
         !manage || creatorId !== session.user?.id ? (
             days > 0 ? (
                 <Button block color="primary" href={`activity?name=${name}`}>
-                    报名参加
+                    {words.register}
                 </Button>
             ) : (
                 <Button block color="secondary" disabled>
-                    报名已截止
+                    {words.registration_closed}
                 </Button>
             )
         ) : (
@@ -49,11 +51,11 @@ export function ActivityCard({
                     color="warning"
                     href={'manage/activity?name=' + name}
                 >
-                    管理活动
+                    {words.manage_this_hackathon}
                 </Button>
                 {status === 'online' ? (
                     <Button block color="danger" className="mt-2">
-                        申请下线
+                        {words.apply_to_offline}
                     </Button>
                 ) : (
                     <Button
@@ -62,7 +64,7 @@ export function ActivityCard({
                         className="mt-2"
                         onClick={() => onPublish(name)}
                     >
-                        申请上线
+                        {words.apply_to_online}
                     </Button>
                 )}
             </>
@@ -71,7 +73,6 @@ export function ActivityCard({
     return (
         <Card
             {...rest}
-            key={rest.id}
             className={classNames(
                 'mb-3',
                 'border',
@@ -102,12 +103,22 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        报名截止 {days < 0 ? '--' : days} 天
+                        {textJoin(
+                            words.registration_deadline,
+                            days < 0 ? '--' : days + '',
+                            words.days
+                        )}
                     </time>
                     <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
                     </span>
-                    <span>{stat?.register}人报名</span>
+                    <span>
+                        {textJoin(
+                            (stat?.register || 0) + '',
+                            words.people,
+                            words.registered
+                        )}
+                    </span>
                 </small>
 
                 {toolbar}

@@ -1,10 +1,13 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { textJoin } from 'web-utility/source/i18n';
+
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
 import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { Button } from 'boot-cell/source/Form/Button';
 
+import { words } from '../../i18n';
 import { activity } from '../../model';
 
 @observer
@@ -60,12 +63,16 @@ export class TeamDetail extends mixin() {
                                 href={`team/edit?activity=${hackathonName}&tid=${id}`}
                                 color="link"
                             >
-                                编辑团队信息
+                                {textJoin(
+                                    words.edit,
+                                    words.team,
+                                    words.profile
+                                )}
                             </Button>
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />
-                            团队成员
+                            {words.team_members}
                             <ul className="list-unstyled mt-3">
                                 {members?.map(
                                     ({
