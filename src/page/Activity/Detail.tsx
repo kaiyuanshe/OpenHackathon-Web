@@ -71,7 +71,7 @@ export class ActivityDetail extends mixin() {
             eventEndedAt,
             location,
             roles,
-            stat
+            enrollment
         } = activity.current;
 
         return (
@@ -117,7 +117,7 @@ export class ActivityDetail extends mixin() {
                     <li>
                         {words.registration_count}
                         <FAIcon name="users" color="success" className="mx-2" />
-                        {textJoin((stat?.register || 0) + '', words.people)}
+                        {textJoin((enrollment || 0) + '', words.people)}
                     </li>
                 </ul>
                 {!roles?.isEnrolled ? (

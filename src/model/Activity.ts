@@ -38,6 +38,7 @@ export interface Activity extends DataItem {
     tags?: string[];
     banners: Asset[];
     location?: string;
+    enrollment: number;
     maxEnrollment: number;
     coord?: Coord;
     enrollmentStartedAt: string;
