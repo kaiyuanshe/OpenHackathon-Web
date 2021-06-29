@@ -189,9 +189,9 @@ export class ActivityDetail extends mixin() {
             </div>
             <div className="p-2">
                 {words.team_leader}：
-                <a href={'user?uid=' + creator?.id}>
-                    <img className={style.icon} src={creator?.photo || defaultLogo} />{' '}
-                    {creator?.nickname}
+                <a href={'user?uid=' + creator.id}>
+                    <img className={style.icon} src={creator.photo || defaultLogo} />{' '}
+                    {creator.nickname}
                 </a>
             </div>
         </li>
