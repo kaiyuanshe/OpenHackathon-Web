@@ -25,6 +25,7 @@ import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
 import { words } from '../../i18n';
 import { activity, RegistrationStatus, Team } from '../../model';
+import defaultLogo from '../../image/logo.png';
 
 @observer
 @component({
@@ -174,7 +175,7 @@ export class ActivityDetail extends mixin() {
     }: Team) => (
         <li className="border overflow-hidden mb-3" style={{ width: '200' }}>
             <div className="d-flex border-bottom">
-                <img className={style.logo} src={logo} />
+                <img className={style.logo} src={logo || defaultLogo} />
                 <div className="flex-shrink-1">
                     <h4 className="text-nowrap my-1">
                         <a href={`team?activity=${hackathonName}&tid=${id}`}>
@@ -189,7 +190,7 @@ export class ActivityDetail extends mixin() {
             <div className="p-2">
                 {words.team_leader}：
                 <a href={'user?uid=' + creator?.id}>
-                    <img className={style.icon} src={creator?.photo} />{' '}
+                    <img className={style.icon} src={creator?.photo || defaultLogo} />{' '}
                     {creator?.nickname}
                 </a>
             </div>
