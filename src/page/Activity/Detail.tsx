@@ -169,8 +169,8 @@ export class ActivityDetail extends mixin() {
         logo,
         id,
         displayName,
-        member_count,
-        leader
+        membersCount,
+        creator
     }: Team) => (
         <li className="border overflow-hidden mb-3" style={{ width: '200' }}>
             <div className="d-flex border-bottom">
@@ -182,15 +182,15 @@ export class ActivityDetail extends mixin() {
                         </a>
                     </h4>
                     {words.a_total_of}
-                    <span className="mx-2 text-success">{member_count}</span>
+                    <span className="mx-2 text-success">{membersCount}</span>
                     {words.people}
                 </div>
             </div>
             <div className="p-2">
                 {words.team_leader}：
-                <a href={'user?uid=' + leader?.id}>
-                    <img className={style.icon} src={leader?.phone} />{' '}
-                    {leader?.nickname}
+                <a href={'user?uid=' + creator?.id}>
+                    <img className={style.icon} src={creator?.photo} />{' '}
+                    {creator?.nickname}
                 </a>
             </div>
         </li>

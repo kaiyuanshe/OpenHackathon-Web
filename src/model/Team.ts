@@ -10,14 +10,14 @@ interface Membership {
 
 export interface Team extends DataItem {
     works: any[];
-    member_count: number;
+    membersCount: number;
     displayName: string;
     description: string;
     cover: string;
     members: Membership[];
     awards: any[];
     logo: string;
-    leader: User;
+    creator: User;
     hackathonName: string;
     azure_keys: any[];
     templates: any[];
