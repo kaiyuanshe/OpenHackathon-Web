@@ -49,7 +49,6 @@ export class TeamDetail extends mixin() {
 
         if (this.tid) {
             await activity.team.getOne(this.tid);
-            activity.team.members.boot(activity.current.name, activity.team.current.id);
             this.members = await activity.team.members.getNextPage({}, true);
             const { user } = session;
             if(user)

@@ -32,8 +32,8 @@ export class TeamMemberModel extends TableModel<TeamMember> {
     singleBase = '';
     multipleBase = '';
 
-    boot(activityName: string, teamId: string) {
-        this.singleBase = `hackathon/${activityName}/team/${teamId}/member`;
+    boot(base: string, teamId: string) {
+        this.singleBase = `${base}/${teamId}/member`;
         this.multipleBase = `${this.singleBase}s`;
         return this;
     }
@@ -48,4 +48,11 @@ export class TeamModel extends ActivitySubModel<Team> {
     subBase = 'team';
 
     members: TeamMemberModel = new TeamMemberModel();
+
+    @loading
+    async getOne(id: string) {
+        super.getOne(id);
+        this.members.boot(this.singleBase, id);
+        return this.current
+    }
 }
