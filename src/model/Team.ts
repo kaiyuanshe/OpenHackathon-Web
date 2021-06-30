@@ -1,5 +1,5 @@
-import { DataItem } from './service';
-import { ActivitySubModel, TableModel } from './BaseModel';
+import { DataItem, service } from './service';
+import { ActivitySubModel, TableModel, loading } from './BaseModel';
 import { User } from './User';
 
 export interface TeamMember extends DataItem {
@@ -36,6 +36,11 @@ export class TeamMemberModel extends TableModel<TeamMember> {
         this.singleBase = `hackathon/${activityName}/team/${teamId}/member`;
         this.multipleBase = `${this.singleBase}s`;
         return this;
+    }
+
+    @loading
+    async leave() {
+        await service.delete(this.singleBase);
     }
 }
 
