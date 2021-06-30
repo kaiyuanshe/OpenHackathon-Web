@@ -88,8 +88,8 @@ export class TeamDetail extends mixin() {
             logo,
             displayName,
             description
-        } = (activity.team && activity.team.current) || {}
-        const loading = activity.loading || (activity.team && activity.team.loading);
+        } = activity.team.current;
+        const loading = activity.loading || activity.team.loading;
 
         return (
             <SpinnerBox className="container" cover={loading}>
