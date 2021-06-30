@@ -109,9 +109,9 @@ export function ActivityCard({
                             words.days
                         )}
                     </time>
-                    <span>
+                    {/* <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
-                    </span>
+                    </span> */}
                     <span>
                         {textJoin(
                             (stat?.register || 0) + '',
