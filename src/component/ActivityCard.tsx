@@ -103,11 +103,11 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        {textJoin(
+                        {days >= 0 ? textJoin(
                             words.registration_deadline,
-                            days < 0 ? '--' : days + '',
+                            days + '',
                             words.days
-                        )}
+                        ) : ''}
                     </time>
                     {/* <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
