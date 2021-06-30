@@ -117,7 +117,7 @@ export class ActivityDetail extends mixin() {
                     <li>
                         {words.registration_count}
                         <FAIcon name="users" color="success" className="mx-2" />
-                        {textJoin((enrollment || 0) + '', words.people)}
+                        {textJoin(enrollment + '', words.people)}
                     </li>
                 </ul>
                 {!roles?.isEnrolled ? (
