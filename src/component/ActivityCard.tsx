@@ -23,7 +23,7 @@ export function ActivityCard({
     tags,
     enrollmentEndedAt,
     status,
-    stat,
+    enrollment,
     creatorId,
     manage,
     onPublish,
@@ -114,7 +114,7 @@ export function ActivityCard({
                     </span> */}
                     <span>
                         {textJoin(
-                            (stat?.register || 0) + '',
+                            enrollment + '',
                             words.people,
                             words.registered
                         )}
