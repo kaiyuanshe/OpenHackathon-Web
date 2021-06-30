@@ -23,7 +23,7 @@ export function ActivityCard({
     tags,
     enrollmentEndedAt,
     status,
-    stat,
+    enrollment,
     creatorId,
     manage,
     onPublish,
@@ -103,18 +103,18 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        {textJoin(
+                        {days >= 0 ? textJoin(
                             words.registration_deadline,
-                            days < 0 ? '--' : days + '',
+                            days + '',
                             words.days
-                        )}
+                        ) : ''}
                     </time>
-                    <span>
+                    {/* <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}
-                    </span>
+                    </span> */}
                     <span>
                         {textJoin(
-                            (stat?.register || 0) + '',
+                            enrollment + '',
                             words.people,
                             words.registered
                         )}

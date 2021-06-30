@@ -28,7 +28,7 @@ export enum zh_TW {
     most_popular = '人氣熱點',
     upcoming_events = '即將開始',
     more_events = '更多活動',
-    registration_deadline = '報名截止',
+    registration_deadline = '距報名截止還有',
     registered = '已報名',
     register = '報名',
     registration_closed = '報名已截止',

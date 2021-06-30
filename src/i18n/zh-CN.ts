@@ -28,7 +28,7 @@ export enum zh_CN {
     most_popular = '人气热点',
     upcoming_events = '即将开始',
     more_events = '更多活动',
-    registration_deadline = '报名截止',
+    registration_deadline = '距报名截止还有',
     registered = '已报名',
     register = '报名',
     registration_closed = '报名已截止',

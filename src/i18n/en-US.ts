@@ -28,7 +28,7 @@ export enum en_US {
     most_popular = 'Most popular',
     upcoming_events = 'Upcoming events',
     more_events = 'More events',
-    registration_deadline = 'Registration deadline',
+    registration_deadline = 'Registration closing in',
     registered = 'registered',
     register = 'Register',
     registration_closed = 'Registration Closed',
