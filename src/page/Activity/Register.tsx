@@ -66,6 +66,7 @@ export class RegisterPage extends mixin() {
                             className="col-12 col-sm-4 col-md-3"
                             type={multiple ? 'checkbox' : 'radio'}
                             name={title}
+                            value={value}
                             key={value}
                         >
                             {value}

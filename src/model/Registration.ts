@@ -17,7 +17,7 @@ export enum RegistrationStatus {
     rejected = 'rejected'
 }
 
-interface ExtraField {
+export interface ExtraField {
     name: string;
     value: string;
 }

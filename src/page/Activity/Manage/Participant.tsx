@@ -7,14 +7,20 @@ import {
     createCell
 } from 'web-cell';
 import { observer } from 'mobx-web-cell';
+import { Button } from 'boot-cell/source/Form/Button';
 import { ToggleField } from 'boot-cell/source/Form/ToggleField';
 import { Field } from 'boot-cell/source/Form/Field';
 import { Table, TableRow } from 'boot-cell/source/Content/Table';
+import { openDialog, Modal } from 'boot-cell/source/Prompt/Dialog';
 
 import { AdminFrame } from '../../../component/AdminFrame';
 import menu from './menu.json';
 import { activity } from '../../../model';
-import { Registration, RegistrationStatus } from '../../../model/Registration';
+import {
+    ExtraField,
+    Registration,
+    RegistrationStatus
+} from '../../../model/Registration';
 
 const StatusName = {
     [RegistrationStatus.none]: '未审核',
@@ -59,6 +65,35 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
             autoApprove: (target as HTMLInputElement).checked
         });
 
+    showFormData(fields: ExtraField[]) {
+        return openDialog(
+            <Modal title="参赛者问卷">
+                <table>
+                    {fields.map(({ name, value }) => {
+                        const list = value.split(',');
+
+                        return (
+                            <TableRow>
+                                <th>{name}</th>
+                                <td className="px-3">
+                                    {list.length < 2 ? (
+                                        list[0]
+                                    ) : (
+                                        <ol className="m-0 pl-3">
+                                            {list.map(value => (
+                                                <li>{value}</li>
+                                            ))}
+                                        </ol>
+                                    )}
+                                </td>
+                            </TableRow>
+                        );
+                    })}
+                </table>
+            </Modal>
+        );
+    }
+
     handleStatus(userId: string, oldStatus: Registration['status']) {
         return ({ target }: Event) => {
             const status = (target as HTMLInputElement)
@@ -71,7 +106,8 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
 
     renderUser = (
         {
-            user: { name, email, registerSource, phone, address },
+            user: { nickname, username, email, registerSource, phone, address },
+            extensions,
             createdAt,
             status,
             userId
@@ -80,7 +116,14 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
     ) => (
         <TableRow checked={false}>
             <td>{i + 1}</td>
-            <td>{name}</td>
+            <td>
+                <Button
+                    color="link"
+                    onClick={() => this.showFormData(extensions)}
+                >
+                    {nickname || username}
+                </Button>
+            </td>
             <td>{email}</td>
             <td>{registerSource}</td>
             <td>{phone}</td>
