@@ -46,20 +46,6 @@ export class ActivityDetail extends mixin() {
         await activity.team.getNextPage({}, true);
     }
 
-    handleRegister = async () => {
-        const { status } = await activity.registration.createOne();
-
-        if (status === RegistrationStatus.approved) return activity.getOne();
-
-        self.alert(
-            textJoin(
-                words.hackathons,
-                this.name,
-                words.registration_needs_review
-            )
-        );
-    };
-
     renderMeta() {
         const {
             name,
@@ -121,7 +107,10 @@ export class ActivityDetail extends mixin() {
                     </li>
                 </ul>
                 {!roles?.isEnrolled ? (
-                    <Button color="success" onClick={this.handleRegister}>
+                    <Button
+                        color="success"
+                        href={`activity/register?name=${name}`}
+                    >
                         {words.register}
                     </Button>
                 ) : !roles?.isJudge ? (
@@ -190,7 +179,10 @@ export class ActivityDetail extends mixin() {
             <div className="p-2">
                 {words.team_leader}：
                 <a href={'user?uid=' + creator.id}>
-                    <img className={style.icon} src={creator.photo || defaultLogo} />{' '}
+                    <img
+                        className={style.icon}
+                        src={creator.photo || defaultLogo}
+                    />{' '}
                     {creator.nickname}
                 </a>
             </div>
