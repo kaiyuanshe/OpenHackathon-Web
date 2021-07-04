@@ -33,7 +33,9 @@ export function ActivityBasicForm({
         judgeEndedAt,
         location,
         detail
-    } = {},
+    } = {
+        detail: ''
+    },
     defaultSlot,
     ...rest
 }: ActivityBasicFormProps) {
