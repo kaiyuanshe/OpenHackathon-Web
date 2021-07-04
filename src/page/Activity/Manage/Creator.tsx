@@ -28,7 +28,7 @@ export class CreateActivity extends mixin() {
         const form = event.target as HTMLFormElement;
         const data = formToJSON<ActivityBasicFormData>(form);
 
-        await activity.updateOne({
+        await activity.createOne({
             ...data,
             tags: data.tags.split(' ')
         });

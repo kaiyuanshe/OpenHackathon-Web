@@ -142,22 +142,24 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     }
 
     @loading
-    async updateOne({ name, id, ...data }: Partial<ActivityData>) {
-        if (!id) {
-            const {
-                body: { nameAvailable, message }
-            } = await service.post<NameCheckResult>(
-                'hackathon/checkNameAvailability',
-                { name }
-            );
-            if (!nameAvailable) throw new URIError(message);
-        }
+    async createOne({ name, ...data }: Partial<ActivityData>) {
+        const {
+            body: { nameAvailable, message }
+        } = await service.post<NameCheckResult>(
+            'hackathon/checkNameAvailability',
+            { name }
+        );
+        if (!nameAvailable)
+            throw new URIError(message);
         const path = `hackathon/${name}`;
+        const { body } = await service.put<Activity>(path, data);
+        return (this.current = body);
+    }
 
-        const { body } = await (id
-            ? service.patch<Activity>(path, data)
-            : service.put<Activity>(path, data));
-
+    @loading
+    async updateOne({ name, ...data }: Partial<ActivityData>) {
+        const path = `hackathon/${name}`;
+        const { body } = await service.patch<Activity>(path, data);
         return (this.current = body);
     }
 
