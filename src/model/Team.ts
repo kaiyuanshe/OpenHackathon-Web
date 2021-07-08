@@ -1,10 +1,12 @@
-import { DataItem } from './service';
-import { ActivitySubModel } from './BaseModel';
+import { DataItem, service } from './service';
+import { ActivitySubModel, TableModel, loading } from './BaseModel';
 import { User } from './User';
 
-interface Membership {
-    status: number;
-    join_time: number;
+export interface TeamMember extends DataItem {
+    userId: string;
+    status: string;
+    desciption: string;
+    role: string;
     user: User;
 }
 
@@ -14,7 +16,6 @@ export interface Team extends DataItem {
     displayName: string;
     description: string;
     cover: string;
-    members: Membership[];
     awards: any[];
     logo: string;
     creator: User;
@@ -27,6 +28,31 @@ export interface Team extends DataItem {
     autoApprove: boolean;
 }
 
+export class TeamMemberModel extends TableModel<TeamMember> {
+    singleBase = '';
+    multipleBase = '';
+
+    boot(base: string, teamId: string) {
+        this.singleBase = `${base}/${teamId}/member`;
+        this.multipleBase = `${this.singleBase}s`;
+        return this;
+    }
+
+    @loading
+    async leave() {
+        await service.delete(this.singleBase);
+    }
+}
+
 export class TeamModel extends ActivitySubModel<Team> {
     subBase = 'team';
+
+    members: TeamMemberModel = new TeamMemberModel();
+
+    @loading
+    async getOne(id: string) {
+        super.getOne(id);
+        this.members.boot(this.singleBase, id);
+        return this.current
+    }
 }
