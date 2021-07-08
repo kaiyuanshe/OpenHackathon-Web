@@ -70,6 +70,43 @@ export class TeamDetail extends mixin() {
         await activity.team.members.getNextPage({}, true);
     }
 
+    renderJoiningTeam() {
+        return (
+            this.joining_team_form ?
+            <Form onSubmit={this.joinTeam}>
+                <FormField
+                    label={textJoin(words.personal, words.introduction)}
+                    name="description"
+                    placeholder={words.team_member_description_tips}
+                    required
+                />
+                <Button type="submit" color="primary" onClick={() => this.joining_team_form = false}>{words.submit}</Button>
+                &nbsp;
+                <Button color="secondary" onClick={() => this.joining_team_form = false}>{words.cancel}</Button>
+            </Form> :
+            <Button color="success" onClick={() => this.joining_team_form = true}>{words.join_team}</Button>
+        )
+    }
+
+    renderLeavingTeam({role,status}) {
+        return (
+            status === 'approved' ?
+            (
+                role === 'admin' ?
+                <Button color="link">{words.manage_team_members}</Button> :
+                <Button color="danger" onClick={this.leaveTeam}>{words.leave_team}</Button>
+            ) :
+            (
+                status === 'pendingApproval' ?
+                <div>
+                    <p>{words.waiting_approval_from_team_admin}</p>
+                    <Button color="danger" onClick={this.leaveTeam}>{words.cancel_joining}</Button>
+                </div> :
+                ''
+            )
+        )
+    }
+
     render() {
         const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
         const {
@@ -134,38 +171,9 @@ export class TeamDetail extends mixin() {
                                 )}
                             </ul>
                             {
-                                !members.current.role ?
-                                (
-                                    this.joining_team_form ?
-                                    <Form onSubmit={this.joinTeam}>
-                                        <FormField
-                                            label={textJoin(words.personal, words.introduction)}
-                                            name="description"
-                                            placeholder={words.team_member_description_tips}
-                                            required
-                                        />
-                                        <Button type="submit" color="primary" onClick={() => this.joining_team_form = false}>{words.submit}</Button>
-                                        &nbsp;
-                                        <Button color="secondary" onClick={() => this.joining_team_form = false}>{words.cancel}</Button>
-                                    </Form> :
-                                    <Button color="success" onClick={() => this.joining_team_form = true}>{words.join_team}</Button>
-                                ) :
-                                (
-                                    members.current.status === 'approved' ?
-                                    (
-                                        members.current.role === 'admin' ?
-                                        <Button color="link">{words.manage_team_members}</Button> :
-                                        <Button color="danger" onClick={this.leaveTeam}>{words.leave_team}</Button>
-                                    ) :
-                                    (
-                                        members.current.status === 'pendingApproval' ?
-                                        <div>
-                                            <p>{words.waiting_approval_from_team_admin}</p>
-                                            <Button color="danger" onClick={this.leaveTeam}>{words.cancel_joining}</Button>
-                                        </div> :
-                                        ''
-                                    )
-                                )
+                                members.current.role ?
+                                this.renderLeavingTeam(members.current) :
+                                this.renderJoiningTeam()             
                             }
                         </div>
                     </div>
