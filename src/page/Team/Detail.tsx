@@ -28,15 +28,6 @@ export class TeamDetail extends mixin() {
     tid = '';
 
     @watch
-    members = [];
-
-    @watch
-    role = '';
-
-    @watch
-    status = '';
-
-    @watch
     joining_team_form = false;
 
     async connectedCallback() {
@@ -49,14 +40,11 @@ export class TeamDetail extends mixin() {
 
         if (this.tid) {
             await activity.team.getOne(this.tid);
-            this.members = await activity.team.members.getNextPage({}, true);
+            await activity.team.members.getNextPage({}, true);
             const { user } = session;
             if(user)
                 try {
                     await activity.team.members.getOne(user.id);
-                    const { role, status } = activity.team.members.current || {}
-                    this.role = role;
-                    this.status = status;
                 }
                 catch(err) {
                     if(err.status !== 404) //404: user is not a memeber of team
@@ -71,13 +59,15 @@ export class TeamDetail extends mixin() {
         const form = event.target as HTMLFormElement;
         const data = formToJSON<TeamMember>(form);
         data.role = 'member';
-        const { role, status } = await activity.team.members.updateOne(data);
-        this.role = role;
-        this.status = status;
+        const me = await activity.team.members.updateOne(data);
+        activity.team.members.current = me;
+        if(me.status === 'approved')
+            activity.team.members.list.push(me);
     }
 
     async leaveTeam() {
         await activity.team.members.leave();
+        await activity.team.members.getNextPage({}, true);
     }
 
     render() {
@@ -88,6 +78,7 @@ export class TeamDetail extends mixin() {
             displayName,
             description
         } = activity.team.current;
+        const members = activity.team.members;
         const loading = activity.loading || activity.team.loading;
 
         return (
@@ -108,7 +99,7 @@ export class TeamDetail extends mixin() {
                             <h2>{displayName}</h2>
                             <p>{description}</p>
                             {
-                                this.role === 'admin' ?
+                                members.current.role === 'admin' ?
                                 <Button
                                     href={`team/edit?activity=${hackathonName}&tid=${id}`}
                                     color="link"
@@ -126,7 +117,7 @@ export class TeamDetail extends mixin() {
                             <BGIcon type="square" name="users" />
                             {words.team_members}
                             <ul className="list-unstyled mt-3">
-                                {this.members?.map(
+                                {members.list.map(
                                     ({
                                         user: { id, photo, nickname }
                                     }) => (
@@ -143,7 +134,7 @@ export class TeamDetail extends mixin() {
                                 )}
                             </ul>
                             {
-                                !this.role ?
+                                !members.current.role ?
                                 (
                                     this.joining_team_form ?
                                     <Form onSubmit={this.joinTeam}>
@@ -153,21 +144,21 @@ export class TeamDetail extends mixin() {
                                             placeholder={words.team_member_description_tips}
                                             required
                                         />
-                                        <Button type="submit" color="primary">{words.submit}</Button>
+                                        <Button type="submit" color="primary" onClick={() => this.joining_team_form = false}>{words.submit}</Button>
                                         &nbsp;
                                         <Button color="secondary" onClick={() => this.joining_team_form = false}>{words.cancel}</Button>
                                     </Form> :
                                     <Button color="success" onClick={() => this.joining_team_form = true}>{words.join_team}</Button>
                                 ) :
                                 (
-                                    this.status === 'approved' ?
+                                    members.current.status === 'approved' ?
                                     (
-                                        this.role === 'admin' ?
+                                        members.current.role === 'admin' ?
                                         <Button color="link">{words.manage_team_members}</Button> :
                                         <Button color="danger" onClick={this.leaveTeam}>{words.leave_team}</Button>
                                     ) :
                                     (
-                                        this.status === 'pendingApproval' ?
+                                        members.current.status === 'pendingApproval' ?
                                         <div>
                                             <p>{words.waiting_approval_from_team_admin}</p>
                                             <Button color="danger" onClick={this.leaveTeam}>{words.cancel_joining}</Button>
