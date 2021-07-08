@@ -38,18 +38,21 @@ export class TeamDetail extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        if (this.tid) {
-            await activity.team.getOne(this.tid);
-            await activity.team.members.getNextPage({}, true);
-            const { user } = session;
-            if(user)
-                try {
-                    await activity.team.members.getOne(user.id);
-                }
-                catch(err) {
-                    if(err.status !== 404) //404: user is not a memeber of team
-                        throw err
-                }
+        if (!this.tid)
+            return
+        
+        await activity.team.getOne(this.tid);
+        await activity.team.members.getNextPage({}, true);
+        
+        const { user } = session;
+        if(!user)
+            return
+        try {
+            await activity.team.members.getOne(user.id);
+        }
+        catch(err) {
+            if(err.status !== 404) //404: user is not a memeber of team
+                throw err
         }
     }
 
@@ -117,6 +120,7 @@ export class TeamDetail extends mixin() {
         } = activity.team.current;
         const members = activity.team.members;
         const loading = activity.loading || activity.team.loading;
+        const { user } = session;
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -171,9 +175,11 @@ export class TeamDetail extends mixin() {
                                 )}
                             </ul>
                             {
-                                members.current.role ?
-                                this.renderLeavingTeam(members.current) :
-                                this.renderJoiningTeam()             
+                                user && (
+                                    members.current.role ?
+                                    this.renderLeavingTeam(members.current) :
+                                    this.renderJoiningTeam()
+                                )         
                             }
                         </div>
                     </div>
