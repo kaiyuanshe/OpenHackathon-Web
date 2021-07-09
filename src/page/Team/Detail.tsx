@@ -96,7 +96,7 @@ export class TeamDetail extends mixin() {
             status === 'approved' ?
             (
                 role === 'admin' ?
-                <Button color="link">{words.manage_team_members}</Button> :
+                <Button color="link" href={`team/members?activity=${this.activity}&tid=${this.tid}`}>{words.manage_team_members}</Button> :
                 <Button color="danger" onClick={this.leaveTeam}>{words.leave_team}</Button>
             ) :
             (

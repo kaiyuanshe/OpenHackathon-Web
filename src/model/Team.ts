@@ -2,10 +2,17 @@ import { DataItem, service } from './service';
 import { ActivitySubModel, TableModel, loading } from './BaseModel';
 import { User } from './User';
 
+export enum TeamMemberStatus {
+    none = 'none',
+    pending = 'pendingApproval',
+    approved = 'approved',
+    rejected = 'rejected'
+}
+
 export interface TeamMember extends DataItem {
     userId: string;
-    status: string;
-    desciption: string;
+    status: TeamMemberStatus;
+    description: string;
     role: string;
     user: User;
 }
@@ -41,6 +48,18 @@ export class TeamMemberModel extends TableModel<TeamMember> {
     @loading
     async leave() {
         await service.delete(this.singleBase);
+    }
+
+    @loading
+    async updateRole(userId: string, role: string) {
+        await service.post(`${this.singleBase}/${userId}/updateRole`, {
+            role
+        });
+    }
+
+    @loading
+    async approveOne(userId: string) {
+        await service.post(`${this.singleBase}/${userId}/approve`);
     }
 }
 

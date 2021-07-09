@@ -89,5 +89,12 @@ export enum en_US {
     project_manager = 'Project manager',
     student = 'Student',
     others = 'Others',
-    what_are_your_commonly_used_programming_languages = 'What are your commonly used programming languages'
+    what_are_your_commonly_used_programming_languages = 'What are your commonly used programming languages',
+    approve = 'Approve',
+    status_none = 'None',
+    status_approved = 'Approved',
+    status_pending = 'Pending',
+    status_rejected = 'Rejected',
+    admin = 'Admin',
+    member = 'Member'
 }

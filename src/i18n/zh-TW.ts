@@ -89,5 +89,12 @@ export enum zh_TW {
     project_manager = '項目/產品經理',
     student = '在校生',
     others = '其他',
-    what_are_your_commonly_used_programming_languages = '常用編程語言'
+    what_are_your_commonly_used_programming_languages = '常用編程語言',
+    approve = '通過',
+    status_none = '未審核',
+    status_approved = '通過',
+    status_pending = '審核中',
+    status_rejected = '拒絕',
+    admin = '管理員',
+    member = '隊員'
 }
