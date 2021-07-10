@@ -23,9 +23,9 @@ const StatusName = {
 };
 
 const RoleName = {
-    'admin': words.admin,
-    'member': words.member
-}
+    admin: words.admin,
+    member: words.member
+};
 
 @observer
 @component({
@@ -51,17 +51,18 @@ export class TeamMembers extends mixin() {
 
         if (this.tid && this.tid != activity.team.current.id) {
             await activity.team.getOne(this.tid);
-            if(activity.team.members.list.length == 0)
+            if (activity.team.members.list.length == 0)
                 activity.team.members.getNextPage({}, true);
         }
     }
 
     handleRole(userId: string) {
         return async ({ target }: Event) => {
-            const role = (target as HTMLInputElement)
-                .value as TeamMemberStatus;
-            const member = activity.team.members.list.find(m => m.userId === userId)
-            if(member && role !== member.role) {
+            const role = (target as HTMLInputElement).value as TeamMemberStatus;
+            const member = activity.team.members.list.find(
+                m => m.userId === userId
+            );
+            if (member && role !== member.role) {
                 await activity.team.members.updateRole(userId, role);
                 member.role = role;
             }
@@ -70,9 +71,17 @@ export class TeamMembers extends mixin() {
 
     handleApprove(userId: string) {
         return async () => {
-            const member = activity.team.members.list.find(m => m.userId === userId)
+            const member = activity.team.members.list.find(
+                m => m.userId === userId
+            );
             await activity.team.members.approveOne(userId);
             member.status = TeamMemberStatus.approved;
+        };
+    }
+
+    handleDelete(userId: string) {
+        return async () => {
+            await activity.team.members.deleteOne(userId);
         };
     }
 
@@ -101,9 +110,23 @@ export class TeamMembers extends mixin() {
                     ))}
                 </Field>
             </td>
-            <td>{StatusName[status]}{status === TeamMemberStatus.pending ? (<Button onClick={this.handleApprove(userId)} color="link">{words.approve}</Button>) : ''}</td>
+            <td>
+                {StatusName[status]}
+                {status === TeamMemberStatus.pending ? (
+                    <Button onClick={this.handleApprove(userId)} color="link">
+                        {words.approve}
+                    </Button>
+                ) : (
+                    ''
+                )}
+            </td>
+            <td>
+                <Button color="danger" onClick={this.handleDelete(userId)}>
+                    删除
+                </Button>
+            </td>
         </TableRow>
-    )
+    );
 
     render() {
         const loading = activity.loading || activity.team.loading;
@@ -120,7 +143,11 @@ export class TeamMembers extends mixin() {
                         },
                         {
                             title: teamName,
-                            href: 'team?activity=' + this.activity + '&tid=' + this.tid
+                            href:
+                                'team?activity=' +
+                                this.activity +
+                                '&tid=' +
+                                this.tid
                         },
                         {
                             title: words.team_members
@@ -136,11 +163,12 @@ export class TeamMembers extends mixin() {
                         <th>个人简介</th>
                         <th>角色</th>
                         <th>状态</th>
+                        <th>操作</th>
                     </TableRow>
 
                     {list.map(this.renderMember)}
                 </Table>
             </SpinnerBox>
-        )
+        );
     }
 }
