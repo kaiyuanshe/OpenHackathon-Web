@@ -82,5 +82,5 @@ export enum zh_CN {
     project_manager = '项目/产品经理',
     student = '在校生',
     others = '其它',
-    what_are_your_commonly_used_programming_languages = '常用的编程语言',
+    what_are_your_commonly_used_programming_languages = '常用的编程语言'
 }
