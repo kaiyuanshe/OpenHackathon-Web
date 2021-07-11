@@ -55,11 +55,15 @@ export class TeamMemberModel extends TableModel<TeamMember> {
         await service.post(`${this.singleBase}/${userId}/updateRole`, {
             role
         });
+        const member = this.list.find(m => m.userId === userId);
+        if (member && role !== member.role) member.role = role;
     }
 
     @loading
     async approveOne(userId: string) {
         await service.post(`${this.singleBase}/${userId}/approve`);
+        const member = this.list.find(m => m.userId === userId);
+        if (member) member.status = TeamMemberStatus.approved;
     }
 }
 
@@ -72,6 +76,6 @@ export class TeamModel extends ActivitySubModel<Team> {
     async getOne(id: string) {
         super.getOne(id);
         this.members.boot(this.singleBase, id);
-        return this.current
+        return this.current;
     }
 }

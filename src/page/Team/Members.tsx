@@ -59,23 +59,13 @@ export class TeamMembers extends mixin() {
     handleRole(userId: string) {
         return async ({ target }: Event) => {
             const role = (target as HTMLInputElement).value as TeamMemberStatus;
-            const member = activity.team.members.list.find(
-                m => m.userId === userId
-            );
-            if (member && role !== member.role) {
-                await activity.team.members.updateRole(userId, role);
-                member.role = role;
-            }
+            await activity.team.members.updateRole(userId, role);
         };
     }
 
     handleApprove(userId: string) {
         return async () => {
-            const member = activity.team.members.list.find(
-                m => m.userId === userId
-            );
             await activity.team.members.approveOne(userId);
-            member.status = TeamMemberStatus.approved;
         };
     }
 
