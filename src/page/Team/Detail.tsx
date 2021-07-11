@@ -12,6 +12,7 @@ import { FormField } from 'boot-cell/source/Form/FormField';
 
 import { words } from '../../i18n';
 import { activity, session, TeamMember } from '../../model';
+import { buildURLData } from 'web-utility';
 
 @observer
 @component({
@@ -38,21 +39,19 @@ export class TeamDetail extends mixin() {
         if (this.activity !== activity.current.name)
             await activity.getOne(this.activity);
 
-        if (!this.tid)
-            return
-        
+        if (!this.tid) return;
+
         await activity.team.getOne(this.tid);
         await activity.team.members.getNextPage({}, true);
-        
+
         const { user } = session;
-        if(!user)
-            return
+        if (!user) return;
         try {
             await activity.team.members.getOne(user.id);
-        }
-        catch(err) {
-            if(err.status !== 404) //404: user is not a memeber of team
-                throw err
+        } catch (err) {
+            if (err.status !== 404)
+                //404: user is not a memeber of team
+                throw err;
         }
     }
 
@@ -64,8 +63,7 @@ export class TeamDetail extends mixin() {
         data.role = 'member';
         const me = await activity.team.members.updateOne(data);
         activity.team.members.current = me;
-        if(me.status === 'approved')
-            activity.team.members.list.push(me);
+        if (me.status === 'approved') activity.team.members.list.push(me);
     }
 
     async leaveTeam() {
@@ -74,8 +72,7 @@ export class TeamDetail extends mixin() {
     }
 
     renderJoiningTeam() {
-        return (
-            this.joining_team_form ?
+        return this.joining_team_form ? (
             <Form onSubmit={this.joinTeam}>
                 <FormField
                     label={textJoin(words.personal, words.introduction)}
@@ -83,41 +80,68 @@ export class TeamDetail extends mixin() {
                     placeholder={words.team_member_description_tips}
                     required
                 />
-                <Button type="submit" color="primary" onClick={() => this.joining_team_form = false}>{words.submit}</Button>
+                <Button
+                    type="submit"
+                    color="primary"
+                    onClick={() => (this.joining_team_form = false)}
+                >
+                    {words.submit}
+                </Button>
                 &nbsp;
-                <Button color="secondary" onClick={() => this.joining_team_form = false}>{words.cancel}</Button>
-            </Form> :
-            <Button color="success" onClick={() => this.joining_team_form = true}>{words.join_team}</Button>
-        )
+                <Button
+                    color="secondary"
+                    onClick={() => (this.joining_team_form = false)}
+                >
+                    {words.cancel}
+                </Button>
+            </Form>
+        ) : (
+            <Button
+                color="success"
+                onClick={() => (this.joining_team_form = true)}
+            >
+                {words.join_team}
+            </Button>
+        );
     }
 
-    renderLeavingTeam({role,status}) {
-        return (
-            status === 'approved' ?
-            (
-                role === 'admin' ?
-                <Button color="link" href={`team/members?activity=${this.activity}&tid=${this.tid}`}>{words.manage_team_members}</Button> :
-                <Button color="danger" onClick={this.leaveTeam}>{words.leave_team}</Button>
-            ) :
-            (
-                status === 'pendingApproval' ?
-                <div>
-                    <p>{words.waiting_approval_from_team_admin}</p>
-                    <Button color="danger" onClick={this.leaveTeam}>{words.cancel_joining}</Button>
-                </div> :
-                ''
+    renderLeavingTeam({ role, status }) {
+        const { activity, tid } = this;
+        return status === 'approved' ? (
+            role === 'admin' ? (
+                <Button
+                    color="link"
+                    href={
+                        'team/members?' +
+                        buildURLData({
+                            activity,
+                            tid
+                        })
+                    }
+                >
+                    {words.manage_team_members}
+                </Button>
+            ) : (
+                <Button color="danger" onClick={this.leaveTeam}>
+                    {words.leave_team}
+                </Button>
             )
-        )
+        ) : status === 'pendingApproval' ? (
+            <div>
+                <p>{words.waiting_approval_from_team_admin}</p>
+                <Button color="danger" onClick={this.leaveTeam}>
+                    {words.cancel_joining}
+                </Button>
+            </div>
+        ) : (
+            ''
+        );
     }
 
     render() {
-        const { displayName: hackathonDisplayName, name: hackathonName } = activity.current;
-        const {
-            id,
-            logo,
-            displayName,
-            description
-        } = activity.team.current;
+        const { displayName: hackathonDisplayName, name: hackathonName } =
+            activity.current;
+        const { id, logo, displayName, description } = activity.team.current;
         const members = activity.team.members;
         const loading = activity.loading || activity.team.loading;
         const { user } = session;
@@ -139,10 +163,15 @@ export class TeamDetail extends mixin() {
                             <img className="d-block m-auto" src={logo} />
                             <h2>{displayName}</h2>
                             <p>{description}</p>
-                            {
-                                members.current.role === 'admin' ?
+                            {members.current.role === 'admin' ? (
                                 <Button
-                                    href={`team/edit?activity=${hackathonName}&tid=${id}`}
+                                    href={
+                                        'team/edit?' +
+                                        buildURLData({
+                                            activity: hackathonName,
+                                            tid: id
+                                        })
+                                    }
                                     color="link"
                                 >
                                     {textJoin(
@@ -150,18 +179,17 @@ export class TeamDetail extends mixin() {
                                         words.team,
                                         words.profile
                                     )}
-                                </Button> :
+                                </Button>
+                            ) : (
                                 ''
-                            }
+                            )}
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />
                             {words.team_members}
                             <ul className="list-unstyled mt-3">
                                 {members.list.map(
-                                    ({
-                                        user: { id, photo, nickname }
-                                    }) => (
+                                    ({ user: { id, photo, nickname } }) => (
                                         <li>
                                             <a href={'user?uid=' + id}>
                                                 <img
@@ -174,13 +202,10 @@ export class TeamDetail extends mixin() {
                                     )
                                 )}
                             </ul>
-                            {
-                                user && (
-                                    members.current.role ?
-                                    this.renderLeavingTeam(members.current) :
-                                    this.renderJoiningTeam()
-                                )         
-                            }
+                            {user &&
+                                (members.current.role
+                                    ? this.renderLeavingTeam(members.current)
+                                    : this.renderJoiningTeam())}
                         </div>
                     </div>
                 </div>

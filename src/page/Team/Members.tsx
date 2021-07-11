@@ -14,6 +14,7 @@ import { Field } from 'boot-cell/source/Form/Field';
 import { Button } from 'boot-cell/source/Form/Button';
 import { activity, TeamMember, TeamMemberStatus } from '../../model';
 import { words } from '../../i18n';
+import { buildURLData } from 'web-utility';
 
 const StatusName = {
     [TeamMemberStatus.none]: words.status_none,
@@ -134,10 +135,11 @@ export class TeamMembers extends mixin() {
                         {
                             title: teamName,
                             href:
-                                'team?activity=' +
-                                this.activity +
-                                '&tid=' +
-                                this.tid
+                                'team?' +
+                                buildURLData({
+                                    activity: this.activity,
+                                    tid: this.tid
+                                })
                         },
                         {
                             title: words.team_members
