@@ -43,6 +43,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             component: ActivityList
         },
         {
+            paths: ['activity/register'],
+            component: async () =>
+                (await import('./Activity/Register')).RegisterPage
+        },
+        {
             paths: ['user'],
             component: UserDetail
         },
@@ -113,7 +118,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             // @ts-ignore
             dialog.on('login', resolve)
         );
-        data.nickname ||= data.email || data.phone;
+        data.nickname ||= data.username || data.email || data.phone;
 
         await session.signIn(data);
 

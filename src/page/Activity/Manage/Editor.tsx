@@ -50,12 +50,12 @@ export class EditActivity extends mixin<EditActivityProps>() {
     };
 
     render({ name }: EditActivityProps) {
-        const { loading } = activity;
+        const { loading, current } = activity;
 
         return (
             <AdminFrame menu={menu} name={name}>
                 <ActivityBasicForm
-                    data={activity.current}
+                    data={{ ...current, id: current.name }}
                     onSubmit={this.saveBasicForm}
                 >
                     <Button

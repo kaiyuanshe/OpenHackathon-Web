@@ -1,6 +1,14 @@
+import { HTMLInputProps } from 'web-utility/source/DOM-type';
+
 import { DataItem, ListFilter, service } from './service';
 import { ActivitySubModel, loading } from './BaseModel';
 import { User } from './User';
+
+export interface Question extends Pick<HTMLInputProps, 'type' | 'required'> {
+    title: string;
+    options?: string[];
+    multiple?: boolean;
+}
 
 export enum RegistrationStatus {
     none = 'none',
@@ -9,11 +17,17 @@ export enum RegistrationStatus {
     rejected = 'rejected'
 }
 
+export interface ExtraField {
+    name: string;
+    value: string;
+}
+
 export interface Registration extends DataItem {
     hackathonName: string;
     userId: string;
     user: User;
     status: RegistrationStatus;
+    extensions: ExtraField[];
 }
 
 export interface RegistrationQuery extends ListFilter<Registration> {
@@ -27,8 +41,8 @@ export class RegistrationModel extends ActivitySubModel<
     subBase = 'enrollment';
 
     @loading
-    async createOne() {
-        const { body } = await service.put<Registration>(this.singleBase, {});
+    async createOne(data: Partial<Pick<Registration, 'extensions'>> = {}) {
+        const { body } = await service.put<Registration>(this.singleBase, data);
 
         return (this.current = body);
     }
