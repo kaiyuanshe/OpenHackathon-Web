@@ -9,6 +9,7 @@ import {
 import { observer } from 'mobx-web-cell';
 import { textJoin } from 'web-utility/source/i18n';
 import { diffTime } from 'web-utility/source/date';
+import { buildURLData } from 'web-utility';
 
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { Badge } from 'boot-cell/source/Reminder/Badge';
@@ -114,7 +115,10 @@ export class ActivityDetail extends mixin() {
                         {words.register}
                     </Button>
                 ) : !roles?.isJudge ? (
-                    <Button color="primary" href={`team/edit?activity=${name}`}>
+                    <Button
+                        color="primary"
+                        href={'team/edit?' + buildURLData({ activity: name })}
+                    >
                         {textJoin(words.create, words.team)}
                     </Button>
                 ) : null}
@@ -167,7 +171,15 @@ export class ActivityDetail extends mixin() {
                 <img className={style.logo} src={logo || defaultLogo} />
                 <div className="flex-shrink-1">
                     <h4 className="text-nowrap my-1">
-                        <a href={`team?activity=${hackathonName}&tid=${id}`}>
+                        <a
+                            href={
+                                'team?' +
+                                buildURLData({
+                                    activity: hackathonName,
+                                    tid: id
+                                })
+                            }
+                        >
                             {displayName}
                         </a>
                     </h4>

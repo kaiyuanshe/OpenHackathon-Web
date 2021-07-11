@@ -89,5 +89,12 @@ export enum zh_CN {
     project_manager = '项目/产品经理',
     student = '在校生',
     others = '其它',
-    what_are_your_commonly_used_programming_languages = '常用的编程语言'
+    what_are_your_commonly_used_programming_languages = '常用的编程语言',
+    approve = '通过',
+    status_none = '未审核',
+    status_approved = '通过',
+    status_pending = '审核中',
+    status_rejected = '拒绝',
+    admin = '管理员',
+    member = '队员'
 }

@@ -64,6 +64,10 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
             component: async () => (await import('./Team/Edit')).TeamEdit
         },
         {
+            paths: ['team/members'],
+            component: async () => (await import('./Team/Members')).TeamMembers
+        },
+        {
             paths: ['create'],
             component: async () =>
                 (await import('./Activity/Manage/Creator')).CreateActivity
