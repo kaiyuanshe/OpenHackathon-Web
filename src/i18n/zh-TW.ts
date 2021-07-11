@@ -57,7 +57,7 @@ export enum zh_TW {
     please_complete_all_mandatory_fields_before_you_proceed = '建議您先完善或更新',
     personal_profile = '個人資料',
     sign_up = '報名參加',
-    linkein_or_cv = '領英/個人介紹',
+    linkein_or_cv = '領英/個人簡歷',
     social_media_account_or_twitter_or_weibo = '社交媒體帳號/推特/微博',
     which_of_these_particular_areas_are_you_interested_in_going_into_this_event = '本次比賽您感興趣的賽題是什麼？',
     what_do_you_hope_to_learn_from_the_workshops = '您希望從系列工作坊/講座中學習到那方面的內容',

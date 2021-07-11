@@ -1,26 +1,27 @@
 import { Question } from '../../model';
+import { words } from '../../i18n';
 
 export const questions: Question[] = [
     {
-        title: '您的专业',
+        title: words.what_is_your_occupation,
         options: [
-            '前端工程师',
-            '后端工程师',
-            '客户端工程师',
-            '游戏工程师',
-            '算法工程师',
-            '区块链工程师',
-            '运维工程师',
-            '测试工程师',
-            '架构师',
-            '项目/产品经理',
-            '在校生',
-            '其它'
+            words.front_end_engineer,
+            words.back_end_engineer,
+            words.client_engineer,
+            words.game_developerment_engineer,
+            words.algorithm_engineer,
+            words.blockchain_engineer,
+            words.operations,
+            words.quality_assurance_engineer,
+            words.architect,
+            words.project_manager,
+            words.student,
+            words.others
         ],
         multiple: true
     },
     {
-        title: '常用的编程语言',
+        title: words.what_are_your_commonly_used_programming_languages,
         options: [
             'JavaScript/TypeScript',
             'Java/Scala/Groovy/Kotlin',
@@ -33,40 +34,33 @@ export const questions: Question[] = [
             'Rust',
             'Go',
             'C/C++',
-            '其它'
+            words.others
         ],
         multiple: true
     },
-   {
-        title: '领英/个人介绍',
+    {
+        title: words.linkein_or_cv,
+        type: 'url'
     },
-{
-        title: '社交媒体账号/Twitter/Weibo',
+    {
+        title: words.social_media_account_or_twitter_or_weibo,
+        type: 'url'
     },
-{
-        title: '本次比赛您感兴趣的赛题是什么？',
+    {
+        title: words.which_of_these_particular_areas_are_you_interested_in_going_into_this_event
     },
-{
-        title: '您希望从系列工作坊/讲座中听到哪方面内容？',
+    {
+        title: words.what_do_you_hope_to_learn_from_the_workshops
     },
-
-{
-        title: '您是否愿意进行组队？',
-   options: [
-            '是',
-            '否，喜欢个人SOLO',
-            '否，已有队伍',
-        ],
+    {
+        title: words.do_you_plan__on_hacking_solo_or_with_a_team,
+        options: [words.yes, words.no_i_prefer_solo, words.no_i_have_a_team]
     },
-   {
-        title: '您介意新手加入您的团队？',
-      options: [
-            '是',
-            '否',
-        ],
+    {
+        title: words.would_you_be_open_to_having_a_beginner_join_your_team,
+        options: [words.yes, words.no]
     },
-{
-        title: '关于队友，您还有什么其他需求吗？我们会尽全力帮助您找到合适人选，助力您的DEVE2030比赛之旅。',
-    },
-
+    {
+        title: words.anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate
+    }
 ];

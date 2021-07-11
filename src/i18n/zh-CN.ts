@@ -57,7 +57,7 @@ export enum zh_CN {
     please_complete_all_mandatory_fields_before_you_proceed = '建议您先完善或更新',
     personal_profile = '个人资料',
     sign_up = '报名参加',
-    linkein_or_cv = '领英/个人介绍',
+    linkein_or_cv = '领英/个人简历',
     social_media_account_or_twitter_or_weibo = '社交媒体账号/推特/微博',
     which_of_these_particular_areas_are_you_interested_in_going_into_this_event = '本次比赛您感兴趣的赛题是什么？',
     what_do_you_hope_to_learn_from_the_workshops = '您希望从系列工作坊/讲座中听到哪方面内容',

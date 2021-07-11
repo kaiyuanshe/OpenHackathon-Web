@@ -82,22 +82,24 @@ export class RegisterPage extends mixin() {
     render() {
         return (
             <form className="container py-3" onSubmit={this.handleSubmit}>
-                <legend className="text-center">参赛者问卷</legend>
+                <legend className="text-center">{words.questionnaire}</legend>
 
                 <p className="text-muted">
-                    建议您先完善或更新
+                    {
+                        words.please_complete_all_mandatory_fields_before_you_proceed
+                    }
                     <a
                         target="_blank"
                         href="https://ophapiv2-demo.authing.cn/u"
                     >
-                        个人资料
+                        {' ' + words.personal_profile}
                     </a>
                 </p>
                 {questions.map(this.renderField)}
 
                 <footer className="text-center">
                     <Button type="submit" color="success">
-                        报名参加
+                        {words.sign_up}
                     </Button>
                 </footer>
             </form>
