@@ -20,7 +20,7 @@ interface MenuSection {
 
 export interface AdminFrameProps extends WebCellProps {
     menu: MenuSection[];
-    name: string;
+    name?: string;
     loading?: boolean;
 }
 

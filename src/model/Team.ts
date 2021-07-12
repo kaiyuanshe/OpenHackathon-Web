@@ -46,8 +46,8 @@ export class TeamMemberModel extends TableModel<TeamMember> {
     }
 
     @loading
-    async leave() {
-        await service.delete(this.singleBase);
+    leave() {
+        return service.delete(this.singleBase);
     }
 
     @loading

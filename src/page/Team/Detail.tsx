@@ -2,6 +2,7 @@ import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { textJoin } from 'web-utility/source/i18n';
 import { formToJSON } from 'web-utility/source/DOM';
+import { buildURLData } from 'web-utility/source/URL';
 
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
 import { BreadCrumb } from 'boot-cell/source/Navigator/BreadCrumb';
@@ -11,8 +12,7 @@ import { Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
 
 import { words } from '../../i18n';
-import { activity, session, TeamMember } from '../../model';
-import { buildURLData } from 'web-utility';
+import { activity, APIError, session, TeamMember } from '../../model';
 
 @observer
 @component({
@@ -45,30 +45,41 @@ export class TeamDetail extends mixin() {
         await activity.team.members.getNextPage({}, true);
 
         const { user } = session;
-        if (!user) return;
-        try {
-            await activity.team.members.getOne(user.id);
-        } catch (err) {
-            if (err.status !== 404)
-                //404: user is not a memeber of team
-                throw err;
-        }
+
+        if (user)
+            try {
+                await activity.team.members.getOne(user.id);
+            } catch (error) {
+                // 404: user is not a member of team
+                if ((error as APIError).status !== 404) throw error;
+            }
     }
 
     async joinTeam(event: Event) {
         event.preventDefault(), event.stopPropagation();
 
         const form = event.target as HTMLFormElement;
+
         const data = formToJSON<TeamMember>(form);
         data.role = 'member';
+
         const me = await activity.team.members.updateOne(data);
-        activity.team.members.current = me;
         if (me.status === 'approved') activity.team.members.list.push(me);
     }
 
     async leaveTeam() {
         await activity.team.members.leave();
         await activity.team.members.getNextPage({}, true);
+    }
+
+    renderMember({ user: { id, photo, nickname } }: TeamMember) {
+        return (
+            <li>
+                <a href={`user?uid=${id}`}>
+                    <img style={{ width: '1.5rem' }} src={photo} /> {nickname}
+                </a>
+            </li>
+        );
     }
 
     renderJoiningTeam() {
@@ -107,17 +118,12 @@ export class TeamDetail extends mixin() {
 
     renderLeavingTeam({ role, status }) {
         const { activity, tid } = this;
+
         return status === 'approved' ? (
             role === 'admin' ? (
                 <Button
                     color="link"
-                    href={
-                        'team/members?' +
-                        buildURLData({
-                            activity,
-                            tid
-                        })
-                    }
+                    href={'team/members?' + buildURLData({ activity, tid })}
                 >
                     {words.manage_team_members}
                 </Button>
@@ -142,7 +148,7 @@ export class TeamDetail extends mixin() {
         const { displayName: hackathonDisplayName, name: hackathonName } =
             activity.current;
         const { id, logo, displayName, description } = activity.team.current;
-        const members = activity.team.members;
+        const { members } = activity.team;
         const loading = activity.loading || activity.team.loading;
         const { user } = session;
 
@@ -163,7 +169,7 @@ export class TeamDetail extends mixin() {
                             <img className="d-block m-auto" src={logo} />
                             <h2>{displayName}</h2>
                             <p>{description}</p>
-                            {members.current.role === 'admin' ? (
+                            {members.current.role !== 'admin' ? null : (
                                 <Button
                                     href={
                                         'team/edit?' +
@@ -180,27 +186,13 @@ export class TeamDetail extends mixin() {
                                         words.profile
                                     )}
                                 </Button>
-                            ) : (
-                                ''
                             )}
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />
                             {words.team_members}
                             <ul className="list-unstyled mt-3">
-                                {members.list.map(
-                                    ({ user: { id, photo, nickname } }) => (
-                                        <li>
-                                            <a href={'user?uid=' + id}>
-                                                <img
-                                                    style={{ width: '1.5rem' }}
-                                                    src={photo}
-                                                />{' '}
-                                                {nickname}
-                                            </a>
-                                        </li>
-                                    )
-                                )}
+                                {members.list.map(this.renderMember)}
                             </ul>
                             {user &&
                                 (members.current.role

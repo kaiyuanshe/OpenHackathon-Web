@@ -41,6 +41,7 @@ export enum zh_CN {
     manage_this_hackathon = '管理活动',
     apply_to_offline = '申请下线',
     apply_to_online = '申请上线',
+    delete = '删除',
     organizer = '主办方',
     event_location = '活动地点',
     registration_count = '报名人数',

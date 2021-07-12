@@ -41,6 +41,7 @@ export enum en_US {
     manage_this_hackathon = 'Manage this hackathon',
     apply_to_offline = 'Apply to offline',
     apply_to_online = 'Apply to online',
+    delete = 'Delete',
     organizer = 'Organizer',
     event_location = 'Event Location',
     registration_count = 'Registration count',

@@ -178,6 +178,10 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
         return (this.current = body);
     }
 
+    isSame(name: string) {
+        return (item: Activity) => item.name === name;
+    }
+
     @loading
     async updateActivityConfig(
         data: Partial<ActivityConfig>,

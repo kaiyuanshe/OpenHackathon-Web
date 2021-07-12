@@ -4,7 +4,7 @@ import { ActivityCardProps, ActivityCard } from './ActivityCard';
 import { Activity } from '../model';
 
 export interface ActivityGalleryProps
-    extends Pick<ActivityCardProps, 'manage' | 'onPublish'> {
+    extends Pick<ActivityCardProps, 'manage' | 'onPublish' | 'onDelete'> {
     list: Activity[];
 }
 

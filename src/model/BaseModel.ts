@@ -52,6 +52,8 @@ export abstract class TableModel<
         this.list = [];
     }
 
+    private queryId = 0;
+
     @loading
     async getNextPage(
         { search, orderby, top, ...filter }: F = {} as F,
@@ -64,7 +66,8 @@ export abstract class TableModel<
         orderby ??= this.orderBy;
         top ??= this.pageSize;
 
-        const currentLink = this.nextPage || this.multipleBase;
+        const currentLink = this.nextPage || this.multipleBase,
+            queryId = ++this.queryId;
         const {
             body: { nextLink, value }
         } = await service.get<PageData<T>>(
@@ -75,13 +78,15 @@ export abstract class TableModel<
                 top
             })}`
         );
+        if (this.queryId !== queryId) return this.list;
+
         this.keyWord = search;
         this.orderBy = orderby;
         this.pageSize = top;
         this.prevPage = currentLink;
         this.nextPage = nextLink;
 
-        return (this.list = [...this.list, ...value]);
+        return (this.list = reset ? value : [...this.list, ...value]);
     }
 
     updateList() {
@@ -106,11 +111,18 @@ export abstract class TableModel<
         return (this.current = body);
     }
 
+    isSame(key: any) {
+        return (item: T) => item.id === key;
+    }
+
     @loading
     async deleteOne(id: string) {
         await service.delete(`${this.singleBase}/${id}`);
 
-        await this.updateList();
+        const { list } = this;
+        const index = list.findIndex(this.isSame(id));
+
+        this.list = [...list.slice(0, index), ...list.slice(index + 1)];
     }
 
     clearCurrent() {

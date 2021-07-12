@@ -39,6 +39,10 @@ export class AdminPage extends mixin() {
                     manage
                     list={list}
                     onPublish={name => activity.publishOne(name, true)}
+                    onDelete={name =>
+                        self.confirm(`确定删除 ${name}？`) &&
+                        activity.deleteOne(name)
+                    }
                 />
             </AdminFrame>
         );

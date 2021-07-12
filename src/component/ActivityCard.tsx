@@ -11,7 +11,8 @@ import { Activity, session } from '../model';
 
 export interface ActivityCardProps extends Omit<Activity, 'id'>, CardProps {
     manage?: boolean;
-    onPublish?(name: string): any;
+    onPublish?: (name: string) => any;
+    onDelete?: (name: string) => any;
 }
 
 export function ActivityCard({
@@ -27,6 +28,7 @@ export function ActivityCard({
     creatorId,
     manage,
     onPublish,
+    onDelete,
     ...rest
 }: ActivityCardProps) {
     const event_start = new Date(eventStartedAt),
@@ -48,23 +50,30 @@ export function ActivityCard({
             <>
                 <Button
                     block
-                    color="warning"
+                    color="info"
                     href={'manage/activity?name=' + name}
                 >
                     {words.manage_this_hackathon}
                 </Button>
                 {status === 'online' ? (
-                    <Button block color="danger" className="mt-2">
+                    <Button block color="warning" className="mt-2">
                         {words.apply_to_offline}
                     </Button>
                 ) : (
-                    <Button
-                        block
-                        color="success"
-                        className="mt-2"
-                        onClick={() => onPublish(name)}
-                    >
-                        {words.apply_to_online}
+                    onPublish && (
+                        <Button
+                            block
+                            color="success"
+                            className="mt-2"
+                            onClick={() => onPublish(name)}
+                        >
+                            {words.apply_to_online}
+                        </Button>
+                    )
+                )}
+                {!manage || !onDelete ? null : (
+                    <Button block color="danger" onClick={() => onDelete(name)}>
+                        {words.delete}
                     </Button>
                 )}
             </>
@@ -103,11 +112,13 @@ export function ActivityCard({
             <CardFooter>
                 <small className="d-flex justify-content-between mb-2">
                     <time dateTime={event_end.toJSON()}>
-                        {days >= 0 ? textJoin(
-                            words.registration_deadline,
-                            days + '',
-                            words.days
-                        ) : ''}
+                        {days < 0
+                            ? null
+                            : textJoin(
+                                  words.registration_deadline,
+                                  days + '',
+                                  words.days
+                              )}
                     </time>
                     {/* <span>
                         <FAIcon name="heart" color="danger" /> {stat?.like}

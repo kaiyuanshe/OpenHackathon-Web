@@ -31,13 +31,13 @@ export const service = new HTTPClient({
     } catch {
         const { body } = response as Response<ErrorData>;
 
-        if (body?.status > 299) {
-            const message = body.errors
+        const message = body
+            ? body.errors
                 ? Object.values(body.errors).flat().join('\n')
-                : body.detail;
+                : body.detail
+            : 'Bad connection to the OHP server';
 
-            throw Object.assign(new URIError(message), response);
-        }
+        throw Object.assign(new URIError(message), response);
     }
 });
 
