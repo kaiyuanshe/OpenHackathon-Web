@@ -35,7 +35,9 @@ export class HomePage extends mixin() {
             .sort(
                 ({ enrollmentEndedAt: A }, { enrollmentEndedAt: B }) =>
                     +new Date(B) - +new Date(A)
-            );
+            )
+            .slice(0, 6);
+
         return <ActivityGallery list={list} />;
     }
 
@@ -87,10 +89,12 @@ export class HomePage extends mixin() {
                     image: banners[0]?.uri,
                     detail: ribbon
                 })),
-            popular_activities = [...list].sort(
-                ({ stat: a }, { stat: b }) =>
-                    b?.register - a?.register || b?.like - a?.like
-            );
+            popular_activities = [...list]
+                .sort(
+                    ({ stat: a }, { stat: b }) =>
+                        b?.register - a?.register || b?.like - a?.like
+                )
+                .slice(0, 6);
 
         return (
             <>
@@ -106,7 +110,7 @@ export class HomePage extends mixin() {
                         <TabView mode="pills">
                             <NavLink>{words.last_events}</NavLink>
                             <TabPanel>
-                                <ActivityGallery list={list} />
+                                <ActivityGallery list={list.slice(0, 6)} />
                             </TabPanel>
                             <NavLink>{words.most_popular}</NavLink>
                             <TabPanel>

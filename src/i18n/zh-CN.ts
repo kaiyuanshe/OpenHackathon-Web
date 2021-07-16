@@ -76,7 +76,7 @@ export enum zh_CN {
     no_i_have_a_team = '否，已有队伍',
     would_you_be_open_to_having_a_beginner_join_your_team = '您介意新手加入您的团队？',
     no = '否',
-    anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate = '关于队友，您还有什么其他需求吗? 我们会尽全力帮助您找到合适人选，助力您的DEVE2030比赛之旅。',
+    anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate = '关于队友，您还有什么其他需求吗? 我们会尽全力帮助您找到合适人选，助力您的DEV2030比赛之旅。',
     what_is_your_occupation = '您的专业',
     front_end_engineer = '前端工程师',
     back_end_engineer = '后端工程师',

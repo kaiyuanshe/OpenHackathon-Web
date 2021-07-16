@@ -1,10 +1,12 @@
 .box {
-    max-height: 90vh;
     display: flex;
 
     & > :first-child {
         width: calc(100% - 16rem);
         margin-right: 1rem;
+        :global .back-image {
+            min-height: 70vh;
+        }
     }
     & > :last-child {
         width: 15rem;
