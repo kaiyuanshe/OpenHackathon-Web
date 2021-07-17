@@ -142,7 +142,11 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     }
 
     @loading
-    async updateOne({ name, id, ...data }: Partial<ActivityData>) {
+    async updateOne({
+        name = this.current.name,
+        id,
+        ...data
+    }: Partial<ActivityData>) {
         if (!id) {
             const {
                 body: { nameAvailable, message }

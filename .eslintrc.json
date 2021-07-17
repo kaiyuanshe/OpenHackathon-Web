@@ -18,6 +18,8 @@
         "prettier"
     ],
     "rules": {
-        "no-unused-vars": "warn"
+        "no-var": "off",
+        "no-unused-vars": "warn",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
     }
 }

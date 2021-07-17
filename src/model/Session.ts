@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import { request } from 'koajax';
 
 import { service, setToken } from './service';
 import { BaseModel, loading } from './BaseModel';
@@ -30,9 +31,10 @@ export interface Session extends User {
     _id: string;
 }
 
-export interface FileData {
-    file_name: string;
-    pre_file_name: string;
+export interface UploadMeta {
+    expiration: number;
+    filename: string;
+    uploadUrl: string;
     url: string;
 }
 
@@ -72,28 +74,24 @@ export class SessionModel extends BaseModel {
     }
 
     @loading
-    async upload(file: Blob | string | URL, scope: 'user' | 'team') {
-        const form = new FormData();
-
-        if (file instanceof Blob) form.append('files[]', file);
-        else form.append('picture', file + '');
-
+    async upload(file: File) {
         const {
-            body: { files }
-        } = await service.post<{ files: FileData[] }>(
-            `user/file?file_type=${scope}_file`,
-            form
-        );
-        return files[0];
+            body: { uploadUrl, url }
+        } = await service.post<UploadMeta>('user/generateFileUrl', {
+            filename: file.name
+        });
+        await request({ method: 'PUT', path: uploadUrl, body: file }).response;
+
+        return url;
     }
 
     @loading
     async updateProfile({
         avatar,
         ...data
-    }: Partial<{ avatar: Blob } & UserProfile>) {
+    }: Partial<{ avatar: File } & UserProfile>) {
         if (avatar) {
-            const { url } = await this.upload(avatar, 'user');
+            const url = await this.upload(avatar);
 
             await service.put<boolean>('user/picture', { url });
         }

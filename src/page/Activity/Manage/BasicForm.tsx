@@ -1,18 +1,24 @@
 import { createCell } from 'web-cell';
 import classNames from 'classnames';
+import { formToJSON } from 'web-utility/source/DOM';
+
 import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
+import { FileInput } from 'boot-cell/source/Form/FileInput';
 import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
 
-import { Activity } from '../../../model';
+import { activity, Activity, session } from '../../../model';
 import { TimeRange } from '../../../component/TimeRange';
 
-export type ActivityBasicFormData = Partial<
-    Omit<Activity, 'tags' | 'description'> & { tags: string }
+type ActivityBasicFormData = Partial<
+    Omit<Activity, 'tags' | 'description'> & {
+        tags: string;
+        banners: File;
+    }
 >;
-
-export interface ActivityBasicFormProps extends FormProps {
+export interface ActivityBasicFormProps extends Omit<FormProps, 'onSubmit'> {
     data?: Partial<Activity>;
+    onSubmit(data: Partial<Activity>): any;
 }
 
 export function ActivityBasicForm({
@@ -32,13 +38,35 @@ export function ActivityBasicForm({
         judgeStartedAt,
         judgeEndedAt,
         location,
-        detail
+        detail = ''
     } = {},
+    onSubmit,
     defaultSlot,
     ...rest
 }: ActivityBasicFormProps) {
+    async function save(event: Event) {
+        event.preventDefault(), event.stopPropagation();
+
+        const form = event.target as HTMLFormElement;
+        const { tags, banners, ...input } =
+            formToJSON<ActivityBasicFormData>(form);
+
+        const uri = await session.upload(banners);
+
+        const data = await activity.updateOne({
+            ...input,
+            tags: tags.split(' '),
+            banners: [{ name: banners.name, uri }]
+        });
+        return onSubmit(data);
+    }
+
     return (
-        <Form {...rest} className={classNames('text-center', className)}>
+        <Form
+            {...rest}
+            className={classNames('text-center', className)}
+            onSubmit={save}
+        >
             <input type="hidden" name="id" value={id} />
             <FormField
                 label="名称"
@@ -64,6 +92,9 @@ export function ActivityBasicForm({
                 placeholder="标签，请以空格分隔"
                 value={tags?.join(' ')}
             />
+            <FormField label="头图" labelColumn={2}>
+                <FileInput name="banners" accept="image/*" />
+            </FormField>
             <FormField
                 label="活动地址"
                 name="location"
@@ -126,6 +157,7 @@ export function ActivityBasicForm({
                 name="detail"
                 placeholder="活动详情"
                 value={detail}
+                upload={file => session.upload(file)}
             />
             {defaultSlot}
         </Form>
