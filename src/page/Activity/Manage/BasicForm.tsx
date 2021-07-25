@@ -6,14 +6,17 @@ import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
 import { FileInput } from 'boot-cell/source/Form/FileInput';
 import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
+import { Image } from 'boot-cell/source/Media/Image';
 
 import { activity, Activity, session } from '../../../model';
 import { TimeRange } from '../../../component/TimeRange';
 
+import style from './BasicForm.module.less';
+
 type ActivityBasicFormData = Partial<
     Omit<Activity, 'tags' | 'description'> & {
         tags: string;
-        banners: File;
+        banner: File;
     }
 >;
 export interface ActivityBasicFormProps extends Omit<FormProps, 'onSubmit'> {
@@ -28,6 +31,7 @@ export function ActivityBasicForm({
         name,
         displayName,
         tags,
+        banners,
         summary,
         ribbon,
         maxEnrollment,
@@ -48,15 +52,19 @@ export function ActivityBasicForm({
         event.preventDefault(), event.stopPropagation();
 
         const form = event.target as HTMLFormElement;
-        const { tags, banners, ...input } =
+        const { tags, banner, ...input } =
             formToJSON<ActivityBasicFormData>(form);
 
-        const uri = await session.upload(banners);
+        if (banner) {
+            const uri = await session.upload(banner);
+            if (banners) banners.push({ uri });
+            else banners = [{ uri }];
+        }
 
         const data = await activity.updateOne({
             ...input,
             tags: tags.split(' '),
-            banners: [{ name: banners.name, uri }]
+            banners
         });
         return onSubmit(data);
     }
@@ -93,7 +101,10 @@ export function ActivityBasicForm({
                 value={tags?.join(' ')}
             />
             <FormField label="头图" labelColumn={2}>
-                <FileInput name="banners" accept="image/*" />
+                {banners?.map(image => (
+                    <Image src={image.uri} className={style.banner} />
+                ))}
+                <FileInput name="banner" accept="image/*" />
             </FormField>
             <FormField
                 label="活动地址"
