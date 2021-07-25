@@ -80,7 +80,12 @@ export class SessionModel extends BaseModel {
         } = await service.post<UploadMeta>('user/generateFileUrl', {
             filename: file.name
         });
-        await request({ method: 'PUT', path: uploadUrl, body: file }).response;
+        await request({
+            method: 'PUT',
+            path: uploadUrl,
+            headers: { 'x-ms-blob-type': 'BlockBlob' },
+            body: file
+        }).response;
 
         return url;
     }
