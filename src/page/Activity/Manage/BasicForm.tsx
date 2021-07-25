@@ -7,6 +7,8 @@ import { FormField } from 'boot-cell/source/Form/FormField';
 import { FileInput } from 'boot-cell/source/Form/FileInput';
 import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
 import { Image } from 'boot-cell/source/Media/Image';
+import { Button } from 'boot-cell/source/Form/Button';
+import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { activity, Activity, session } from '../../../model';
 import { TimeRange } from '../../../component/TimeRange';
@@ -69,6 +71,13 @@ export function ActivityBasicForm({
         return onSubmit(data);
     }
 
+    function handleDeleteBanner(imageUri: string) {
+        return () => {
+            const index = banners.findIndex(({ uri }) => uri == imageUri);
+            if (index >= 0) banners.splice(index, 1);
+        };
+    }
+
     return (
         <Form
             {...rest}
@@ -102,7 +111,15 @@ export function ActivityBasicForm({
             />
             <FormField label="头图" labelColumn={2}>
                 {banners?.map(image => (
-                    <Image src={image.uri} className={style.banner} />
+                    <div className={style.banner}>
+                        <Image src={image.uri} />
+                        <Button
+                            color="danger"
+                            onClick={handleDeleteBanner(image.uri)}
+                        >
+                            <FAIcon name="trash-alt" />
+                        </Button>
+                    </div>
                 ))}
                 <FileInput name="banner" accept="image/*" />
             </FormField>
