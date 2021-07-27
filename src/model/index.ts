@@ -7,7 +7,7 @@ import { ActivityModel } from './Activity';
 export const history = new History();
 export const session = new SessionModel();
 export const user = new UserModel();
-export const activity = new ActivityModel();
+export const activity = new ActivityModel(session);
 
 export * from './static';
 export * from './service';

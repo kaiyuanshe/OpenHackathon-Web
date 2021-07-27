@@ -1,11 +1,10 @@
 import { component, mixin, createCell, Fragment } from 'web-cell';
 import { observer } from 'mobx-web-cell';
-import { formToJSON } from 'web-utility/source/DOM';
 import { TabView, TabPanel } from 'boot-cell/source/Content/TabView';
 import { Step } from 'boot-cell/source/Navigator/Stepper';
 import { Button } from 'boot-cell/source/Form/Button';
 
-import { ActivityBasicForm, ActivityBasicFormData } from './BasicForm';
+import { ActivityBasicForm } from './BasicForm';
 import { activity, history } from '../../../model';
 
 @observer
@@ -21,19 +20,6 @@ export class CreateActivity extends mixin() {
 
         super.connectedCallback();
     }
-
-    saveBasicForm = async (event: Event) => {
-        event.preventDefault(), event.stopPropagation();
-
-        const form = event.target as HTMLFormElement;
-        const data = formToJSON<ActivityBasicFormData>(form);
-
-        await activity.updateOne({
-            ...data,
-            tags: data.tags.split(' ')
-        });
-        this.tabView.activeIndex++;
-    };
 
     handleFinish = async (event: Event) => {
         event.preventDefault();
@@ -59,7 +45,9 @@ export class CreateActivity extends mixin() {
                 >
                     <Step icon={1}>填写基本信息</Step>
                     <TabPanel>
-                        <ActivityBasicForm onSubmit={this.saveBasicForm}>
+                        <ActivityBasicForm
+                            onSubmit={() => this.tabView.activeIndex++}
+                        >
                             <Button
                                 type="submit"
                                 color="primary"

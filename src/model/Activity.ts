@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 
 import { DataItem, service, PageData, Asset, ListFilter } from './service';
 import { TableModel, loading } from './BaseModel';
+import { SessionModel } from './Session';
 import { Coord, coordsOf } from './AMap';
 import { TeamModel } from './Team';
 import { RegistrationModel } from './Registration';
@@ -107,6 +108,13 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     @observable
     config: ActivityConfig = {} as ActivityConfig;
 
+    session: SessionModel;
+
+    constructor(session: SessionModel) {
+        super();
+        this.session = session;
+    }
+
     async getEventList(name: string) {
         const {
             body: { value }
@@ -142,7 +150,11 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
     }
 
     @loading
-    async updateOne({ name, id, ...data }: Partial<ActivityData>) {
+    async updateOne({
+        name = this.current.name,
+        id,
+        ...data
+    }: Partial<ActivityData>) {
         if (!id) {
             const {
                 body: { nameAvailable, message }
@@ -159,6 +171,28 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
             : service.put<Activity>(path, data));
 
         return (this.current = body);
+    }
+
+    async addBanner(file: File) {
+        const uri = await this.session.upload(file);
+        const { name, banners } = this.current;
+
+        const { banners: images } = await this.updateOne({
+            id: name,
+            banners: [...(banners || []), { uri }]
+        });
+        return images.slice(-1)[0];
+    }
+
+    async deleteBanner(URI: string) {
+        const { name, banners } = this.current;
+
+        const index = banners?.findIndex(({ uri }) => uri === URI);
+
+        await this.updateOne({
+            id: name,
+            banners: [...banners.slice(0, index), ...banners.slice(index + 1)]
+        });
     }
 
     @loading

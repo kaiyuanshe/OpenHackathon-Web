@@ -4,7 +4,7 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "@authing/native-js-ui-components": "^2.4.31",
+        "@authing/native-js-ui-components": "^2.4.32",
         "boot-cell": "^1.9.5",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.4",
@@ -15,19 +15,19 @@
         "quill": "^1.3.7",
         "quill-image-uploader": "^1.2.2",
         "web-cell": "^2.3.0",
-        "web-utility": "^2.5.4"
+        "web-utility": "^2.6.0"
     },
     "devDependencies": {
         "@types/classnames": "^2.3.1",
         "@types/quill": "^2.0.9",
-        "@typescript-eslint/parser": "^4.28.2",
+        "@typescript-eslint/eslint-plugin": "^4.28.5",
+        "@typescript-eslint/parser": "^4.28.5",
         "autoprefixer": "^9.8.6",
-        "eslint": "^7.30.0",
-        "eslint-config-prettier": "^7.2.0",
-        "eslint-plugin-prettier": "^3.4.0",
+        "eslint": "^7.31.0",
+        "eslint-config-prettier": "^8.3.0",
         "husky": "^7.0.1",
         "less": "^4.1.1",
-        "lint-staged": "^11.0.0",
+        "lint-staged": "^11.1.1",
         "parcel-bundler": "^1.12.5",
         "postcss-modules": "^3.2.2",
         "prettier": "^2.3.2",
@@ -41,11 +41,8 @@
         "tabWidth": 4
     },
     "lint-staged": {
-        "*.{html,md,css,less,json,yml}": "prettier --write",
-        "*.{js,ts,tsx}": [
-            "prettier --write",
-            "eslint --fix"
-        ]
+        "*.{html,md,css,less,json,yml,js,ts,tsx}": "prettier --write",
+        "*.{js,ts,tsx}": "eslint --fix"
     },
     "postcss": {
         "modules": true,

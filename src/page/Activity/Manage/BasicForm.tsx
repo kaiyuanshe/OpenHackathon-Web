@@ -1,18 +1,27 @@
 import { createCell } from 'web-cell';
 import classNames from 'classnames';
+import { formToJSON } from 'web-utility/source/DOM';
+
 import { FormProps, Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
+import { FileInput } from 'boot-cell/source/Form/FileInput';
 import { HTMLEditor } from 'boot-cell/source/Form/HTMLEditor';
+import { Image } from 'boot-cell/source/Media/Image';
+import { Button } from 'boot-cell/source/Form/Button';
+import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 
-import { Activity } from '../../../model';
+import { activity, Activity, session } from '../../../model';
 import { TimeRange } from '../../../component/TimeRange';
 
-export type ActivityBasicFormData = Partial<
-    Omit<Activity, 'tags' | 'description'> & { tags: string }
+type ActivityBasicFormData = Partial<
+    Omit<Activity, 'tags' | 'description'> & {
+        tags: string;
+        banner: File;
+    }
 >;
-
-export interface ActivityBasicFormProps extends FormProps {
+export interface ActivityBasicFormProps extends Omit<FormProps, 'onSubmit'> {
     data?: Partial<Activity>;
+    onSubmit(data: Partial<Activity>): any;
 }
 
 export function ActivityBasicForm({
@@ -22,6 +31,7 @@ export function ActivityBasicForm({
         name,
         displayName,
         tags,
+        banners,
         summary,
         ribbon,
         maxEnrollment,
@@ -32,13 +42,34 @@ export function ActivityBasicForm({
         judgeStartedAt,
         judgeEndedAt,
         location,
-        detail
+        detail = ''
     } = {},
+    onSubmit,
     defaultSlot,
     ...rest
 }: ActivityBasicFormProps) {
+    async function save(event: Event) {
+        event.preventDefault(), event.stopPropagation();
+
+        const form = event.target as HTMLFormElement;
+        const { tags, banner, ...input } =
+            formToJSON<ActivityBasicFormData>(form);
+
+        if (banner) await activity.addBanner(banner);
+
+        const data = await activity.updateOne({
+            ...input,
+            tags: tags.split(' ')
+        });
+        return onSubmit(data);
+    }
+
     return (
-        <Form {...rest} className={classNames('text-center', className)}>
+        <Form
+            {...rest}
+            className={classNames('text-center', className)}
+            onSubmit={save}
+        >
             <input type="hidden" name="id" value={id} />
             <FormField
                 label="名称"
@@ -64,6 +95,23 @@ export function ActivityBasicForm({
                 placeholder="标签，请以空格分隔"
                 value={tags?.join(' ')}
             />
+            <FormField label="头图" labelColumn={2}>
+                {banners?.map(({ uri }) => (
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <Image style={{ height: '10rem' }} src={uri} />
+                        {banners?.[1] && (
+                            <Button
+                                className="ml-3"
+                                color="danger"
+                                onClick={() => activity.deleteBanner(uri)}
+                            >
+                                <FAIcon name="trash-alt" />
+                            </Button>
+                        )}
+                    </div>
+                ))}
+                <FileInput name="banner" accept="image/*" />
+            </FormField>
             <FormField
                 label="活动地址"
                 name="location"
@@ -126,6 +174,7 @@ export function ActivityBasicForm({
                 name="detail"
                 placeholder="活动详情"
                 value={detail}
+                upload={file => session.upload(file)}
             />
             {defaultSlot}
         </Form>

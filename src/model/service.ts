@@ -67,7 +67,7 @@ export interface PageData<T> {
 }
 
 export interface Asset {
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
     uri: string;
 }
