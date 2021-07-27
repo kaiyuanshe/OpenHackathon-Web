@@ -225,7 +225,7 @@ export class ActivityDetail extends mixin() {
                 <div className="row">
                     <TabView className="col-12 col-lg-9">
                         <NavLink>{words.hackathon_detail}</NavLink>
-                        <TabPanel innerHTML={detail} />
+                        <TabPanel className={style.detail} innerHTML={detail} />
 
                         <NavLink>{words.latest_news}</NavLink>
                         <TabPanel>{this.renderEventList()}</TabPanel>

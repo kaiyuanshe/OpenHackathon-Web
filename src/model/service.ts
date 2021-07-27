@@ -50,7 +50,6 @@ export interface ListFilter<T extends DataItem = DataItem> {
 
 export interface DataItem {
     id: string;
-    name: string;
     creatorId: string;
     createdAt: string;
     updatedAt: string;

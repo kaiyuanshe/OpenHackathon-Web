@@ -1,6 +1,7 @@
 import { component, mixin, watch, attribute, createCell } from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { textJoin } from 'web-utility/source/i18n';
+import { buildURLData } from 'web-utility/source/URL';
 import { formToJSON } from 'web-utility/source/DOM';
 
 import { SpinnerBox } from 'boot-cell/source/Prompt/Spinner';
@@ -41,18 +42,18 @@ export class TeamEdit extends mixin() {
     saveTeam = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
 
-        const { tid } = this,
+        const { activity: aid, tid } = this,
             form = event.target as HTMLFormElement;
         const data = formToJSON<Team>(form),
             operation = tid ? words.edit : words.create;
 
-        const { id, name } = await activity.team.updateOne({
+        const { displayName } = await activity.team.updateOne({
             ...data,
             id: tid
         });
-        self.alert(textJoin(operation, name, words.team, words.success));
+        self.alert(textJoin(operation, displayName, words.team, words.success));
 
-        history.push(`team?id=${id}`);
+        history.push(`team?${buildURLData({ activity: aid, tid })}`);
     };
 
     render() {

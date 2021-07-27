@@ -32,6 +32,7 @@ export type ActivityStatus =
     | 'offline';
 
 export interface Activity extends DataItem {
+    name: string;
     displayName: string;
     ribbon: string;
     summary: string;

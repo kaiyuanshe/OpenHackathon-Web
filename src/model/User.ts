@@ -36,12 +36,13 @@ export interface Identity {
 }
 
 export interface Group extends Omit<DataItem, 'id' | 'creatorId'> {
+    name: string;
     code: string;
     description: string;
     users: ListBox<User>;
 }
 
-export interface Role extends Omit<DataItem, 'id' | 'name' | 'creatorId'> {
+export interface Role extends Omit<DataItem, 'id' | 'creatorId'> {
     code: string;
     arn: string;
     description: string;
@@ -105,6 +106,7 @@ export interface UserMeta {
 }
 
 export interface User extends DataItem, UserProfile, UserMeta {
+    name: string;
     likes?: Registration[];
     registrations?: Registration[];
 }
