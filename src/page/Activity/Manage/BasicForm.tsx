@@ -13,8 +13,6 @@ import { FAIcon } from 'boot-cell/source/Reminder/FAIcon';
 import { activity, Activity, session } from '../../../model';
 import { TimeRange } from '../../../component/TimeRange';
 
-import style from './BasicForm.module.less';
-
 type ActivityBasicFormData = Partial<
     Omit<Activity, 'tags' | 'description'> & {
         tags: string;
@@ -57,25 +55,13 @@ export function ActivityBasicForm({
         const { tags, banner, ...input } =
             formToJSON<ActivityBasicFormData>(form);
 
-        if (banner) {
-            const uri = await session.upload(banner);
-            if (banners) banners.push({ uri });
-            else banners = [{ uri }];
-        }
+        if (banner) await activity.addBanner(banner);
 
         const data = await activity.updateOne({
             ...input,
-            tags: tags.split(' '),
-            banners
+            tags: tags.split(' ')
         });
         return onSubmit(data);
-    }
-
-    function handleDeleteBanner(imageUri: string) {
-        return () => {
-            const index = banners.findIndex(({ uri }) => uri == imageUri);
-            if (index >= 0) banners.splice(index, 1);
-        };
     }
 
     return (
@@ -110,15 +96,18 @@ export function ActivityBasicForm({
                 value={tags?.join(' ')}
             />
             <FormField label="头图" labelColumn={2}>
-                {banners?.map(image => (
-                    <div className={style.banner}>
-                        <Image src={image.uri} />
-                        <Button
-                            color="danger"
-                            onClick={handleDeleteBanner(image.uri)}
-                        >
-                            <FAIcon name="trash-alt" />
-                        </Button>
+                {banners?.map(({ uri }) => (
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <Image style={{ height: '10rem' }} src={uri} />
+                        {banners?.[1] && (
+                            <Button
+                                className="ml-3"
+                                color="danger"
+                                onClick={() => activity.deleteBanner(uri)}
+                            >
+                                <FAIcon name="trash-alt" />
+                            </Button>
+                        )}
                     </div>
                 ))}
                 <FileInput name="banner" accept="image/*" />
