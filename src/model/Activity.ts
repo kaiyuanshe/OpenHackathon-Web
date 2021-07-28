@@ -232,3 +232,5 @@ export class ActivityModel extends TableModel<Activity, ActivityQuery> {
         return (this.config = body);
     }
 }
+
+export class OwnActivityModel extends ActivityModel {}

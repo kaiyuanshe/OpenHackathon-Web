@@ -44,10 +44,11 @@ export class TeamEdit extends mixin() {
 
         const { activity: aid, tid } = this,
             form = event.target as HTMLFormElement;
-        const data = formToJSON<Team>(form),
+        const { displayName, ...data } = formToJSON<Team>(form),
             operation = tid ? words.edit : words.create;
 
-        const { displayName } = await activity.team.updateOne({
+        await activity.team.updateOne({
+            displayName: displayName + '',
             ...data,
             id: tid
         });

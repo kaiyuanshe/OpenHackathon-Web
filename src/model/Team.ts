@@ -1,6 +1,7 @@
-import { DataItem, service } from './service';
+import { DataItem, ListFilter, service } from './service';
 import { ActivitySubModel, TableModel, loading } from './BaseModel';
 import { User } from './User';
+import site_logo from '../image/logo.png';
 
 export enum TeamMemberStatus {
     none = 'none',
@@ -72,10 +73,30 @@ export class TeamModel extends ActivitySubModel<Team> {
 
     members: TeamMemberModel = new TeamMemberModel();
 
-    @loading
+    static fixLogo({ logo, creator, ...data }: Team): Team {
+        creator.photo ||= site_logo;
+
+        return {
+            ...data,
+            logo: logo || creator.photo,
+            creator
+        };
+    }
+
     async getOne(id: string) {
-        super.getOne(id);
+        const team = await super.getOne(id);
+
         this.members.boot(this.singleBase, id);
-        return this.current;
+
+        return (this.current = TeamModel.fixLogo(team));
+    }
+
+    async getNextPage(
+        filter: ListFilter<Team> = {} as ListFilter<Team>,
+        reset = false
+    ) {
+        const list = await super.getNextPage(filter, reset);
+
+        return (this.list = list.map(TeamModel.fixLogo));
     }
 }

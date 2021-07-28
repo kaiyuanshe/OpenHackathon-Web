@@ -25,8 +25,7 @@ import { Button } from 'boot-cell/source/Form/Button';
 import style from './Detail.module.less';
 import { TimeUnitName, isMobile } from '../../utility';
 import { words } from '../../i18n';
-import { activity, RegistrationStatus, Team } from '../../model';
-import defaultLogo from '../../image/logo.png';
+import { activity, Team } from '../../model';
 
 @observer
 @component({
@@ -168,17 +167,14 @@ export class ActivityDetail extends mixin() {
     }: Team) => (
         <li className="border overflow-hidden mb-3" style={{ width: '200' }}>
             <div className="d-flex border-bottom">
-                <img className={style.logo} src={logo || defaultLogo} />
+                <img className={style.logo} src={logo} />
                 <div className="flex-shrink-1">
                     <h4 className="text-nowrap my-1">
                         <a
-                            href={
-                                'team?' +
-                                buildURLData({
-                                    activity: hackathonName,
-                                    tid: id
-                                })
-                            }
+                            href={`team?${buildURLData({
+                                activity: hackathonName,
+                                tid: id
+                            })}`}
                         >
                             {displayName}
                         </a>
@@ -191,10 +187,7 @@ export class ActivityDetail extends mixin() {
             <div className="p-2">
                 {words.team_leader}：
                 <a href={'user?uid=' + creator.id}>
-                    <img
-                        className={style.icon}
-                        src={creator.photo || defaultLogo}
-                    />{' '}
+                    <img className={style.icon} src={creator.photo} />{' '}
                     {creator.nickname}
                 </a>
             </div>

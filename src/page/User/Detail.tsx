@@ -10,7 +10,7 @@ import { BGIcon } from 'boot-cell/source/Reminder/FAIcon';
 
 import { ActivityGallery } from '../../component';
 import { words } from '../../i18n';
-import { Provider, session, user, activity } from '../../model';
+import { Provider, session, user, activity, ownActivity } from '../../model';
 import style from './Detail.module.less';
 
 const provider_list = Object.entries(Provider).filter(([key]) => isNaN(+key)),
@@ -36,7 +36,8 @@ export class UserDetail extends mixin() {
             'url(https://hacking.kaiyuanshe.cn/static/pic/profile-back-pattern.png)';
 
         user.getOne(this.uid);
-        activity.getNextPage({ listType: 'admin' }, true);
+        activity.getNextPage({ listType: 'enrolled' }, true);
+        ownActivity.getNextPage({ listType: 'admin' }, true);
 
         super.connectedCallback();
     }
@@ -66,7 +67,7 @@ export class UserDetail extends mixin() {
     render() {
         const {
             loading,
-            current: { id, nickname, photo, likes, registrations }
+            current: { id, nickname, photo, likes }
         } = user;
         const isSelf = session.user?.id === id;
 
@@ -99,29 +100,23 @@ export class UserDetail extends mixin() {
                     )}
                 </div>
                 <TabView mode="masthead" tabAlign="center">
-                    <NavLink>{words.followed_hackathons}</NavLink>
+                    <NavLink>{words.joined_hackathons}</NavLink>
                     <TabPanel>
-                        {likes && (
-                            <ActivityGallery
-                                list={likes.map(
-                                    ({ hackathon_info }) => hackathon_info
-                                )}
-                            />
-                        )}
+                        <ActivityGallery list={activity.list} />
                     </TabPanel>
                     <NavLink>{words.owned_hackathons}</NavLink>
                     <TabPanel>
                         <ActivityGallery
                             manage
-                            list={activity.list}
-                            onPublish={name => activity.publishOne(name)}
+                            list={ownActivity.list}
+                            onPublish={name => ownActivity.publishOne(name)}
                         />
                     </TabPanel>
-                    <NavLink>{words.joined_hackathons}</NavLink>
+                    <NavLink>{words.followed_hackathons}</NavLink>
                     <TabPanel>
-                        {registrations && (
+                        {likes && (
                             <ActivityGallery
-                                list={registrations.map(
+                                list={likes.map(
                                     ({ hackathon_info }) => hackathon_info
                                 )}
                             />

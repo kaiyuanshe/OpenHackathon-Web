@@ -42,6 +42,7 @@ export enum en_US {
     apply_to_offline = 'Apply to offline',
     apply_to_online = 'Apply to online',
     delete = 'Delete',
+    disband = 'Disband',
     organizer = 'Organizer',
     event_location = 'Event Location',
     registration_count = 'Registration count',
