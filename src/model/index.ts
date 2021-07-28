@@ -2,12 +2,13 @@ import { History } from 'cell-router/source';
 
 import { SessionModel } from './Session';
 import { UserModel } from './User';
-import { ActivityModel } from './Activity';
+import { ActivityModel, OwnActivityModel } from './Activity';
 
 export const history = new History();
 export const session = new SessionModel();
 export const user = new UserModel();
 export const activity = new ActivityModel(session);
+export const ownActivity = new OwnActivityModel(session);
 
 export * from './static';
 export * from './service';

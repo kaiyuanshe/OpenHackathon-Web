@@ -56,7 +56,7 @@ export class SessionModel extends BaseModel {
     async signIn(data: Record<string, any>) {
         const { body } = await service.post<Session>('login', data);
 
-        setToken(data.token);
+        setToken(body.token, body.tokenExpiredAt);
 
         return this.save(body);
     }

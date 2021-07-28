@@ -1,4 +1,11 @@
-import { component, mixin, watch, attribute, createCell } from 'web-cell';
+import {
+    component,
+    mixin,
+    watch,
+    attribute,
+    createCell,
+    Fragment
+} from 'web-cell';
 import { observer } from 'mobx-web-cell';
 import { textJoin } from 'web-utility/source/i18n';
 import { formToJSON } from 'web-utility/source/DOM';
@@ -12,7 +19,7 @@ import { Form } from 'boot-cell/source/Form/Form';
 import { FormField } from 'boot-cell/source/Form/FormField';
 
 import { words } from '../../i18n';
-import { activity, APIError, session, TeamMember } from '../../model';
+import { APIError, TeamMember, history, session, activity } from '../../model';
 
 @observer
 @component({
@@ -55,6 +62,19 @@ export class TeamDetail extends mixin() {
             }
     }
 
+    async disbandTeam() {
+        const { activity: name, tid } = this,
+            { displayName } = activity.team.current;
+        if (
+            !self.confirm(textJoin(words.disband, displayName, words.team, '?'))
+        )
+            return;
+
+        await activity.team.deleteOne(tid);
+
+        history.replace(`activity?name=${name}`);
+    }
+
     async joinTeam(event: Event) {
         event.preventDefault(), event.stopPropagation();
 
@@ -70,6 +90,25 @@ export class TeamDetail extends mixin() {
     async leaveTeam() {
         await activity.team.members.leave();
         await activity.team.members.getNextPage({}, true);
+    }
+
+    renderManager() {
+        const { activity: name, tid } = this;
+
+        return (
+            <>
+                <Button
+                    block
+                    color="warning"
+                    href={`team/edit?${buildURLData({ activity: name, tid })}`}
+                >
+                    {textJoin(words.edit, words.team, words.profile)}
+                </Button>
+                <Button block color="danger" onClick={this.disbandTeam}>
+                    {textJoin(words.disband, words.team)}
+                </Button>
+            </>
+        );
     }
 
     renderMember({ user: { id, photo, nickname } }: TeamMember) {
@@ -93,6 +132,7 @@ export class TeamDetail extends mixin() {
                 />
                 <Button
                     type="submit"
+                    block
                     color="primary"
                     onClick={() => (this.joining_team_form = false)}
                 >
@@ -100,6 +140,7 @@ export class TeamDetail extends mixin() {
                 </Button>
                 &nbsp;
                 <Button
+                    block
                     color="secondary"
                     onClick={() => (this.joining_team_form = false)}
                 >
@@ -108,6 +149,7 @@ export class TeamDetail extends mixin() {
             </Form>
         ) : (
             <Button
+                block
                 color="success"
                 onClick={() => (this.joining_team_form = true)}
             >
@@ -122,32 +164,31 @@ export class TeamDetail extends mixin() {
         return status === 'approved' ? (
             role === 'admin' ? (
                 <Button
-                    color="link"
+                    block
+                    color="primary"
                     href={'team/members?' + buildURLData({ activity, tid })}
                 >
                     {words.manage_team_members}
                 </Button>
             ) : (
-                <Button color="danger" onClick={this.leaveTeam}>
+                <Button block color="danger" onClick={this.leaveTeam}>
                     {words.leave_team}
                 </Button>
             )
         ) : status === 'pendingApproval' ? (
             <div>
                 <p>{words.waiting_approval_from_team_admin}</p>
-                <Button color="danger" onClick={this.leaveTeam}>
+                <Button block color="danger" onClick={this.leaveTeam}>
                     {words.cancel_joining}
                 </Button>
             </div>
-        ) : (
-            ''
-        );
+        ) : null;
     }
 
     render() {
         const { displayName: hackathonDisplayName, name: hackathonName } =
             activity.current;
-        const { id, logo, displayName, description } = activity.team.current;
+        const { logo, displayName, description } = activity.team.current;
         const { members } = activity.team;
         const loading = activity.loading || activity.team.loading;
         const { user } = session;
@@ -166,27 +207,16 @@ export class TeamDetail extends mixin() {
                 <div className="d-lg-flex">
                     <div className="border bg-white mr-lg-3 mb-3 mb-lg-0">
                         <header className="p-3">
-                            <img className="d-block m-auto" src={logo} />
+                            <img
+                                className="d-block m-auto"
+                                style={{ maxWidth: '15rem' }}
+                                src={logo}
+                            />
                             <h2>{displayName}</h2>
                             <p>{description}</p>
-                            {members.current.role !== 'admin' ? null : (
-                                <Button
-                                    href={
-                                        'team/edit?' +
-                                        buildURLData({
-                                            activity: hackathonName,
-                                            tid: id
-                                        })
-                                    }
-                                    color="link"
-                                >
-                                    {textJoin(
-                                        words.edit,
-                                        words.team,
-                                        words.profile
-                                    )}
-                                </Button>
-                            )}
+                            {members.current.role !== 'admin'
+                                ? null
+                                : this.renderManager()}
                         </header>
                         <div className="p-3 border-top">
                             <BGIcon type="square" name="users" />

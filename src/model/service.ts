@@ -13,18 +13,27 @@ export type APIError = HTTPError<ErrorData>;
 
 const { localStorage } = self;
 
-var token: string = localStorage.token || '';
+var token: string = localStorage.token || '',
+    expiredAt = new Date(localStorage.expiredAt || '');
 
-export const setToken = (raw: string) => (localStorage.token = token = raw);
+export function setToken(raw: string, deadline: string) {
+    localStorage.token = token = raw;
+    localStorage.expiredAt = expiredAt = new Date(deadline);
+}
 
 export const service = new HTTPClient({
     baseURI: 'https://hackathon-api.kaiyuanshe.cn/v2/',
     responseType: 'json'
 }).use(async ({ request, response }, next) => {
-    if (token)
+    if (token) {
+        if (Date.now() >= +expiredAt)
+            throw Object.assign(new URIError('Token timed out'), {
+                status: 401
+            });
         (request.headers = request.headers || {})[
             'Authorization'
         ] = `token ${token}`;
+    }
 
     try {
         await next();
