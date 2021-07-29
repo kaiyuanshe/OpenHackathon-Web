@@ -42,27 +42,27 @@ export class TeamEdit extends mixin() {
     saveTeam = async (event: Event) => {
         event.preventDefault(), event.stopPropagation();
 
-        const { activity: aid, tid } = this,
-            form = event.target as HTMLFormElement;
+        const form = event.target as HTMLFormElement;
         const { displayName, ...data } = formToJSON<Team>(form),
-            operation = tid ? words.edit : words.create;
+            operation = this.tid ? words.edit : words.create;
 
-        await activity.team.updateOne({
+        const { id } = await activity.team.updateOne({
             displayName: displayName + '',
-            ...data,
-            id: tid
+            ...data
         });
         self.alert(textJoin(operation, displayName, words.team, words.success));
 
-        history.push(`team?${buildURLData({ activity: aid, tid })}`);
+        history.push(
+            `team?${buildURLData({ activity: this.activity, tid: id })}`
+        );
     };
 
     render() {
         const { displayName: hackathonDisplayName, name: hackathonName } =
             activity.current;
-        const { displayName, description, autoApprove } =
-            (activity.team && activity.team.current) || {};
-        const loading = activity.loading || activity.team.loading;
+        const { id, displayName, description, autoApprove } =
+            activity.team?.current || {};
+        const loading = activity.loading || activity.team?.loading;
 
         return (
             <SpinnerBox className="container" cover={loading}>
@@ -82,6 +82,7 @@ export class TeamEdit extends mixin() {
                 <div className="d-lg-flex">
                     <div className="border bg-white flex-fill p-3">
                         <Form onSubmit={this.saveTeam}>
+                            <input type="hidden" name="id" value={id} />
                             <FormField
                                 label={textJoin(words.team, words.name)}
                                 name="displayName"

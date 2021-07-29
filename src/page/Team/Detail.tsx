@@ -62,7 +62,7 @@ export class TeamDetail extends mixin() {
             }
     }
 
-    async disbandTeam() {
+    disbandTeam = async () => {
         const { activity: name, tid } = this,
             { displayName } = activity.team.current;
         if (
@@ -73,7 +73,7 @@ export class TeamDetail extends mixin() {
         await activity.team.deleteOne(tid);
 
         history.replace(`activity?name=${name}`);
-    }
+    };
 
     async joinTeam(event: Event) {
         event.preventDefault(), event.stopPropagation();
