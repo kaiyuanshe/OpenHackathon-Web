@@ -67,7 +67,7 @@ export enum en_US {
     please_complete_all_mandatory_fields_before_you_proceed = 'Please complete all mandatory fields before you proceed',
     personal_profile = 'Personal Profile',
     sign_up = 'Sign Up',
-    linkein_or_cv = 'LinkeIn/CV',
+    linkein_or_cv = 'LinkeIn/CV/Blog',
     social_media_account_or_twitter_or_weibo = 'Social Media Account/Twitter/Weibo',
     which_of_these_particular_areas_are_you_interested_in_going_into_this_event = 'Which of these particular areas are you interested in going into this event?',
     what_do_you_hope_to_learn_from_the_workshops = 'What do you hope to learn from the workshops',
