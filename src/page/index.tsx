@@ -44,8 +44,11 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
         },
         {
             paths: ['activity/register'],
-            component: async () =>
-                (await import('./Activity/Register')).RegisterPage
+            component: async () => {
+                const { user } = session;
+                if (!user) await this.signIn();
+                return (await import('./Activity/Register')).RegisterPage;
+            }
         },
         {
             paths: ['user'],

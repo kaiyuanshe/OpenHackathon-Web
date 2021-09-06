@@ -20,6 +20,8 @@
     "rules": {
         "no-var": "off",
         "no-unused-vars": "warn",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off"
     }
 }
