@@ -4,7 +4,7 @@
     "private": true,
     "main": "src/index.html",
     "dependencies": {
-        "@authing/native-js-ui-components": "^2.4.32",
+        "@authing/native-js-ui-components": "^2.4.48",
         "boot-cell": "^1.9.5",
         "browser-unhandled-rejection": "^1.0.2",
         "cell-router": "^2.0.4",
