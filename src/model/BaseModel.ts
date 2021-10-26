@@ -66,18 +66,19 @@ export abstract class TableModel<
         orderby ??= this.orderBy;
         top ??= this.pageSize;
 
-        const currentLink = this.nextPage || this.multipleBase,
+        const currentLink =
+                this.nextPage ||
+                `${this.multipleBase}?${buildURLData({
+                    ...filter,
+                    search,
+                    orderby,
+                    top
+                })}`,
             queryId = ++this.queryId;
         const {
             body: { nextLink, value }
-        } = await service.get<PageData<T>>(
-            `${currentLink}?${buildURLData({
-                ...filter,
-                search,
-                orderby,
-                top
-            })}`
-        );
+        } = await service.get<PageData<T>>(currentLink);
+
         if (this.queryId !== queryId) return this.list;
 
         this.keyWord = search;

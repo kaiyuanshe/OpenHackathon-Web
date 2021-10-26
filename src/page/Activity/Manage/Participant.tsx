@@ -62,6 +62,7 @@ export class ManageParticipant extends mixin<ManageParticipantProps>() {
 
     handleAutoApprove = async ({ target }: Event) =>
         activity.updateOne({
+            id: activity.current.name,
             autoApprove: (target as HTMLInputElement).checked
         });
 
