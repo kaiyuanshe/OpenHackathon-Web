@@ -165,7 +165,7 @@ export class PageRouter extends mixin<{}, PageRouterState>() {
                     brand={
                         <img
                             alt={words.open_hackathon_platform}
-                            src="https://hacking.kaiyuanshe.cn/static/images/logo.jpg"
+                            src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
                             style={{ width: '2rem' }}
                         />
                     }

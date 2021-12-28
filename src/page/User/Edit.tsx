@@ -16,7 +16,7 @@ export class UserEdit extends mixin() {
     connectedCallback() {
         this.classList.add('d-block', 'py-5');
         this.style.background =
-            'url(https://hacking.kaiyuanshe.cn/static/pic/profile-back-pattern.png)';
+            'url(https://hackathon-api.static.kaiyuanshe.cn/static/profile-back-pattern.png)';
 
         session.getUser();
 
