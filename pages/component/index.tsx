@@ -11,10 +11,10 @@ import {
   EditorHTML,
 } from 'idea-react';
 
-import PageHead from '../components/PageHead';
-import RichEditData from './api/rich-edit.json';
+import PageHead from '../../components/PageHead';
+import RichEditData from '../api/rich-edit.json';
 
-const Editor = dynamic(() => import('../components/Editor'), { ssr: false });
+const Editor = dynamic(() => import('../../components/Editor'), { ssr: false });
 
 export default function ComponentPage() {
   const title = 'Component examples',

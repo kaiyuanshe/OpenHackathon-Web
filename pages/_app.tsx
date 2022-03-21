@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import Image from 'next/image';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import Link from 'next/link';
+import { Container, Image, Nav, Navbar } from 'react-bootstrap';
 
 import '../styles/globals.less';
 
