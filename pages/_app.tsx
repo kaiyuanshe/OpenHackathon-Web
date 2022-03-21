@@ -17,10 +17,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Container>
           <Navbar.Brand href="/">{Name}</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/component">Component</Nav.Link>
-            <Nav.Link href="https://github.com/idea2app/nextjs-reactbootstrap-ts">
-              Source code
-            </Nav.Link>
+            <Link href="/component" passHref>
+              <Nav.Link>Component</Nav.Link>
+            </Link>
+            <Link
+              href="https://github.com/idea2app/nextjs-reactbootstrap-ts"
+              passHref
+            >
+              <Nav.Link>Source code</Nav.Link>
+            </Link>
           </Nav>
         </Container>
       </Navbar>
