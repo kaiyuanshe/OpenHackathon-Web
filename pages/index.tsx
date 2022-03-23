@@ -1,21 +1,48 @@
-import type { InferGetStaticPropsType } from 'next';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import type { InferGetServerSidePropsType } from 'next';
+import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
 import styles from '../styles/Home.module.less';
+import { ListData, request } from './api/core';
+import { Activity } from './api/Activity';
 import { mainNav, framework } from './api/home';
 
-export function getStaticProps() {
-  return { props: { mainNav, framework } };
+export async function getServerSideProps() {
+  const { value } = await request<ListData<Activity>>('hackathons?top=10');
+
+  return { props: { activities: value, mainNav, framework } };
 }
 
 const HomePage = ({
+  activities,
   mainNav,
   framework,
-}: InferGetStaticPropsType<typeof getStaticProps>) => (
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <>
     <PageHead />
 
+    <Container>
+      <Carousel>
+        {activities
+          .filter(({ banners }) => banners?.[0])
+          .map(
+            ({ name: key, displayName, ribbon, banners: [{ uri, name }] }) => (
+              <Carousel.Item key={key}>
+                <img
+                  className="d-block w-100"
+                  style={{ height: '80vh', objectFit: 'cover' }}
+                  src={uri}
+                  alt={name}
+                />
+                <Carousel.Caption className="text-shadow">
+                  <h3>{displayName}</h3>
+                  <p>{ribbon}</p>
+                </Carousel.Caption>
+              </Carousel.Item>
+            ),
+          )}
+      </Carousel>
+    </Container>
     <main
       className={`flex-fill d-flex flex-column justify-content-center align-items-center ${styles.main}`}
     >
