@@ -13,9 +13,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Navbar bg="primary" variant="dark" fixed="top">
+      <Navbar bg="dark" variant="dark" fixed="top">
         <Container>
-          <Navbar.Brand href="/">{Name}</Navbar.Brand>
+          <Navbar.Brand href="/">
+            <Image
+              className="align-top me-3"
+              style={{ width: '2rem' }}
+              src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
+            />
+            {Name}
+          </Navbar.Brand>
           <Nav className="me-auto">
             <Link href="/component" passHref>
               <Nav.Link>Component</Nav.Link>
