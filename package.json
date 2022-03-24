@@ -22,13 +22,19 @@
     "@editorjs/list": "^1.7.0",
     "@editorjs/paragraph": "^2.8.0",
     "@editorjs/quote": "^2.4.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-fontawesome": "^0.1.18",
+    "classnames": "^2.3.1",
     "editorjs-html": "^3.4.2",
     "idea-react": "^0.10.3",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-bootstrap": "^2.2.1",
     "react-dom": "17.0.2",
-    "react-editor-js": "^2.0.6"
+    "react-editor-js": "^2.0.6",
+    "web-utility": "^3.6.0"
   },
   "devDependencies": {
     "@jest/types": "^27.5.1",

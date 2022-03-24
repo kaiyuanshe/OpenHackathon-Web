@@ -2,6 +2,7 @@ import type { InferGetServerSidePropsType } from 'next';
 import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
+import { ActivityCard } from '../components/ActivityCard';
 import styles from '../styles/Home.module.less';
 import { ListData, request } from './api/core';
 import { Activity } from './api/Activity';
@@ -21,7 +22,7 @@ const HomePage = ({
   <>
     <PageHead />
 
-    <Container>
+    <Container className="mt-4">
       <Carousel>
         {activities
           .filter(({ banners }) => banners?.[0])
@@ -43,6 +44,23 @@ const HomePage = ({
           )}
       </Carousel>
     </Container>
+
+    <section className="my-5 py-5 bg-light text-center">
+      <Container className="text-start">
+        <Row className="g-4" xs={1} sm={2} lg={3} xxl={4}>
+          {activities.slice(0, 6).map(activity => (
+            <Col key={activity.name}>
+              <ActivityCard className="h-100" {...activity} />
+            </Col>
+          ))}
+        </Row>
+      </Container>
+
+      <Button variant="outline-primary" size="sm" className="px-5 mt-5">
+        更多活动
+      </Button>
+    </section>
+
     <main
       className={`flex-fill d-flex flex-column justify-content-center align-items-center ${styles.main}`}
     >
