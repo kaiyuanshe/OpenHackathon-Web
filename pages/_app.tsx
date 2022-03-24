@@ -28,10 +28,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               <Nav.Link>Component</Nav.Link>
             </Link>
             <Link
-              href="https://github.com/idea2app/nextjs-reactbootstrap-ts"
+              href="https://github.com/kaiyuanshe/OpenHackathon-Web"
               passHref
             >
-              <Nav.Link>Source code</Nav.Link>
+              <Nav.Link target="_blank">开源代码</Nav.Link>
             </Link>
           </Nav>
         </Container>
@@ -44,14 +44,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <footer className="flex-fill d-flex justify-content-center align-items-center border-top py-4">
         <a
           className="flex-fill d-flex justify-content-center align-items-center"
-          href="https://vercel.com?utm_source=create-next-app&amp;utm_medium=default-template&amp;utm_campaign=create-next-app"
+          href="https://github.com/idea2app/Next-Bootstrap-ts"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by
+          由
           <span className="mx-2">
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <Image src="/nextjs.png" alt="Next Logo" width={48} />
           </span>
+          idea2app 脚手架强力驱动
         </a>
       </footer>
     </>

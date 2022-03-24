@@ -1,46 +1,77 @@
-export const mainNav = [
-  {
-    title: 'Documentation',
-    link: 'https://nextjs.org/docs',
-    summary: 'Find in-depth information about Next.js features and API.',
-  },
-  {
-    title: 'Learn',
-    link: 'https://nextjs.org/learn',
-    summary: 'Learn about Next.js in an interactive course with quizzes!',
-  },
-  {
-    title: 'Examples',
-    link: 'https://github.com/vercel/next.js/tree/master/examples',
-    summary: 'Discover and deploy boilerplate example Next.js projects.',
-  },
-  {
-    title: 'Deploy',
-    link: 'https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app',
-    summary: 'Instantly deploy your Next.js site to a public URL with Vercel.',
-  },
-];
+export interface Organization {
+  name: string;
+  url: string;
+  logo: string;
+}
 
-export const framework = [
-  {
-    title: 'Next.js',
-    summary: 'The React Framework for Production.',
-    logo: 'nextjs.png',
-    link: 'https://nextjs.org/',
-    repository: 'https://github.com/vercel/next.js',
-  },
-  {
-    title: 'React Bootstrap',
-    summary: 'The most popular front-end framework Rebuilt for React.',
-    logo: 'reactbootstrap.svg',
-    link: 'https://react-bootstrap.github.io/',
-    repository: 'https://github.com/react-bootstrap/react-bootstrap',
-  },
-  {
-    title: 'TypeScript',
-    summary: 'TypeScript is JavaScript with syntax for types.',
-    logo: 'typescript.png',
-    link: 'https://www.typescriptlang.org/',
-    repository: 'https://github.com/microsoft/TypeScript',
-  },
-];
+export enum OrganizationType {
+  sponsor,
+  host,
+}
+
+export const OrganizationTypeName = {
+  [OrganizationType.sponsor]: '赞助伙伴',
+  [OrganizationType.host]: '合作主办',
+};
+
+export const partner: Record<OrganizationType, Organization[]> = {
+  [OrganizationType.sponsor]: [
+    {
+      name: '华为云',
+      url: 'https://www.huaweicloud.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/huawei.png',
+    },
+    {
+      name: '微软',
+      url: 'https://www.microsoft.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/microsoft.png',
+    },
+    {
+      name: 'Authing',
+      url: 'https://authing.cn/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/authing.png',
+    },
+  ],
+  [OrganizationType.host]: [
+    {
+      name: '微软',
+      url: 'https://www.microsoft.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/microsoft.png',
+    },
+    {
+      name: 'Gitcafe',
+      url: 'https://gitcafe.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/gitcafe-small.png',
+    },
+    {
+      name: '优麒麟',
+      url: 'https://www.ubuntukylin.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/UbuntuKylinnew.png',
+    },
+    {
+      name: '灵雀云',
+      url: 'http://www.alauda.cn/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/alauda-small.png',
+    },
+    {
+      name: '极客学院',
+      url: 'http://www.jikexueyuan.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/jikexueyuan.png',
+    },
+    {
+      name: 'JStorm',
+      url: 'https://github.com/alibaba/jstorm/wiki',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/jstorm-small.png',
+    },
+    {
+      name: '微创科技',
+      url: 'https://www.wicresoft.com/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/wicresoft-small.png',
+    },
+    {
+      name: '聚合数据',
+      url: 'https://www.juhe.cn/',
+      logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/juhe.png',
+    },
+  ],
+};
