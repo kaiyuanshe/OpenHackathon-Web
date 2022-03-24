@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container, Image, Nav, Navbar } from 'react-bootstrap';
+import { Container, Button, Image, Nav, Navbar } from 'react-bootstrap';
 
 import '../styles/globals.less';
 
@@ -23,17 +23,25 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             />
             {Name}
           </Navbar.Brand>
-          <Nav className="me-auto">
-            <Link href="/component" passHref>
-              <Nav.Link>Component</Nav.Link>
-            </Link>
-            <Link
-              href="https://github.com/kaiyuanshe/OpenHackathon-Web"
-              passHref
-            >
-              <Nav.Link target="_blank">开源代码</Nav.Link>
-            </Link>
-          </Nav>
+
+          <Navbar.Toggle />
+
+          <Navbar.Collapse className="justify-content-end">
+            <Nav className="me-auto">
+              <Link href="/component" passHref>
+                <Nav.Link>Component</Nav.Link>
+              </Link>
+              <Link
+                href="https://github.com/kaiyuanshe/OpenHackathon-Web"
+                passHref
+              >
+                <Nav.Link target="_blank">开源代码</Nav.Link>
+              </Link>
+            </Nav>
+            <div>
+              <Button href="/user/sign-in/">登录</Button>
+            </div>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
 
