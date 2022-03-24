@@ -1,23 +1,20 @@
 import type { InferGetServerSidePropsType } from 'next';
-import { Container, Row, Col, Card, Button, Carousel } from 'react-bootstrap';
+import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
 import { ActivityCard } from '../components/ActivityCard';
-import styles from '../styles/Home.module.less';
 import { ListData, request } from './api/core';
 import { Activity } from './api/Activity';
-import { mainNav, framework } from './api/home';
+import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
   const { value } = await request<ListData<Activity>>('hackathons?top=10');
 
-  return { props: { activities: value, mainNav, framework } };
+  return { props: { activities: value } };
 }
 
 const HomePage = ({
   activities,
-  mainNav,
-  framework,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <>
     <PageHead />
@@ -61,67 +58,31 @@ const HomePage = ({
       </Button>
     </section>
 
-    <main
-      className={`flex-fill d-flex flex-column justify-content-center align-items-center ${styles.main}`}
-    >
-      <h1 className={`m-0 text-center ${styles.title}`}>
-        Welcome to
-        <a className="text-primary mx-2" href="https://nextjs.org">
-          Next.js!
-        </a>
-      </h1>
-
-      <p className={`text-center fs-4 ${styles.description}`}>
-        Get started by editing
-        <code className={`mx-2 rounded-3 bg-light ${styles.code}`}>
-          pages/index.tsx
-        </code>
-      </p>
-
-      <div
-        className={`d-flex flex-wrap flex-column flex-sm-row justify-content-center align-items-center ${styles.grid}`}
-      >
-        {mainNav.map(({ link, title, summary }) => (
-          <Card
-            key={link}
-            className={`m-3 p-4 rounded-3 border ${styles.card}`}
-            tabIndex={-1}
+    <Container className="text-center">
+      {Object.entries(partner).map(([type, list]) => (
+        <>
+          <h3 className="my-5">
+            {OrganizationTypeName[+type as OrganizationType]}
+          </h3>
+          <Row
+            as="ul"
+            className="list-unstyled justify-content-around g-4"
+            xs={2}
+            sm={3}
+            md={4}
+            xl={6}
           >
-            <Card.Body>
-              <Card.Title as="h2" className="fs-4 mb-3">
-                <a href={link} className="stretched-link">
-                  {title} &rarr;
+            {list.map(({ name, url, logo }) => (
+              <Col as="li" key={name} title={name}>
+                <a target="_blank" rel="noreferrer" href={url}>
+                  <Image fluid src={logo} />
                 </a>
-              </Card.Title>
-              <Card.Text className="fs-5">{summary}</Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
-
-      <h2 className="my-4 text-center">Upstream projects</h2>
-      <Row>
-        {framework.map(({ logo, title, summary, link, repository }) => (
-          <Col sm={4} key={title}>
-            <Card className={`h-100 ${styles.card}`}>
-              <Card.Img variant="top" src={logo} className={styles.cardImg} />
-              <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{summary}</Card.Text>
-              </Card.Body>
-              <Card.Footer className="d-flex justify-content-around">
-                <Button variant="primary" href={link}>
-                  Home Page
-                </Button>
-                <Button variant="success" href={repository}>
-                  Source Code
-                </Button>
-              </Card.Footer>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </main>
+              </Col>
+            ))}
+          </Row>
+        </>
+      ))}
+    </Container>
   </>
 );
 
