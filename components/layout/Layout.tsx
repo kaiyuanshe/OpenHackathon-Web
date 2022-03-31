@@ -1,4 +1,6 @@
 import MainNavigation from './MainNavigation';
+import React from 'react';
+import { Image } from 'react-bootstrap';
 
 const Layout : React.FC = (props) => {
   return <>
