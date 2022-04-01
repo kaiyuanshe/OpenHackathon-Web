@@ -7,7 +7,7 @@ const MainNavigation = () => {
   return <Navbar bg="dark" variant="dark" fixed="top">
     <Container>
       <Navbar.Brand href="/">
-        <Image
+        <img
           className="align-top me-3"
           style={{ width: '2rem' }}
           src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
@@ -18,11 +18,11 @@ const MainNavigation = () => {
         <Link href="/component" passHref>
           <Nav.Link>Component</Nav.Link>
         </Link>
-        <Link
-          href="https://github.com/kaiyuanshe/OpenHackathon-Web"
-          passHref
-        >
+        <Link href="https://github.com/kaiyuanshe/OpenHackathon-Web" passHref>
           <Nav.Link target="_blank">开源代码</Nav.Link>
+        </Link>
+        <Link href="https://github.com/kaiyuanshe/open-hackathon/wiki/%E5%BC%80%E6%94%BE%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97" passHref>
+          <Nav.Link target="_blank">新手帮助</Nav.Link>
         </Link>
       </Nav>
     </Container>
