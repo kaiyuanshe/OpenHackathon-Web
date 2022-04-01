@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { InferGetServerSidePropsType } from 'next';
 import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
@@ -60,7 +61,7 @@ const HomePage = ({
 
     <Container className="text-center">
       {Object.entries(partner).map(([type, list]) => (
-        <>
+        <Fragment key={type}>
           <h3 className="my-5">
             {OrganizationTypeName[+type as OrganizationType]}
           </h3>
@@ -80,7 +81,7 @@ const HomePage = ({
               </Col>
             ))}
           </Row>
-        </>
+        </Fragment>
       ))}
     </Container>
   </>
