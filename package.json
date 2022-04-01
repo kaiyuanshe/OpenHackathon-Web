@@ -14,7 +14,7 @@
     "e2e": "jest"
   },
   "dependencies": {
-    "@authing/react-ui-components": "^3.0.31",
+    "@authing/native-js-ui-components": "^3.0.32",
     "@editorjs/code": "^2.7.0",
     "@editorjs/editorjs": "^2.23.2",
     "@editorjs/header": "^2.6.2",
@@ -31,6 +31,7 @@
     "editorjs-html": "^3.4.2",
     "idea-react": "^0.10.3",
     "next": "12.1.0",
+    "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-bootstrap": "^2.2.1",
     "react-dom": "17.0.2",

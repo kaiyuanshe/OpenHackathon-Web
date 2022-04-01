@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Container, Button, Image, Nav, Navbar } from 'react-bootstrap';
 
+import { UserBar } from '../components/UserBar';
 import '../styles/globals.less';
 
 const Name = process.env.NEXT_PUBLIC_SITE_NAME || '';
@@ -38,9 +39,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <Nav.Link target="_blank">开源代码</Nav.Link>
               </Link>
             </Nav>
-            <div>
-              <Button href="/user/sign-in/">登录</Button>
-            </div>
+
+            <UserBar />
           </Navbar.Collapse>
         </Container>
       </Navbar>
