@@ -11,9 +11,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
-        <div className="mt-5 pt-2">
           <Component {...pageProps} />
-        </div>
       </Layout>
     </>
   );

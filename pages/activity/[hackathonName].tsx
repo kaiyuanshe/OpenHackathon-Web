@@ -14,7 +14,7 @@ const HackathonActivity = ({ activity }: InferGetServerSidePropsType<typeof getS
 
 export async function getServerSideProps(context: GetServerSidePropsContext<{ hackathonName: string }>) {
   const hackathonName: string = context.params!.hackathonName;
-  const activity: Activity = await request<Activity>('/activity/' + hackathonName);
+  const activity: Activity = await request<Activity>('hackathon/' + hackathonName);
   return { props: { activity } };
 }
 

@@ -5,7 +5,7 @@ import { Image } from 'react-bootstrap';
 const Layout : React.FC = (props) => {
   return <>
     <MainNavigation />
-    <main>{props.children}</main>
+    <main className="mt-5 pt-5">{props.children}</main>
     <footer className="flex-fill d-flex justify-content-center align-items-center border-top py-4">
       <a
         className="flex-fill d-flex justify-content-center align-items-center"
