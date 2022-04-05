@@ -2,10 +2,10 @@ import MainNavigation from './MainNavigation';
 import React from 'react';
 import { Image } from 'react-bootstrap';
 
-const Layout : React.FC = (props) => {
+const Layout : React.FC = ({children}) => {
   return <>
     <MainNavigation />
-    <main className="mt-5 pt-5">{props.children}</main>
+    <main className="mt-5 pt-5">{children}</main>
     <footer className="flex-fill d-flex justify-content-center align-items-center border-top py-4">
       <a
         className="flex-fill d-flex justify-content-center align-items-center"
