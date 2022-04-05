@@ -1,3 +1,5 @@
+import { Col } from 'react-bootstrap';
+
 import { Team } from '../models/Team';
 
 export const TeamCard = ({

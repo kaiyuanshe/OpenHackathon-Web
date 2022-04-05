@@ -1,6 +1,6 @@
-import MainNavigation from './MainNavigation';
 import React, { PropsWithChildren } from 'react';
 import { Image } from 'react-bootstrap';
+import { MainNavigation } from './MainNavigation';
 
 export const Layout: React.FC = ({ children }: PropsWithChildren) => (
     <>
