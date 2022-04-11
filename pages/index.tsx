@@ -27,7 +27,7 @@ const HomePage = ({
           .map(
             ({ name: key, displayName, ribbon, banners: [{ uri, name }] }) => (
               <Carousel.Item key={key}>
-                <img
+                <Image
                   className="d-block w-100"
                   style={{ height: '80vh', objectFit: 'cover' }}
                   src={uri}
@@ -76,7 +76,7 @@ const HomePage = ({
             {list.map(({ name, url, logo }) => (
               <Col as="li" key={name} title={name}>
                 <a target="_blank" rel="noreferrer" href={url}>
-                  <Image fluid src={logo} />
+                  <Image fluid src={logo} alt={name} />
                 </a>
               </Col>
             ))}
