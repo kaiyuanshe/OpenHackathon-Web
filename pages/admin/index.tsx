@@ -11,7 +11,7 @@ import { requestClient } from '../api/core';
 
 interface State {
   loading?: boolean;
-  nextLink?: string;
+  nextLink?: string | null;
   list: Activity[];
 }
 
@@ -34,6 +34,8 @@ export default class AdminPage extends PureComponent<{}, State> {
         nextLink,
         list: [...list, ...value],
       });
+    } catch {
+      this.setState({ nextLink: null });
     } finally {
       this.setState({ loading: false });
     }
