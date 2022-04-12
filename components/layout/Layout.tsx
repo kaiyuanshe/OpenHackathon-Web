@@ -7,7 +7,7 @@ export const Layout: React.FC = ({ children }: PropsWithChildren<{}>) => (
   <>
     <MainNavigation />
 
-    <main className="mt-5 pt-5">{children}</main>
+    <main className="mt-5 py-4">{children}</main>
 
     <footer className="flex-fill d-flex justify-content-center align-items-center border-top py-4">
       <a

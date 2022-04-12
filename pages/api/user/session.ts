@@ -1,3 +1,4 @@
+import { cache } from 'web-utility';
 import { destroyCookie } from 'nookies';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -13,7 +14,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         undefined,
         { req, res },
       );
-      return res.json(user);
+      return res.json({
+        ...user,
+        token: readCookie(req, 'token'),
+      });
     }
     case 'POST': {
       const user = await request<User>('login', 'POST', req.body, {
@@ -33,3 +37,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 };
+
+export const getClientSession = cache(async clean => {
+  const user = await request<User>('user/session');
+
+  setTimeout(clean, +new Date(user.tokenExpiredAt) - Date.now());
+
+  return user;
+}, 'Client Session');

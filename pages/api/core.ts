@@ -2,12 +2,15 @@ import { ServerResponse } from 'http';
 import { setCookie } from 'nookies';
 import { GetServerSidePropsContext } from 'next';
 
+import { getClientSession } from './user/session';
+
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
+const BackHost = process.env.NEXT_PUBLIC_API_HOST;
 const Host =
   typeof window !== 'undefined'
     ? new URL('/api/', location.origin) + ''
-    : process.env.NEXT_PUBLIC_API_HOST;
+    : BackHost;
 
 export async function request<T>(
   path: string,
@@ -31,7 +34,7 @@ export async function request<T>(
     headers,
   });
 
-  const data = await response.json();
+  const data = response.status !== 204 ? await response.json() : {};
 
   if (response.status > 299) {
     if (context?.res) {
@@ -42,6 +45,23 @@ export async function request<T>(
     throw new URIError(response.statusText);
   }
   return data as T;
+}
+
+export async function requestClient<T>(
+  path: string,
+  method?: HTTPMethod,
+  body?: any,
+  headers: Record<string, any> = {},
+) {
+  const { token } = await getClientSession();
+
+  return request<T>(
+    new URL(path, BackHost) + '',
+    method,
+    body,
+    {},
+    { Authorization: `token ${token}`, ...headers },
+  );
 }
 
 const Env = process.env.NODE_ENV;

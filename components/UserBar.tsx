@@ -3,6 +3,7 @@ import { Button, Dropdown } from 'react-bootstrap';
 
 import { User } from '../models/User';
 import { request } from '../pages/api/core';
+import { getClientSession } from '../pages/api/user/session';
 
 interface State {
   user?: User;
@@ -13,7 +14,7 @@ export class UserBar extends PureComponent<{}, State> {
 
   async componentDidMount() {
     try {
-      const user = await request<User>('user/session');
+      const user = await getClientSession();
 
       this.setState({ user });
     } catch {}

@@ -9,7 +9,7 @@ export interface Activity extends Base {
   location: string;
   banners: Media[];
   readOnly: boolean;
-  status: string;
+  status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
   maxEnrollment: number;
