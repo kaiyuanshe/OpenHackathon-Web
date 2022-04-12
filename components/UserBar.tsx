@@ -1,11 +1,11 @@
 import { PureComponent } from 'react';
 import { Button, Dropdown } from 'react-bootstrap';
 
+import { User } from '../models/User';
 import { request } from '../pages/api/core';
-import { Session } from '../pages/api/user/session';
 
 interface State {
-  user?: Session;
+  user?: User;
 }
 
 export class UserBar extends PureComponent<{}, State> {
@@ -13,7 +13,7 @@ export class UserBar extends PureComponent<{}, State> {
 
   async componentDidMount() {
     try {
-      const user = await request<Session>('user/session');
+      const user = await request<User>('user/session');
 
       this.setState({ user });
     } catch {}

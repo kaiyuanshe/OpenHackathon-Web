@@ -1,4 +1,4 @@
-import { Base, Media } from './core';
+import { Base, Media } from './Base';
 
 export interface Activity extends Base {
   name: string;

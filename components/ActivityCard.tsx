@@ -9,7 +9,8 @@ import {
   faTags,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Activity } from '../pages/api/Activity';
+import { TimeUnit } from './time';
+import { Activity } from '../models/Activity';
 
 export interface ActivityCardProps extends Activity {
   className: string;
@@ -37,7 +38,7 @@ export function ActivityCard({
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt);
   const eventStartedAtText = eventStart.toLocaleString(),
-    enrollmentDiff = diffTime(enrollmentStart);
+    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
 
   return (
     <Card className={classNames('border-success', className)}>

@@ -4,8 +4,9 @@ import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
 import { ActivityCard } from '../components/ActivityCard';
-import { ListData, request } from './api/core';
-import { Activity } from './api/Activity';
+import { ListData } from '../models/Base';
+import { Activity } from '../models/Activity';
+import { request } from './api/core';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
