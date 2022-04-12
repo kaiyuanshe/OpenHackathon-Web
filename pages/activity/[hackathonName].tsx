@@ -60,7 +60,7 @@ export default function HackathonActivity({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Container>
-      <PageHead title={name} />
+      <PageHead title={displayName} />
 
       <Row xs={1} sm={1} lg={2}>
         <Carousel>
