@@ -11,19 +11,25 @@ import {
 import { convertDatetime } from './time';
 import { Activity } from '../models/Activity';
 import { ActivityEntry } from './ActivityEntry';
+import { ActivityControlProps, ActivityControl } from './ActivityControl';
 
-export interface ActivityCardProps extends Activity {
+export interface ActivityCardProps extends Activity, ActivityControlProps {
   className?: string;
+  controls?: boolean;
 }
 
 export function ActivityCard({
   className,
+  controls,
   name,
   displayName,
   eventStartedAt,
   location,
   tags,
   enrollment,
+  status,
+  onPublish,
+  onDelete,
   ...rest
 }: ActivityCardProps) {
   const eventStartedAtText = convertDatetime(eventStartedAt);
@@ -59,7 +65,11 @@ export function ActivityCard({
           <Col className="text-end">{enrollment}人已报名</Col>
         </Row>
 
-        <ActivityEntry {...{ ...rest, name, eventStartedAt }} />
+        {controls ? (
+          <ActivityControl {...{ name, status, onPublish, onDelete }} />
+        ) : (
+          <ActivityEntry {...{ ...rest, name, eventStartedAt }} />
+        )}
       </Card.Footer>
     </Card>
   );
