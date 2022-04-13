@@ -18,7 +18,7 @@ const UserDetailPage = ({
       }}
     >
       <PageHead title="用户资料" />
-      <UserDetail userInfo={userInfo} />
+      <UserDetail {...userInfo} />
     </main>
   );
 };

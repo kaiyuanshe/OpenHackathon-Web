@@ -24,14 +24,16 @@ export interface UserDetailProps extends User {
   className?: string;
 }
 
-export const UserDetail: React.FC<{ userInfo: UserDetailProps }> = ({
-  userInfo: { nickname, photo, registerSource },
-}) => {
+export const UserDetail: React.FC<UserDetailProps> = ({
+  nickname,
+  photo,
+  registerSource,
+}: UserDetailProps) => {
   const href = 'https://ophapiv2-demo.authing.cn/u';
 
   return (
     <>
-      <Container style={{ minWidth: '32rem' }}>
+      <Container>
         <Row>
           <Col lg="auto">
             <Container className="mb-4">
