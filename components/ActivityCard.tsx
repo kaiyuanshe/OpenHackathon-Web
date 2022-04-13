@@ -1,7 +1,6 @@
-import { diffTime } from 'web-utility';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
@@ -9,35 +8,31 @@ import {
   faTags,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Activity } from '../pages/api/Activity';
+import { convertDatetime } from './time';
+import { Activity } from '../models/Activity';
+import { ActivityEntry } from './ActivityEntry';
+import { ActivityControlProps, ActivityControl } from './ActivityControl';
 
-export interface ActivityCardProps extends Activity {
-  className: string;
+export interface ActivityCardProps extends Activity, ActivityControlProps {
+  className?: string;
+  controls?: boolean;
 }
 
 export function ActivityCard({
   className,
+  controls,
   name,
   displayName,
-  enrollmentStartedAt,
-  enrollmentEndedAt,
   eventStartedAt,
-  eventEndedAt,
-  judgeStartedAt,
-  judgeEndedAt,
   location,
   tags,
   enrollment,
+  status,
+  onPublish,
+  onDelete,
+  ...rest
 }: ActivityCardProps) {
-  const now = Date.now(),
-    enrollmentStart = new Date(enrollmentStartedAt),
-    enrollmentEnd = new Date(enrollmentEndedAt),
-    eventStart = new Date(eventStartedAt),
-    eventEnd = new Date(eventEndedAt),
-    judgeStart = new Date(judgeStartedAt),
-    judgeEnd = new Date(judgeEndedAt);
-  const eventStartedAtText = eventStart.toLocaleString(),
-    enrollmentDiff = diffTime(enrollmentStart);
+  const eventStartedAtText = convertDatetime(eventStartedAt);
 
   return (
     <Card className={classNames('border-success', className)}>
@@ -69,29 +64,12 @@ export function ActivityCard({
           <Col></Col>
           <Col className="text-end">{enrollment}人已报名</Col>
         </Row>
-        <Button
-          className="my-2 w-100"
-          variant={
-            +enrollmentStart < now && now < +enrollmentEnd
-              ? 'primary'
-              : 'secondary'
-          }
-          href={`/activity/${name}`}
-        >
-          {now < +enrollmentStart
-            ? `${enrollmentDiff.distance} ${enrollmentDiff.unit}后开始报名`
-            : now < +enrollmentEnd
-            ? '立即报名'
-            : now < +eventStart
-            ? '报名截止'
-            : now < +eventEnd
-            ? '比赛进行中'
-            : now < +judgeStart
-            ? '作品提交截止'
-            : now < +judgeEnd
-            ? '评委审核中'
-            : '比赛结束'}
-        </Button>
+
+        {controls ? (
+          <ActivityControl {...{ name, status, onPublish, onDelete }} />
+        ) : (
+          <ActivityEntry {...{ ...rest, name, eventStartedAt }} />
+        )}
       </Card.Footer>
     </Card>
   );

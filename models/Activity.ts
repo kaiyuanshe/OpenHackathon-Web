@@ -1,4 +1,4 @@
-import { Base, Media } from './core';
+import { Base, Media } from './Base';
 
 export interface Activity extends Base {
   name: string;
@@ -9,7 +9,7 @@ export interface Activity extends Base {
   location: string;
   banners: Media[];
   readOnly: boolean;
-  status: string;
+  status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
   maxEnrollment: number;
