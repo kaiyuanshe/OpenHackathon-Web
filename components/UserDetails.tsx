@@ -1,14 +1,5 @@
 import classNames from 'classnames';
-import {
-  Container,
-  Row,
-  Col,
-  Tabs,
-  Tab,
-  Card,
-  Image,
-  Button,
-} from 'react-bootstrap';
+import { Container, Row, Col, Tabs, Tab, Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGithub,
@@ -28,7 +19,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({
   nickname,
   photo,
   registerSource,
-}: UserDetailProps) => {
+}) => {
   const href = 'https://ophapiv2-demo.authing.cn/u';
 
   return (
