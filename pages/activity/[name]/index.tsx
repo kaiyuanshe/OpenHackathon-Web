@@ -7,6 +7,10 @@ import {
   Tabs,
   Tab,
   Carousel,
+<<<<<<< HEAD
+=======
+  Button,
+>>>>>>> 2478dc7... add teams page
   Image,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -68,26 +72,15 @@ export default function HackathonActivity({
     <Container>
       <PageHead title={displayName} />
 
-      <Row>
-        <Col xs={12} sm={7}>
-          <Carousel>
-            {banners?.map(({ uri }) => (
-              <Carousel.Item key={uri}>
-                <Image
-                  className="w-100"
-                  style={{ height: '70vh', objectFit: 'cover' }}
-                  src={uri}
-                  alt={name}
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Col>
-        <Col
-          xs={12}
-          sm={5}
-          className="d-flex flex-column justify-content-start"
-        >
+      <Row xs={1} sm={1} lg={2}>
+        <Carousel>
+          {banners?.map(({ uri }) => (
+            <Carousel.Item key={uri}>
+              <Image className="d-block w-100" src={uri} alt={name} />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+        <div className="d-flex flex-column justify-content-start">
           <h2>{displayName}</h2>
           <aside className="pb-2">
             {tags.map(tag => (
@@ -181,14 +174,21 @@ export default function HackathonActivity({
             </Tab>
           </Tabs>
         </Col>
-        <Col>
-          <h2>比赛地点</h2>
-          {/* 
+        {displayName && location ? (
+          <Col>
+            <h2>比赛地点</h2>
+            {/* 
           // @ts-ignore */}
+<<<<<<< HEAD
           <LocationMap title={displayName} address={location}>
             暂无地址导航
           </LocationMap>
         </Col>
+=======
+            <LocationMap title={displayName} address={location} />
+          </Col>
+        ) : null}
+>>>>>>> 2478dc7... add teams page
       </Row>
     </Container>
   );
