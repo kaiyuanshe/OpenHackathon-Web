@@ -4,8 +4,10 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
-
+        <link
+          rel="icon"
+          href="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
+        />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://polyfill.kaiyuanshe.cn/feature/PWAManifest.js"></script>
 
@@ -15,7 +17,7 @@ export default function Document() {
         />
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/idea-react@0.22.0/dist/index.css"
+          href="https://cdn.jsdelivr.net/npm/idea-react@0.22.2/dist/index.css"
         />
         <link
           rel="stylesheet"

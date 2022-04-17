@@ -40,5 +40,6 @@ export const AuthingGuard = dynamic(
 );
 
 export default function SignInPage() {
+  // @ts-ignore
   return <AuthingGuard />;
 }

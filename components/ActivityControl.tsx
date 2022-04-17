@@ -32,17 +32,14 @@ export function ActivityControl({
           {status === 'planning' && '申请'}上线
         </Button>
       ) : (
-        <Button className="w-100 mt-2" variant="warning">
+        <Button
+          className="w-100 mt-2"
+          variant="warning"
+          onClick={() => onDelete?.(name)}
+        >
           下线
         </Button>
       )}
-      <Button
-        className="w-100 mt-2"
-        variant="danger"
-        onClick={() => onDelete?.(name)}
-      >
-        删除
-      </Button>
     </>
   );
 }

@@ -27,3 +27,5 @@ export interface Activity extends Base {
     isEnrolled: boolean;
   };
 }
+
+export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh';

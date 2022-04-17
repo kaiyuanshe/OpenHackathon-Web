@@ -1,8 +1,9 @@
 import { cache } from 'web-utility';
+import { HTTPError } from 'koajax';
 import { destroyCookie } from 'nookies';
 
 import { User } from '../../../models/User';
-import { safeAPI, readCookie, writeCookie, request, HTTPError } from '../core';
+import { safeAPI, readCookie, writeCookie, request } from '../core';
 
 export default safeAPI(async (req, res) => {
   switch (req.method) {
@@ -18,8 +19,12 @@ export default safeAPI(async (req, res) => {
           ...user,
           token: readCookie(req, 'token'),
         });
-      } catch {
-        throw new HTTPError('Unauthorized', 401, {});
+      } catch (error) {
+        throw new HTTPError('Unauthorized', {
+          ...(error as HTTPError),
+          status: 401,
+          statusText: 'Unauthorized',
+        });
       }
     case 'POST': {
       const user = await request<User>('login', 'POST', req.body, {

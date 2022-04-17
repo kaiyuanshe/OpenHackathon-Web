@@ -17,27 +17,27 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { convertDatetime } from '../../components/time';
-import PageHead from '../../components/PageHead';
-import { LocationMap } from '../../components/LocationMap';
-import { TeamCard } from '../../components/TeamCard';
-import { ListData } from '../../models/Base';
-import { Activity } from '../../models/Activity';
-import { Team } from '../../models/Team';
-import { request } from '../api/core';
+import { convertDatetime } from '../../../components/time';
+import PageHead from '../../../components/PageHead';
+import { LocationMap } from '../../../components/LocationMap';
+import { TeamCard } from '../../../components/TeamCard';
+import { ListData } from '../../../models/Base';
+import { Activity } from '../../../models/Activity';
+import { Team } from '../../../models/Team';
+import { request } from '../../api/core';
 
 export async function getServerSideProps({
-  params: { hackathonName } = {},
-}: GetServerSidePropsContext<{ hackathonName?: string }>) {
-  if (!hackathonName)
+  params: { name } = {},
+}: GetServerSidePropsContext<{ name?: string }>) {
+  if (!name)
     return {
       notFound: true,
       props: {} as { activity: Activity; teams: Team[] },
     };
 
-  const activity = await request<Activity>(`hackathon/${hackathonName}`),
+  const activity = await request<Activity>(`hackathon/${name}`),
     { value: teams } = await request<ListData<Team>>(
-      `hackathon/${hackathonName}/teams?top=1000`,
+      `hackathon/${name}/teams?top=1000`,
     );
   return { props: { activity, teams } };
 }
@@ -124,13 +124,7 @@ export default function HackathonActivity({
               <Col>{enrollment}</Col>
             </Row>
           </ul>
-          <Link
-            href={{
-              pathname: '/activity/register',
-              query: { name },
-            }}
-            passHref
-          >
+          <Link href={`/activity/${name}/register`} passHref>
             <Button variant="success" className="col-3">
               报名
             </Button>
@@ -167,7 +161,8 @@ export default function HackathonActivity({
         </Col>
         <Col>
           <h2>比赛地点</h2>
-
+          {/* 
+          // @ts-ignore */}
           <LocationMap title={displayName} address={location} />
         </Col>
       </Row>

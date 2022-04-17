@@ -3,7 +3,7 @@ import { Image } from 'react-bootstrap';
 
 import { MainNavigation } from './MainNavigation';
 
-export const Layout: React.FC = ({ children }: PropsWithChildren<{}>) => (
+export const Layout: React.FC<PropsWithChildren<{}>> = ({ children }) => (
   <>
     <MainNavigation />
 

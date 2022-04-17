@@ -1,4 +1,5 @@
 import { ServerResponse } from 'http';
+import { HTTPError, Request, request as call } from 'koajax';
 import { setCookie } from 'nookies';
 import {
   GetServerSidePropsContext,
@@ -7,8 +8,7 @@ import {
 } from 'next';
 
 import { getClientSession } from './user/session';
-
-export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+import { ErrorData } from '../../models/Base';
 
 const BackHost = process.env.NEXT_PUBLIC_API_HOST;
 const Host =
@@ -16,27 +16,9 @@ const Host =
     ? new URL('/api/', location.origin) + ''
     : BackHost;
 
-export class HTTPError<T> extends URIError {
-  status: number;
-  header?: Record<string, string>;
-  body: T;
-
-  constructor(message: string, status: number, body: T, header?: Headers) {
-    super(message);
-
-    this.status = status;
-
-    if (header)
-      this.header = Object.fromEntries(
-        [...header].map(([key, value]) => [key, value]),
-      );
-    this.body = body;
-  }
-}
-
-export async function request<T>(
+export async function request<T = void>(
   path: string,
-  method?: HTTPMethod,
+  method?: Request['method'],
   body?: any,
   context?: Partial<GetServerSidePropsContext>,
   headers: Record<string, any> = {},
@@ -50,24 +32,30 @@ export async function request<T>(
     headers['Content-Type'] = 'application/json';
   } catch {}
 
-  const response = await fetch(new URL(path, Host) + '', {
+  const { response } = call<T>({
+    path: new URL(path, Host) + '',
     method,
     body,
     headers,
+    responseType: 'json',
   });
+  const { headers: header, body: data } = await response;
 
-  const data = response.status !== 204 ? await response.json() : {};
+  if (!data || !('traceId' in data)) return data!;
 
-  if (response.status < 300) return data as T;
+  const { status, title, detail } = data as unknown as ErrorData;
 
-  const { status, statusText, headers: header } = response;
-
-  throw new HTTPError(statusText, status, data, header);
+  throw new HTTPError(detail || title, {
+    status,
+    statusText: title,
+    headers: header,
+    body: data,
+  });
 }
 
-export async function requestClient<T>(
+export async function requestClient<T = void>(
   path: string,
-  method?: HTTPMethod,
+  method?: Request['method'],
   body?: any,
   headers: Record<string, any> = {},
 ) {
@@ -83,7 +71,8 @@ export async function requestClient<T>(
     );
   } catch (error) {
     if (error instanceof HTTPError)
-      location.href = error.status ? '/user/sign-in' : `/${error.status}`;
+      location.href =
+        error.status === 401 ? '/user/sign-in' : `/${error.status}`;
 
     throw error;
   }

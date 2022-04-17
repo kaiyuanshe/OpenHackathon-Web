@@ -37,6 +37,7 @@ export class UserBar extends PureComponent<{}, State> {
           <Dropdown>
             <Dropdown.Toggle>{user.nickname}</Dropdown.Toggle>
             <Dropdown.Menu>
+              <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
               <Dropdown.Item onClick={this.signOut}>登出</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

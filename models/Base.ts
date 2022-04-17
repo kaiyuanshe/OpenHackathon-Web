@@ -10,6 +10,14 @@ export interface Media {
   uri: string;
 }
 
+export interface ErrorData {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  traceId: string;
+}
+
 export interface ListData<T> {
   nextLink: string;
   value: T[];

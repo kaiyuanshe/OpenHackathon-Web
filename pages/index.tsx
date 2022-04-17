@@ -3,7 +3,7 @@ import type { InferGetServerSidePropsType } from 'next';
 import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
-import { ActivityCard } from '../components/ActivityCard';
+import { ActivityList } from '../components/ActivityList';
 import { ListData } from '../models/Base';
 import { Activity } from '../models/Activity';
 import { request } from './api/core';
@@ -46,16 +46,15 @@ const HomePage = ({
 
     <section className="my-5 py-5 bg-light text-center">
       <Container className="text-start">
-        <Row className="g-4" xs={1} sm={2} lg={3} xxl={4}>
-          {activities.slice(0, 6).map(activity => (
-            <Col key={activity.name}>
-              <ActivityCard className="h-100" {...activity} />
-            </Col>
-          ))}
-        </Row>
+        <ActivityList value={activities.slice(0, 6)} />
       </Container>
 
-      <Button variant="outline-primary" size="sm" className="px-5 mt-5">
+      <Button
+        className="px-5 mt-5"
+        variant="outline-primary"
+        size="sm"
+        href="/activity/"
+      >
         更多活动
       </Button>
     </section>
