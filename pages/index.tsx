@@ -28,12 +28,17 @@ const HomePage = ({
           .map(
             ({ name: key, displayName, ribbon, banners: [{ uri, name }] }) => (
               <Carousel.Item key={key}>
-                <Image
-                  className="d-block w-100"
-                  style={{ height: '80vh', objectFit: 'cover' }}
-                  src={uri}
-                  alt={name}
-                />
+                <a
+                  className="d-block stretched-link"
+                  href={`/activity/${key}/`}
+                >
+                  <Image
+                    className="w-100"
+                    style={{ height: '80vh', objectFit: 'cover' }}
+                    src={uri}
+                    alt={name}
+                  />
+                </a>
                 <Carousel.Caption className="text-shadow">
                   <h3>{displayName}</h3>
                   <p>{ribbon}</p>
@@ -75,7 +80,7 @@ const HomePage = ({
           >
             {list.map(({ name, url, logo }) => (
               <Col as="li" key={name} title={name}>
-                <a target="_blank" rel="noreferrer" href={url}>
+                <a target="_blank" href={url} rel="noreferrer">
                   <Image fluid src={logo} alt={name} />
                 </a>
               </Col>

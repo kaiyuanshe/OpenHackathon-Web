@@ -62,13 +62,11 @@ export async function requestClient<T = void>(
   try {
     const { token } = await getClientSession();
 
-    return request<T>(
-      new URL(path, BackHost) + '',
-      method,
-      body,
-      {},
-      { Authorization: `token ${token}`, ...headers },
-    );
+    headers = { Authorization: `token ${token}`, ...headers };
+  } catch {}
+
+  try {
+    return request<T>(new URL(path, BackHost) + '', method, body, {}, headers);
   } catch (error) {
     if (error instanceof HTTPError)
       location.href =

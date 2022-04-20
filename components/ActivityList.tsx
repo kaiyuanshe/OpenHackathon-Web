@@ -1,21 +1,24 @@
 import { PureComponent } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Loading } from 'idea-react';
-import { watchVisible } from 'web-utility';
+import { buildURLData, watchVisible } from 'web-utility';
 
 import { ActivityCard } from './ActivityCard';
 import { ListData } from '../models/Base';
 import { Activity, ActivityListType } from '../models/Activity';
 import { requestClient } from '../pages/api/core';
+import { getClientSession } from '../pages/api/user/session';
 
 export interface ActivityListProps {
   type?: ActivityListType;
   size?: 'sm' | 'lg';
   value?: Activity[];
+  userId?: string;
 }
 
 interface State {
   loading?: boolean;
+  sessionUserId?: string;
   nextLink?: string | null;
   list: Activity[];
 }
@@ -26,15 +29,28 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
   };
 
   async nextPage() {
-    const { type = 'online' } = this.props,
-      { loading, nextLink: nextPage, list } = this.state;
+    const { type = 'online', userId } = this.props,
+      { loading, sessionUserId, nextLink: nextPage, list } = this.state;
 
     if (loading || nextPage === null) return;
 
     this.setState({ loading: true });
+
+    if (!userId && !sessionUserId)
+      try {
+        var { id } = await getClientSession();
+
+        this.setState({ sessionUserId: id });
+      } catch {}
+
     try {
       const { nextLink, value } = await requestClient<ListData<Activity>>(
-        nextPage || `hackathons?listType=${type}&orderby=updatedAt`,
+        nextPage ||
+          `hackathons?${buildURLData({
+            userId: userId || sessionUserId,
+            listType: type,
+            orderby: 'updatedAt',
+          })}`,
       );
       this.setState({
         nextLink,
@@ -85,7 +101,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
   render() {
     const { type, size, value } = this.props,
-      { loading, nextLink, list } = this.state;
+      { loading, sessionUserId, nextLink, list } = this.state;
 
     return (
       <>
@@ -105,7 +121,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
             <Col key={item.name}>
               <ActivityCard
                 className="h-100"
-                controls={type === 'admin'}
+                controls={type === 'admin' && !!sessionUserId}
                 {...item}
                 onPublish={this.publishOne}
                 onDelete={this.deleteOne}

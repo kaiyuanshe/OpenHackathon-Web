@@ -17,6 +17,7 @@ import { User } from '../../models/User';
 import { request } from '../api/core';
 
 const UserDetailPage = ({
+  id,
   nickname,
   photo,
   registerSource,
@@ -46,7 +47,7 @@ const UserDetailPage = ({
                 />
 
                 <Card.Body className="text-start border-top p-3">
-                  <Link href={`https://github.com/${nickname}`} passHref>
+                  <a target="_blank" href={`https://github.com/${nickname}`} rel="noreferrer">
                     <FontAwesomeIcon
                       className={classNames(
                         'fa-stack',
@@ -56,7 +57,7 @@ const UserDetailPage = ({
                       )}
                       icon={faGithub}
                     />
-                  </Link>
+                  </a>
                   <FontAwesomeIcon
                     className="text-secondary fa-stack"
                     icon={faQq}
@@ -85,10 +86,10 @@ const UserDetailPage = ({
                 className="w-100 mb-3 justify-content-center"
               >
                 <Tab eventKey="enroll" title="参与的活动">
-                  <ActivityList type="enrolled" />
+                  <ActivityList type="enrolled" userId={id} />
                 </Tab>
                 <Tab eventKey="admin" title="创建的活动">
-                  <ActivityList type="admin" />
+                  <ActivityList type="admin" userId={id} />
                 </Tab>
                 <Tab eventKey="contact" title="关注的活动"></Tab>
               </Tabs>

@@ -4,25 +4,27 @@ import { Button } from 'react-bootstrap';
 import { TimeUnit } from './time';
 import { Activity } from '../models/Activity';
 
-export type ActivityEntryProps = Pick<
-  Activity,
-  | 'name'
-  | 'enrollmentStartedAt'
-  | 'enrollmentEndedAt'
-  | 'eventStartedAt'
-  | 'eventEndedAt'
-  | 'judgeStartedAt'
-  | 'judgeEndedAt'
->;
+export interface ActivityEntryProps
+  extends Pick<
+    Activity,
+    | 'enrollmentStartedAt'
+    | 'enrollmentEndedAt'
+    | 'eventStartedAt'
+    | 'eventEndedAt'
+    | 'judgeStartedAt'
+    | 'judgeEndedAt'
+  > {
+  href: string;
+}
 
 export function ActivityEntry({
-  name,
   enrollmentStartedAt,
   enrollmentEndedAt,
   eventStartedAt,
   eventEndedAt,
   judgeStartedAt,
   judgeEndedAt,
+  href,
 }: ActivityEntryProps) {
   const now = Date.now(),
     enrollmentStart = new Date(enrollmentStartedAt),
@@ -31,15 +33,15 @@ export function ActivityEntry({
     eventEnd = new Date(eventEndedAt),
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt);
-  const enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
+  const enrolling = +enrollmentStart < now && now < +enrollmentEnd,
+    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
 
   return (
     <Button
       className="my-2 w-100"
-      variant={
-        +enrollmentStart < now && now < +enrollmentEnd ? 'primary' : 'secondary'
-      }
-      href={`/activity/${name}`}
+      variant="primary"
+      href={href}
+      disabled={!enrolling}
     >
       {now < +enrollmentStart
         ? `${enrollmentDiff.distance} ${enrollmentDiff.unit}后开始报名`

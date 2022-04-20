@@ -14,7 +14,7 @@ export const TeamCard = ({
     <div className="border p-2">
       <a
         className="fs-4 text-primary text-truncate"
-        href={`team/${id}?activity=${hackathonName}`}
+        href={`/activity/${hackathonName}/team/${id}/`}
       >
         {displayName}
       </a>

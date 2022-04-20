@@ -1,6 +1,5 @@
 import React from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
 import {
   Container,
   Row,
@@ -8,7 +7,7 @@ import {
   Tabs,
   Tab,
   Carousel,
-  Button,
+  Image,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -20,6 +19,7 @@ import {
 import { convertDatetime } from '../../../components/time';
 import PageHead from '../../../components/PageHead';
 import { LocationMap } from '../../../components/LocationMap';
+import { ActivityEntry } from '../../../components/ActivityEntry';
 import { TeamCard } from '../../../components/TeamCard';
 import { ListData } from '../../../models/Base';
 import { Activity } from '../../../models/Activity';
@@ -39,6 +39,11 @@ export async function getServerSideProps({
     { value: teams } = await request<ListData<Team>>(
       `hackathon/${name}/teams?top=1000`,
     );
+  activity.detail = activity.detail
+    .replace(/\\+n/g, '\n')
+    .replace(/\\+t/g, ' ')
+    .replace(/\\+"/g, '"');
+
   return { props: { activity, teams } };
 }
 
@@ -55,6 +60,7 @@ export default function HackathonActivity({
     location,
     enrollment,
     detail,
+    ...rest
   },
   teams,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -62,15 +68,26 @@ export default function HackathonActivity({
     <Container>
       <PageHead title={displayName} />
 
-      <Row xs={1} sm={1} lg={2}>
-        <Carousel>
-          {banners.map(({ uri }) => (
-            <Carousel.Item key={uri}>
-              <img className="d-block w-100" src={uri} alt={name} />
-            </Carousel.Item>
-          ))}
-        </Carousel>
-        <div className="d-flex flex-column justify-content-start">
+      <Row>
+        <Col xs={12} sm={7}>
+          <Carousel>
+            {banners?.map(({ uri }) => (
+              <Carousel.Item key={uri}>
+                <Image
+                  className="w-100"
+                  style={{ height: '70vh', objectFit: 'cover' }}
+                  src={uri}
+                  alt={name}
+                />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+        </Col>
+        <Col
+          xs={12}
+          sm={5}
+          className="d-flex flex-column justify-content-start"
+        >
           <h2>{displayName}</h2>
           <aside className="pb-2">
             {tags.map(tag => (
@@ -124,12 +141,17 @@ export default function HackathonActivity({
               <Col>{enrollment}</Col>
             </Row>
           </ul>
-          <Link href={`/activity/${name}/register`} passHref>
-            <Button variant="success" className="col-3">
-              报名
-            </Button>
-          </Link>
-        </div>
+          <ActivityEntry
+            {...{
+              ...rest,
+              enrollmentStartedAt,
+              enrollmentEndedAt,
+              eventStartedAt,
+              eventEndedAt,
+            }}
+            href={`/activity/${name}/register`}
+          />
+        </Col>
       </Row>
       <Row className="mt-3">
         <Col lg={9} md={12} sm={12}>
@@ -163,7 +185,9 @@ export default function HackathonActivity({
           <h2>比赛地点</h2>
           {/* 
           // @ts-ignore */}
-          <LocationMap title={displayName} address={location} />
+          <LocationMap title={displayName} address={location}>
+            暂无地址导航
+          </LocationMap>
         </Col>
       </Row>
     </Container>

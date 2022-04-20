@@ -21,7 +21,7 @@ interface State {
 
 export class LocationMap extends PureComponent<LocationMapProps, State> {
   state: Readonly<State> = {
-    loading: true,
+    loading: false,
   };
 
   /**
@@ -29,10 +29,15 @@ export class LocationMap extends PureComponent<LocationMapProps, State> {
    */
   async componentDidMount() {
     const { address } = this.props;
+
+    if (!address) return;
+
+    this.setState({ loading: true });
+
     const {
       status,
       info,
-      geocodes: [geoCode],
+      geocodes: [geoCode] = [],
     } = await request<AMapGeoList>(
       `https://restapi.amap.com/v3/geocode/geo?${new URLSearchParams({
         key: Key,
