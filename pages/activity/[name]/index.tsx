@@ -7,10 +7,6 @@ import {
   Tabs,
   Tab,
   Carousel,
-<<<<<<< HEAD
-=======
-  Button,
->>>>>>> 2478dc7... add teams page
   Image,
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -80,7 +76,7 @@ export default function HackathonActivity({
             </Carousel.Item>
           ))}
         </Carousel>
-        <div className="d-flex flex-column justify-content-start">
+        <Col className="d-flex flex-column justify-content-start">
           <h2>{displayName}</h2>
           <aside className="pb-2">
             {((tags || []) as string[]).map(tag => (
@@ -177,18 +173,12 @@ export default function HackathonActivity({
         {displayName && location ? (
           <Col>
             <h2>比赛地点</h2>
-            {/* 
-          // @ts-ignore */}
-<<<<<<< HEAD
-          <LocationMap title={displayName} address={location}>
-            暂无地址导航
-          </LocationMap>
-        </Col>
-=======
-            <LocationMap title={displayName} address={location} />
+            {/* @ts-ignore */}
+            <LocationMap title={displayName} address={location}>
+              暂无地址导航
+            </LocationMap>
           </Col>
         ) : null}
->>>>>>> 2478dc7... add teams page
       </Row>
     </Container>
   );

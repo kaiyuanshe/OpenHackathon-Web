@@ -2,11 +2,16 @@ import { Base } from './Base';
 import { User } from './User';
 
 export enum WorkTypeEnum {
-  'IMAGE' = 'image',
-  'WEBSITE' = 'website',
-  'VIDEO' = 'video',
-  'WORD' = 'word',
-  'POWERPOINT' = 'powerpoint',
+  IMAGE = 'image',
+  WEBSITE = 'website',
+  VIDEO = 'video',
+  WORD = 'word',
+  POWERPOINT = 'powerpoint',
+}
+
+export enum MembershipStatusEnum {
+  PENDINGAPPROVAL = 'pendingApproval',
+  APPROVED = 'approved',
 }
 
 export interface Team extends Base {
@@ -30,13 +35,11 @@ export interface TeamWork extends Base {
 }
 
 export interface TeamMember extends Omit<Base, 'id'> {
-  createdAt: string;
-  updatedAt: string;
   hackathonName: string;
   teamId: string;
   userId: string;
   user: User;
   description: string;
   role: string;
-  status: string;
+  status: MembershipStatusEnum;
 }
