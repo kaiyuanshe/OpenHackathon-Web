@@ -11,8 +11,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
-        {/* 
-        // @ts-ignore */}
+        {/* @ts-ignore */}
         <Component {...pageProps} />
       </Layout>
     </>

@@ -5,12 +5,10 @@ import { ActivityList } from '../../components/ActivityList';
 
 export default function AdminPage() {
   return (
-    <>
+    <Container fluid>
       <PageHead title="平台管理" />
 
-      <Container fluid>
-        <ActivityList type="admin" size="lg" />
-      </Container>
-    </>
+      <ActivityList type="admin" size="lg" />
+    </Container>
   );
 }

@@ -28,4 +28,9 @@ export interface Activity extends Base {
   };
 }
 
-export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh';
+export type ActivityListType =
+  | 'online'
+  | 'admin'
+  | 'enrolled'
+  | 'fresh'
+  | 'created';

@@ -7,7 +7,6 @@ import { ActivityCard } from './ActivityCard';
 import { ListData } from '../models/Base';
 import { Activity, ActivityListType } from '../models/Activity';
 import { requestClient } from '../pages/api/core';
-import { getClientSession } from '../pages/api/user/session';
 
 export interface ActivityListProps {
   type?: ActivityListType;
@@ -18,7 +17,6 @@ export interface ActivityListProps {
 
 interface State {
   loading?: boolean;
-  sessionUserId?: string;
   nextLink?: string | null;
   list: Activity[];
 }
@@ -30,24 +28,17 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
   async nextPage() {
     const { type = 'online', userId } = this.props,
-      { loading, sessionUserId, nextLink: nextPage, list } = this.state;
+      { loading, nextLink: nextPage, list } = this.state;
 
     if (loading || nextPage === null) return;
 
     this.setState({ loading: true });
 
-    if (!userId && !sessionUserId)
-      try {
-        var { id } = await getClientSession();
-
-        this.setState({ sessionUserId: id });
-      } catch {}
-
     try {
       const { nextLink, value } = await requestClient<ListData<Activity>>(
         nextPage ||
           `hackathons?${buildURLData({
-            userId: userId || sessionUserId,
+            userId,
             listType: type,
             orderby: 'updatedAt',
           })}`,
@@ -101,7 +92,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
   render() {
     const { type, size, value } = this.props,
-      { loading, sessionUserId, nextLink, list } = this.state;
+      { loading, nextLink, list } = this.state;
 
     return (
       <>
@@ -121,7 +112,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
             <Col key={item.name}>
               <ActivityCard
                 className="h-100"
-                controls={type === 'admin' && !!sessionUserId}
+                controls={type === 'admin' || type === 'created'}
                 {...item}
                 onPublish={this.publishOne}
                 onDelete={this.deleteOne}

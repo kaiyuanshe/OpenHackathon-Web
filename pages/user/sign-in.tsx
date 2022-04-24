@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import '@authing/native-js-ui-components/lib/index.min.css';
 
+import PageHead from '../../components/PageHead';
 import { request } from '../api/core';
 
 const AppId = process.env.NEXT_PUBLIC_AUTHING_APP_ID!;
@@ -40,6 +41,11 @@ export const AuthingGuard = dynamic(
 );
 
 export default function SignInPage() {
-  // @ts-ignore
-  return <AuthingGuard />;
+  return (
+    <>
+      <PageHead title="登录" />
+      {/* @ts-ignore */}
+      <AuthingGuard />
+    </>
+  );
 }
