@@ -27,7 +27,6 @@ import {
   TeamWork,
   TeamMember,
 } from '../../../../models/Team';
-import { redirect } from 'next/dist/server/api-utils';
 
 export async function getServerSideProps({
   req,
@@ -167,13 +166,7 @@ export default function TeamsPage({
                     </Accordion.Header>
                     <Accordion.Body>
                       <p>{description}</p>
-                      {type === WorkTypeEnum.WEBSITE ||
-                      type === WorkTypeEnum.POWERPOINT ||
-                      type === WorkTypeEnum.WORD ? (
-                        <a href={url} title={title}>
-                          {title}
-                        </a>
-                      ) : type === WorkTypeEnum.IMAGE ? (
+                      {type === WorkTypeEnum.IMAGE ? (
                         <Image src={url} className="mw-100" alt={title} />
                       ) : type === WorkTypeEnum.VIDEO ? (
                         <Ratio aspectRatio="16x9">

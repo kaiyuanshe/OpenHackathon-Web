@@ -30,7 +30,7 @@ export interface TeamWork extends Base {
   hackathonName: string;
   title: string;
   description: string;
-  type: string;
+  type: WorkTypeEnum;
   url: string;
 }
 
