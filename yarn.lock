@@ -1538,7 +1538,7 @@
     magic-string "^0.25.0"
     string.prototype.matchall "^4.0.6"
 
-"@swc/helpers@^0.3.8":
+"@swc/helpers@^0.3.2", "@swc/helpers@^0.3.8":
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.3.8.tgz#5b9ecf4ee480ca00f1ffbc2d1a5d4eed0d1afe81"
   integrity sha512-aWItSZvJj4+GI6FWkjZR13xPNPctq2RRakzo+O6vN7bC2yjwdg5EFpgaSAUn95b7BGSgcflvzVDPoKmJv24IOg==
@@ -2394,6 +2394,16 @@ caniuse-lite@^1.0.30001283, caniuse-lite@^1.0.30001317:
   version "1.0.30001332"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001332.tgz#39476d3aa8d83ea76359c70302eafdd4a1d727dd"
   integrity sha512-10T30NYOEQtN6C11YGg411yebhvpnC6Z102+B95eAsN0oB6KUs01ivE8u+G6FMIRtIrVlYXhL+LUwQ3/hXwDWw==
+
+cell-router@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/cell-router/-/cell-router-2.1.1.tgz#e870c47a66952a20b794c3dd03f9f3fba1828dd4"
+  integrity sha512-yD2CJyGJQQcI8KNpRItpWt74AMnN1Zc9tKFyyp2Gx9ulAq1FaUfcUCIjmRTx3rwjDGMFV/T9ORngha+cdoGI4Q==
+  dependencies:
+    "@swc/helpers" "^0.3.2"
+    iterable-observer "1.0.0-rc.0"
+    web-cell "2.4.0-rc.6"
+    web-utility "^3.0.0"
 
 chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
@@ -6738,6 +6748,11 @@ smart-buffer@^4.2.0:
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
 
+snabbdom@^3.3.1:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/snabbdom/-/snabbdom-3.4.0.tgz#c76ed02643729f84a63875b7894a0fbcdc95c710"
+  integrity sha512-Sr5H1l5QxJa0B/68ZtpWi7MuGIzLWS2Up64QqXe/wzvWOjXvM9rL7+C8GhMmDVtJ7dFWypvyWJHR3nmeZN8YIQ==
+
 socks-proxy-agent@6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/socks-proxy-agent/-/socks-proxy-agent-6.1.1.tgz#e664e8f1aaf4e1fb3df945f09e3d94f911137f87"
@@ -7424,7 +7439,16 @@ warning@^4.0.0, warning@^4.0.3:
   dependencies:
     loose-envify "^1.0.0"
 
-web-utility@^3.6.1, web-utility@^3.6.2:
+web-cell@2.4.0-rc.6:
+  version "2.4.0-rc.6"
+  resolved "https://registry.yarnpkg.com/web-cell/-/web-cell-2.4.0-rc.6.tgz#5f55d46de28183a5b316c5dd33b43d3370b97029"
+  integrity sha512-DqPv9etkWq2e6MroTaQCS9F2P/Vr0n6vNdRF4MaVObNWkqLuUtEZnm2GtwCnDT/9zCS2TcIazhR2Hs3PIQpJ0g==
+  dependencies:
+    "@swc/helpers" "^0.3.2"
+    snabbdom "^3.3.1"
+    web-utility "^3.0.0"
+
+web-utility@^3.0.0, web-utility@^3.6.1, web-utility@^3.6.2:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/web-utility/-/web-utility-3.6.3.tgz#7aaf332b959e98b569b5d52c2f848a23505c4368"
   integrity sha512-XU+mLWrIrIwic1anGRb2xlqerPx5Js4GHs6O7M086gN8GHVpxXFG2Vt2wY3hgsDcItlWF0LgDaS6NxlfW4oxdg==
