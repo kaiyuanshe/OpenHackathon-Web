@@ -15,8 +15,8 @@ import {
   faThLarge,
   faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
-import { menus } from '../models/ActivityManageMenu';
-import { MenuList } from '../models/ActivityManageMenu';
+import { menus } from '../models/ActivityManage';
+import { MenuList } from '../models/ActivityManage';
 //这样添加合适吗？目前找到的可以遍历生产icon的方法
 library.add(
   faEdit,
@@ -44,7 +44,7 @@ export function ActivityManageFrame({
   let innerIndex = -1;
   const current = menu.find(({ list }) =>
     list.find(({ href }, index) => {
-      if (path?.slice().split('/')[3].includes(href)) {
+      if (path?.split('/')[4].includes(href)) {
         innerIndex = index;
         return true;
       }

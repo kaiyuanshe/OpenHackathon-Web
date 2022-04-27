@@ -1,5 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
+import { Base } from './Base';
+import { User } from './User';
 export interface MenuHref {
   title: string;
   href: string;
@@ -73,3 +74,10 @@ export const menus: MenuList[] = [
     ],
   },
 ];
+
+export interface AdminsJudges extends Base {
+  hackathonName: string;
+  userId: string;
+  user: User;
+  description?: string;
+}
