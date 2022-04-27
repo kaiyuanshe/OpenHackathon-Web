@@ -6,13 +6,16 @@ import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
 import { requestClient } from '../../api/core';
+import { withSession } from '../../api/user/session';
 import { Question, questions, Extensions } from '../../../models/Question';
 
-export async function getServerSideProps({
-  params,
-}: GetServerSidePropsContext<{ name: string }>) {
-  return { props: { activity: params!.name } };
-}
+export const getServerSideProps = withSession(
+  async ({ params }: GetServerSidePropsContext<{ name: string }>) => ({
+    props: {
+      activity: params!.name,
+    },
+  }),
+);
 
 class RegisterPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -24,12 +27,16 @@ class RegisterPage extends PureComponent<
     const { activity } = this.props,
       data = formToJSON(event.target as HTMLFormElement);
 
-    const extensions: Extensions[] = Object.entries(data).map(
-      ([name, value]) => ({
-        name,
-        value: value + '',
-      }),
-    );
+    const extensions = Object.entries(data)
+      .map(
+        ([name, value]) =>
+          value && {
+            name,
+            value: value + '',
+          },
+      )
+      .filter(Boolean) as Extensions[];
+
     await requestClient(`hackathon/${activity}/enrollment`, 'PUT', {
       extensions,
     });

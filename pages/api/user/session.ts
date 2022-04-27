@@ -1,6 +1,7 @@
 import { cache } from 'web-utility';
 import { HTTPError } from 'koajax';
 import { destroyCookie } from 'nookies';
+import { GetServerSidePropsContext } from 'next';
 
 import { User } from '../../../models/User';
 import { safeAPI, readCookie, writeCookie, request } from '../core';
@@ -44,6 +45,20 @@ export default safeAPI(async (req, res) => {
     }
   }
 });
+
+export function withSession<
+  T extends (context: GetServerSidePropsContext<any>) => Promise<any>,
+>(handler?: T) {
+  return (async context =>
+    readCookie(context.req, 'token')
+      ? handler?.(context) || { props: {} }
+      : {
+          redirect: {
+            destination: '/user/sign-in',
+            permanent: false,
+          },
+        }) as T;
+}
 
 export const getClientSession = cache(async clean => {
   const user = await request<User>('user/session');

@@ -7,6 +7,7 @@ import { ActivityCard } from './ActivityCard';
 import { ListData } from '../models/Base';
 import { Activity, ActivityListType } from '../models/Activity';
 import { requestClient } from '../pages/api/core';
+import { getClientSession } from '../pages/api/user/session';
 
 export interface ActivityListProps {
   type?: ActivityListType;
@@ -16,6 +17,7 @@ export interface ActivityListProps {
 }
 
 interface State {
+  sessionUserId?: string;
   loading?: boolean;
   nextLink?: string | null;
   list: Activity[];
@@ -25,6 +27,12 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
   state: Readonly<State> = {
     list: [],
   };
+
+  async componentDidMount() {
+    const { id } = await getClientSession();
+
+    this.setState({ sessionUserId: id });
+  }
 
   async nextPage() {
     const { type = 'online', userId } = this.props,
@@ -41,6 +49,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
             userId,
             listType: type,
             orderby: 'updatedAt',
+            top: 6,
           })}`,
       );
       this.setState({
@@ -92,7 +101,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
   render() {
     const { type, size, value } = this.props,
-      { loading, nextLink, list } = this.state;
+      { sessionUserId, loading, nextLink, list } = this.state;
 
     return (
       <>
@@ -112,7 +121,9 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
             <Col key={item.name}>
               <ActivityCard
                 className="h-100"
-                controls={type === 'admin' || type === 'created'}
+                controls={
+                  !!sessionUserId && (type === 'admin' || type === 'created')
+                }
                 {...item}
                 onPublish={this.publishOne}
                 onDelete={this.deleteOne}
