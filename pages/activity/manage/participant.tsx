@@ -5,22 +5,6 @@ import { requestClient } from '../../api/core';
 import { ListData } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 
-// type Props = {
-//   name: string;
-// }
-
-// 1.
-// const UserName = ({ name }: Props) => {
-// }
-
-// 2.
-// const UserName = (props: Props) => {
-//   const { name } = props;
-// }
-
-// 3.
-// const UserName = ({ name } : { name: string }) => {
-
 //——————————————— 辅助组件 ———————————————
 
 //1.用户名点击弹框
@@ -126,10 +110,11 @@ const RegistrationStatus = (props: {
 
 //——————————————— 主体组件 ———————————————
 
-// 组件后期需增加传入的props，用于指定baseUrl路径${hackathonName}
+//TODO:需增加传入的props，用于指定baseUrl路径${hackathonName}
 const Participant = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
 
+  //TODO:weopenstart替换为${hackathonName}
   let baseUrl = 'hackathon/weopenstar/enrollment';
 
   async function getPage() {
