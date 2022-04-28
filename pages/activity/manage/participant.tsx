@@ -21,12 +21,16 @@ import { Enrollment } from '../../../models/Enrollment';
 // 3.
 // const UserName = ({ name } : { name: string }) => {
 
-// NOTE: 改变属性会渲染两次
-
 //——————————————— 辅助组件 ———————————————
 
-//1.用户名——点击弹框
-const UserName = ({ name, extensions }: { name: string; extensions: {} }) => {
+//1.用户名点击弹框
+const UserName = ({
+  name,
+  extensions,
+}: {
+  name: string;
+  extensions: {} | any;
+}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -34,7 +38,9 @@ const UserName = ({ name, extensions }: { name: string; extensions: {} }) => {
 
   //获取问卷答案
   const answer = (question: string) => {
-    let res = extensions.filter(n => n.name === question).map(n => n.value);
+    let res = extensions
+      .filter((n: any) => n.name === question)
+      .map((n: any) => n.value);
     console.log('res = ', res);
     return res;
   };
@@ -74,29 +80,34 @@ const UserName = ({ name, extensions }: { name: string; extensions: {} }) => {
   );
 };
 
-//4.状态——下拉菜单（状态显示要改一下） TODO:PUT
+//2.审核状态变更
 const RegistrationStatus = (props: {
   status: string;
-  onChange: (value: string) => void;
+  userId: string;
+  url: string;
 }) => {
-  const { status, onChange } = props;
+  const { status, userId, url } = props;
+  console.log(props);
 
   const statusName = {
     none: '未审核',
     pendingApproval: '审核中',
-    approved: '通过',
-    rejected: '拒绝',
+    approve: '通过',
+    reject: '拒绝',
   } as { [key: string]: string };
 
-  const getStatus = e => {
-    onChange(e.target.value);
-  };
+  // Post
+  async function postStatus(e: {} | any) {
+    let status = e.target.value;
+    // console.log(e.target.value, userId)
+    const postUrl = url + `/${userId}/${status}`;
+    // console.log("postUrl = ", postUrl)
+    await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
+  }
 
-  // xia xie yi bo
-  // XD XDDD
   return (
     <>
-      <select name="status" id="status-select" onChange={getStatus}>
+      <select name="status" id="status-select" onChange={postStatus}>
         <option value={status}>{statusName[status]}</option>
         {Object.keys(statusName)
           .filter(key => key !== status)
@@ -115,26 +126,23 @@ const RegistrationStatus = (props: {
 
 //——————————————— 主体组件 ———————————————
 
+// 组件后期需增加传入的props，用于指定baseUrl路径${hackathonName}
 const Participant = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [status, setStatus] = useState('');
+
+  let baseUrl = 'hackathon/weopenstar/enrollment';
 
   async function getPage() {
     const data = await requestClient<ListData<Enrollment>>(
-      `hackathon/weopenstar/enrollments`,
+      baseUrl + 's',
       'GET',
     );
     setEnrollments(data.value);
   }
 
-  // niubi
-  //变更数据后重新刷新，修改[]
-
   useEffect(() => {
     getPage();
-  }, [status]);
-
-  console.log('status', status);
+  }, []);
 
   return (
     <div className="participant-table">
@@ -165,13 +173,11 @@ const Participant = () => {
               <td>{user.email}</td>
               <td>
                 <RegistrationStatus
+                  url={baseUrl}
+                  userId={user.id!}
                   status={status}
-                  onChange={e => {
-                    setStatus(e);
-                  }}
                 />
               </td>
-              <td>{status}</td>
             </tr>
           ))}
         </tbody>
