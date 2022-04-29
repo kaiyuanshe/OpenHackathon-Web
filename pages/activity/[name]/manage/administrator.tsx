@@ -15,7 +15,7 @@ import { AdministratorModal } from '../../../../components/ActivityAdministrator
 import styles from '../../../../styles/Table.module.less';
 interface State {
   show: boolean;
-  checked: boolean;
+  checked: { [key: string]: boolean };
   inputVal: string;
   nextLink?: string | null;
   list: User[];
@@ -24,8 +24,8 @@ interface State {
 interface AdministratorPageProps {
   activity: string;
   path: string;
-  admins: ListData<AdminsJudges>;
-  judges: ListData<AdminsJudges>;
+  admins: AdminsJudges[];
+  judges: AdminsJudges[];
 }
 
 const tableHead = [
@@ -39,6 +39,8 @@ const tableHead = [
   '创建时间',
   '备注',
 ];
+//生成一个checked value数列，用于在state中给各个复选框分配checked值
+const CheckboxArr = Array.from({ length: 10 }, (e, i) => i.toString());
 
 export async function getServerSideProps({
   params: { name } = {},
@@ -49,10 +51,10 @@ export async function getServerSideProps({
       notFound: true,
       props: {} as AdministratorPageProps,
     };
-  const admins = await requestClient<ListData<AdminsJudges>>(
+  const { value: admins } = await requestClient<ListData<AdminsJudges>>(
       `hackathon/${name}/admins`,
     ),
-    judges = await requestClient<ListData<AdminsJudges>>(
+    { value: judges } = await requestClient<ListData<AdminsJudges>>(
       `hackathon/${name}/judges`,
     );
   return {
@@ -71,7 +73,10 @@ class AdministratorPage extends PureComponent<
 > {
   state: Readonly<State> = {
     show: false,
-    checked: false,
+    checked: CheckboxArr.reduce(
+      (prev, current) => ({ ...prev, [current]: false }),
+      {},
+    ),
     inputVal: '',
     list: [],
   };
@@ -84,18 +89,27 @@ class AdministratorPage extends PureComponent<
       { userId, adminJudge, description } = data,
       { activity } = this.props;
     if (!userId) return;
-    //此处进行判断，如果adminjudge不为空，传入事件为增加管理员/裁判；否则删除管理员或裁判
+
+    //此处进行判断，如果adminjudge不为空，传入事件为增加管理员/裁判；否则删除管理员/裁判
     if (adminJudge) {
       await requestClient(
         `hackathon/${activity}/${adminJudge}/${userId}`,
         'PUT',
-        description,
+        { description: description },
       );
     } else {
-      if (typeof userId != 'string') return;
-      //此处userId稍有不同，后台数据无法区分管理员与裁判，所以此处userId前面接了一段adminh或judge
-      const [user, id] = userId.split(':');
-      await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+      //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
+      if (typeof userId === 'string') {
+        const [user, id] = userId.split(':');
+        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+      }
+      if (!Array.isArray(userId) || userId!.length === 0) return;
+      //批量删除
+      userId.map(async item => {
+        if (typeof item !== 'string') return;
+        const [user, id] = item.split(':');
+        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+      });
     }
 
     self.alert('已知悉您的请求，正在处理中！');
@@ -104,8 +118,8 @@ class AdministratorPage extends PureComponent<
       inputVal: '',
       list: [],
     });
-    //明天需要测试一下url为同一地址时是否可以刷新网页
-    location.href = `/activity/${activity}/manage/administrator`;
+    //先不加刷新链接，观察network 接口response
+    //location.href = `/activity/${activity}/manage/administrator`;
   };
 
   handleSearch = async () => {
@@ -114,12 +128,11 @@ class AdministratorPage extends PureComponent<
         `user/search?keyword=${inputVal}`,
         'POST',
       );
-    if (!value) return;
+    if (!Array.isArray(value) || value.length === 0)
+      alert('您要查询的用户不存在');
     this.setState({
       list: [...value],
     });
-
-    alert('您要查询的用户不存在');
   };
 
   handleShow = () => {
@@ -143,27 +156,44 @@ class AdministratorPage extends PureComponent<
   toggleSelectAll = ({
     currentTarget: { checked },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    checked
-      ? this.setState({
-          checked: true,
-        })
-      : this.setState({
-          checked: false,
-        });
+    Object.keys(this.state.checked).forEach(checkbox => {
+      this.setState(prevState => ({
+        checked: {
+          ...prevState.checked,
+          [checkbox]: checked,
+        },
+      }));
+    });
+  };
+  handleCheckboxChange = ({
+    currentTarget,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    //设置一个自定义标签获取每个checked的名称，从而更改对应的state.checked
+    const dataKey = currentTarget.getAttribute('data-key'),
+      checked = currentTarget.checked;
+    this.setState(prevState => ({
+      checked: {
+        ...prevState.checked,
+        [dataKey!]: checked,
+      },
+    }));
   };
 
-  renderField = ({
-    createdAt,
-    updatedAt,
-    userId,
-    user: {
-      email,
-      nickname,
-      lastLogin,
-      registerSource: [source],
-    },
-    description,
-  }: AdminsJudges) => (
+  renderField = (
+    {
+      createdAt,
+      updatedAt,
+      userId,
+      user: {
+        email,
+        nickname,
+        lastLogin,
+        registerSource: [source],
+      },
+      description,
+    }: AdminsJudges,
+    index: number,
+  ) => (
     <tr>
       {[
         userId,
@@ -185,7 +215,9 @@ class AdministratorPage extends PureComponent<
               aria-label={description ? `judge${data}` : `admin${data}`}
               name="userId"
               value={description ? `judge:${data}` : `admin:${data}`}
-              checked={this.state.checked}
+              checked={this.state.checked[index.toString()]}
+              onChange={this.handleCheckboxChange}
+              data-key={index.toString()}
             />
           </td>
         ),
@@ -195,8 +227,7 @@ class AdministratorPage extends PureComponent<
 
   render() {
     const { activity, path, admins, judges } = this.props,
-      value = [...admins.value, ...judges.value],
-      len = [value.length, admins.value.length, judges.value.length];
+      value = [...admins, ...judges];
 
     return (
       <ActivityManageFrame path={path}>
@@ -205,9 +236,9 @@ class AdministratorPage extends PureComponent<
           <Row xs="1" sm="2">
             <Col sm="auto" md="auto">
               <ListGroup>
-                <ListGroup.Item>全部用户({len[0]})</ListGroup.Item>
-                <ListGroup.Item>管理员({len[1]})</ListGroup.Item>
-                <ListGroup.Item>裁判({len[2]})</ListGroup.Item>
+                <ListGroup.Item>全部用户({value.length})</ListGroup.Item>
+                <ListGroup.Item>管理员({admins.length})</ListGroup.Item>
+                <ListGroup.Item>裁判({judges.length})</ListGroup.Item>
               </ListGroup>
               <Col className="d-flex flex-column">
                 <Button
@@ -241,7 +272,6 @@ class AdministratorPage extends PureComponent<
                             name="selectAll"
                             onChange={this.toggleSelectAll}
                           />
-                          #
                         </th>
                       ),
                     )}

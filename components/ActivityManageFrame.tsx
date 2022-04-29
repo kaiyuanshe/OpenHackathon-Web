@@ -61,7 +61,7 @@ export function ActivityManageFrame({
               </Nav.Link>
               {list.map(({ title, href, icon }) => (
                 <Link key={title} href={href} passHref>
-                  <Nav.Link className="">
+                  <Nav.Link>
                     <FontAwesomeIcon
                       icon={icon}
                       className="text-primary ms-3 me-3"
