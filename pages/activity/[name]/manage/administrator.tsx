@@ -80,6 +80,25 @@ class AdministratorPage extends PureComponent<
     inputVal: '',
     list: [],
   };
+
+  //检验：复选框至少选中一个，否则提示验证消息
+  componentDidMount() {
+    const firstCheckbox: HTMLInputElement = document.getElementById(
+      '0checkbox',
+    ) as HTMLInputElement;
+    firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
+  }
+  componentDidUpdate() {
+    const firstCheckbox: HTMLInputElement = document.getElementById(
+      '0checkbox',
+    ) as HTMLInputElement;
+    firstCheckbox?.setCustomValidity(
+      Object.values(this.state.checked).some(check => check === true)
+        ? ''
+        : '请选择至少一位管理员或裁判！',
+    );
+  }
+
   //处理两处表单提交，一处是增加管理员/裁判，一处是删除管理员/裁判
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -95,21 +114,25 @@ class AdministratorPage extends PureComponent<
       await requestClient(
         `hackathon/${activity}/${adminJudge}/${userId}`,
         'PUT',
-        { description: description },
+        { description },
       );
     } else {
+      //弹窗确认删除
+      const confirmed = window.confirm('确认删除所选管理员/裁判？');
       //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
+      if (!confirmed) return;
+
       if (typeof userId === 'string') {
         const [user, id] = userId.split(':');
         await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
       }
-      if (!Array.isArray(userId) || userId!.length === 0) return;
+      if (!Array.isArray(userId) || userId.length === 0) return;
       //批量删除
-      userId.map(async item => {
+      for (let item of userId) {
         if (typeof item !== 'string') return;
         const [user, id] = item.split(':');
         await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-      });
+      }
     }
 
     self.alert('已知悉您的请求，正在处理中！');
@@ -118,7 +141,7 @@ class AdministratorPage extends PureComponent<
       inputVal: '',
       list: [],
     });
-    //先不加刷新链接，观察network 接口response
+    //先不加刷新链接，观察network 接口response，调试完毕后可以加上
     //location.href = `/activity/${activity}/manage/administrator`;
   };
 
@@ -128,8 +151,7 @@ class AdministratorPage extends PureComponent<
         `user/search?keyword=${inputVal}`,
         'POST',
       );
-    if (!Array.isArray(value) || value.length === 0)
-      alert('您要查询的用户不存在');
+    if (!value?.[0]) alert('您要查询的用户不存在');
     this.setState({
       list: [...value],
     });
@@ -156,14 +178,11 @@ class AdministratorPage extends PureComponent<
   toggleSelectAll = ({
     currentTarget: { checked },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    Object.keys(this.state.checked).forEach(checkbox => {
-      this.setState(prevState => ({
-        checked: {
-          ...prevState.checked,
-          [checkbox]: checked,
-        },
-      }));
-    });
+    this.setState(prevState => ({
+      checked: Object.fromEntries(
+        Object.keys(prevState.checked).map(key => [key, checked]),
+      ),
+    }));
   };
   handleCheckboxChange = ({
     currentTarget,
@@ -200,7 +219,7 @@ class AdministratorPage extends PureComponent<
         nickname,
         email,
         description ? '裁判' : '管理员',
-        createdAt < updatedAt ? '已通过' : '审核中',
+        createdAt ? '已通过' : '审核中',
         source.split(':')[1],
         convertDatetime(lastLogin),
         convertDatetime(createdAt),
@@ -214,10 +233,11 @@ class AdministratorPage extends PureComponent<
               inline
               aria-label={description ? `judge${data}` : `admin${data}`}
               name="userId"
+              id={`${index}checkbox`}
               value={description ? `judge:${data}` : `admin:${data}`}
-              checked={this.state.checked[index.toString()]}
+              checked={this.state.checked[index + '']}
               onChange={this.handleCheckboxChange}
-              data-key={index.toString()}
+              data-key={index + ''}
             />
           </td>
         ),
