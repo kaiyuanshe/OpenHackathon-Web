@@ -83,20 +83,16 @@ class AdministratorPage extends PureComponent<
 
   //检验：复选框至少选中一个，否则提示验证消息
   componentDidMount() {
-    const firstCheckbox: HTMLInputElement = document.getElementById(
-      '0checkbox',
-    ) as HTMLInputElement;
+    //非常假，'#0checkbox'selector查询字段非法，改为‘#checkbox0’。HTML4好像不支持数字做开头，但是HTML5是支持的
+    const firstCheckbox =
+      document.querySelector<HTMLInputElement>('#checkbox0');
     firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
   }
   componentDidUpdate() {
-    const firstCheckbox: HTMLInputElement = document.getElementById(
-      '0checkbox',
-    ) as HTMLInputElement;
-    firstCheckbox?.setCustomValidity(
-      Object.values(this.state.checked).some(check => check === true)
-        ? ''
-        : '请选择至少一位管理员或裁判！',
-    );
+    const firstCheckbox =
+      document.querySelector<HTMLInputElement>('#checkbox0');
+    if (Object.values(this.state.checked).some(check => check))
+      return firstCheckbox?.setCustomValidity('');
   }
 
   //处理两处表单提交，一处是增加管理员/裁判，一处是删除管理员/裁判
@@ -129,7 +125,7 @@ class AdministratorPage extends PureComponent<
       if (!Array.isArray(userId) || userId.length === 0) return;
       //批量删除
       for (let item of userId) {
-        if (typeof item !== 'string') return;
+        if (typeof item !== 'string') continue;
         const [user, id] = item.split(':');
         await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
       }
@@ -141,8 +137,8 @@ class AdministratorPage extends PureComponent<
       inputVal: '',
       list: [],
     });
-    //先不加刷新链接，观察network 接口response，调试完毕后可以加上
-    //location.href = `/activity/${activity}/manage/administrator`;
+
+    location.href = `/activity/${activity}/manage/administrator`;
   };
 
   handleSearch = async () => {
@@ -233,7 +229,7 @@ class AdministratorPage extends PureComponent<
               inline
               aria-label={description ? `judge${data}` : `admin${data}`}
               name="userId"
-              id={`${index}checkbox`}
+              id={`checkbox${index}`}
               value={description ? `judge:${data}` : `admin:${data}`}
               checked={this.state.checked[index + '']}
               onChange={this.handleCheckboxChange}
