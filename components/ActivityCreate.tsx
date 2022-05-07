@@ -1,5 +1,12 @@
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import React, { FormEvent, useRef } from 'react';
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  FormControl,
+  Row,
+} from 'react-bootstrap';
+import React, { FocusEvent, FormEvent, useRef, useState } from 'react';
 import { Activity, ActivityFormData } from '../models/Activity';
 import { formToJSON } from 'web-utility';
 import { requestClient } from '../pages/api/core';
@@ -9,13 +16,14 @@ import { DateTimeInput } from './DateTimeInput';
 
 const ActivityCreate: React.FC = () => {
   const nameRef = useRef<HTMLInputElement>(null);
+
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
     const inputParams: ActivityFormData = formToJSON<ActivityFormData>(
       event.target as HTMLFormElement,
-    ) as ActivityFormData;
+    );
 
     const nameAvailabilityRes = await requestClient<NameAvailability>(
       'hackathon/checkNameAvailability',
@@ -27,6 +35,7 @@ const ActivityCreate: React.FC = () => {
 
     if (!nameAvailabilityRes.nameAvailable) {
       alert(`活动名称: ${inputParams.name} 不可用，请更换名称`);
+      return;
     }
 
     inputParams.banners = Array.from(
@@ -47,25 +56,25 @@ const ActivityCreate: React.FC = () => {
 
     inputParams.enrollmentEndedAt = inputParams.enrollmentEndedAt
       ? inputParams.enrollmentEndedAt
-      : null;
+      : undefined;
     inputParams.enrollmentStartedAt = inputParams.enrollmentStartedAt
       ? inputParams.enrollmentStartedAt
-      : null;
+      : undefined;
     inputParams.eventEndedAt = inputParams.eventEndedAt
       ? inputParams.eventEndedAt
-      : null;
+      : undefined;
     inputParams.eventStartedAt = inputParams.eventStartedAt
       ? inputParams.eventStartedAt
-      : null;
+      : undefined;
     inputParams.judgeEndedAt = inputParams.judgeEndedAt
       ? inputParams.judgeEndedAt
-      : null;
+      : undefined;
     inputParams.judgeStartedAt = inputParams.judgeStartedAt
       ? inputParams.judgeStartedAt
-      : null;
+      : undefined;
     inputParams.maxEnrollment = inputParams.maxEnrollment
       ? inputParams.maxEnrollment
-      : null;
+      : undefined;
 
     const createRes = await requestClient(
       `hackathon/${inputParams.name}`,
@@ -73,15 +82,40 @@ const ActivityCreate: React.FC = () => {
       inputParams as Activity,
     );
 
-    // await requestClient(`hackathon/${inputParams.name}/requestPublish`, "POST");
-    alert('succeed');
+    if (confirm('活动创建成功，是否申请发布活动?')) {
+      await requestClient(
+        `hackathon/${inputParams.name}/requestPublish`,
+        'POST',
+      );
+      alert('已申请发布活动,请等待审核');
+    }
+
     //todo loading
-    //todo notify success
+    //todo redirect
+  };
+
+  const validateName = async (event: FocusEvent<HTMLInputElement>) => {
+    console.log(nameRef.current?.value);
+    if (!nameRef.current?.value) {
+      return;
+    }
+
+    const nameAvailabilityRes = await requestClient<NameAvailability>(
+      'hackathon/checkNameAvailability',
+      'POST',
+      {
+        name: nameRef.current?.value,
+      },
+    );
+
+    if (!nameAvailabilityRes.nameAvailable) {
+      alert(`活动名称: ${nameRef.current!.value} 不可用，请更换名称`);
+    }
   };
 
   return (
     <Container>
-      <h2>创建活动</h2>
+      <h2 className="text-center">创建活动</h2>
       <Form onSubmit={submitHandler}>
         <Form.Group as={Row} className="mb-3" controlId="email">
           <Form.Label column sm={2}>
@@ -93,7 +127,7 @@ const ActivityCreate: React.FC = () => {
               type="text"
               placeholder="名称，仅限字母和数字"
               ref={nameRef}
-              isInvalid={false}
+              onBlur={validateName}
               required
             />
           </Col>
@@ -186,6 +220,7 @@ const ActivityCreate: React.FC = () => {
           </Col>
         </Form.Group>
 
+        {/*//todo editor*/}
         <Form.Group as={Row} className="mb-3" controlId="briefInfo">
           <Form.Label column sm={2}>
             活动详情

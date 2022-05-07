@@ -10,5 +10,9 @@ export const TimeUnit = new Map([
   ['年', Year],
 ]);
 
-export const convertDatetime = (datetime: string) =>
-  new Date(datetime).toLocaleString();
+export const convertDatetime = (datetime?: string) => {
+  if (datetime) {
+    return new Date(datetime).toLocaleString();
+  }
+  return '';
+};

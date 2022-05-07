@@ -12,15 +12,16 @@ export interface Activity extends Base {
   status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
-  maxEnrollment: number | null;
+  // maxEnrollment: number | null;
+  maxEnrollment?: number;
   autoApprove: boolean;
   tags: string[];
-  eventStartedAt: string | null;
-  eventEndedAt: string | null;
-  enrollmentStartedAt: string | null;
-  enrollmentEndedAt: string | null;
-  judgeStartedAt: string | null;
-  judgeEndedAt: string | null;
+  eventStartedAt?: string;
+  eventEndedAt?: string;
+  enrollmentStartedAt?: string;
+  enrollmentEndedAt?: string;
+  judgeStartedAt?: string;
+  judgeEndedAt?: string;
   roles: {
     isAdmin: boolean;
     isJudge: boolean;

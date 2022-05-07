@@ -1,7 +1,7 @@
 import { diffTime } from 'web-utility';
 import { Button } from 'react-bootstrap';
 
-import { TimeUnit } from './time';
+import { TimeUnit } from '../utils/time';
 import { Activity } from '../models/Activity';
 
 export interface ActivityEntryProps

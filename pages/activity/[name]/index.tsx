@@ -16,7 +16,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { convertDatetime } from '../../../components/time';
+import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
 import { LocationMap } from '../../../components/LocationMap';
 import { ActivityEntry } from '../../../components/ActivityEntry';
