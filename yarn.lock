@@ -7433,6 +7433,15 @@ web-utility@^3.6.1, web-utility@^3.6.2:
     element-internals-polyfill "^1.1.2"
     regenerator-runtime "^0.13.9"
 
+web-utility@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/web-utility/-/web-utility-3.6.4.tgz#d7322e1fdaf558546279df14e974ee8fe4394d3c"
+  integrity sha512-uX1w/G+NOCCoOL5spG9+0XDBMa2mgQk035WQqIO6hCvciiM7+juLDxDEU3VgwvoOpCirGA7mz4NexyrCoQYkyQ==
+  dependencies:
+    "@swc/helpers" "^0.3.8"
+    element-internals-polyfill "^1.1.2"
+    regenerator-runtime "^0.13.9"
+
 webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"

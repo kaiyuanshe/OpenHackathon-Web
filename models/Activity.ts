@@ -29,3 +29,9 @@ export interface Activity extends Base {
 }
 
 export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh';
+
+export type ActivityFormData = Activity & {
+  tagsString: string;
+  bannerUrls: string[] | string;
+  // bannerUrls:  string[];
+};
