@@ -1,4 +1,4 @@
-import { FormEvent, PureComponent } from 'react';
+import { PureComponent, SyntheticEvent } from 'react';
 import { Row, Col, Table, Form, ListGroup, Button } from 'react-bootstrap';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +15,7 @@ import { AdministratorModal } from '../../../../components/ActivityAdministrator
 import styles from '../../../../styles/Table.module.less';
 interface State {
   show: boolean;
-  checked: { [key: string]: boolean };
+  checked: Record<string, boolean>;
   inputVal: string;
   nextLink?: string | null;
   list: User[];
@@ -83,7 +83,6 @@ class AdministratorPage extends PureComponent<
 
   //检验：复选框至少选中一个，否则提示验证消息
   componentDidMount() {
-    //非常假，'#0checkbox'selector查询字段非法，改为‘#checkbox0’。HTML4好像不支持数字做开头，但是HTML5是支持的
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
     firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
@@ -95,62 +94,66 @@ class AdministratorPage extends PureComponent<
       return firstCheckbox?.setCustomValidity('');
   }
 
-  //处理两处表单提交，一处是增加管理员/裁判，一处是删除管理员/裁判
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  //处理三处表单提交，1. 搜索用户 2. 增加管理员/裁判，3. 删除管理员/裁判
+  handleSubmit = async (
+    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  ) => {
     event.preventDefault();
     event.stopPropagation();
+    //获取提交按钮id，按此区分事件处理；在这种情况下，event.target为Form，所以需要获取nativeEvent，然后得到id
+    const { id } = event.nativeEvent.submitter!;
+    console.log(id, event.currentTarget, event);
     //解构赋值获得关键的userId和admin/judge参数
     const data = formToJSON(event.target as HTMLFormElement),
-      { userId, adminJudge, description } = data,
+      { userId, adminJudge, userSearch, description } = data,
       { activity } = this.props;
-    if (!userId) return;
+    switch (id) {
+      case 'search':
+        const { value: searchResult } = await requestClient<ListData<User>>(
+          `user/search?keyword=${userSearch}`,
+          'POST',
+        );
+        if (!searchResult?.[0]) return alert('您要查询的用户不存在');
+        this.setState({
+          list: [...searchResult],
+        });
+        break;
+      case 'increase':
+        if (!userId) return alert('请先搜索并选择一位用户');
+        await requestClient(
+          `hackathon/${activity}/${adminJudge}/${userId}`,
+          'PUT',
+          { description },
+        );
 
-    //此处进行判断，如果adminjudge不为空，传入事件为增加管理员/裁判；否则删除管理员/裁判
-    if (adminJudge) {
-      await requestClient(
-        `hackathon/${activity}/${adminJudge}/${userId}`,
-        'PUT',
-        { description },
-      );
-    } else {
-      //弹窗确认删除
-      const confirmed = window.confirm('确认删除所选管理员/裁判？');
-      //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
-      if (!confirmed) return;
+        self.alert('已知悉您的请求，正在处理中！');
+        location.href = `/activity/${activity}/manage/administrator`;
+        this.setState({
+          show: false,
+          inputVal: '',
+          list: [],
+        });
 
-      if (typeof userId === 'string') {
-        const [user, id] = userId.split(':');
-        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-      }
-      if (!Array.isArray(userId) || userId.length === 0) return;
-      //批量删除
-      for (let item of userId) {
-        if (typeof item !== 'string') continue;
-        const [user, id] = item.split(':');
-        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-      }
+        break;
+      case 'delete':
+        //弹窗确认删除
+        const confirmed = window.confirm('确认删除所选管理员/裁判？');
+        //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
+        if (!confirmed) return;
+        if (typeof userId === 'string') {
+          const [user, id] = userId.split(':');
+          await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+        }
+        if (!Array.isArray(userId) || userId.length === 0) return;
+        //批量删除
+        for (let item of userId) {
+          if (typeof item !== 'string') continue;
+          const [user, id] = item.split(':');
+          await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+        }
+        location.href = `/activity/${activity}/manage/administrator`;
+        break;
     }
-
-    self.alert('已知悉您的请求，正在处理中！');
-    this.setState({
-      show: false,
-      inputVal: '',
-      list: [],
-    });
-
-    location.href = `/activity/${activity}/manage/administrator`;
-  };
-
-  handleSearch = async () => {
-    const { inputVal } = this.state,
-      { value } = await requestClient<ListData<User>>(
-        `user/search?keyword=${inputVal}`,
-        'POST',
-      );
-    if (!value?.[0]) alert('您要查询的用户不存在');
-    this.setState({
-      list: [...value],
-    });
   };
 
   handleShow = () => {
@@ -163,11 +166,10 @@ class AdministratorPage extends PureComponent<
       show: false,
     });
   };
-  handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
+
+  handleReset = () => {
     this.setState({
-      inputVal: value,
+      list: [],
     });
   };
 
@@ -265,7 +267,7 @@ class AdministratorPage extends PureComponent<
                   <FontAwesomeIcon icon={faPlus} />
                   增加
                 </Button>
-                <Button variant="danger" type="submit">
+                <Button variant="danger" type="submit" id="delete">
                   <FontAwesomeIcon icon={faTrash} />
                   删除
                 </Button>
@@ -302,8 +304,7 @@ class AdministratorPage extends PureComponent<
           show={this.state.show}
           onHide={this.handleClose}
           handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
-          handleSearch={this.handleSearch}
+          handleReset={this.handleReset}
           list={this.state.list}
           handleClose={this.handleClose}
         />
