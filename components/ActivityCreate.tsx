@@ -62,7 +62,6 @@ const ActivityCreate: React.FC = () => {
       alert('已申请发布活动,请等待审核');
     }
 
-    //todo loading
     await router.push(`/activity/${inputParams.name}`);
   };
 
