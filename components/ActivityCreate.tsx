@@ -4,7 +4,7 @@ import { Activity, ActivityFormData } from '../models/Activity';
 import { formToJSON } from 'web-utility';
 import { requestClient } from '../pages/api/core';
 import { NameAvailability } from '../models/NameAvailability';
-import { MyFilePicker } from './MyFilePicker';
+import { FileUpload } from './FileUpload';
 import { DateTimeInput } from './DateTimeInput';
 import { useRouter } from 'next/router';
 
@@ -33,17 +33,16 @@ const ActivityCreate: React.FC = () => {
       return;
     }
 
-    inputParams.banners = Array.from(
-      ([] as string[]).concat(inputParams.bannerUrls ?? []),
-      bannerUrl => {
+    inputParams.banners = ([] as string[])
+      .concat(inputParams.bannerUrls ?? [])
+      .map(bannerUrl => {
         const fileName = bannerUrl.split('/').slice(-1)[0];
         return {
           name: fileName,
           description: fileName,
           uri: bannerUrl,
         };
-      },
-    );
+      });
 
     inputParams.tags = inputParams.tagsString
       ? inputParams.tagsString.split(/\s+/)
@@ -138,7 +137,7 @@ const ActivityCreate: React.FC = () => {
             头图（必填,最多10张）
           </Form.Label>
           <Col column sm={10}>
-            <MyFilePicker
+            <FileUpload
               accept="image/*"
               name="bannerUrls"
               max={2}

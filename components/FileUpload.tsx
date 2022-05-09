@@ -2,10 +2,7 @@ import React, { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 
 import style from 'idea-react/source/FilePicker/index.module.less';
 import { Icon } from 'idea-react';
-import { requestClient, uploadBlob } from '../pages/api/core';
-import { UploadUrl } from '../models/Upload';
-//todo why wrong
-// import { Icon } from "idea-react/source/Icon";
+import { uploadFile } from '../utils/UploadFile';
 
 export type FilePickerProps = PropsWithoutRef<{
   accept: `${string}/${string}`;
@@ -20,7 +17,7 @@ interface State {
   values: string[];
 }
 
-export class MyFilePicker extends PureComponent<FilePickerProps, State> {
+export class FileUpload extends PureComponent<FilePickerProps, State> {
   static displayName = 'FilePicker';
 
   state: Readonly<State> = {
@@ -33,16 +30,6 @@ export class MyFilePicker extends PureComponent<FilePickerProps, State> {
     this.setState({ values });
   }
 
-  // componentDidUpdate(lastProps: FilePickerProps, lastState: State) {
-  //   const { defaultValue: values = [] } = this.props;
-  //
-  //   if (
-  //     lastProps.defaultValue + "" !== values + "" &&
-  //     values + "" !== lastState.values + ""
-  //   )
-  //     this.setState({ values });
-  // }
-
   addOne = async ({
     currentTarget: { files },
   }: ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +41,7 @@ export class MyFilePicker extends PureComponent<FilePickerProps, State> {
     }
 
     for (let file of files) {
-      const fileUrl: string = await this.uploadFile(file);
+      const fileUrl: string = await uploadFile(file);
       console.log('uploaded');
       values.push(fileUrl);
     }
@@ -71,22 +58,6 @@ export class MyFilePicker extends PureComponent<FilePickerProps, State> {
     this.setState({
       values: [...values.slice(0, index), ...values.slice(index + 1)],
     });
-  }
-
-  async uploadFile(file: File): Promise<string> {
-    const fileName: string = file.name;
-
-    const uploadUrlRes = await requestClient<UploadUrl>(
-      `user/generateFileUrl`,
-      'POST',
-      {
-        filename: fileName,
-      },
-    );
-    await uploadBlob(uploadUrlRes.uploadUrl, 'PUT', file, {
-      'Content-Type': file.type,
-    });
-    return uploadUrlRes.url;
   }
 
   render() {
