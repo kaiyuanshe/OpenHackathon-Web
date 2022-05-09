@@ -18,11 +18,11 @@ const Host =
 
 export async function request<T = void>(
   path: string,
-  method?: Request['method'],
+  method: Request['method'] = 'GET',
   body?: any,
   context?: Partial<GetServerSidePropsContext>,
   headers: Record<string, any> = {},
-) {
+): Promise<T> {
   const token = context?.req && readCookie(context.req, 'token');
 
   if (token) headers.Authorization = `token ${token}`;
@@ -140,7 +140,7 @@ export function writeCookie(
   setCookie({ res }, key, value, {
     httpOnly: true,
     secure: Env !== 'development',
-    maxAge: +new Date(expiredAt) - Date.now(),
+    maxAge: (+new Date(expiredAt) - Date.now()) / 1000,
     path: '/',
   });
 }

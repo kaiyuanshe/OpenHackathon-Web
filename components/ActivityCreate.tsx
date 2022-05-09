@@ -6,9 +6,11 @@ import { requestClient } from '../pages/api/core';
 import { NameAvailability } from '../models/NameAvailability';
 import { MyFilePicker } from './MyFilePicker';
 import { DateTimeInput } from './DateTimeInput';
+import { useRouter } from 'next/router';
 
 const ActivityCreate: React.FC = () => {
   const nameRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,7 +19,7 @@ const ActivityCreate: React.FC = () => {
     const inputParams: ActivityFormData = formToJSON<ActivityFormData>(
       event.target as HTMLFormElement,
     );
-
+    console.log(inputParams);
     const nameAvailabilityRes = await requestClient<NameAvailability>(
       'hackathon/checkNameAvailability',
       'POST',
@@ -47,28 +49,6 @@ const ActivityCreate: React.FC = () => {
       ? inputParams.tagsString.split(/\s+/)
       : [];
 
-    inputParams.enrollmentEndedAt = inputParams.enrollmentEndedAt
-      ? inputParams.enrollmentEndedAt
-      : undefined;
-    inputParams.enrollmentStartedAt = inputParams.enrollmentStartedAt
-      ? inputParams.enrollmentStartedAt
-      : undefined;
-    inputParams.eventEndedAt = inputParams.eventEndedAt
-      ? inputParams.eventEndedAt
-      : undefined;
-    inputParams.eventStartedAt = inputParams.eventStartedAt
-      ? inputParams.eventStartedAt
-      : undefined;
-    inputParams.judgeEndedAt = inputParams.judgeEndedAt
-      ? inputParams.judgeEndedAt
-      : undefined;
-    inputParams.judgeStartedAt = inputParams.judgeStartedAt
-      ? inputParams.judgeStartedAt
-      : undefined;
-    inputParams.maxEnrollment = inputParams.maxEnrollment
-      ? inputParams.maxEnrollment
-      : undefined;
-
     const createRes = await requestClient(
       `hackathon/${inputParams.name}`,
       'PUT',
@@ -84,7 +64,7 @@ const ActivityCreate: React.FC = () => {
     }
 
     //todo loading
-    //todo redirect
+    await router.push(`/activity/${inputParams.name}`);
   };
 
   const validateName = async (event: FocusEvent<HTMLInputElement>) => {
