@@ -1,12 +1,5 @@
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  FormControl,
-  Row,
-} from 'react-bootstrap';
-import React, { FocusEvent, FormEvent, useRef, useState } from 'react';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import React, { FocusEvent, FormEvent, useRef } from 'react';
 import { Activity, ActivityFormData } from '../models/Activity';
 import { formToJSON } from 'web-utility';
 import { requestClient } from '../pages/api/core';

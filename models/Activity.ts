@@ -12,16 +12,15 @@ export interface Activity extends Base {
   status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
-  // maxEnrollment: number | null;
-  maxEnrollment?: number;
+  maxEnrollment: number;
   autoApprove: boolean;
   tags: string[];
-  eventStartedAt?: string;
-  eventEndedAt?: string;
-  enrollmentStartedAt?: string;
-  enrollmentEndedAt?: string;
-  judgeStartedAt?: string;
-  judgeEndedAt?: string;
+  eventStartedAt: string;
+  eventEndedAt: string;
+  enrollmentStartedAt: string;
+  enrollmentEndedAt: string;
+  judgeStartedAt: string;
+  judgeEndedAt: string;
   roles: {
     isAdmin: boolean;
     isJudge: boolean;
@@ -31,8 +30,24 @@ export interface Activity extends Base {
 
 export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh';
 
-export type ActivityFormData = Activity & {
+export interface ActivityFormData
+  extends Omit<
+    Activity,
+    | 'maxEnrollment'
+    | 'eventStartedAt'
+    | 'eventEndedAt'
+    | 'enrollmentStartedAt'
+    | 'enrollmentEndedAt'
+    | 'judgeStartedAt'
+    | 'judgeEndedAt'
+  > {
   tagsString: string;
   bannerUrls: string[] | string;
-  // bannerUrls:  string[];
-};
+  maxEnrollment?: number;
+  eventStartedAt?: string;
+  eventEndedAt?: string;
+  enrollmentStartedAt?: string;
+  enrollmentEndedAt?: string;
+  judgeStartedAt?: string;
+  judgeEndedAt?: string;
+}
