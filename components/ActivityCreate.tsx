@@ -19,7 +19,7 @@ const ActivityCreate: React.FC = () => {
     const inputParams: ActivityFormData = formToJSON<ActivityFormData>(
       event.target as HTMLFormElement,
     );
-    console.log(inputParams);
+
     const nameAvailabilityRes = await requestClient<NameAvailability>(
       'hackathon/checkNameAvailability',
       'POST',
@@ -140,7 +140,6 @@ const ActivityCreate: React.FC = () => {
               accept="image/*"
               name="bannerUrls"
               max={2}
-              // defaultValue={[]}
               multiple={true}
               required={true}
             />

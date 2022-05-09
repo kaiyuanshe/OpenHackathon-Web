@@ -2,7 +2,7 @@ import React, { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 
 import style from 'idea-react/source/FilePicker/index.module.less';
 import { Icon } from 'idea-react';
-import { uploadFile } from '../utils/UploadFile';
+import { uploadFile } from '../utils/uploadFile';
 
 export type FilePickerProps = PropsWithoutRef<{
   accept: `${string}/${string}`;
