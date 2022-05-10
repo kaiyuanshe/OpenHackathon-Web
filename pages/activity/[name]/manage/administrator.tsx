@@ -3,7 +3,7 @@ import { Row, Col, Table, Form, ListGroup, Button } from 'react-bootstrap';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { formToJSON } from 'web-utility';
+import { formToJSON, JSONValue, URLData } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import PageHead from '../../../../components/PageHead';
 import { requestClient } from '../../../api/core';
@@ -16,7 +16,7 @@ import styles from '../../../../styles/Table.module.less';
 interface State {
   show: boolean;
   checked: Record<string, boolean>;
-  inputVal: string;
+
   nextLink?: string | null;
   list: User[];
 }
@@ -77,7 +77,7 @@ class AdministratorPage extends PureComponent<
       (prev, current) => ({ ...prev, [current]: false }),
       {},
     ),
-    inputVal: '',
+
     list: [],
   };
 
@@ -102,7 +102,7 @@ class AdministratorPage extends PureComponent<
     event.stopPropagation();
     //获取提交按钮id，按此区分事件处理；在这种情况下，event.target为Form，所以需要获取nativeEvent，然后得到id
     const { id } = event.nativeEvent.submitter!;
-    console.log(id, event.currentTarget, event);
+
     //解构赋值获得关键的userId和admin/judge参数
     const data = formToJSON(event.target as HTMLFormElement),
       { userId, adminJudge, userSearch, description } = data,
@@ -130,7 +130,7 @@ class AdministratorPage extends PureComponent<
         location.href = `/activity/${activity}/manage/administrator`;
         this.setState({
           show: false,
-          inputVal: '',
+
           list: [],
         });
 
@@ -138,15 +138,17 @@ class AdministratorPage extends PureComponent<
       case 'delete':
         //弹窗确认删除
         const confirmed = window.confirm('确认删除所选管理员/裁判？');
-        //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
         if (!confirmed) return;
-        if (typeof userId === 'string') {
-          const [user, id] = userId.split(':');
-          await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-        }
-        if (!Array.isArray(userId) || userId.length === 0) return;
+        //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
+        let userIdArr: (JSONValue | URLData<unknown>)[] = [];
+        typeof userId === 'string'
+          ? (userIdArr = userId.split(','))
+          : Array.isArray(userId)
+          ? (userIdArr = [...userId])
+          : userId;
+
         //批量删除
-        for (let item of userId) {
+        for (let item of userIdArr) {
           if (typeof item !== 'string') continue;
           const [user, id] = item.split(':');
           await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
@@ -199,7 +201,6 @@ class AdministratorPage extends PureComponent<
   renderField = (
     {
       createdAt,
-      updatedAt,
       userId,
       user: {
         email,
@@ -303,10 +304,10 @@ class AdministratorPage extends PureComponent<
         <AdministratorModal
           show={this.state.show}
           onHide={this.handleClose}
-          handleSubmit={this.handleSubmit}
-          handleReset={this.handleReset}
+          onSubmit={this.handleSubmit}
+          onReset={this.handleReset}
           list={this.state.list}
-          handleClose={this.handleClose}
+          onClose={this.handleClose}
         />
       </ActivityManageFrame>
     );

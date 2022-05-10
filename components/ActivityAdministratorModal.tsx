@@ -5,19 +5,17 @@ import { User } from '../models/User';
 interface AdministratorModalProps {
   show: boolean;
   onHide?: () => any;
-  handleSubmit: (
-    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
-  ) => Promise<any>;
-  handleReset: () => any;
+  onSubmit: (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => any;
+  onReset: () => any;
   list: User[];
-  handleClose: () => any;
+  onClose: () => any;
 }
 
 export const AdministratorModal = ({
   show,
   onHide,
-  handleSubmit,
-  handleReset,
+  onSubmit,
+  onReset,
   list,
 }: AdministratorModalProps) => (
   <Modal show={show} onHide={onHide} centered>
@@ -25,7 +23,7 @@ export const AdministratorModal = ({
       <Modal.Title>增加管理员</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={onSubmit}>
         <Form.Group as={Row}>
           <Col>
             <Form.Control
@@ -44,7 +42,7 @@ export const AdministratorModal = ({
           </Col>
         </Form.Group>
       </Form>
-      <Form onSubmit={handleSubmit} onReset={handleReset}>
+      <Form onSubmit={onSubmit} onReset={onReset}>
         <Table className="my-3">
           <thead>
             <tr>
@@ -56,7 +54,7 @@ export const AdministratorModal = ({
           </thead>
           <tbody>
             {list?.map(({ username, nickname, email, id }, idx) => (
-              <tr key={idx}>
+              <tr key={id}>
                 <td>
                   <Form.Check
                     inline
