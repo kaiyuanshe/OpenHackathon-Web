@@ -1,23 +1,32 @@
-import { PureComponent, SyntheticEvent } from 'react';
-import { Row, Col, Table, Form, ListGroup, Button } from 'react-bootstrap';
+import { SyntheticEvent, ChangeEvent, PureComponent } from 'react';
+import {
+  Badge,
+  Row,
+  Col,
+  ListGroup,
+  Table,
+  Form,
+  Button,
+} from 'react-bootstrap';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { formToJSON, JSONValue, URLData } from 'web-utility';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
-import PageHead from '../../../../components/PageHead';
-import { requestClient } from '../../../api/core';
-import { AdminsJudges } from '../../../../models/ActivityManage';
-import { User } from '../../../../models/User';
-import { ListData } from '../../../../models/Base';
+import { formToJSON } from 'web-utility';
+
 import { convertDatetime } from '../../../../components/time';
+import PageHead from '../../../../components/PageHead';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
+import { requestClient } from '../../../api/core';
+import { ListData } from '../../../../models/Base';
+import { User } from '../../../../models/User';
+import { AdminsJudges } from '../../../../models/ActivityManage';
 import styles from '../../../../styles/Table.module.less';
+
 interface State {
   show: boolean;
   checked: Record<string, boolean>;
-
-  nextLink?: string | null;
+  nextLink: string | null;
   list: User[];
 }
 
@@ -77,7 +86,7 @@ class AdministratorPage extends PureComponent<
       (prev, current) => ({ ...prev, [current]: false }),
       {},
     ),
-
+    nextLink: null,
     list: [],
   };
 
@@ -85,11 +94,13 @@ class AdministratorPage extends PureComponent<
   componentDidMount() {
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
+
     firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
   }
   componentDidUpdate() {
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
+
     if (Object.values(this.state.checked).some(check => check))
       return firstCheckbox?.setCustomValidity('');
   }
@@ -101,12 +112,17 @@ class AdministratorPage extends PureComponent<
     event.preventDefault();
     event.stopPropagation();
     //获取提交按钮id，按此区分事件处理；在这种情况下，event.target为Form，所以需要获取nativeEvent，然后得到id
-    const { id } = event.nativeEvent.submitter!;
+    const { id } = event.nativeEvent.submitter!,
+      { activity } = this.props;
 
     //解构赋值获得关键的userId和admin/judge参数
-    const data = formToJSON(event.target as HTMLFormElement),
-      { userId, adminJudge, userSearch, description } = data,
-      { activity } = this.props;
+    const { userId, adminJudge, userSearch, description } = formToJSON<{
+      userId: string | string[];
+      adminJudge: string;
+      userSearch: string;
+      description: string;
+    }>(event.currentTarget);
+
     switch (id) {
       case 'search':
         const { value: searchResult } = await requestClient<ListData<User>>(
@@ -114,38 +130,32 @@ class AdministratorPage extends PureComponent<
           'POST',
         );
         if (!searchResult?.[0]) return alert('您要查询的用户不存在');
+
         this.setState({
           list: [...searchResult],
         });
         break;
       case 'increase':
         if (!userId) return alert('请先搜索并选择一位用户');
+
         await requestClient(
           `hackathon/${activity}/${adminJudge}/${userId}`,
           'PUT',
           { description },
         );
-
         self.alert('已知悉您的请求，正在处理中！');
+
         location.href = `/activity/${activity}/manage/administrator`;
-        this.setState({
-          show: false,
 
-          list: [],
-        });
-
+        this.setState({ show: false, list: [] });
         break;
       case 'delete':
         //弹窗确认删除
         const confirmed = window.confirm('确认删除所选管理员/裁判？');
         if (!confirmed) return;
         //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
-        let userIdArr: (JSONValue | URLData<unknown>)[] = [];
-        typeof userId === 'string'
-          ? (userIdArr = userId.split(','))
-          : Array.isArray(userId)
-          ? (userIdArr = [...userId])
-          : userId;
+        const userIdArr =
+          typeof userId === 'string' ? userId.split(',') : userId;
 
         //批量删除
         for (let item of userIdArr) {
@@ -158,42 +168,27 @@ class AdministratorPage extends PureComponent<
     }
   };
 
-  handleShow = () => {
-    this.setState({
-      show: true,
-    });
-  };
-  handleClose = () => {
-    this.setState({
-      show: false,
-    });
-  };
+  toggleDialog = (show: boolean) => () => this.setState({ show });
 
-  handleReset = () => {
-    this.setState({
-      list: [],
-    });
-  };
+  handleReset = () => this.setState({ list: [] });
 
   toggleSelectAll = ({
     currentTarget: { checked },
-  }: React.ChangeEvent<HTMLInputElement>) => {
+  }: ChangeEvent<HTMLInputElement>) =>
     this.setState(prevState => ({
       checked: Object.fromEntries(
         Object.keys(prevState.checked).map(key => [key, checked]),
       ),
     }));
-  };
-  handleCheckboxChange = ({
-    currentTarget,
-  }: React.ChangeEvent<HTMLInputElement>) => {
+
+  handleCheckboxChange = ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
     //设置一个自定义标签获取每个checked的名称，从而更改对应的state.checked
-    const dataKey = currentTarget.getAttribute('data-key'),
-      checked = currentTarget.checked;
+    const { key } = currentTarget.dataset;
+
     this.setState(prevState => ({
       checked: {
         ...prevState.checked,
-        [dataKey!]: checked,
+        [key!]: currentTarget.checked,
       },
     }));
   };
@@ -244,6 +239,34 @@ class AdministratorPage extends PureComponent<
     </tr>
   );
 
+  renderList() {
+    const { admins, judges } = this.props;
+    const all = [...admins, ...judges];
+
+    return (
+      <ListGroup>
+        <ListGroup.Item className="d-flex justify-content-between">
+          全部用户
+          <Badge className="ms-2" bg="secondary">
+            {all.length}
+          </Badge>
+        </ListGroup.Item>
+        <ListGroup.Item className="d-flex justify-content-between">
+          管理员
+          <Badge className="ms-2" bg="secondary">
+            {admins.length}
+          </Badge>
+        </ListGroup.Item>
+        <ListGroup.Item className="d-flex justify-content-between">
+          裁判
+          <Badge className="ms-2" bg="secondary">
+            {judges.length}
+          </Badge>
+        </ListGroup.Item>
+      </ListGroup>
+    );
+  }
+
   render() {
     const { activity, path, admins, judges } = this.props,
       value = [...admins, ...judges];
@@ -254,22 +277,19 @@ class AdministratorPage extends PureComponent<
         <Form onSubmit={this.handleSubmit}>
           <Row xs="1" sm="2">
             <Col sm="auto" md="auto">
-              <ListGroup>
-                <ListGroup.Item>全部用户({value.length})</ListGroup.Item>
-                <ListGroup.Item>管理员({admins.length})</ListGroup.Item>
-                <ListGroup.Item>裁判({judges.length})</ListGroup.Item>
-              </ListGroup>
+              {this.renderList()}
+
               <Col className="d-flex flex-column">
                 <Button
                   variant="success"
                   className="my-3"
-                  onClick={this.handleShow}
+                  onClick={this.toggleDialog(true)}
                 >
-                  <FontAwesomeIcon icon={faPlus} />
+                  <FontAwesomeIcon className="me-2" icon={faPlus} />
                   增加
                 </Button>
                 <Button variant="danger" type="submit" id="delete">
-                  <FontAwesomeIcon icon={faTrash} />
+                  <FontAwesomeIcon className="me-2" icon={faTrash} />
                   删除
                 </Button>
               </Col>
@@ -301,13 +321,13 @@ class AdministratorPage extends PureComponent<
             </Col>
           </Row>
         </Form>
+
         <AdministratorModal
           show={this.state.show}
-          onHide={this.handleClose}
+          onHide={this.toggleDialog(false)}
           onSubmit={this.handleSubmit}
           onReset={this.handleReset}
           list={this.state.list}
-          onClose={this.handleClose}
         />
       </ActivityManageFrame>
     );

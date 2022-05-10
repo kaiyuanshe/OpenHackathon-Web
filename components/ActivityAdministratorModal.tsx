@@ -1,14 +1,14 @@
 import { SyntheticEvent } from 'react';
 import { Modal, Form, Table, Row, Col, Button } from 'react-bootstrap';
+
 import { User } from '../models/User';
 
-interface AdministratorModalProps {
+export interface AdministratorModalProps {
   show: boolean;
-  onHide?: () => any;
+  list: User[];
   onSubmit: (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => any;
   onReset: () => any;
-  list: User[];
-  onClose: () => any;
+  onHide?: () => any;
 }
 
 export const AdministratorModal = ({
