@@ -10,6 +10,7 @@ export default function Document() {
         />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://polyfill.kaiyuanshe.cn/feature/PWAManifest.js"></script>
+        <script src="https://polyfill.kaiyuanshe.cn/feature/EventSubmitter.js"></script>
 
         <link
           rel="stylesheet"
