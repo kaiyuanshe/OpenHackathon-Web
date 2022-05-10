@@ -41,7 +41,7 @@ export interface ActivityFormData
     | 'judgeStartedAt'
     | 'judgeEndedAt'
   > {
-  tagsString: string;
+  tagsString?: string;
   bannerUrls: string[] | string;
   maxEnrollment?: number;
   eventStartedAt?: string;

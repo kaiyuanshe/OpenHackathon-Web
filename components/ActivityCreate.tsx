@@ -44,9 +44,7 @@ const ActivityCreate: React.FC = () => {
         };
       });
 
-    inputParams.tags = inputParams.tagsString
-      ? inputParams.tagsString.split(/\s+/)
-      : [];
+    inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
 
     const createRes = await requestClient(
       `hackathon/${inputParams.name}`,
@@ -133,7 +131,7 @@ const ActivityCreate: React.FC = () => {
 
         <Form.Group as={Row} className="mb-3" controlId="image">
           <Form.Label column sm={2}>
-            头图（必填,最多10张）
+            头图(必填,最多10张)
           </Form.Label>
           <Col column sm={10}>
             <FileUpload

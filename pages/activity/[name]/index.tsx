@@ -49,13 +49,13 @@ export async function getServerSideProps({
       undefined,
       { req, res },
     );
-  console.log(activity);
-  activity.detail = activity.detail
-    ? activity.detail
-        .replace(/\\+n/g, '\n')
-        .replace(/\\+t/g, ' ')
-        .replace(/\\+"/g, '"')
-    : activity.detail;
+
+  if (activity.detail) {
+    activity.detail = activity.detail
+      .replace(/\\+n/g, '\n')
+      .replace(/\\+t/g, ' ')
+      .replace(/\\+"/g, '"');
+  }
 
   return { props: { activity, teams } };
 }

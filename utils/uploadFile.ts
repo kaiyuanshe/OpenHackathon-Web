@@ -4,13 +4,13 @@ import { UploadUrl } from '../models/Upload';
 export const uploadFile = async (file: File): Promise<string> => {
   const filename = file.name;
 
-  const uploadUrlRes = await requestClient<UploadUrl>(
+  const { uploadUrl, url } = await requestClient<UploadUrl>(
     `user/generateFileUrl`,
     'POST',
     { filename },
   );
-  await uploadBlob(uploadUrlRes.uploadUrl, 'PUT', file, {
+  await uploadBlob(uploadUrl, 'PUT', file, {
     'Content-Type': file.type,
   });
-  return uploadUrlRes.url;
+  return url;
 };
