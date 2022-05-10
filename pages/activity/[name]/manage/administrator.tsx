@@ -1,23 +1,32 @@
-import { FormEvent, PureComponent } from 'react';
-import { Row, Col, Table, Form, ListGroup, Button } from 'react-bootstrap';
+import { SyntheticEvent, ChangeEvent, PureComponent } from 'react';
+import {
+  Badge,
+  Row,
+  Col,
+  ListGroup,
+  Table,
+  Form,
+  Button,
+} from 'react-bootstrap';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formToJSON } from 'web-utility';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
-import PageHead from '../../../../components/PageHead';
-import { requestClient } from '../../../api/core';
-import { AdminsJudges } from '../../../../models/ActivityManage';
-import { User } from '../../../../models/User';
-import { ListData } from '../../../../models/Base';
+
 import { convertDatetime } from '../../../../components/time';
+import PageHead from '../../../../components/PageHead';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
+import { requestClient } from '../../../api/core';
+import { ListData } from '../../../../models/Base';
+import { User } from '../../../../models/User';
+import { AdminsJudges } from '../../../../models/ActivityManage';
 import styles from '../../../../styles/Table.module.less';
+
 interface State {
   show: boolean;
-  checked: { [key: string]: boolean };
-  inputVal: string;
-  nextLink?: string | null;
+  checked: Record<string, boolean>;
+  nextLink: string | null;
   list: User[];
 }
 
@@ -77,123 +86,109 @@ class AdministratorPage extends PureComponent<
       (prev, current) => ({ ...prev, [current]: false }),
       {},
     ),
-    inputVal: '',
+    nextLink: null,
     list: [],
   };
 
   //检验：复选框至少选中一个，否则提示验证消息
   componentDidMount() {
-    const firstCheckbox: HTMLInputElement = document.getElementById(
-      '0checkbox',
-    ) as HTMLInputElement;
+    const firstCheckbox =
+      document.querySelector<HTMLInputElement>('#checkbox0');
+
     firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
   }
   componentDidUpdate() {
-    const firstCheckbox: HTMLInputElement = document.getElementById(
-      '0checkbox',
-    ) as HTMLInputElement;
-    firstCheckbox?.setCustomValidity(
-      Object.values(this.state.checked).some(check => check === true)
-        ? ''
-        : '请选择至少一位管理员或裁判！',
-    );
+    const firstCheckbox =
+      document.querySelector<HTMLInputElement>('#checkbox0');
+
+    if (Object.values(this.state.checked).some(check => check))
+      return firstCheckbox?.setCustomValidity('');
   }
 
-  //处理两处表单提交，一处是增加管理员/裁判，一处是删除管理员/裁判
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  //处理三处表单提交，1. 搜索用户 2. 增加管理员/裁判，3. 删除管理员/裁判
+  handleSubmit = async (
+    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  ) => {
     event.preventDefault();
     event.stopPropagation();
-    //解构赋值获得关键的userId和admin/judge参数
-    const data = formToJSON(event.target as HTMLFormElement),
-      { userId, adminJudge, description } = data,
+    //获取提交按钮id，按此区分事件处理；在这种情况下，event.target为Form，所以需要获取nativeEvent，然后得到id
+    const { id } = event.nativeEvent.submitter!,
       { activity } = this.props;
-    if (!userId) return;
 
-    //此处进行判断，如果adminjudge不为空，传入事件为增加管理员/裁判；否则删除管理员/裁判
-    if (adminJudge) {
-      await requestClient(
-        `hackathon/${activity}/${adminJudge}/${userId}`,
-        'PUT',
-        { description },
-      );
-    } else {
-      //弹窗确认删除
-      const confirmed = window.confirm('确认删除所选管理员/裁判？');
-      //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里区分一下多选情况下的删除api
-      if (!confirmed) return;
+    //解构赋值获得关键的userId和admin/judge参数
+    const { userId, adminJudge, userSearch, description } = formToJSON<{
+      userId: string | string[];
+      adminJudge: string;
+      userSearch: string;
+      description: string;
+    }>(event.currentTarget);
 
-      if (typeof userId === 'string') {
-        const [user, id] = userId.split(':');
-        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-      }
-      if (!Array.isArray(userId) || userId.length === 0) return;
-      //批量删除
-      for (let item of userId) {
-        if (typeof item !== 'string') return;
-        const [user, id] = item.split(':');
-        await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-      }
+    switch (id) {
+      case 'search':
+        const { value: searchResult } = await requestClient<ListData<User>>(
+          `user/search?keyword=${userSearch}`,
+          'POST',
+        );
+        if (!searchResult?.[0]) return alert('您要查询的用户不存在');
+
+        this.setState({
+          list: [...searchResult],
+        });
+        break;
+      case 'increase':
+        if (!userId) return alert('请先搜索并选择一位用户');
+
+        await requestClient(
+          `hackathon/${activity}/${adminJudge}/${userId}`,
+          'PUT',
+          { description },
+        );
+        self.alert('已知悉您的请求，正在处理中！');
+
+        location.href = `/activity/${activity}/manage/administrator`;
+
+        this.setState({ show: false, list: [] });
+        break;
+      case 'delete':
+        //弹窗确认删除
+        const confirmed = window.confirm('确认删除所选管理员/裁判？');
+        if (!confirmed) return;
+        //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
+        const userIdArr =
+          typeof userId === 'string' ? userId.split(',') : userId;
+
+        //批量删除
+        for (let item of userIdArr) {
+          if (typeof item !== 'string') continue;
+          const [user, id] = item.split(':');
+          await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+        }
+        location.href = `/activity/${activity}/manage/administrator`;
+        break;
     }
-
-    self.alert('已知悉您的请求，正在处理中！');
-    this.setState({
-      show: false,
-      inputVal: '',
-      list: [],
-    });
-    //先不加刷新链接，观察network 接口response，调试完毕后可以加上
-    //location.href = `/activity/${activity}/manage/administrator`;
   };
 
-  handleSearch = async () => {
-    const { inputVal } = this.state,
-      { value } = await requestClient<ListData<User>>(
-        `user/search?keyword=${inputVal}`,
-        'POST',
-      );
-    if (!value?.[0]) alert('您要查询的用户不存在');
-    this.setState({
-      list: [...value],
-    });
-  };
+  toggleDialog = (show: boolean) => () => this.setState({ show });
 
-  handleShow = () => {
-    this.setState({
-      show: true,
-    });
-  };
-  handleClose = () => {
-    this.setState({
-      show: false,
-    });
-  };
-  handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      inputVal: value,
-    });
-  };
+  handleReset = () => this.setState({ list: [] });
 
   toggleSelectAll = ({
     currentTarget: { checked },
-  }: React.ChangeEvent<HTMLInputElement>) => {
+  }: ChangeEvent<HTMLInputElement>) =>
     this.setState(prevState => ({
       checked: Object.fromEntries(
         Object.keys(prevState.checked).map(key => [key, checked]),
       ),
     }));
-  };
-  handleCheckboxChange = ({
-    currentTarget,
-  }: React.ChangeEvent<HTMLInputElement>) => {
+
+  handleCheckboxChange = ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
     //设置一个自定义标签获取每个checked的名称，从而更改对应的state.checked
-    const dataKey = currentTarget.getAttribute('data-key'),
-      checked = currentTarget.checked;
+    const { key } = currentTarget.dataset;
+
     this.setState(prevState => ({
       checked: {
         ...prevState.checked,
-        [dataKey!]: checked,
+        [key!]: currentTarget.checked,
       },
     }));
   };
@@ -201,7 +196,6 @@ class AdministratorPage extends PureComponent<
   renderField = (
     {
       createdAt,
-      updatedAt,
       userId,
       user: {
         email,
@@ -233,7 +227,7 @@ class AdministratorPage extends PureComponent<
               inline
               aria-label={description ? `judge${data}` : `admin${data}`}
               name="userId"
-              id={`${index}checkbox`}
+              id={`checkbox${index}`}
               value={description ? `judge:${data}` : `admin:${data}`}
               checked={this.state.checked[index + '']}
               onChange={this.handleCheckboxChange}
@@ -245,6 +239,34 @@ class AdministratorPage extends PureComponent<
     </tr>
   );
 
+  renderList() {
+    const { admins, judges } = this.props;
+    const all = [...admins, ...judges];
+
+    return (
+      <ListGroup>
+        <ListGroup.Item className="d-flex justify-content-between">
+          全部用户
+          <Badge className="ms-2" bg="secondary">
+            {all.length}
+          </Badge>
+        </ListGroup.Item>
+        <ListGroup.Item className="d-flex justify-content-between">
+          管理员
+          <Badge className="ms-2" bg="secondary">
+            {admins.length}
+          </Badge>
+        </ListGroup.Item>
+        <ListGroup.Item className="d-flex justify-content-between">
+          裁判
+          <Badge className="ms-2" bg="secondary">
+            {judges.length}
+          </Badge>
+        </ListGroup.Item>
+      </ListGroup>
+    );
+  }
+
   render() {
     const { activity, path, admins, judges } = this.props,
       value = [...admins, ...judges];
@@ -255,22 +277,19 @@ class AdministratorPage extends PureComponent<
         <Form onSubmit={this.handleSubmit}>
           <Row xs="1" sm="2">
             <Col sm="auto" md="auto">
-              <ListGroup>
-                <ListGroup.Item>全部用户({value.length})</ListGroup.Item>
-                <ListGroup.Item>管理员({admins.length})</ListGroup.Item>
-                <ListGroup.Item>裁判({judges.length})</ListGroup.Item>
-              </ListGroup>
+              {this.renderList()}
+
               <Col className="d-flex flex-column">
                 <Button
                   variant="success"
                   className="my-3"
-                  onClick={this.handleShow}
+                  onClick={this.toggleDialog(true)}
                 >
-                  <FontAwesomeIcon icon={faPlus} />
+                  <FontAwesomeIcon className="me-2" icon={faPlus} />
                   增加
                 </Button>
-                <Button variant="danger" type="submit">
-                  <FontAwesomeIcon icon={faTrash} />
+                <Button variant="danger" type="submit" id="delete">
+                  <FontAwesomeIcon className="me-2" icon={faTrash} />
                   删除
                 </Button>
               </Col>
@@ -302,14 +321,13 @@ class AdministratorPage extends PureComponent<
             </Col>
           </Row>
         </Form>
+
         <AdministratorModal
           show={this.state.show}
-          onHide={this.handleClose}
-          handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
-          handleSearch={this.handleSearch}
+          onHide={this.toggleDialog(false)}
+          onSubmit={this.handleSubmit}
+          onReset={this.handleReset}
           list={this.state.list}
-          handleClose={this.handleClose}
         />
       </ActivityManageFrame>
     );

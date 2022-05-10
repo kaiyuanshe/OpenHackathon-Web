@@ -42,6 +42,9 @@ export function ActivityManageFrame({
   children,
 }: ActivityManageFrameProps) {
   let innerIndex = -1;
+
+  const pathname = path?.split('/')[2];
+
   const current = menu.find(({ list }) =>
     list.find(({ href }, index) => {
       if (path?.split('/')[4].includes(href)) {
@@ -53,20 +56,24 @@ export function ActivityManageFrame({
   return (
     <Row xs={1} md={2}>
       <Col md="auto">
-        <Nav className="flex-column px-2 border-end">
+        <Nav className="flex-column px-2 border-end" variant="pills">
           {menu.map(({ title, list }) => (
             <>
-              <Nav.Link className="text-muted" disabled>
+              <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
                 {title}
               </Nav.Link>
               {list.map(({ title, href, icon }) => (
-                <Link key={title} href={href} passHref>
+                <Link
+                  key={title}
+                  href={`/activity/${pathname}/manage/${href}`}
+                  passHref
+                >
                   <Nav.Link>
                     <FontAwesomeIcon
                       icon={icon}
                       className="text-primary ms-3 me-3"
                     />
-                    {title}
+                    <span className="d-md-none d-lg-inline">{title}</span>
                   </Nav.Link>
                 </Link>
               ))}
