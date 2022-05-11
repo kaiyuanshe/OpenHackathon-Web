@@ -12,7 +12,7 @@ export interface Activity extends Base {
   status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
-  maxEnrollment: number;
+  maxEnrollment?: number;
   autoApprove: boolean;
   tags: string[];
   eventStartedAt: string;
@@ -30,24 +30,9 @@ export interface Activity extends Base {
 
 export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh';
 
-export interface ActivityFormData
-  extends Omit<
-    Activity,
-    | 'maxEnrollment'
-    | 'eventStartedAt'
-    | 'eventEndedAt'
-    | 'enrollmentStartedAt'
-    | 'enrollmentEndedAt'
-    | 'judgeStartedAt'
-    | 'judgeEndedAt'
-  > {
-  tagsString?: string;
-  bannerUrls: string[] | string;
-  maxEnrollment?: number;
-  eventStartedAt?: string;
-  eventEndedAt?: string;
-  enrollmentStartedAt?: string;
-  enrollmentEndedAt?: string;
-  judgeStartedAt?: string;
-  judgeEndedAt?: string;
+export interface NameAvailability {
+  name: string;
+  nameAvailable: boolean;
+  reason: string;
+  message: string;
 }

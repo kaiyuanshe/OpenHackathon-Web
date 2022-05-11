@@ -1,15 +1,18 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import React, { FocusEvent, FormEvent, useRef } from 'react';
-import { Activity, ActivityFormData } from '../models/Activity';
+import React, { FocusEvent, FormEvent } from 'react';
+import { Activity, NameAvailability } from '../models/Activity';
 import { formToJSON } from 'web-utility';
 import { requestClient } from '../pages/api/core';
-import { NameAvailability } from '../models/NameAvailability';
 import { FileUpload } from './FileUpload';
 import { DateTimeInput } from './DateTimeInput';
 import { useRouter } from 'next/router';
 
+interface ActivityFormData extends Activity {
+  tagsString?: string;
+  bannerUrls: string[] | string;
+}
+
 const ActivityCreate: React.FC = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
@@ -20,16 +23,8 @@ const ActivityCreate: React.FC = () => {
       event.target as HTMLFormElement,
     );
 
-    const nameAvailabilityRes = await requestClient<NameAvailability>(
-      'hackathon/checkNameAvailability',
-      'POST',
-      {
-        name: inputParams.name,
-      },
-    );
-
-    if (!nameAvailabilityRes.nameAvailable) {
-      alert(`活动名称: ${inputParams.name} 不可用，请更换名称`);
+    const nameAvailable: boolean = await isNameAvailable(inputParams.name);
+    if (!nameAvailable) {
       return;
     }
 
@@ -64,29 +59,37 @@ const ActivityCreate: React.FC = () => {
   };
 
   const validateName = async (event: FocusEvent<HTMLInputElement>) => {
-    console.log(nameRef.current?.value);
-    if (!nameRef.current?.value) {
+    if (!event.currentTarget.value) {
       return;
+    }
+
+    await isNameAvailable(event.currentTarget.value);
+  };
+
+  async function isNameAvailable(name?: string): Promise<boolean> {
+    const errorMsg = `活动名称: ${name} 不可用，请更换名称`;
+    if (!name || name.length < 1) {
+      alert(errorMsg);
+      return false;
     }
 
     const nameAvailabilityRes = await requestClient<NameAvailability>(
       'hackathon/checkNameAvailability',
       'POST',
-      {
-        name: nameRef.current?.value,
-      },
+      { name },
     );
 
     if (!nameAvailabilityRes.nameAvailable) {
-      alert(`活动名称: ${nameRef.current!.value} 不可用，请更换名称`);
+      alert(errorMsg);
     }
-  };
+    return nameAvailabilityRes.nameAvailable;
+  }
 
   return (
     <Container>
       <h2 className="text-center">创建活动</h2>
       <Form onSubmit={submitHandler}>
-        <Form.Group as={Row} className="mb-3" controlId="email">
+        <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
             名称(必填)
           </Form.Label>
@@ -95,14 +98,14 @@ const ActivityCreate: React.FC = () => {
               name="name"
               type="text"
               placeholder="名称，仅限字母和数字"
-              ref={nameRef}
+              pattern="[a-zA-Z0-9]+"
               onBlur={validateName}
               required
             />
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="name">
+        <Form.Group as={Row} className="mb-3" controlId="displayName">
           <Form.Label column sm={2}>
             显示名称(必填)
           </Form.Label>
@@ -131,15 +134,15 @@ const ActivityCreate: React.FC = () => {
 
         <Form.Group as={Row} className="mb-3" controlId="image">
           <Form.Label column sm={2}>
-            头图(必填,最多10张)
+            头图(必填，最多10张)
           </Form.Label>
           <Col column sm={10}>
             <FileUpload
               accept="image/*"
               name="bannerUrls"
               max={2}
-              multiple={true}
-              required={true}
+              multiple
+              required
             />
           </Col>
         </Form.Group>
@@ -153,9 +156,13 @@ const ActivityCreate: React.FC = () => {
           </Col>
         </Form.Group>
 
-        <DateTimeInput label="报名时间" inputName="enrollment" />
-        <DateTimeInput label="活动时间" inputName="event" />
-        <DateTimeInput label="评分时间" inputName="judge" />
+        <DateTimeInput
+          label="报名时间(必填)"
+          name="enrollment"
+          required={true}
+        />
+        <DateTimeInput label="活动时间(必填)" name="event" required={true} />
+        <DateTimeInput label="评分时间(必填)" name="judge" required={true} />
 
         <Form.Group as={Row} className="mb-3" controlId="slogan">
           <Form.Label column sm={2}>
@@ -175,6 +182,7 @@ const ActivityCreate: React.FC = () => {
               name="maxEnrollment"
               type="number"
               placeholder="0 表示无限"
+              defaultValue={0}
             />
           </Col>
         </Form.Group>

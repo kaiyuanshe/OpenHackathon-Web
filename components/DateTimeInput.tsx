@@ -1,24 +1,33 @@
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import React from 'react';
 
-export const DateTimeInput: React.FC<{
+interface DateTimeInputProps {
   label: string;
-  inputName: string;
-}> = props => (
+  name: string;
+  required?: boolean;
+}
+
+export const DateTimeInput: React.FC<DateTimeInputProps> = ({
+  label,
+  name,
+  required = false,
+}) => (
   <Form.Group as={Row} className="mb-3" controlId="enrollTime">
     <Form.Label column sm={2}>
-      {props.label}
+      {label}
     </Form.Label>
     <Col column sm={10}>
       <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1">时间范围</InputGroup.Text>
         <Form.Control
-          name={`${props.inputName}StartedAt`}
+          name={`${name}StartedAt`}
           type="datetime-local"
+          required={required}
         />
         <Form.Control
-          name={`${props.inputName}EndedAt`}
+          name={`${name}EndedAt`}
           type="datetime-local"
+          required={required}
         />
       </InputGroup>
     </Col>
