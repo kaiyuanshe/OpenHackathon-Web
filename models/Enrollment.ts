@@ -1,16 +1,15 @@
 import { User } from './User';
+import { Base } from './Base';
 
-export interface Enrollment {
-  createdAt: '2008-01-14T04:33:35Z';
-  updatedAt: '2008-01-14T04:33:35Z';
-  hackathonName: 'foo';
-  userId: '1';
+export interface Enrollment extends Base {
+  hackathonName: string;
+  userId: string;
   user: User;
   status: 'approved';
   extensions: [
     {
-      name: 'mykey';
-      value: 'myvalue';
+      name: string;
+      value: string;
     },
   ];
 }

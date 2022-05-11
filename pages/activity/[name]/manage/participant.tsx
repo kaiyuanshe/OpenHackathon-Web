@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Button, Modal, Table } from 'react-bootstrap';
 import { useState } from 'react';
-import { requestClient } from '../../api/core';
-import { ListData } from '../../../models/Base';
-import { Enrollment } from '../../../models/Enrollment';
+import { requestClient } from '../../../api/core';
+import { ListData } from '../../../../models/Base';
+import { Enrollment } from '../../../../models/Enrollment';
 
 //——————————————— 辅助组件 ———————————————
 
@@ -13,21 +13,12 @@ const UserName = ({
   extensions,
 }: {
   name: string;
-  extensions: {} | any;
+  extensions: Enrollment['extensions'];
 }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  //获取问卷答案
-  const answer = (question: string) => {
-    let res = extensions
-      .filter((n: any) => n.name === question)
-      .map((n: any) => n.value);
-    console.log('res = ', res);
-    return res;
-  };
 
   return (
     <>
@@ -45,11 +36,16 @@ const UserName = ({
           <Modal.Title>参赛者问卷</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <b>您的专业</b>
-          <span>{answer('您的专业')}</span>
-          <br />
-          <b>常用的编程语言</b>
-          <span>{answer('常用的编程语言')}</span>
+          {extensions.map((n, index) => {
+            if (index < 2) {
+              return (
+                <div key={index}>
+                  <strong>{n.name}</strong>
+                  <p>{n.value}</p>
+                </div>
+              );
+            }
+          })}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -71,22 +67,27 @@ const RegistrationStatus = (props: {
   url: string;
 }) => {
   const { status, userId, url } = props;
-  console.log(props);
+  console.log('状态 = ', props);
 
   const statusName = {
     none: '未审核',
     pendingApproval: '审核中',
-    approve: '通过',
-    reject: '拒绝',
+    approved: '通过',
+    rejectd: '拒绝',
   } as { [key: string]: string };
 
   // Post
-  async function postStatus(e: {} | any) {
-    let status = e.target.value;
-    // console.log(e.target.value, userId)
-    const postUrl = url + `/${userId}/${status}`;
-    // console.log("postUrl = ", postUrl)
-    await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
+  async function postStatus(e: React.ChangeEvent<HTMLSelectElement>) {
+    let status = e.currentTarget.value;
+    let state: string =
+      status === 'approved' ? 'approve' : status === 'rejectd' ? 'reject' : '';
+
+    console.log(e.currentTarget.value, userId);
+    if (state) {
+      const postUrl = url + `/${userId}/${state}`;
+      // console.log("postUrl = ", postUrl)
+      await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
+    }
   }
 
   return (
@@ -96,13 +97,11 @@ const RegistrationStatus = (props: {
         {Object.keys(statusName)
           .filter(key => key !== status)
           .map(key => ({ label: statusName[key], value: key }))
-          .map(s => {
-            return (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            );
-          })}
+          .map(s => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
       </select>
     </>
   );
@@ -115,14 +114,17 @@ const Participant = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
 
   //TODO:weopenstart替换为${hackathonName}
-  let baseUrl = 'hackathon/weopenstar/enrollment';
+  let baseUrl = 'hackathon/a12345678/enrollment';
 
   async function getPage() {
-    const data = await requestClient<ListData<Enrollment>>(
+    const { value } = await requestClient<ListData<Enrollment>>(
       baseUrl + 's',
       'GET',
     );
-    setEnrollments(data.value);
+    setEnrollments(value);
+    console.log(value);
+    // setEnrollments(data.value);
+    // console.log(data.value)
   }
 
   useEffect(() => {
@@ -145,17 +147,19 @@ const Participant = () => {
           </tr>
         </thead>
         <tbody>
-          {enrollments.map(({ user, status, extensions }, index) => (
+          {enrollments.map(({ user, status, extensions, createdAt }, index) => (
             <tr key={user.id}>
               <td>{index + 1}</td>
               <td>
                 <UserName name={user.nickname} extensions={extensions} />
               </td>
               <td>{user.email}</td>
-              <td>{user.registerSource}</td>
+              <td>{user.registerSource[0].split(':')[1]}</td>
               <td>{user.phone}</td>
               <td>{user.address}</td>
-              <td>{user.email}</td>
+              {/* 只取T之前的时间（UTC） */}
+              <td>{user.createdAt.split('T')[0]}</td>
+
               <td>
                 <RegistrationStatus
                   url={baseUrl}
