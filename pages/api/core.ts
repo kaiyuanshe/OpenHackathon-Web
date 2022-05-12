@@ -63,9 +63,10 @@ export async function requestClient<T = void>(
   headers: Record<string, any> = {},
 ) {
   try {
-    const { token } = await getClientSession();
-
-    headers = { Authorization: `token ${token}`, ...headers };
+    const user = await getClientSession();
+    if (user) {
+      headers = { Authorization: `token ${user.token}`, ...headers };
+    }
   } catch {}
 
   try {

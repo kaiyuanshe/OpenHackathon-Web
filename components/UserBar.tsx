@@ -1,10 +1,11 @@
-import { PureComponent } from 'react';
+import { PureComponent, useContext } from 'react';
 import { Button, Dropdown, Nav } from 'react-bootstrap';
 import Link from 'next/link';
 
 import { User } from '../models/User';
 import { request } from '../pages/api/core';
 import { getClientSession } from '../pages/api/user/session';
+import { AuthContext } from '../context/AuthContext';
 
 interface State {
   user?: User;
@@ -12,14 +13,14 @@ interface State {
 
 export class UserBar extends PureComponent<{}, State> {
   state: Readonly<State> = {};
+  static contextType = AuthContext;
 
-  async componentDidMount() {
-    try {
-      const user = await getClientSession();
-
-      this.setState({ user });
-    } catch {}
-  }
+  // async componentDidMount() {
+  //   try {
+  //     const user = await getClientSession();
+  //     this.setState({ user });
+  //   } catch {}
+  // }
 
   async signOut() {
     await request('user/session', 'DELETE');
@@ -28,7 +29,8 @@ export class UserBar extends PureComponent<{}, State> {
   }
 
   render() {
-    const { user } = this.state;
+    // const { user } = this.state;
+    const user = this.context.user;
 
     return !user ? (
       <Button href="/user/sign-in/">登入</Button>
