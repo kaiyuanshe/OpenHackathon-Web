@@ -29,9 +29,9 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
   };
 
   async componentDidMount() {
-    const { id } = await getClientSession();
+    const user = await getClientSession();
 
-    this.setState({ sessionUserId: id });
+    user && this.setState({ sessionUserId: user.id });
   }
 
   async nextPage() {
