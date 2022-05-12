@@ -9,29 +9,28 @@ import {
 import { getClientSession } from '../pages/api/user/session';
 
 import { User } from '../models/User';
+import { request } from '../pages/api/core';
 
 type AuthContextProps = {
   user?: User;
   isLoggedIn: boolean;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextProps>({
   user: undefined,
   isLoggedIn: false,
-  logout: () => {},
+  logout: async () => {},
 });
 
 export const AuthProvider = (props: PropsWithChildren<any>) => {
-  const [state, setState] = useState<Partial<AuthContextProps>>({
+  const [state, setState] = useState<Omit<AuthContextProps, 'logout'>>({
     user: undefined,
     isLoggedIn: false,
   });
 
-  console.log('inside auth provider');
   useEffect(() => {
     const loadUserState = async (): Promise<void> => {
-      console.log('inside async');
       const storedUser = await getClientSession();
       if (storedUser) {
         setState({
@@ -43,7 +42,13 @@ export const AuthProvider = (props: PropsWithChildren<any>) => {
     loadUserState();
   }, []);
 
-  const contextValue: AuthContextProps = { ...state };
+  const logout = async () => {
+    await request('user/session', 'DELETE');
+
+    location.replace('/');
+  };
+
+  const contextValue: AuthContextProps = { ...state, logout };
 
   return (
     <AuthContext.Provider value={contextValue}>
