@@ -10,7 +10,7 @@ interface DateTimeInputProps {
 export const DateTimeInput: React.FC<DateTimeInputProps> = ({
   label,
   name,
-  required = false,
+  required,
 }) => (
   <Form.Group as={Row} className="mb-3" controlId="enrollTime">
     <Form.Label column sm={2}>
