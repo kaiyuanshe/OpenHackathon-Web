@@ -4,11 +4,15 @@ import { destroyCookie } from 'nookies';
 
 import { User } from '../../../models/User';
 import { safeAPI, readCookie, writeCookie, request } from '../core';
+import { NextApiResponse } from 'next';
 
-export default safeAPI(async (req, res) => {
+export default safeAPI(async (req, res: NextApiResponse<User | undefined>) => {
   switch (req.method) {
     case 'GET':
       try {
+        if (!readCookie(req, 'userId')) {
+          return res.json(undefined);
+        }
         const user = await request<User>(
           `user/${readCookie(req, 'userId')}`,
           'GET',
@@ -40,14 +44,16 @@ export default safeAPI(async (req, res) => {
       destroyCookie({ res }, 'token', { path: '/' });
       destroyCookie({ res }, 'userId', { path: '/' });
 
-      return res.json({});
+      return res.json({} as User);
     }
   }
 });
 
 export const getClientSession = cache(async clean => {
-  const user = await request<User>('user/session');
-
+  const user = await request<User | undefined>('user/session');
+  if (!user) {
+    return;
+  }
   setTimeout(clean, +new Date(user.tokenExpiredAt) - Date.now());
 
   return user;
