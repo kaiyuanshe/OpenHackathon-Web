@@ -38,9 +38,9 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
     if (!userId && !sessionUserId)
       try {
-        var { id } = await getClientSession();
+        var user = await getClientSession();
 
-        this.setState({ sessionUserId: id });
+        user && this.setState({ sessionUserId: user.id });
       } catch {}
 
     try {
