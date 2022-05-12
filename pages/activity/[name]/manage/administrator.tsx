@@ -18,6 +18,7 @@ import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
 import { requestClient } from '../../../api/core';
+import { withSession } from '../../../api/user/session';
 import { ListData } from '../../../../models/Base';
 import { User } from '../../../../models/User';
 import { AdminsJudges } from '../../../../models/ActivityManage';
@@ -51,30 +52,32 @@ const tableHead = [
 //生成一个checked value数列，用于在state中给各个复选框分配checked值
 const CheckboxArr = Array.from({ length: 10 }, (e, i) => i.toString());
 
-export async function getServerSideProps({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) {
-  if (!name)
+export const getServerSideProps = withSession(
+  async ({
+    params: { name } = {},
+    req,
+  }: GetServerSidePropsContext<{ name?: string }>) => {
+    if (!name)
+      return {
+        notFound: true,
+        props: {} as AdministratorPageProps,
+      };
+    const { value: admins } = await requestClient<ListData<AdminsJudges>>(
+        `hackathon/${name}/admins`,
+      ),
+      { value: judges } = await requestClient<ListData<AdminsJudges>>(
+        `hackathon/${name}/judges`,
+      );
     return {
-      notFound: true,
-      props: {} as AdministratorPageProps,
+      props: {
+        activity: name,
+        path: req.url,
+        admins,
+        judges,
+      },
     };
-  const { value: admins } = await requestClient<ListData<AdminsJudges>>(
-      `hackathon/${name}/admins`,
-    ),
-    { value: judges } = await requestClient<ListData<AdminsJudges>>(
-      `hackathon/${name}/judges`,
-    );
-  return {
-    props: {
-      activity: name,
-      path: req.url,
-      admins,
-      judges,
-    },
-  };
-}
+  },
+);
 
 class AdministratorPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>,
