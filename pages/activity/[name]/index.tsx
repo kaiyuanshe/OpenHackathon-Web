@@ -21,7 +21,7 @@ import PageHead from '../../../components/PageHead';
 import { LocationMap } from '../../../components/LocationMap';
 import { ActivityEntry } from '../../../components/ActivityEntry';
 import { TeamCard } from '../../../components/TeamCard';
-import { ListData } from '../../../models/Base';
+import { Media, ListData } from '../../../models/Base';
 import { Activity } from '../../../models/Activity';
 import { Team } from '../../../models/Team';
 import { request } from '../../api/core';
@@ -81,29 +81,18 @@ export default function HackathonActivity({
     <Container>
       <PageHead title={displayName} />
 
-      <Row>
-        <Col xs={12} sm={7}>
-          <Carousel>
-            {banners?.map(({ uri }) => (
-              <Carousel.Item key={uri}>
-                <Image
-                  className="w-100"
-                  style={{ height: '70vh', objectFit: 'cover' }}
-                  src={uri}
-                  alt={name}
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Col>
-        <Col
-          xs={12}
-          sm={5}
-          className="d-flex flex-column justify-content-start"
-        >
+      <Row xs={1} sm={1} lg={2}>
+        <Carousel>
+          {((banners || []) as Media[]).map(({ uri }) => (
+            <Carousel.Item key={uri}>
+              <Image className="d-block w-100" src={uri} alt={name} />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+        <Col className="d-flex flex-column justify-content-start">
           <h2>{displayName}</h2>
           <aside className="pb-2">
-            {tags.map(tag => (
+            {((tags || []) as string[]).map(tag => (
               <span key={tag} className="badge bg-success me-2">
                 {tag}
               </span>
@@ -184,7 +173,7 @@ export default function HackathonActivity({
             <Tab eventKey="team" title="所有团队" className="pt-2">
               {teams[0] ? (
                 <Row xs={1} md={2} lg={2} xxl={2} className="g-4">
-                  {teams.map(team => (
+                  {(teams as Team[]).map(team => (
                     <TeamCard key={team.id} {...team} />
                   ))}
                 </Row>
@@ -194,14 +183,15 @@ export default function HackathonActivity({
             </Tab>
           </Tabs>
         </Col>
-        <Col>
-          <h2>比赛地点</h2>
-          {/* 
-          // @ts-ignore */}
-          <LocationMap title={displayName} address={location}>
-            暂无地址导航
-          </LocationMap>
-        </Col>
+        {displayName && location ? (
+          <Col>
+            <h2>比赛地点</h2>
+            {/* @ts-ignore */}
+            <LocationMap title={displayName} address={location}>
+              暂无地址导航
+            </LocationMap>
+          </Col>
+        ) : null}
       </Row>
     </Container>
   );

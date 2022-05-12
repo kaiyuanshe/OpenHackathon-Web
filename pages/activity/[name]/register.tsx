@@ -1,38 +1,52 @@
-import { Component, FormEvent } from 'react';
-import { Container, Form, Row, Col, Button } from 'react-bootstrap';
+import { FormEvent, PureComponent } from 'react';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { Question, questions, Extensions } from '../../../models/Question';
+import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
-import { requestClient } from '../../api/core';
 
-class RegisterPage extends Component {
+import PageHead from '../../../components/PageHead';
+import { requestClient } from '../../api/core';
+import { withSession } from '../../api/user/session';
+import { Question, questions, Extensions } from '../../../models/Question';
+
+export const getServerSideProps = withSession(
+  async ({ params }: GetServerSidePropsContext<{ name: string }>) => ({
+    props: {
+      activity: params!.name,
+    },
+  }),
+);
+
+class RegisterPage extends PureComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> {
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const data = formToJSON(event.target as HTMLFormElement),
-      hackathonName = location.pathname.slice().split('/')[2],
-      formData: Extensions[] = Object.entries(data).map(([name, value]) => ({
-        name,
-        value: value + '',
-      }));
+    const { activity } = this.props,
+      data = formToJSON(event.target as HTMLFormElement);
 
-    await requestClient(`hackathon/${hackathonName}/enrollment`, 'PUT', {
-      extensions: formData,
+    const extensions = Object.entries(data)
+      .map(
+        ([name, value]) =>
+          value && {
+            name,
+            value: value + '',
+          },
+      )
+      .filter(Boolean) as Extensions[];
+
+    await requestClient(`hackathon/${activity}/enrollment`, 'PUT', {
+      extensions,
     });
     self.alert(
-      textJoin(
-        '黑客松活动',
-        `${hackathonName}`,
-        '报名须管理员审核，请耐心等候……',
-      ),
+      textJoin('黑客松活动', activity, '报名须管理员审核，请耐心等候……'),
     );
-    location.href = `/activity/${hackathonName}`;
+    location.href = `/activity/${activity}`;
   };
-  renderField = (
-    { options, multiple, title, ...props }: Question,
-    index: number,
-  ) =>
+
+  renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
       <Form.Group as="li" className="mb-3">
         {title}
@@ -58,9 +72,14 @@ class RegisterPage extends Component {
         </Row>
       </Form.Group>
     );
+
   render() {
+    const { activity } = this.props;
+
     return (
       <Container>
+        <PageHead title={`${activity} 参赛者问卷`} />
+
         <Form onSubmit={this.handleSubmit}>
           <legend className="text-center">参赛者问卷</legend>
           <small className="text-muted mt-2">

@@ -17,8 +17,8 @@ export interface ActivityListProps {
 }
 
 interface State {
-  loading?: boolean;
   sessionUserId?: string;
+  loading?: boolean;
   nextLink?: string | null;
   list: Activity[];
 }
@@ -28,28 +28,28 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
     list: [],
   };
 
+  async componentDidMount() {
+    const { id } = await getClientSession();
+
+    this.setState({ sessionUserId: id });
+  }
+
   async nextPage() {
     const { type = 'online', userId } = this.props,
-      { loading, sessionUserId, nextLink: nextPage, list } = this.state;
+      { loading, nextLink: nextPage, list } = this.state;
 
     if (loading || nextPage === null) return;
 
     this.setState({ loading: true });
 
-    if (!userId && !sessionUserId)
-      try {
-        var { id } = await getClientSession();
-
-        this.setState({ sessionUserId: id });
-      } catch {}
-
     try {
       const { nextLink, value } = await requestClient<ListData<Activity>>(
         nextPage ||
           `hackathons?${buildURLData({
-            userId: userId || sessionUserId,
+            userId,
             listType: type,
             orderby: 'updatedAt',
+            top: 6,
           })}`,
       );
       this.setState({
@@ -101,7 +101,7 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
 
   render() {
     const { type, size, value } = this.props,
-      { loading, sessionUserId, nextLink, list } = this.state;
+      { sessionUserId, loading, nextLink, list } = this.state;
 
     return (
       <>
@@ -121,7 +121,9 @@ export class ActivityList extends PureComponent<ActivityListProps, State> {
             <Col key={item.name}>
               <ActivityCard
                 className="h-100"
-                controls={type === 'admin' && !!sessionUserId}
+                controls={
+                  !!sessionUserId && (type === 'admin' || type === 'created')
+                }
                 {...item}
                 onPublish={this.publishOne}
                 onDelete={this.deleteOne}
