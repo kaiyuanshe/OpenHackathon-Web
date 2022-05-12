@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formToJSON } from 'web-utility';
 
-import { convertDatetime } from '../../../../components/time';
+import { convertDatetime } from '../../../../utils/time';
 import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
