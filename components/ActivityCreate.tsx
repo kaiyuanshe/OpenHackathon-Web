@@ -1,51 +1,45 @@
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import React, { FocusEvent, FormEvent } from 'react';
-import { Activity, NameAvailability } from '../models/Activity';
-import { formToJSON } from 'web-utility';
-import { requestClient } from '../pages/api/core';
-import { FileUpload } from './FileUpload';
-import { DateTimeInput } from './DateTimeInput';
+import { FormEvent, FC } from 'react';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
+import { makeArray, formToJSON } from 'web-utility';
+
+import { DateTimeInput } from './DateTimeInput';
+import { FileUpload } from './FileUpload';
+import { Activity, NameAvailability } from '../models/Activity';
+import { requestClient } from '../pages/api/core';
 
 interface ActivityFormData extends Activity {
   tagsString?: string;
   bannerUrls: string[] | string;
 }
 
-const ActivityCreate: React.FC = () => {
+const ActivityCreate: FC = () => {
   const router = useRouter();
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const inputParams: ActivityFormData = formToJSON<ActivityFormData>(
-      event.currentTarget,
-    );
+    const inputParams = formToJSON<ActivityFormData>(event.currentTarget);
 
-    const nameAvailable: boolean = await isNameAvailable(inputParams.name);
-    if (!nameAvailable) {
-      return;
-    }
+    const nameAvailable = await isNameAvailable(inputParams.name);
 
-    inputParams.banners = ([] as string[])
-      .concat(inputParams.bannerUrls ?? [])
-      .map(bannerUrl => {
-        const fileName = bannerUrl.split('/').slice(-1)[0];
+    if (!nameAvailable) return;
+
+    inputParams.banners = makeArray(inputParams.bannerUrls ?? []).map(
+      bannerUrl => {
+        const name = bannerUrl.split('/').slice(-1)[0];
+
         return {
-          name: fileName,
-          description: fileName,
+          name,
+          description: name,
           uri: bannerUrl,
         };
-      });
-
+      },
+    );
     inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
 
-    const createRes = await requestClient(
-      `hackathon/${inputParams.name}`,
-      'PUT',
-      inputParams as Activity,
-    );
+    await requestClient(`hackathon/${inputParams.name}`, 'PUT', inputParams);
 
     if (confirm('活动创建成功，是否申请发布活动?')) {
       await requestClient(
@@ -54,40 +48,30 @@ const ActivityCreate: React.FC = () => {
       );
       alert('已申请发布活动,请等待审核');
     }
-
     await router.push(`/activity/${inputParams.name}`);
   };
 
-  const validateName = async (event: FocusEvent<HTMLInputElement>) => {
-    if (!event.currentTarget.value) {
-      return;
-    }
-
-    await isNameAvailable(event.currentTarget.value);
-  };
-
-  async function isNameAvailable(name?: string): Promise<boolean> {
+  async function isNameAvailable(name = '') {
     const errorMsg = `活动名称: ${name} 不可用，请更换名称`;
+
     if (!name) {
       alert(errorMsg);
       return false;
     }
-
     const { nameAvailable } = await requestClient<NameAvailability>(
       'hackathon/checkNameAvailability',
       'POST',
       { name },
     );
+    if (!nameAvailable) alert(errorMsg);
 
-    if (!nameAvailable) {
-      alert(errorMsg);
-    }
     return nameAvailable;
   }
 
   return (
     <Container>
       <h2 className="text-center">创建活动</h2>
+
       <Form onSubmit={submitHandler}>
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
@@ -99,7 +83,7 @@ const ActivityCreate: React.FC = () => {
               type="text"
               placeholder="名称，仅限字母和数字"
               pattern="[a-zA-Z0-9]+"
-              onBlur={validateName}
+              onBlur={({ currentTarget: { value } }) => isNameAvailable(value)}
               required
             />
           </Col>

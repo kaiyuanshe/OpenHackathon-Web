@@ -1,24 +1,26 @@
-import { Col, Form, InputGroup, Row } from 'react-bootstrap';
-import React from 'react';
+import { FC } from 'react';
+import { Row, Col, Form, InputGroup } from 'react-bootstrap';
 
-interface DateTimeInputProps {
+export interface DateTimeInputProps {
+  id?: string;
   label: string;
   name: string;
   required?: boolean;
 }
 
-export const DateTimeInput: React.FC<DateTimeInputProps> = ({
+export const DateTimeInput: FC<DateTimeInputProps> = ({
+  id,
   label,
   name,
   required,
 }) => (
-  <Form.Group as={Row} className="mb-3" controlId="enrollTime">
+  <Form.Group as={Row} className="mb-3" controlId={id}>
     <Form.Label column sm={2}>
       {label}
     </Form.Label>
     <Col column sm={10}>
       <InputGroup className="mb-3">
-        <InputGroup.Text id="basic-addon1">时间范围</InputGroup.Text>
+        <InputGroup.Text>时间范围</InputGroup.Text>
         <Form.Control
           name={`${name}StartedAt`}
           type="datetime-local"

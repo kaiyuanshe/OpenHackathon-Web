@@ -1,7 +1,7 @@
-import React, { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
-
-import style from 'idea-react/source/FilePicker/index.module.less';
+import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 import { Icon } from 'idea-react';
+import style from 'idea-react/source/FilePicker/index.module.less';
+
 import { uploadFile } from '../utils/uploadFile';
 
 export type FilePickerProps = PropsWithoutRef<{
@@ -35,17 +35,16 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
   }: ChangeEvent<HTMLInputElement>) => {
     if (!files) return;
 
-    const { values } = this.state;
-    if (this.props.max && values.length >= this.props.max) {
-      return;
-    }
+    const { max } = this.props,
+      { values } = this.state;
+
+    if (max && values.length >= max) return;
 
     for (let file of files) {
-      const fileUrl: string = await uploadFile(file);
-      console.log('uploaded');
+      const fileUrl = await uploadFile(file);
+
       values.push(fileUrl);
     }
-
     this.setState({ values: [...values] });
   };
 
