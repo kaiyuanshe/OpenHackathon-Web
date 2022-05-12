@@ -12,7 +12,7 @@ export interface Activity extends Base {
   status: 'planning' | 'pendingApproval' | 'online' | 'offline';
   creatorId: string;
   enrollment: number;
-  maxEnrollment: number;
+  maxEnrollment?: number;
   autoApprove: boolean;
   tags: string[];
   eventStartedAt: string;
@@ -34,3 +34,10 @@ export type ActivityListType =
   | 'enrolled'
   | 'fresh'
   | 'created';
+
+export interface NameAvailability {
+  name: string;
+  nameAvailable: boolean;
+  reason: string;
+  message: string;
+}

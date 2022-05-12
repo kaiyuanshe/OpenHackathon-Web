@@ -16,7 +16,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { convertDatetime } from '../../../components/time';
+import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
 import { LocationMap } from '../../../components/LocationMap';
 import { ActivityEntry } from '../../../components/ActivityEntry';
@@ -27,6 +27,8 @@ import { Team } from '../../../models/Team';
 import { request } from '../../api/core';
 
 export async function getServerSideProps({
+  req,
+  res,
   params: { name } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
   if (!name)
@@ -35,14 +37,25 @@ export async function getServerSideProps({
       props: {} as { activity: Activity; teams: Team[] },
     };
 
-  const activity = await request<Activity>(`hackathon/${name}`),
+  const activity = await request<Activity>(
+      `hackathon/${name}`,
+      'GET',
+      undefined,
+      { req, res },
+    ),
     { value: teams } = await request<ListData<Team>>(
       `hackathon/${name}/teams?top=1000`,
+      'GET',
+      undefined,
+      { req, res },
     );
-  activity.detail = activity.detail
-    .replace(/\\+n/g, '\n')
-    .replace(/\\+t/g, ' ')
-    .replace(/\\+"/g, '"');
+
+  if (activity.detail) {
+    activity.detail = activity.detail
+      .replace(/\\+n/g, '\n')
+      .replace(/\\+t/g, ' ')
+      .replace(/\\+"/g, '"');
+  }
 
   return { props: { activity, teams } };
 }
