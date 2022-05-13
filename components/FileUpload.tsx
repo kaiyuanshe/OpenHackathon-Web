@@ -18,17 +18,9 @@ interface State {
 }
 
 export class FileUpload extends PureComponent<FilePickerProps, State> {
-  static displayName = 'FilePicker';
-
   state: Readonly<State> = {
-    values: [],
+    values: this.props.defaultValue || [],
   };
-
-  componentDidMount() {
-    const { defaultValue: values = [] } = this.props;
-
-    this.setState({ values });
-  }
 
   addOne = async ({
     currentTarget: { files },

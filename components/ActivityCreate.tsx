@@ -124,7 +124,7 @@ const ActivityCreate: FC = () => {
             <FileUpload
               accept="image/*"
               name="bannerUrls"
-              max={2}
+              max={10}
               multiple
               required
             />
