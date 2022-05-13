@@ -1,11 +1,31 @@
 import React, { useEffect } from 'react';
-import { Button, Modal, Table } from 'react-bootstrap';
+import { Button, Form, Modal, Table } from 'react-bootstrap';
 import { useState } from 'react';
 import { requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';
 import { Enrollment } from '../../../../models/Enrollment';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 //——————————————— 辅助组件 ———————————————
+
+//0.获取动态路由
+export async function getServerSideProps({
+  params: { name } = {},
+  req,
+}: GetServerSidePropsContext<{ name?: string }>) {
+  if (!name)
+    return {
+      notFound: true,
+    };
+
+  return {
+    props: {
+      activity: name,
+      path: req.url,
+    },
+  };
+}
 
 //1.用户名点击弹框
 const UserName = ({
@@ -37,14 +57,12 @@ const UserName = ({
         </Modal.Header>
         <Modal.Body>
           {extensions.map((n, index) => {
-            if (index < 2) {
-              return (
-                <div key={index}>
-                  <strong>{n.name}</strong>
-                  <p>{n.value}</p>
-                </div>
-              );
-            }
+            return (
+              <div key={index}>
+                <strong>{n.name}</strong>
+                <p>{n.value}</p>
+              </div>
+            );
           })}
         </Modal.Body>
         <Modal.Footer>
@@ -60,6 +78,13 @@ const UserName = ({
   );
 };
 
+//静态数据statusName放在组件2外，减少重复渲染
+const statusName = {
+  approved: '通过',
+  rejectd: '拒绝',
+  none: '未审核',
+  pendingApproval: '审核中',
+} as { [key: string]: string };
 //2.审核状态变更
 const RegistrationStatus = (props: {
   status: string;
@@ -69,13 +94,6 @@ const RegistrationStatus = (props: {
   const { status, userId, url } = props;
   console.log('状态 = ', props);
 
-  const statusName = {
-    none: '未审核',
-    pendingApproval: '审核中',
-    approved: '通过',
-    rejectd: '拒绝',
-  } as { [key: string]: string };
-
   // Post
   async function postStatus(e: React.ChangeEvent<HTMLSelectElement>) {
     let status = e.currentTarget.value;
@@ -84,37 +102,42 @@ const RegistrationStatus = (props: {
 
     console.log(e.currentTarget.value, userId);
     if (state) {
-      const postUrl = url + `/${userId}/${state}`;
+      const postUrl = `${url}/${userId}/${state}`;
       // console.log("postUrl = ", postUrl)
       await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
     }
   }
 
   return (
-    <>
-      <select name="status" id="status-select" onChange={postStatus}>
-        <option value={status}>{statusName[status]}</option>
-        {Object.keys(statusName)
-          .filter(key => key !== status)
-          .map(key => ({ label: statusName[key], value: key }))
-          .map(s => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-      </select>
-    </>
+    <Form.Control
+      as="select"
+      name="status"
+      id="status-select"
+      onChange={postStatus}
+    >
+      <option value={status}>{statusName[status]}</option>
+      {Object.keys(statusName)
+        .filter(key => key !== status)
+        .map(key => ({ label: statusName[key], value: key }))
+        .map(s => (
+          <option key={s.value} value={s.value}>
+            {s.label}
+          </option>
+        ))}
+    </Form.Control>
   );
 };
 
 //——————————————— 主体组件 ———————————————
 
-//TODO:需增加传入的props，用于指定baseUrl路径${hackathonName}
-const Participant = () => {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+//TODO:测试post
 
-  //TODO:weopenstart替换为${hackathonName}
-  let baseUrl = 'hackathon/a12345678/enrollment';
+const Participant = props => {
+  const { activity, path } = props;
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  console.log('props = ', props, path);
+
+  let baseUrl = `hackathon/${activity}/enrollment`;
 
   async function getPage() {
     const { value } = await requestClient<ListData<Enrollment>>(
@@ -122,9 +145,7 @@ const Participant = () => {
       'GET',
     );
     setEnrollments(value);
-    console.log(value);
-    // setEnrollments(data.value);
-    // console.log(data.value)
+    console.log('value = ', value);
   }
 
   useEffect(() => {
@@ -132,46 +153,50 @@ const Participant = () => {
   }, []);
 
   return (
-    <div className="participant-table">
-      <Table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>注册名</th>
-            <th>邮箱</th>
-            <th>登录方式</th>
-            <th>联系电话</th>
-            <th>联系地址</th>
-            <th>报名时间</th>
-            <th>状态</th>
-          </tr>
-        </thead>
-        <tbody>
-          {enrollments.map(({ user, status, extensions, createdAt }, index) => (
-            <tr key={user.id}>
-              <td>{index + 1}</td>
-              <td>
-                <UserName name={user.nickname} extensions={extensions} />
-              </td>
-              <td>{user.email}</td>
-              <td>{user.registerSource[0].split(':')[1]}</td>
-              <td>{user.phone}</td>
-              <td>{user.address}</td>
-              {/* 只取T之前的时间（UTC） */}
-              <td>{user.createdAt.split('T')[0]}</td>
-
-              <td>
-                <RegistrationStatus
-                  url={baseUrl}
-                  userId={user.id!}
-                  status={status}
-                />
-              </td>
+    <ActivityManageFrame path={path}>
+      <div className="participant-table">
+        <Table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>注册名</th>
+              <th>邮箱</th>
+              <th>登录方式</th>
+              <th>联系电话</th>
+              <th>联系地址</th>
+              <th>报名时间</th>
+              <th>状态</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    </div>
+          </thead>
+          <tbody>
+            {enrollments.map(
+              ({ user, status, extensions, createdAt }, index) => (
+                <tr key={user.id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <UserName name={user.nickname} extensions={extensions} />
+                  </td>
+                  <td>{user.email}</td>
+                  <td>{user.registerSource[0].split(':')[1]}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.address}</td>
+                  {/* 只取T之前的时间（UTC） */}
+                  <td>{createdAt.split('T')[0]}</td>
+
+                  <td>
+                    <RegistrationStatus
+                      url={baseUrl}
+                      userId={user.id!}
+                      status={status}
+                    />
+                  </td>
+                </tr>
+              ),
+            )}
+          </tbody>
+        </Table>
+      </div>
+    </ActivityManageFrame>
   );
 };
 
