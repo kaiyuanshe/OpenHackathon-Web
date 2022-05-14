@@ -49,7 +49,7 @@ const tableHead = [
   '备注',
 ];
 //生成一个checked value数列，用于在state中给各个复选框分配checked值
-const CheckboxArr = Array.from({ length: 10 }, (e, i) => i.toString());
+const CheckboxArr = Array.from({ length: 10 }, (e, i) => i + '');
 
 export async function getServerSideProps({
   params: { name } = {},
@@ -101,8 +101,9 @@ class AdministratorPage extends PureComponent<
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
 
-    if (Object.values(this.state.checked).some(check => check))
-      return firstCheckbox?.setCustomValidity('');
+    Object.values(this.state.checked).some(check => check)
+      ? firstCheckbox?.setCustomValidity('')
+      : firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
   }
 
   //处理三处表单提交，1. 搜索用户 2. 增加管理员/裁判，3. 删除管理员/裁判
@@ -125,47 +126,61 @@ class AdministratorPage extends PureComponent<
 
     switch (id) {
       case 'search':
-        const { value: searchResult } = await requestClient<ListData<User>>(
-          `user/search?keyword=${userSearch}`,
-          'POST',
-        );
-        if (!searchResult?.[0]) return alert('您要查询的用户不存在');
-
-        this.setState({
-          list: [...searchResult],
-        });
+        this.searchId(userSearch);
         break;
       case 'increase':
-        if (!userId) return alert('请先搜索并选择一位用户');
-
-        await requestClient(
-          `hackathon/${activity}/${adminJudge}/${userId}`,
-          'PUT',
-          { description },
-        );
-        self.alert('已知悉您的请求，正在处理中！');
-
-        location.href = `/activity/${activity}/manage/administrator`;
-
-        this.setState({ show: false, list: [] });
+        this.increaseId(userId, activity, adminJudge, description);
         break;
       case 'delete':
-        //弹窗确认删除
-        const confirmed = window.confirm('确认删除所选管理员/裁判？');
-        if (!confirmed) return;
-        //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
-        const userIdArr =
-          typeof userId === 'string' ? userId.split(',') : userId;
-
-        //批量删除
-        for (let item of userIdArr) {
-          if (typeof item !== 'string') continue;
-          const [user, id] = item.split(':');
-          await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
-        }
-        location.href = `/activity/${activity}/manage/administrator`;
+        this.deleteId(userId, activity);
         break;
     }
+  };
+
+  searchId = async (userSearch: string) => {
+    const { value: searchResult } = await requestClient<ListData<User>>(
+      `user/search?keyword=${userSearch}`,
+      'POST',
+    );
+    if (!searchResult?.[0]) return alert('您要查询的用户不存在');
+
+    this.setState({
+      list: [...searchResult],
+    });
+  };
+  increaseId = async (
+    userId: string | string[],
+    activity: string,
+    adminJudge: string,
+    description: string,
+  ) => {
+    if (!userId) return alert('请先搜索并选择一位用户');
+
+    await requestClient(
+      `hackathon/${activity}/${adminJudge}/${userId}`,
+      'PUT',
+      { description },
+    );
+    self.alert('已知悉您的请求，正在处理中！');
+
+    location.href = `/activity/${activity}/manage/administrator`;
+
+    this.setState({ show: false, list: [] });
+  };
+  deleteId = async (userId: string | string[], activity: string) => {
+    //弹窗确认删除
+    const confirmed = window.confirm('确认删除所选管理员/裁判？');
+    if (!confirmed) return;
+    //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
+    const userIdArr = typeof userId === 'string' ? userId.split(',') : userId;
+
+    //批量删除
+    for (let item of userIdArr) {
+      if (typeof item !== 'string') continue;
+      const [user, id] = item.split(':');
+      await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
+    }
+    location.href = `/activity/${activity}/manage/administrator`;
   };
 
   toggleDialog = (show: boolean) => () => this.setState({ show });
