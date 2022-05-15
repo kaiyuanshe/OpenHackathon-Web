@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Table } from 'react-bootstrap';
-import { useState } from 'react';
 import { requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';
 import { Enrollment } from '../../../../models/Enrollment';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import styles from '../../../../styles/participant.less';
 
 //——————————————— 辅助组件 ———————————————
 
@@ -78,7 +78,7 @@ const UserName = ({
   );
 };
 
-//静态数据statusName放在组件2外，减少重复渲染
+//静态数据statusName放在辅助组件2外，减少重复渲染
 const statusName = {
   approved: '通过',
   rejectd: '拒绝',
@@ -114,6 +114,7 @@ const RegistrationStatus = (props: {
       name="status"
       id="status-select"
       onChange={postStatus}
+      className={styles.form}
     >
       <option value={status}>{statusName[status]}</option>
       {Object.keys(statusName)
@@ -130,11 +131,12 @@ const RegistrationStatus = (props: {
 
 //——————————————— 主体组件 ———————————————
 
-//TODO:测试post
+//TODO:测试post。
 
-const Participant = props => {
+const Participant = (props: { activity: string; path: string }) => {
   const { activity, path } = props;
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  //NOTE：跳转页面的时候${activity}会变成data？
   console.log('props = ', props, path);
 
   let baseUrl = `hackathon/${activity}/enrollment`;
@@ -150,6 +152,7 @@ const Participant = props => {
 
   useEffect(() => {
     getPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
