@@ -94,10 +94,11 @@ class AdministratorPage extends PureComponent<
   componentDidUpdate() {
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
-
-    Object.values(this.state.checked).some(check => check)
-      ? firstCheckbox?.setCustomValidity('')
-      : firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
+    firstCheckbox?.setCustomValidity(
+      Object.values(this.state.checked).some(check => check)
+        ? ''
+        : '请选择至少一位管理员或裁判！',
+    );
   }
 
   //处理删除管理员或裁判

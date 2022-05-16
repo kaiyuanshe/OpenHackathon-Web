@@ -1,4 +1,4 @@
-import { FormEvent, PureComponent, SyntheticEvent } from 'react';
+import React, { FormEvent, PureComponent, SyntheticEvent } from 'react';
 import { Modal, Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 import { ListData } from '../models/Base';
@@ -25,20 +25,20 @@ export class AdministratorModal extends PureComponent<
     list: [],
   };
 
-  searchId = async (event: React.FormEvent<HTMLFormElement>) => {
+  searchId = async (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault();
     event.stopPropagation();
-
-    const { userSearch } = formToJSON<{
+    const { currentTarget } = event,
+      { userSearch } = formToJSON<{
         userSearch: string;
       }>(event.currentTarget),
       { value: searchResult } = await requestClient<ListData<User>>(
         `user/search?keyword=${userSearch}`,
         'POST',
       );
+
     if (!searchResult?.[0]) return alert('您要查询的用户不存在');
-    const form = event.target as HTMLFormElement;
-    form.reset();
+    currentTarget.reset();
     this.setState({
       list: [...searchResult],
     });
@@ -47,7 +47,8 @@ export class AdministratorModal extends PureComponent<
   increaseId = async (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault();
     event.stopPropagation();
-    const { userId, adminJudge, description } = formToJSON<{
+    const { currentTarget } = event,
+      { userId, adminJudge, description } = formToJSON<{
         userId: string | string[];
         adminJudge: string;
         description: string;
@@ -63,8 +64,7 @@ export class AdministratorModal extends PureComponent<
     );
     self.alert('已知悉您的请求，正在处理中！');
     this.props.updateList();
-    const form = event.target as HTMLFormElement;
-    form.reset();
+    currentTarget.reset();
     this.setState({ list: [] });
   };
 
