@@ -82,7 +82,7 @@ export function ActivityManageFrame({
         </Nav>
       </Col>
 
-      <Col className="flex-fill">
+      <Col className="flex-fill  me-4">
         <Breadcrumb className="p-1 bg-light rounded">
           <Breadcrumb.Item className="mt-3 ps-3">
             {current?.title}
@@ -95,7 +95,7 @@ export function ActivityManageFrame({
             {current?.list[innerIndex]?.title}
           </Breadcrumb.Item>
         </Breadcrumb>
-        <section className="mt-2">{children}</section>
+        <section className="mt-3">{children}</section>
       </Col>
     </Row>
   );
