@@ -42,7 +42,9 @@ export function ActivityManageFrame({
   children,
 }: ActivityManageFrameProps) {
   let innerIndex = -1;
+
   const pathname = path?.split('/')[2];
+
   const current = menu.find(({ list }) =>
     list.find(({ href }, index) => {
       if (path?.split('/')[4].includes(href)) {
