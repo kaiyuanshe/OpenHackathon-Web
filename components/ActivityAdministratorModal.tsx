@@ -1,4 +1,4 @@
-import React, { FormEvent, PureComponent, SyntheticEvent } from 'react';
+import { FormEvent, PureComponent, SyntheticEvent } from 'react';
 import { Modal, Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 import { ListData } from '../models/Base';

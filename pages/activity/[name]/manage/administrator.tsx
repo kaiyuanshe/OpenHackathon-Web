@@ -255,7 +255,7 @@ class AdministratorPage extends PureComponent<
       value = [...admins, ...judges];
 
     return (
-      <ActivityManageFrame path={path}>
+      <ActivityManageFrame name={activity} path={path}>
         <PageHead title={`${activity}活动管理 管理员`} />
         <Form onSubmit={this.handleSubmit}>
           <Row xs="1" sm="2">

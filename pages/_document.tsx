@@ -18,7 +18,7 @@ export default function Document() {
         />
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/idea-react@0.22.2/dist/index.css"
+          href="https://cdn.jsdelivr.net/npm/idea-react@0.22.4/dist/index.css"
         />
         <link
           rel="stylesheet"

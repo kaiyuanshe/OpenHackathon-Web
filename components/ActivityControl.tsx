@@ -19,7 +19,7 @@ export function ActivityControl({
       <Button
         className="w-100 mt-2"
         variant="info"
-        href={`/activity/${name}/admin`}
+        href={`/activity/${name}/manage/administrator`}
       >
         管理
       </Button>

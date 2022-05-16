@@ -1,24 +1,22 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
 import { Base } from './Base';
 import { User } from './User';
-export interface MenuHref {
+
+export interface MenuItem {
   title: string;
-  href: string;
-  icon: IconProp;
+  href?: string;
+  icon?: IconProp;
+  list?: MenuItem[];
 }
 
-export interface MenuList {
-  title: string;
-  list: MenuHref[];
-}
-
-export const menus: MenuList[] = [
+export const menus: MenuItem[] = [
   {
     title: '基础设置',
     list: [
       {
         title: '编辑活动',
-        href: 'activity',
+        href: 'meta',
         icon: 'edit',
       },
       {

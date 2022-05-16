@@ -1,17 +1,18 @@
+import { ChangeEvent, FormEvent, MouseEvent, PureComponent } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { FormEvent, PureComponent, SyntheticEvent } from 'react';
-import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import Image from 'next/image';
+import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { formToJSON } from 'web-utility';
 
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import PageHead from '../../../../components/PageHead';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import styles from '../../../../styles/Table.module.less';
-import { requestClient } from '../../../api/core';
+import { request, requestClient } from '../../../api/core';
+import { withSession } from '../../../api/user/session';
 import { ListData } from '../../../../models/Base';
 import { Award } from '../../../../models/Award';
-import { formToJSON } from 'web-utility';
 
 interface State {
   currentAward: Partial<Award>;
@@ -38,27 +39,32 @@ const awardTableHead = ['权重', '类型', '照片', '名称', '描述', '操�
     team: '团队',
   };
 
-export async function getServerSideProps({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) {
-  if (!name)
-    return {
-      notFound: true,
-      props: {} as AwardPageProps,
-    };
-  const { value: awardList } = await requestClient<ListData<Award>>(
-    `hackathon/${name}/awards`,
-  );
+export const getServerSideProps = withSession(
+  async ({
+    params: { name } = {},
+    req,
+  }: GetServerSidePropsContext<{ name?: string }>) => {
+    if (!name)
+      return {
+        notFound: true,
+        props: {} as AwardPageProps,
+      };
 
-  return {
-    props: {
-      activity: name,
-      path: req.url,
-      awardList,
-    },
-  };
-}
+    const { value: awardList } = await request<ListData<Award>>(
+      `hackathon/${name}/awards`,
+      'GET',
+      undefined,
+      { req },
+    );
+    return {
+      props: {
+        activity: name,
+        path: req.url,
+        awardList,
+      },
+    };
+  },
+);
 
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -68,51 +74,50 @@ class AwardPage extends PureComponent<
     currentAward: DEFAULT_STATE,
     awardList: this.props.awardList,
   };
-  handleSubmit = async (
-    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
-  ) => {
+
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    const { method } = event.nativeEvent.submitter?.dataset! as {
-        method: 'PUT' | 'PATCH';
-      },
+
+    const method = event.currentTarget.getAttribute('method') as
+        | 'PUT'
+        | 'PATCH',
       { activity } = this.props,
-      data = formToJSON(event.target as HTMLFormElement);
+      data = formToJSON(event.currentTarget);
 
     await requestClient(`hackathon/${activity}/award/${data.id}`, method, data);
+
     const { value: awardList } = await requestClient<ListData<Award>>(
       `hackathon/${activity}/awards`,
     );
-
     this.setState({
       currentAward: DEFAULT_STATE,
       awardList,
     });
   };
 
-  handleReset = (event: FormEvent) => {
+  handleReset = () =>
     this.setState({
       currentAward: DEFAULT_STATE,
     });
-  };
 
   //代办：handleEdit 和 handleDelete 逻辑类似，可以合并
-  handleEdit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { awardId } = event.currentTarget.dataset,
-      { activity } = this.props,
-      currentAward = await requestClient<Award>(
-        `hackathon/${activity}/award/${awardId}`,
-      );
+  handleEdit = async ({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
+    const { awardId } = currentTarget.dataset,
+      { activity } = this.props;
 
-    this.setState({
-      currentAward,
-    });
+    const currentAward = await requestClient<Award>(
+      `hackathon/${activity}/award/${awardId}`,
+    );
+    this.setState({ currentAward });
   };
 
-  handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { id } = event.currentTarget,
+  handleDelete = async ({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
+    const { id } = currentTarget,
       { activity } = this.props;
+
     await requestClient(`hackathon/${activity}/award/${id}`, 'DELETE');
+
     const { value: awardList } = await requestClient<ListData<Award>>(
       `hackathon/${activity}/awards`,
     );
@@ -121,8 +126,10 @@ class AwardPage extends PureComponent<
       awardList,
     });
   };
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget;
+
+  handleChange = ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = currentTarget;
+
     this.setState(prevState => ({
       currentAward: { ...prevState.currentAward, ...{ [name]: value } },
     }));
@@ -141,6 +148,7 @@ class AwardPage extends PureComponent<
     return (
       <Form
         className="text-nowrap"
+        method={id ? 'PATCH' : 'PUT'}
         onSubmit={this.handleSubmit}
         onReset={this.handleReset}
       >
@@ -153,10 +161,10 @@ class AwardPage extends PureComponent<
           <Col sm="10">
             <Form.Control
               name="name"
-              value={name}
-              onChange={this.handleChange}
               maxLength={64}
               required
+              value={name}
+              onChange={this.handleChange}
             />
           </Col>
         </Form.Group>
@@ -168,10 +176,10 @@ class AwardPage extends PureComponent<
             <Form.Control
               name="description"
               aria-label="描述"
-              value={description}
-              onChange={this.handleChange}
               maxLength={256}
               required
+              value={description}
+              onChange={this.handleChange}
             />
           </Col>
         </Form.Group>
@@ -183,10 +191,10 @@ class AwardPage extends PureComponent<
             <Form.Control
               type="number"
               name="quantity"
+              min={1}
+              max={10000}
               value={quantity}
               onChange={this.handleChange}
-              max={10000}
-              min={1}
             />
           </Col>
         </Form.Group>
@@ -208,11 +216,7 @@ class AwardPage extends PureComponent<
           <Button type="reset" variant="danger">
             清空表单
           </Button>
-          <Button
-            type="submit"
-            variant={id ? 'warning' : 'success'}
-            data-method={id ? 'PATCH' : 'PUT'}
-          >
+          <Button type="submit" variant={id ? 'warning' : 'success'}>
             {id ? '更新' : '新增'}奖项
           </Button>
         </Col>
@@ -220,11 +224,15 @@ class AwardPage extends PureComponent<
     );
   };
 
-  renderItem = (
-    { quantity, target, pictures, name, description, id }: Award,
-    index: number,
-  ) => (
-    <tr>
+  renderItem = ({
+    quantity,
+    target,
+    pictures,
+    name,
+    description,
+    id,
+  }: Award) => (
+    <tr key={id}>
       <td>{quantity}</td>
       <td>{AwardTargetName[target]}</td>
       <td>
@@ -251,7 +259,7 @@ class AwardPage extends PureComponent<
     const { path, activity } = this.props,
       { awardList } = this.state;
     return (
-      <ActivityManageFrame path={path}>
+      <ActivityManageFrame name={activity} path={path}>
         <PageHead title={`${activity}活动管理 奖项设置`} />
         <Row xs="1" sm="2" className="my-3">
           <Col sm="4" md="4">

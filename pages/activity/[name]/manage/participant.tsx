@@ -1,31 +1,40 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import React, { ChangeEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import { Button, Form, Modal, Table, FormControlProps } from 'react-bootstrap';
+
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
-import { ListData } from '../../../../models/Base';
-import { Enrollment } from '../../../../models/Enrollment';
 import styles from '../../../../styles/participant.module.less';
 import { requestClient } from '../../../api/core';
+import { withSession } from '../../../api/user/session';
+import { ListData } from '../../../../models/Base';
+import { Enrollment } from '../../../../models/Enrollment';
 
+interface ActivityParticipantProps {
+  activity: string;
+  path: string;
+}
 //——————————————— 辅助组件 ———————————————
 
 //0.获取动态路由
-export async function getServerSideProps({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) {
-  if (!name)
-    return {
-      notFound: true,
-    };
+export const getServerSideProps = withSession(
+  async ({
+    params: { name } = {},
+    req,
+  }: GetServerSidePropsContext<{ name?: string }>) => {
+    if (!name)
+      return {
+        notFound: true,
+        props: {} as ActivityParticipantProps,
+      };
 
-  return {
-    props: {
-      activity: name,
-      path: req.url,
-    },
-  };
-}
+    return {
+      props: {
+        activity: name,
+        path: req.url,
+      },
+    };
+  },
+);
 
 //1.用户名点击弹框
 const UserName = ({
@@ -84,31 +93,30 @@ const statusName = {
   rejectd: '拒绝',
   none: '未审核',
   pendingApproval: '审核中',
-} as { [key: string]: string };
+} as Record<string, string>;
+
 //2.审核状态变更
-const RegistrationStatus = (props: {
+const RegistrationStatus = ({
+  status,
+  userId,
+  url,
+}: {
   status: string;
   userId: string;
   url: string;
 }) => {
-  const { status, userId, url } = props;
-  console.log('状态 = ', props);
-
-  // Post
-  // async function postStatus(e: React.ChangeEvent<HTMLSelectElement>) {
   const postStatus: FormControlProps['onChange'] = async ({
     currentTarget,
   }) => {
-    let status = currentTarget.value;
-    let state: string =
+    const status = currentTarget.value;
+    const state =
       status === 'approved' ? 'approve' : status === 'rejectd' ? 'reject' : '';
 
-    console.log(status, userId);
-    if (state) {
-      const postUrl = `${url}/${userId}/${state}`;
-      // console.log("postUrl = ", postUrl)
-      await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
-    }
+    if (!state) return;
+
+    const postUrl = `${url}/${userId}/${state}`;
+
+    await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
   };
 
   return (
@@ -134,20 +142,15 @@ const RegistrationStatus = (props: {
 
 //——————————————— 主体组件 ———————————————
 
-const Participant = (props: { activity: string; path: string }) => {
-  const { activity, path } = props;
+const Participant = ({ activity, path }: ActivityParticipantProps) => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  console.log('props = ', props, path);
 
-  let baseUrl = `hackathon/${activity}/enrollment`;
+  const baseUrl = `hackathon/${activity}/enrollment`;
 
   async function getPage() {
-    const { value } = await requestClient<ListData<Enrollment>>(
-      baseUrl + 's',
-      'GET',
-    );
+    const { value } = await requestClient<ListData<Enrollment>>(`${baseUrl}s`);
+
     setEnrollments(value);
-    console.log('value = ', value);
   }
 
   useEffect(() => {
@@ -156,7 +159,7 @@ const Participant = (props: { activity: string; path: string }) => {
   }, []);
 
   return (
-    <ActivityManageFrame path={path}>
+    <ActivityManageFrame name={activity} path={path}>
       <div className="participant-table">
         <Table className={styles['container-table']}>
           <thead>

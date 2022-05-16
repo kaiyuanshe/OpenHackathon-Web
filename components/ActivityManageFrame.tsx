@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren, Fragment } from 'react';
 import Link from 'next/link';
 import { Nav, Breadcrumb, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,9 +15,11 @@ import {
   faThLarge,
   faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
+
+import { findDeep } from '../utils/data';
 import { menus } from '../models/ActivityManage';
-import { MenuList } from '../models/ActivityManage';
-//这样添加合适吗？目前找到的可以遍历生产icon的方法
+import { MenuItem } from '../models/ActivityManage';
+
 library.add(
   faEdit,
   faUser,
@@ -32,40 +34,35 @@ library.add(
 );
 
 export type ActivityManageFrameProps = PropsWithChildren<{
-  menu?: MenuList[];
+  name: string;
   path?: string;
+  menu?: MenuItem[];
 }>;
 
 export function ActivityManageFrame({
+  name,
   menu = menus,
-  path,
+  path = '',
   children,
 }: ActivityManageFrameProps) {
-  let innerIndex = -1;
+  const route = findDeep(menus, 'list', ({ href }) => {
+    console.log(href, path);
+    return !!href && path.includes(href);
+  });
 
-  const pathname = path?.split('/')[2];
-
-  const current = menu.find(({ list }) =>
-    list.find(({ href }, index) => {
-      if (path?.split('/')[4].includes(href)) {
-        innerIndex = index;
-        return true;
-      }
-    }),
-  );
   return (
     <Row xs={1} md={2}>
       <Col md="auto">
         <Nav className="flex-column px-2 border-end" variant="pills">
           {menu.map(({ title, list }) => (
-            <>
+            <Fragment key={title}>
               <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
                 {title}
               </Nav.Link>
-              {list.map(({ title, href, icon }) => (
+              {list?.map(({ title, href, icon = 'home' }) => (
                 <Link
                   key={title}
-                  href={`/activity/${pathname}/manage/${href}`}
+                  href={`/activity/${name}/manage/${href}`}
                   passHref
                 >
                   <Nav.Link>
@@ -77,23 +74,23 @@ export function ActivityManageFrame({
                   </Nav.Link>
                 </Link>
               ))}
-            </>
+            </Fragment>
           ))}
         </Nav>
       </Col>
 
       <Col className="flex-fill  me-4">
         <Breadcrumb className="p-1 bg-light rounded">
-          <Breadcrumb.Item className="mt-3 ps-3">
-            {current?.title}
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            className="mt-3"
-            href={current?.list[innerIndex]?.href}
-            active
-          >
-            {current?.list[innerIndex]?.title}
-          </Breadcrumb.Item>
+          {route.map(({ href, title }, index, { length }) => (
+            <Breadcrumb.Item
+              className="mt-3"
+              key={href}
+              href={href}
+              active={index + 1 === length}
+            >
+              {title}
+            </Breadcrumb.Item>
+          ))}
         </Breadcrumb>
         <section className="mt-3">{children}</section>
       </Col>
