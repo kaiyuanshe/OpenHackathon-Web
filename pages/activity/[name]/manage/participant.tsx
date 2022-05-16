@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Table } from 'react-bootstrap';
-import { requestClient } from '../../../api/core';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import React, { ChangeEventHandler, useEffect, useState } from 'react';
+import { Button, Form, Modal, Table, FormControlProps } from 'react-bootstrap';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { ListData } from '../../../../models/Base';
 import { Enrollment } from '../../../../models/Enrollment';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import styles from '../../../../styles/participant.less';
+import styles from '../../../../styles/participant.module.less';
+import { requestClient } from '../../../api/core';
 
 //——————————————— 辅助组件 ———————————————
 
@@ -95,18 +95,21 @@ const RegistrationStatus = (props: {
   console.log('状态 = ', props);
 
   // Post
-  async function postStatus(e: React.ChangeEvent<HTMLSelectElement>) {
-    let status = e.currentTarget.value;
+  // async function postStatus(e: React.ChangeEvent<HTMLSelectElement>) {
+  const postStatus: FormControlProps['onChange'] = async ({
+    currentTarget,
+  }) => {
+    let status = currentTarget.value;
     let state: string =
       status === 'approved' ? 'approve' : status === 'rejectd' ? 'reject' : '';
 
-    console.log(e.currentTarget.value, userId);
+    console.log(status, userId);
     if (state) {
       const postUrl = `${url}/${userId}/${state}`;
       // console.log("postUrl = ", postUrl)
       await requestClient<ListData<Enrollment>>(postUrl, 'POST', {});
     }
-  }
+  };
 
   return (
     <Form.Control
@@ -131,12 +134,9 @@ const RegistrationStatus = (props: {
 
 //——————————————— 主体组件 ———————————————
 
-//TODO:测试post。
-
 const Participant = (props: { activity: string; path: string }) => {
   const { activity, path } = props;
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  //NOTE：跳转页面的时候${activity}会变成data？
   console.log('props = ', props, path);
 
   let baseUrl = `hackathon/${activity}/enrollment`;
@@ -158,7 +158,7 @@ const Participant = (props: { activity: string; path: string }) => {
   return (
     <ActivityManageFrame path={path}>
       <div className="participant-table">
-        <Table>
+        <Table className={styles['container-table']}>
           <thead>
             <tr>
               <th>#</th>

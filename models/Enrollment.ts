@@ -6,10 +6,8 @@ export interface Enrollment extends Base {
   userId: string;
   user: User;
   status: 'approved';
-  extensions: [
-    {
-      name: string;
-      value: string;
-    },
-  ];
+  extensions: {
+    name: string;
+    value: string;
+  }[];
 }
