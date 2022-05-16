@@ -1,20 +1,6 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import {
-  ChangeEventHandler,
-  FormEvent,
-  MouseEventHandler,
-  PureComponent,
-  SyntheticEvent,
-} from 'react';
-import {
-  Form,
-  Table,
-  Row,
-  Col,
-  Button,
-  FormControlProps,
-  FormControl,
-} from 'react-bootstrap';
+import { FormEvent, PureComponent, SyntheticEvent } from 'react';
+import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -28,15 +14,17 @@ import { Award } from '../../../../models/Award';
 import { formToJSON } from 'web-utility';
 
 interface State {
-  currentAward: {
-    id?: string;
-    name: string;
-    description: string;
-    quantity: number | '';
-    target: 'team' | 'individual';
-  };
+  currentAward: Partial<Award>;
   awardList: Award[];
 }
+
+const DEFAULT_STATE: Partial<Award> = {
+  id: '',
+  name: '',
+  description: '',
+  quantity: 1,
+  target: 'team',
+};
 
 interface AwardPageProps {
   activity: string;
@@ -77,13 +65,7 @@ class AwardPage extends PureComponent<
   State
 > {
   state: Readonly<State> = {
-    currentAward: {
-      id: '',
-      name: '',
-      description: '',
-      quantity: '',
-      target: 'team',
-    },
+    currentAward: DEFAULT_STATE,
     awardList: this.props.awardList,
   };
   handleSubmit = async (
@@ -103,32 +85,27 @@ class AwardPage extends PureComponent<
     );
 
     this.setState({
-      currentAward: {
-        id: '',
-        name: '',
-        description: '',
-        quantity: '',
-        target: 'team',
-      },
-      awardList: awardList,
+      currentAward: DEFAULT_STATE,
+      awardList,
     });
   };
+
+  handleReset = (event: FormEvent) => {
+    this.setState({
+      currentAward: DEFAULT_STATE,
+    });
+  };
+
   //代办：handleEdit 和 handleDelete 逻辑类似，可以合并
   handleEdit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { awardid } = event.currentTarget.dataset,
+    const { awardId } = event.currentTarget.dataset,
       { activity } = this.props,
       currentAward = await requestClient<Award>(
-        `hackathon/${activity}/award/${awardid}`,
+        `hackathon/${activity}/award/${awardId}`,
       );
 
     this.setState({
-      currentAward: {
-        id: currentAward.id,
-        name: currentAward.name,
-        description: currentAward.description,
-        quantity: currentAward.quantity,
-        target: currentAward.target,
-      },
+      currentAward,
     });
   };
 
@@ -140,7 +117,8 @@ class AwardPage extends PureComponent<
       `hackathon/${activity}/awards`,
     );
     this.setState({
-      awardList: awardList,
+      currentAward: DEFAULT_STATE,
+      awardList,
     });
   };
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,7 +139,11 @@ class AwardPage extends PureComponent<
     } = currentAward;
 
     return (
-      <Form className="text-nowrap" onSubmit={this.handleSubmit}>
+      <Form
+        className="text-nowrap"
+        onSubmit={this.handleSubmit}
+        onReset={this.handleReset}
+      >
         <Form.Control type="hidden" name="id" value={id} />
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
@@ -222,7 +204,7 @@ class AwardPage extends PureComponent<
             </Form.Select>
           </Col>
         </Form.Group>
-        <Col className="d-flex justify-content-between p-4">
+        <Col className="d-flex justify-content-around p-4">
           <Button type="reset" variant="danger">
             清空表单
           </Button>
@@ -251,7 +233,7 @@ class AwardPage extends PureComponent<
         )}
       </td>
       <td>
-        <Button variant="link" onClick={this.handleEdit} data-awardid={id}>
+        <Button variant="link" onClick={this.handleEdit} data-award-id={id}>
           {name}
         </Button>
       </td>
@@ -266,7 +248,8 @@ class AwardPage extends PureComponent<
   );
 
   render() {
-    const { path, activity } = this.props;
+    const { path, activity } = this.props,
+      { awardList } = this.state;
     return (
       <ActivityManageFrame path={path}>
         <PageHead title={`${activity}活动管理 奖项设置`} />
@@ -283,7 +266,7 @@ class AwardPage extends PureComponent<
                   ))}
                 </tr>
               </thead>
-              <tbody>{this.state.awardList.map(this.renderItem)}</tbody>
+              <tbody>{awardList.map(this.renderItem)}</tbody>
             </Table>
           </Col>
         </Row>

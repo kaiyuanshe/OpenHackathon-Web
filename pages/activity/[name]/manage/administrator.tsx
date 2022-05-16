@@ -19,7 +19,6 @@ import { ActivityManageFrame } from '../../../../components/ActivityManageFrame'
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
 import { requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';
-import { User } from '../../../../models/User';
 import { AdminsJudges } from '../../../../models/ActivityManage';
 import styles from '../../../../styles/Table.module.less';
 
@@ -27,14 +26,13 @@ interface State {
   show: boolean;
   checked: Record<string, boolean>;
   nextLink: string | null;
-  list: User[];
+  admins: AdminsJudges[];
+  judges: AdminsJudges[];
 }
 
 interface AdministratorPageProps {
   activity: string;
   path: string;
-  admins: AdminsJudges[];
-  judges: AdminsJudges[];
 }
 
 const tableHead = [
@@ -49,7 +47,11 @@ const tableHead = [
   '备注',
 ];
 //生成一个checked value数列，用于在state中给各个复选框分配checked值
-const CheckboxArr = Array.from({ length: 10 }, (e, i) => i + '');
+const CheckboxArr = Array.from({ length: 10 }, (e, i) => i + ''),
+  DEFAULT_CHECKED = CheckboxArr.reduce(
+    (prev, current) => ({ ...prev, [current]: false }),
+    {},
+  );
 
 export async function getServerSideProps({
   params: { name } = {},
@@ -60,18 +62,11 @@ export async function getServerSideProps({
       notFound: true,
       props: {} as AdministratorPageProps,
     };
-  const { value: admins } = await requestClient<ListData<AdminsJudges>>(
-      `hackathon/${name}/admins`,
-    ),
-    { value: judges } = await requestClient<ListData<AdminsJudges>>(
-      `hackathon/${name}/judges`,
-    );
+
   return {
     props: {
       activity: name,
       path: req.url,
-      admins,
-      judges,
     },
   };
 }
@@ -82,20 +77,19 @@ class AdministratorPage extends PureComponent<
 > {
   state: Readonly<State> = {
     show: false,
-    checked: CheckboxArr.reduce(
-      (prev, current) => ({ ...prev, [current]: false }),
-      {},
-    ),
+    checked: DEFAULT_CHECKED,
     nextLink: null,
-    list: [],
+    admins: [],
+    judges: [],
   };
 
   //检验：复选框至少选中一个，否则提示验证消息
   componentDidMount() {
     const firstCheckbox =
       document.querySelector<HTMLInputElement>('#checkbox0');
-
     firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
+    //列表放入state，便于不刷新页面更新内容，放入后列表加载时间好像更长了一些
+    this.updateList();
   }
   componentDidUpdate() {
     const firstCheckbox =
@@ -106,87 +100,56 @@ class AdministratorPage extends PureComponent<
       : firstCheckbox?.setCustomValidity('请选择至少一位管理员或裁判！');
   }
 
-  //处理三处表单提交，1. 搜索用户 2. 增加管理员/裁判，3. 删除管理员/裁判
+  //处理删除管理员或裁判
   handleSubmit = async (
     event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
   ) => {
     event.preventDefault();
     event.stopPropagation();
     //获取提交按钮id，按此区分事件处理；在这种情况下，event.target为Form，所以需要获取nativeEvent，然后得到id
-    const { id } = event.nativeEvent.submitter!,
-      { activity } = this.props;
+    const { activity } = this.props;
 
     //解构赋值获得关键的userId和admin/judge参数
-    const { userId, adminJudge, userSearch, description } = formToJSON<{
+    const { userId } = formToJSON<{
       userId: string | string[];
-      adminJudge: string;
-      userSearch: string;
-      description: string;
     }>(event.currentTarget);
 
-    switch (id) {
-      case 'search':
-        this.searchId(userSearch);
-        break;
-      case 'increase':
-        this.increaseId(userId, activity, adminJudge, description);
-        break;
-      case 'delete':
-        this.deleteId(userId, activity);
-        break;
-    }
-  };
-
-  searchId = async (userSearch: string) => {
-    const { value: searchResult } = await requestClient<ListData<User>>(
-      `user/search?keyword=${userSearch}`,
-      'POST',
-    );
-    if (!searchResult?.[0]) return alert('您要查询的用户不存在');
-
-    this.setState({
-      list: [...searchResult],
-    });
-  };
-  increaseId = async (
-    userId: string | string[],
-    activity: string,
-    adminJudge: string,
-    description: string,
-  ) => {
-    if (!userId) return alert('请先搜索并选择一位用户');
-
-    await requestClient(
-      `hackathon/${activity}/${adminJudge}/${userId}`,
-      'PUT',
-      { description },
-    );
-    self.alert('已知悉您的请求，正在处理中！');
-
-    location.href = `/activity/${activity}/manage/administrator`;
-
-    this.setState({ show: false, list: [] });
-  };
-  deleteId = async (userId: string | string[], activity: string) => {
     //弹窗确认删除
     const confirmed = window.confirm('确认删除所选管理员/裁判？');
     if (!confirmed) return;
     //formToJSON 如果checkbox值只有一个，返回为string，多个值才返回arr，所以这里把userId都转为数组处理
     const userIdArr = typeof userId === 'string' ? userId.split(',') : userId;
-
     //批量删除
     for (let item of userIdArr) {
       if (typeof item !== 'string') continue;
       const [user, id] = item.split(':');
       await requestClient(`hackathon/${activity}/${user}/${id}`, 'DELETE');
     }
-    location.href = `/activity/${activity}/manage/administrator`;
+    // 重新分配checked值
+    this.setState({
+      checked: DEFAULT_CHECKED,
+    });
+    //更新列表
+    this.updateList();
+  };
+  //列表更新函数，响应删除与增加管理员事件，传递至下一级子组件ActivityAdministratorModal
+  updateList = async () => {
+    const { activity } = this.props,
+      { value: admins } = await requestClient<ListData<AdminsJudges>>(
+        `hackathon/${activity}/admins`,
+      ),
+      { value: judges } = await requestClient<ListData<AdminsJudges>>(
+        `hackathon/${activity}/judges`,
+      );
+    this.setState({
+      admins,
+      judges,
+    });
   };
 
   toggleDialog = (show: boolean) => () => this.setState({ show });
 
-  handleReset = () => this.setState({ list: [] });
-
+  //全选，反选所有用户
   toggleSelectAll = ({
     currentTarget: { checked },
   }: ChangeEvent<HTMLInputElement>) =>
@@ -235,9 +198,9 @@ class AdministratorPage extends PureComponent<
         description,
       ].map((data, idx) =>
         idx ? (
-          <td key={idx + data!}>{data}</td>
+          <td key={idx + userId + createdAt}>{data}</td>
         ) : (
-          <td key={idx + data!}>
+          <td key={idx + userId + createdAt}>
             <Form.Check
               inline
               aria-label={description ? `judge${data}` : `admin${data}`}
@@ -255,7 +218,7 @@ class AdministratorPage extends PureComponent<
   );
 
   renderList() {
-    const { admins, judges } = this.props;
+    const { admins, judges } = this.state;
     const all = [...admins, ...judges];
 
     return (
@@ -283,7 +246,8 @@ class AdministratorPage extends PureComponent<
   }
 
   render() {
-    const { activity, path, admins, judges } = this.props,
+    const { activity, path } = this.props,
+      { admins, judges } = this.state,
       value = [...admins, ...judges];
 
     return (
@@ -339,10 +303,9 @@ class AdministratorPage extends PureComponent<
 
         <AdministratorModal
           show={this.state.show}
+          activity={activity}
           onHide={this.toggleDialog(false)}
-          onSubmit={this.handleSubmit}
-          onReset={this.handleReset}
-          list={this.state.list}
+          updateList={this.updateList}
         />
       </ActivityManageFrame>
     );
