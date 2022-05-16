@@ -18,11 +18,11 @@ const Host =
 
 export async function request<T = void>(
   path: string,
-  method?: Request['method'],
+  method: Request['method'] = 'GET',
   body?: any,
   context?: Partial<GetServerSidePropsContext>,
   headers: Record<string, any> = {},
-) {
+): Promise<T> {
   const token = context?.req && readCookie(context.req, 'token');
 
   if (token) headers.Authorization = `token ${token}`;
@@ -53,9 +53,12 @@ export async function request<T = void>(
   });
 }
 
+/**
+ * 客户端直接请求后端
+ */
 export async function requestClient<T = void>(
   path: string,
-  method?: Request['method'],
+  method: Request['method'] = 'GET',
   body?: any,
   headers: Record<string, any> = {},
 ) {
@@ -74,6 +77,37 @@ export async function requestClient<T = void>(
 
     throw error;
   }
+}
+
+/**
+ * 上传blob文件
+ */
+export async function uploadBlob<T = void>(
+  fullPath: string,
+  method: Request['method'] = 'PUT',
+  body?: any,
+  headers: Record<string, any> = {},
+) {
+  headers['x-ms-blob-type'] = 'BlockBlob';
+
+  const { response } = call<T>({
+    path: fullPath,
+    method,
+    body,
+    headers,
+  });
+  const { headers: header, body: data } = await response;
+
+  if (!data || !('traceId' in data)) return data!;
+
+  const { status, title, detail } = data as unknown as ErrorData;
+
+  throw new HTTPError(detail || title, {
+    status,
+    statusText: title,
+    headers: header,
+    body: data,
+  });
 }
 
 export type NextAPI = (
@@ -106,7 +140,7 @@ export function writeCookie(
   setCookie({ res }, key, value, {
     httpOnly: true,
     secure: Env !== 'development',
-    maxAge: +new Date(expiredAt) - Date.now(),
+    maxAge: (+new Date(expiredAt) - Date.now()) / 1000,
     path: '/',
   });
 }
