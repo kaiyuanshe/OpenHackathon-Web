@@ -1,11 +1,4 @@
-import {
-  ComponentType,
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 import { getClientSession } from '../pages/api/user/session';
 
 import { User } from '../models/User';
@@ -30,7 +23,7 @@ export const AuthProvider = (props: PropsWithChildren<any>) => {
   });
 
   useEffect(() => {
-    const loadUserState = async (): Promise<void> => {
+    const loadUserState = async () => {
       const storedUser = await getClientSession();
       if (storedUser) {
         setState({

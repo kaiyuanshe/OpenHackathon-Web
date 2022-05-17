@@ -14,7 +14,7 @@ export class UserBar extends PureComponent<{}, State> {
   static contextType = AuthContext;
 
   render() {
-    const user = this.context.user;
+    const { user } = this.context;
 
     return !user ? (
       <Button href="/user/sign-in/">登入</Button>
