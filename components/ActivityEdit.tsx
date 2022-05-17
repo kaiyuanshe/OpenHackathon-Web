@@ -35,7 +35,7 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
     <Container>
       <h2 className="text-center">创建活动</h2>
 
-      <ActivityEditor submitHandler={submitHandler} activity={activity} />
+      <ActivityEditor onSubmit={submitHandler} activity={activity} />
     </Container>
   );
 };

@@ -1,6 +1,7 @@
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+
 import PageHead from '../../../components/PageHead';
 import { withSession } from '../../api/user/session';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { Activity } from '../../../models/Activity';
 import { Team } from '../../../models/Team';
 import { request } from '../../api/core';

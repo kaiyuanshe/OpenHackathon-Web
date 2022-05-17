@@ -71,7 +71,7 @@ const ActivityCreate: FC = () => {
       <h2 className="text-center">创建活动</h2>
 
       <ActivityEditor
-        submitHandler={submitHandler}
+        onSubmit={submitHandler}
         isNameAvailable={isNameAvailable}
       />
     </Container>
