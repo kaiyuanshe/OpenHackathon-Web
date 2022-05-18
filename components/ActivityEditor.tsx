@@ -4,13 +4,13 @@ import { FileUpload } from './FileUpload';
 import { DateTimeInput } from './DateTimeInput';
 import { Activity } from '../models/Activity';
 
-type activityEditorProps = {
+type ActivityEditorProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
   isNameAvailable?: (name?: string) => Promise<boolean>;
   activity?: Activity;
 };
 
-export const ActivityEditor: FC<activityEditorProps> = ({
+export const ActivityEditor: FC<ActivityEditorProps> = ({
   onSubmit,
   isNameAvailable,
   activity,
