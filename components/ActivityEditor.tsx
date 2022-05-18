@@ -5,7 +5,7 @@ import { DateTimeInput } from './DateTimeInput';
 import { Activity } from '../models/Activity';
 
 type ActivityEditorProps = {
-  onSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   isNameAvailable?: (name?: string) => Promise<boolean>;
   activity?: Activity;
 };
