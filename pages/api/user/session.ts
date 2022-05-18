@@ -11,9 +11,6 @@ export default safeAPI(async (req, res: NextApiResponse<User | undefined>) => {
   switch (req.method) {
     case 'GET':
       try {
-        if (!readCookie(req, 'userId')) {
-          return res.json(undefined);
-        }
         const user = await request<User>(
           `user/${readCookie(req, 'userId')}`,
           'GET',
@@ -65,7 +62,11 @@ export function withSession<
 }
 
 export const getClientSession = cache(async clean => {
-  const user = await request<User | undefined>('user/session');
+  let user;
+  try {
+    user = await request<User | undefined>('user/session');
+  } catch {}
+
   if (!user) {
     return;
   }
