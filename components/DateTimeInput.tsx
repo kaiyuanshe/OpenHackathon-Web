@@ -1,11 +1,14 @@
 import { FC } from 'react';
 import { Row, Col, Form, InputGroup } from 'react-bootstrap';
+import { formatDate } from 'web-utility';
 
 export interface DateTimeInputProps {
   id?: string;
   label: string;
   name: string;
   required?: boolean;
+  startAt?: string;
+  endAt?: string;
 }
 
 export const DateTimeInput: FC<DateTimeInputProps> = ({
@@ -13,6 +16,8 @@ export const DateTimeInput: FC<DateTimeInputProps> = ({
   label,
   name,
   required,
+  startAt,
+  endAt,
 }) => (
   <Form.Group as={Row} className="mb-3" controlId={id}>
     <Form.Label column sm={2}>
@@ -25,11 +30,13 @@ export const DateTimeInput: FC<DateTimeInputProps> = ({
           name={`${name}StartedAt`}
           type="datetime-local"
           required={required}
+          defaultValue={startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')}
         />
         <Form.Control
           name={`${name}EndedAt`}
           type="datetime-local"
           required={required}
+          defaultValue={endAt && formatDate(endAt, 'YYYY-MM-DDTHH:mm:ss')}
         />
       </InputGroup>
     </Col>
