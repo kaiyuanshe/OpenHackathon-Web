@@ -16,7 +16,7 @@ export const menus: MenuItem[] = [
     list: [
       {
         title: '编辑活动',
-        href: 'meta',
+        href: 'edit',
         icon: 'edit',
       },
       {

@@ -46,7 +46,6 @@ export function ActivityManageFrame({
   children,
 }: ActivityManageFrameProps) {
   const route = findDeep(menus, 'list', ({ href }) => {
-    console.log(href, path);
     return !!href && path.includes(href);
   });
 
@@ -84,7 +83,7 @@ export function ActivityManageFrame({
           {route.map(({ href, title }, index, { length }) => (
             <Breadcrumb.Item
               className="mt-3"
-              key={href}
+              key={title}
               href={href}
               active={index + 1 === length}
             >

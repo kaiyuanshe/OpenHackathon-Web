@@ -23,7 +23,7 @@ export const DateTimeInput: FC<DateTimeInputProps> = ({
     <Form.Label column sm={2}>
       {label}
     </Form.Label>
-    <Col column sm={10}>
+    <Col sm={10}>
       <InputGroup className="mb-3">
         <InputGroup.Text>时间范围</InputGroup.Text>
         <Form.Control
