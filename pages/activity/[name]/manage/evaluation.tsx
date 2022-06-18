@@ -10,10 +10,12 @@ import {
   Badge,
   Card,
 } from 'react-bootstrap';
-import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import PageHead from '../../../../components/PageHead';
 import { Award } from '../../../../models/Award';
 import { ListData } from '../../../../models/Base';
+import { request } from '../../../api/core';
+import { withSession } from '../../../api/user/session';
 
 interface State {}
 interface EvaluationPageProps {
