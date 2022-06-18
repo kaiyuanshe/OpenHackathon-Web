@@ -20,7 +20,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         名称（必填）
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="name"
           type="text"
@@ -38,7 +38,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         显示名称（必填）
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="displayName"
           type="text"
@@ -53,7 +53,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         标签
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="tagsString"
           type="text"
@@ -67,14 +67,14 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         头图（必填，最多10张）
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <FileUpload
           accept="image/*"
           name="bannerUrls"
           max={10}
           multiple
           required
-          defaultValue={activity?.banners.map(({ uri }) => uri)}
+          defaultValue={activity?.banners?.map(({ uri }) => uri)}
         />
       </Col>
     </Form.Group>
@@ -83,7 +83,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         活动地址
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="location"
           type="text"
@@ -119,7 +119,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         广告语
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="ribbon"
           type="text"
@@ -133,7 +133,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         报名人数限制
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="maxEnrollment"
           type="number"
@@ -147,12 +147,13 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         活动简介
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="summary"
           type="text"
           placeholder="活动简介"
           defaultValue={activity?.summary}
+          required
         />
       </Col>
     </Form.Group>
@@ -162,13 +163,14 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
       <Form.Label column sm={2}>
         活动详情
       </Form.Label>
-      <Col column sm={10}>
+      <Col sm={10}>
         <Form.Control
           name="detail"
           as="textarea"
           rows={3}
           placeholder="活动详情"
           defaultValue={activity?.detail}
+          required
         />
       </Col>
     </Form.Group>
