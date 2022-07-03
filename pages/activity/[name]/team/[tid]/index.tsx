@@ -14,19 +14,21 @@ import {
   Accordion,
   Ratio,
   Breadcrumb,
+  Tabs,
+  Tab,
 } from 'react-bootstrap';
 import { Icon } from 'idea-react';
 
-import PageHead from '../../../../components/PageHead';
-import { request, requestClient } from '../../../api/core';
-import { ListData } from '../../../../models/Base';
-import { Activity } from '../../../../models/Activity';
+import PageHead from '../../../../../components/PageHead';
+import { request, requestClient } from '../../../../api/core';
+import { ListData } from '../../../../../models/Base';
+import { Activity } from '../../../../../models/Activity';
 import {
   WorkTypeEnum,
   Team,
   TeamWork,
   TeamMember,
-} from '../../../../models/Team';
+} from '../../../../../models/Team';
 
 export async function getServerSideProps({
   params: { name, tid } = {},
@@ -148,6 +150,16 @@ export default function TeamsPage({
           </Card>
         </Col>
         <Col xs={12} sm={8}>
+          <Container className="mb-4" fluid="lg">
+            <Tabs
+              defaultActiveKey="works"
+              className="w-100 mb-3 justify-content-center"
+            >
+              <Tab eventKey="teamInfo" title="组队需求"></Tab>
+              <Tab eventKey="members" title="成员管理"></Tab>
+              <Tab eventKey="works" title="作品管理"></Tab>
+            </Tabs>
+          </Container>
           <Accordion>
             {teamWorks?.map(
               ({ updatedAt, id, title, description, type, url }, index) => (

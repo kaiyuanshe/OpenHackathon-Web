@@ -1,4 +1,4 @@
-import { Base } from './Base';
+import { Base, Media } from './Base';
 import { User } from './User';
 
 export enum WorkTypeEnum {
@@ -26,6 +26,7 @@ export interface Team extends Base {
 }
 
 export interface TeamWork extends Base {
+  id: string;
   teamId: string;
   hackathonName: string;
   title: string;
