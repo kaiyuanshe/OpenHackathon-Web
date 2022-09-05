@@ -11,8 +11,6 @@ import {
   Button,
   Image,
   Card,
-  Accordion,
-  Ratio,
   Breadcrumb,
   Tabs,
   Tab,
@@ -23,12 +21,7 @@ import PageHead from '../../../../../components/PageHead';
 import { request, requestClient } from '../../../../api/core';
 import { ListData } from '../../../../../models/Base';
 import { Activity } from '../../../../../models/Activity';
-import {
-  WorkTypeEnum,
-  Team,
-  TeamWork,
-  TeamMember,
-} from '../../../../../models/Team';
+import { Team, TeamWork, TeamMember } from '../../../../../models/Team';
 
 export async function getServerSideProps({
   params: { name, tid } = {},
@@ -54,6 +47,7 @@ export default function TeamsPage({
     creator: { photo },
   },
   teamWorkList: { nextLink, value: workList },
+  children,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const {
     query: { name, tid },
@@ -62,14 +56,6 @@ export default function TeamsPage({
 
   if (!name || Array.isArray(name) || !tid || Array.isArray(tid)) push('/404');
 
-  const [moreTeamWorksURL, setMoreTeamWorksURL] = useState<string>(nextLink);
-  const [teamWorks, setTeamWorks] = useState<TeamWork[]>([...workList]);
-
-  async function getMoreTeamWorks(url: string) {
-    const { nextLink, value } = await request<ListData<TeamWork>>(url);
-    setMoreTeamWorksURL(() => nextLink || '');
-    setTeamWorks(teamWorks => [...teamWorks, ...value]);
-  }
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [moreTeamMembersURL, setMoreTeamMembersURL] = useState<string>('');
 
@@ -155,46 +141,12 @@ export default function TeamsPage({
               defaultActiveKey="works"
               className="w-100 mb-3 justify-content-center"
             >
-              <Tab eventKey="teamInfo" title="组队需求"></Tab>
-              <Tab eventKey="members" title="成员管理"></Tab>
+              {/* <Tab eventKey="teamInfo" title="组队需求"></Tab> */}
+              {/* <Tab eventKey="members" title="成员管理"></Tab> */}
               <Tab eventKey="works" title="作品管理"></Tab>
             </Tabs>
           </Container>
-          <Accordion>
-            {teamWorks?.map(
-              ({ updatedAt, id, title, description, type, url }, index) => (
-                <Accordion.Item eventKey={`${index}`} key={id}>
-                  <Accordion.Header>
-                    {title} -{' '}
-                    {updatedAt ? updatedAt.slice(0, 10) + ' 更新' : ''}
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <p>{description}</p>
-                    {type === WorkTypeEnum.IMAGE ? (
-                      <Image src={url} className="mw-100" alt={title} />
-                    ) : type === WorkTypeEnum.VIDEO ? (
-                      <Ratio aspectRatio="16x9">
-                        <video controls width="250" src={url} />
-                      </Ratio>
-                    ) : (
-                      <a href={url} title={title}>
-                        {title}
-                      </a>
-                    )}
-                  </Accordion.Body>
-                </Accordion.Item>
-              ),
-            )}
-          </Accordion>
-
-          {moreTeamWorksURL && (
-            <Button
-              className="w-100"
-              onClick={() => getMoreTeamWorks(moreTeamWorksURL)}
-            >
-              加载更多
-            </Button>
-          )}
+          <section className="mt-3">{children}</section>
         </Col>
       </Row>
     </Container>
