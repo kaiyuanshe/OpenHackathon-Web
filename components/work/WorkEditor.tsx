@@ -54,6 +54,19 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
         />
       </Col>
     </Form.Group>
+    {/* <Form.Group as={Row} className="mb-3" controlId="url">
+      <Form.Label column sm={2}>
+      图片地址
+      </Form.Label>
+      <Col sm={10}>
+        <Form.Control
+          name="image"
+          type="uri"
+          placeholder="图片地址"
+          defaultValue={work?.type?.image}
+        />
+      </Col>
+    </Form.Group> */}
     <Button variant="primary" type="submit">
       提交
     </Button>
