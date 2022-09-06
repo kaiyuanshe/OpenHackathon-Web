@@ -21,7 +21,8 @@ First, run the development server:
 ```bash
 npm run dev
 # or
-yarn dev
+npm i pnpm -g
+pnpm dev
 ```
 
 Open http://localhost:3000 with your browser to see the result.
@@ -52,7 +53,7 @@ Check out our [Next.js deployment documentation][17] for more details.
 ### NPM script
 
 ```shell
-npm run e2e
+pnpm e2e
 ```
 
 ### VS Code

@@ -1,9 +1,10 @@
 import { FormEvent, FC } from 'react';
 import { Container } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import { makeArray, formToJSON } from 'web-utility';
-import { Activity, NameAvailability } from '../models/Activity';
+import { formToJSON } from 'web-utility';
+
 import { requestClient } from '../pages/api/core';
+import { Activity, NameAvailability } from '../models/Activity';
 import { ActivityEditor } from './ActivityEditor';
 
 export interface ActivityFormData extends Activity {
@@ -24,8 +25,9 @@ const ActivityCreate: FC = () => {
 
     if (!nameAvailable) return;
 
-    inputParams.banners = makeArray(inputParams.bannerUrls ?? []).map(
-      bannerUrl => {
+    inputParams.banners = [inputParams.bannerUrls ?? []]
+      .flat()
+      .map(bannerUrl => {
         const name = bannerUrl.split('/').slice(-1)[0];
 
         return {
@@ -33,8 +35,7 @@ const ActivityCreate: FC = () => {
           description: name,
           uri: bannerUrl,
         };
-      },
-    );
+      });
     inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
 
     await requestClient(`hackathon/${inputParams.name}`, 'PUT', inputParams);
