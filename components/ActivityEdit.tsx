@@ -1,10 +1,11 @@
+import { formToJSON } from 'web-utility';
 import { FC, FormEvent } from 'react';
+import { Container } from 'react-bootstrap';
+
+import { requestClient } from '../pages/api/core';
 import { Activity } from '../models/Activity';
 import { ActivityEditor } from './ActivityEditor';
-import { Container } from 'react-bootstrap';
-import { formToJSON, makeArray } from 'web-utility';
 import { ActivityFormData } from './ActivityCreate';
-import { requestClient } from '../pages/api/core';
 
 const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
@@ -13,8 +14,9 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
 
     const inputParams = formToJSON<ActivityFormData>(event.currentTarget);
 
-    inputParams.banners = makeArray(inputParams.bannerUrls ?? []).map(
-      bannerUrl => {
+    inputParams.banners = [inputParams.bannerUrls ?? []]
+      .flat()
+      .map(bannerUrl => {
         const name = bannerUrl.split('/').slice(-1)[0];
 
         return {
@@ -22,8 +24,7 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
           description: name,
           uri: bannerUrl,
         };
-      },
-    );
+      });
     inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
 
     await requestClient(`hackathon/${activity.name}`, 'PUT', inputParams);
