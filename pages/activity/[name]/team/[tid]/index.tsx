@@ -71,27 +71,7 @@ export default function TeamsPage({
   async function getMoreTeamWorks(url: string) {
     const { nextLink, value } = await requestClient<ListData<TeamWork>>(url);
     setMoreTeamWorksURL(() => nextLink || '');
-    setTeamWorks(teamWorks => [
-      ...teamWorks,
-      {
-        createdAt: 'The UTC timestamp when this object was created.',
-        updatedAt: 'The last UTC timestamp when the this object was updated.',
-        teamId: 'Id of the team',
-        id: 'auto-generated id of the work.',
-        hackathonName: 'name of hackathon',
-        title: 'title of the work. Requried for creation.',
-        description: 'description of the work',
-        type: {
-          image: '',
-          website: '',
-          video: '',
-          word: '',
-          powerpoint: '',
-        },
-        url: "Uri of the work. Requried for creation.\r\nIf the url is from a third-party website, please make sure it's allowed to be referenced by https://hackathon.kaiyuanshe.cn.",
-      },
-      ...value,
-    ]);
+    setTeamWorks(teamWorks => [...teamWorks, ...value]);
   }
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [moreTeamMembersURL, setMoreTeamMembersURL] = useState<string>('');
@@ -199,8 +179,11 @@ export default function TeamsPage({
                       {updatedAt ? updatedAt.slice(0, 10) + ' 更新' : ''}
                     </Accordion.Header>
                     <Accordion.Body>
-                      <Link href={`/activity/${name}/team/${tid}/work/edit`}>
+                      <Link
+                        href={`/activity/${name}/team/${tid}/work/${id}/edit`}
+                      >
                         <FontAwesomeIcon
+                          style={{ cursor: 'pointer' }}
                           className="mb-2.5"
                           icon={faPenToSquare}
                         />
