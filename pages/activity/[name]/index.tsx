@@ -183,15 +183,15 @@ export default function HackathonActivity({
             </Tab>
           </Tabs>
         </Col>
-        {displayName && location ? (
+        {/* {displayName && location ? (
           <Col>
             <h2>比赛地点</h2>
-            {/* @ts-ignore */}
+
             <LocationMap title={displayName} address={location}>
               暂无地址导航
             </LocationMap>
           </Col>
-        ) : null}
+        ) : null} */}
       </Row>
     </Container>
   );
