@@ -61,9 +61,13 @@ export function withSession<
 }
 
 export const getClientSession = cache(async clean => {
-  const user = await request<User>('user/session');
+  try {
+    const user = await request<User>('user/session');
 
-  setTimeout(clean, +new Date(user.tokenExpiredAt) - Date.now());
+    setTimeout(clean, +new Date(user.tokenExpiredAt) - Date.now());
 
-  return user;
+    return user;
+  } catch (err: any) {
+    console.error(err);
+  }
 }, 'Client Session');

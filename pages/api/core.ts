@@ -63,7 +63,7 @@ export async function requestClient<T = void>(
   headers: Record<string, any> = {},
 ) {
   try {
-    const { token } = await getClientSession();
+    const { token } = (await getClientSession()) || {};
 
     headers = { Authorization: `token ${token}`, ...headers };
   } catch {}
