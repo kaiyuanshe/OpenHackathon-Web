@@ -14,5 +14,6 @@ const withPWA = setPWA({
 module.exports = withPWA(
   withLess({
     reactStrictMode: true,
+    output: 'standalone',
   }),
 );
