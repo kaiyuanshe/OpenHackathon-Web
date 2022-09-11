@@ -59,8 +59,8 @@ jobs:
         with:
           length: 7
 
-    - uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        images: 'kysprodacr.azurecr.cn/oph-server-v2:sha-${{ steps.short-sha.outputs.sha }}'
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: 'kysprodacr.azurecr.cn/oph-server-v2:sha-${{ steps.short-sha.outputs.sha }}'
