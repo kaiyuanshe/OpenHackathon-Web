@@ -183,15 +183,15 @@ export default function HackathonActivity({
             </Tab>
           </Tabs>
         </Col>
-        {/* {displayName && location ? (
-          <Col>
+        {displayName && location && (
+          <Col className="d-flex flex-column" style={{ height: '50vh' }}>
             <h2>比赛地点</h2>
 
             <LocationMap title={displayName} address={location}>
               暂无地址导航
             </LocationMap>
           </Col>
-        ) : null} */}
+        )}
       </Row>
     </Container>
   );
