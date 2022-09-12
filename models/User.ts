@@ -1,10 +1,16 @@
 import { Base } from './Base';
-import { Area } from './Map';
 
 export interface UserBase {
   username: string;
   email: string;
   phone?: string;
+}
+
+export interface Area {
+  country: string;
+  province: string;
+  city: string;
+  district: string;
 }
 
 export interface GitHubUser extends UserBase, Partial<Pick<Area, 'city'>> {
