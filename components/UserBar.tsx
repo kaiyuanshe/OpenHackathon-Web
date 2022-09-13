@@ -35,11 +35,11 @@ export class UserBar extends PureComponent<{}, State> {
     ) : (
       <>
         <Link href="/activity/create" passHref>
-          <Button variant="success" className="me-3">
+          <Button variant="success" className="mt-3 mb-2 my-md-0 me-md-3">
             创建黑客松活动
           </Button>
         </Link>
-        <Dropdown>
+        <Dropdown className="my-3 my-md-0">
           <Dropdown.Toggle>{user.nickname}</Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
