@@ -4,6 +4,9 @@ import type {
   GetServerSidePropsContext,
 } from 'next';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import {
   Container,
   Row,
@@ -66,7 +69,7 @@ export default function TeamsPage({
   const [teamWorks, setTeamWorks] = useState<TeamWork[]>([...workList]);
 
   async function getMoreTeamWorks(url: string) {
-    const { nextLink, value } = await request<ListData<TeamWork>>(url);
+    const { nextLink, value } = await requestClient<ListData<TeamWork>>(url);
     setMoreTeamWorksURL(() => nextLink || '');
     setTeamWorks(teamWorks => [...teamWorks, ...value]);
   }
@@ -89,6 +92,7 @@ export default function TeamsPage({
 
   useEffect(() => {
     getMoreTeamMembers(`hackathon/${name}/team/${tid}/members`);
+    getMoreTeamWorks(`hackathon/${name}/team/${tid}/works`);
     getHackathonDisplayName();
   }, []);
 
@@ -155,35 +159,60 @@ export default function TeamsPage({
               defaultActiveKey="works"
               className="w-100 mb-3 justify-content-center"
             >
-              <Tab eventKey="teamInfo" title="组队需求"></Tab>
-              <Tab eventKey="members" title="成员管理"></Tab>
+              {/* <Tab eventKey="teamInfo" title="组队需求"></Tab> */}
+              {/* <Tab eventKey="members" title="成员管理"></Tab> */}
               <Tab eventKey="works" title="作品管理"></Tab>
             </Tabs>
           </Container>
           <Accordion>
-            {teamWorks?.map(
-              ({ updatedAt, id, title, description, type, url }, index) => (
-                <Accordion.Item eventKey={`${index}`} key={id}>
-                  <Accordion.Header>
-                    {title} -{' '}
-                    {updatedAt ? updatedAt.slice(0, 10) + ' 更新' : ''}
-                  </Accordion.Header>
-                  <Accordion.Body>
-                    <p>{description}</p>
-                    {type === WorkTypeEnum.IMAGE ? (
-                      <Image src={url} className="mw-100" alt={title} />
-                    ) : type === WorkTypeEnum.VIDEO ? (
-                      <Ratio aspectRatio="16x9">
-                        <video controls width="250" src={url} />
-                      </Ratio>
-                    ) : (
-                      <a href={url} title={title}>
-                        {title}
-                      </a>
-                    )}
-                  </Accordion.Body>
-                </Accordion.Item>
-              ),
+            <Accordion>
+              <Link href={`/activity/${name}/team/${tid}/work/create`}>
+                <Button variant="success" className="me-3 mb-2">
+                  创建黑客松活动
+                </Button>
+              </Link>
+              {teamWorks?.map(
+                ({ updatedAt, id, title, description, type, url }, index) => (
+                  <Accordion.Item eventKey={`${index}`} key={id}>
+                    <Accordion.Header>
+                      {title} -{' '}
+                      {updatedAt ? updatedAt.slice(0, 10) + ' 更新' : ''}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <Link
+                        href={`/activity/${name}/team/${tid}/work/${id}/edit`}
+                      >
+                        <FontAwesomeIcon
+                          style={{ cursor: 'pointer' }}
+                          className="mb-2.5"
+                          icon={faPenToSquare}
+                        />
+                      </Link>
+                      <p>{description}</p>
+                      {type === WorkTypeEnum.IMAGE ? (
+                        <Image src={url} className="mw-100" alt={title} />
+                      ) : type === WorkTypeEnum.VIDEO ? (
+                        <Ratio aspectRatio="16x9">
+                          <video controls width="250" src={url} />
+                        </Ratio>
+                      ) : (
+                        <a href={url} title={title}>
+                          {title}
+                        </a>
+                      )}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                ),
+              )}
+            </Accordion>
+
+            {moreTeamWorksURL && (
+              <Button
+                className="w-100"
+                onClick={() => getMoreTeamWorks(moreTeamWorksURL)}
+              >
+                加载更多
+              </Button>
             )}
           </Accordion>
 
