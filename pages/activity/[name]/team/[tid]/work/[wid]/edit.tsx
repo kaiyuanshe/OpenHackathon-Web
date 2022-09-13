@@ -2,9 +2,9 @@ import PageHead from '../../../../../../../components/PageHead';
 import WorkEdit from '../../../../../../../components/work/WorkEdit';
 import { TeamWork } from '../../../../../../../models/Team';
 import { withSession } from '../../../../../../api/user/session';
+import type { InferGetServerSidePropsType } from 'next';
 import { GetServerSidePropsContext } from 'next';
 import { request } from '../../../../../../api/core';
-import { useRouter } from 'next/router';
 export const getServerSideProps = withSession(
   async ({
     req,
@@ -12,13 +12,13 @@ export const getServerSideProps = withSession(
     params: { name, tid, wid } = {},
   }: GetServerSidePropsContext<{
     name?: string;
-    tid: string;
-    wid: string;
+    tid?: string;
+    wid?: string;
   }>) => {
-    if (!name)
+    if (!name || !tid || !wid)
       return {
         notFound: true,
-        props: {},
+        props: {} as { work: TeamWork },
       };
 
     const work = await request<TeamWork>(
