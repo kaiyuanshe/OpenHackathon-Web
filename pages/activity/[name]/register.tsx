@@ -5,16 +5,27 @@ import { Container, Form, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
-import { requestClient } from '../../api/core';
+import { request, requestClient } from '../../api/core';
 import { withSession } from '../../api/user/session';
+import { Activity } from '../../../models/Activity';
 import { Question, questions, Extensions } from '../../../models/Question';
 
 export const getServerSideProps = withSession(
-  async ({ params }: GetServerSidePropsContext<{ name: string }>) => ({
-    props: {
-      activity: params!.name,
-    },
-  }),
+  async ({ params, res }: GetServerSidePropsContext<{ name: string }>) => {
+    const { name } = params!;
+
+    const { status } = await request<Activity>(`hackathon/${name}`);
+
+    if (status !== 'online') {
+      res.statusCode = 403;
+      res.end();
+    }
+    return {
+      props: {
+        activity: params!.name,
+      },
+    };
+  },
 );
 
 class RegisterPage extends PureComponent<
@@ -48,7 +59,7 @@ class RegisterPage extends PureComponent<
 
   renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
-      <Form.Group as="li" className="mb-3">
+      <Form.Group as="li" className="mb-3" key={title}>
         {title}
         <Row xs={1} sm={3} lg={4} className="mt-2">
           {options.map(value => (
@@ -64,7 +75,7 @@ class RegisterPage extends PureComponent<
         </Row>
       </Form.Group>
     ) : (
-      <Form.Group as="li" className="mb-3 ">
+      <Form.Group as="li" className="mb-3 " key={title}>
         {title}
         <Row className="mt-2">
           <Form.Label htmlFor={title}></Form.Label>

@@ -83,9 +83,9 @@ class AwardPage extends PureComponent<
         | 'PUT'
         | 'PATCH',
       { activity } = this.props,
-      data = formToJSON(event.currentTarget);
+      { id = '', ...data } = formToJSON<Award>(event.currentTarget);
 
-    await requestClient(`hackathon/${activity}/award/${data.id}`, method, data);
+    await requestClient(`hackathon/${activity}/award/${id}`, method, data);
 
     const { value: awardList } = await requestClient<ListData<Award>>(
       `hackathon/${activity}/awards`,
@@ -115,6 +115,8 @@ class AwardPage extends PureComponent<
   handleDelete = async ({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
     const { id } = currentTarget,
       { activity } = this.props;
+
+    if (!confirm('确定删除该奖项？')) return;
 
     await requestClient(`hackathon/${activity}/award/${id}`, 'DELETE');
 

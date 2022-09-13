@@ -7,6 +7,7 @@ import { Activity } from '../models/Activity';
 export interface ActivityEntryProps
   extends Pick<
     Activity,
+    | 'status'
     | 'enrollmentStartedAt'
     | 'enrollmentEndedAt'
     | 'eventStartedAt'
@@ -18,6 +19,7 @@ export interface ActivityEntryProps
 }
 
 export function ActivityEntry({
+  status,
   enrollmentStartedAt,
   enrollmentEndedAt,
   eventStartedAt,
@@ -27,13 +29,14 @@ export function ActivityEntry({
   href,
 }: ActivityEntryProps) {
   const now = Date.now(),
-    enrollmentStart = new Date(enrollmentStartedAt),
+    isOnline = status === 'online';
+  const enrollmentStart = new Date(enrollmentStartedAt),
     enrollmentEnd = new Date(enrollmentEndedAt),
     eventStart = new Date(eventStartedAt),
     eventEnd = new Date(eventEndedAt),
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt);
-  const enrolling = +enrollmentStart < now && now < +enrollmentEnd,
+  const enrolling = isOnline && +enrollmentStart < now && now < +enrollmentEnd,
     enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
 
   return (
@@ -43,7 +46,9 @@ export function ActivityEntry({
       href={href}
       disabled={!enrolling}
     >
-      {now < +enrollmentStart
+      {!isOnline
+        ? '未上线，待审核'
+        : now < +enrollmentStart
         ? `${enrollmentDiff.distance} ${enrollmentDiff.unit}后开始报名`
         : now < +enrollmentEnd
         ? '立即报名'

@@ -69,7 +69,7 @@ export function ActivityCard({
           <ActivityControl {...{ name, status, onPublish, onDelete }} />
         ) : (
           <ActivityEntry
-            {...{ ...rest, eventStartedAt, href: `/activity/${name}` }}
+            {...{ ...rest, status, eventStartedAt, href: `/activity/${name}` }}
           />
         )}
       </Card.Footer>
