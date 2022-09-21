@@ -9,6 +9,7 @@ import {
   Carousel,
   Image,
 } from 'react-bootstrap';
+import { OpenMap } from 'idea-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
@@ -18,7 +19,6 @@ import {
 
 import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
-import { LocationMap } from '../../../components/LocationMap';
 import { ActivityEntry } from '../../../components/ActivityEntry';
 import { TeamCard } from '../../../components/TeamCard';
 import { Media, ListData } from '../../../models/Base';
@@ -187,9 +187,11 @@ export default function HackathonActivity({
           <Col className="d-flex flex-column" style={{ height: '50vh' }}>
             <h2>比赛地点</h2>
 
-            <LocationMap title={displayName} address={location}>
-              暂无地址导航
-            </LocationMap>
+            {typeof window !== 'undefined' && (
+              <OpenMap zoom={10} title={displayName} address={location}>
+                暂无地址导航
+              </OpenMap>
+            )}
           </Col>
         )}
       </Row>

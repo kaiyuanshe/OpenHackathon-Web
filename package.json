@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "husky install  &&  npx playwright install",
     "dev": "next dev",
-    "build": "next build",
-    "export": "next build  &&  next export",
+    "build": "rm -rf .next  &&  next build",
+    "export": "npm run build  &&  next export",
     "start": "next start",
     "lint": "next lint",
     "test": "npm run lint  &&  lint-staged",
