@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import {
   Container,
@@ -8,23 +8,28 @@ import {
   Tab,
   Carousel,
   Image,
+  Button,
 } from 'react-bootstrap';
 import { OpenMap } from 'idea-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
+  faFlag,
   faLocationDot,
+  faSignIn,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
-import { ActivityEntry } from '../../../components/ActivityEntry';
+import { getActivityStatusText } from '../../../components/ActivityEntry';
 import { TeamCard } from '../../../components/TeamCard';
 import { Media, ListData } from '../../../models/Base';
 import { Activity } from '../../../models/Activity';
 import { Team } from '../../../models/Team';
 import { request } from '../../api/core';
+import { Enrollment } from '../../../models/Enrollment';
+import { TeamCreateModal } from '../../../components/TeamCreateModal';
 
 export async function getServerSideProps({
   req,
@@ -34,7 +39,12 @@ export async function getServerSideProps({
   if (!name)
     return {
       notFound: true,
-      props: {} as { activity: Activity; teams: Team[] },
+      props: {} as {
+        activity: Activity;
+        teams: Team[];
+        enrollmentStatus: 'none';
+        myTeam: null;
+      },
     };
 
   const activity = await request<Activity>(
@@ -57,7 +67,33 @@ export async function getServerSideProps({
       .replace(/\\+"/g, '"');
   }
 
-  return { props: { activity, teams } };
+  try {
+    var { status: enrollmentStatus } = await request<Enrollment>(
+      `hackathon/${name}/enrollment`,
+      'GET',
+      undefined,
+      { req, res },
+    );
+  } catch {}
+
+  let myTeam: Team | null = null;
+  try {
+    if (enrollmentStatus === 'approved') {
+      myTeam = await request<Team>(`hackathon/${name}/team`, 'GET', undefined, {
+        req,
+        res,
+      });
+    }
+  } catch {}
+
+  return {
+    props: {
+      activity,
+      teams,
+      enrollmentStatus: enrollmentStatus || null,
+      myTeam,
+    },
+  };
 }
 
 export default function HackathonActivity({
@@ -76,7 +112,18 @@ export default function HackathonActivity({
     ...rest
   },
   teams,
+  enrollmentStatus,
+  myTeam,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [showCreateTeam, setShowCreateTeam] = useState<boolean>(false);
+  const now = Date.now(),
+    enrollmentEnd = new Date(enrollmentEndedAt),
+    enrollmentStart = new Date(enrollmentStartedAt);
+  const isShowSignupBtn =
+    (!enrollmentStatus || ['none', 'reject'].includes(enrollmentStatus)) &&
+    now < +enrollmentEnd;
+  const isDisableSignupBtn = now < +enrollmentStart;
+
   return (
     <Container>
       <PageHead title={displayName} />
@@ -142,17 +189,53 @@ export default function HackathonActivity({
               </Col>
               <Col>{enrollment}</Col>
             </Row>
+            <Row as="li" className="my-2">
+              <Col md={4} lg={3}>
+                <FontAwesomeIcon className="text-success me-2" icon={faFlag} />
+                活动状态
+              </Col>
+              <Col>
+                {getActivityStatusText({
+                  ...rest,
+                  enrollmentStartedAt,
+                  enrollmentEndedAt,
+                  eventStartedAt,
+                  eventEndedAt,
+                })}
+              </Col>
+            </Row>
+            <Row as="li" className="my-2">
+              <Col md={4} lg={3}>
+                <FontAwesomeIcon
+                  className="text-success me-2"
+                  icon={faSignIn}
+                />
+                报名状态
+              </Col>
+              <Col>
+                {enrollmentStatus === 'pendingApproval'
+                  ? '已报名，等待通过'
+                  : enrollmentStatus === 'approved'
+                  ? '已报名成功'
+                  : enrollmentStatus === 'rejected'
+                  ? '已拒绝'
+                  : '未报名'}
+              </Col>
+            </Row>
           </ul>
-          <ActivityEntry
-            {...{
-              ...rest,
-              enrollmentStartedAt,
-              enrollmentEndedAt,
-              eventStartedAt,
-              eventEndedAt,
-            }}
-            href={`/activity/${name}/register`}
-          />
+          {isShowSignupBtn && (
+            <Button
+              href={`/activity/${name}/register`}
+              disabled={isDisableSignupBtn}
+            >
+              立即报名
+            </Button>
+          )}
+          {enrollmentStatus === 'approved' && !myTeam && (
+            <Button onClick={() => setShowCreateTeam(() => true)}>
+              创建队伍
+            </Button>
+          )}
         </Col>
       </Row>
       <Row className="mt-3">
@@ -171,7 +254,7 @@ export default function HackathonActivity({
               <div className="h1 my-5 text-center">暂无消息</div>
             </Tab>
             <Tab eventKey="team" title="所有团队" className="pt-2">
-              {teams[0] ? (
+              {teams.length > 0 ? (
                 <Row xs={1} md={2} lg={2} xxl={2} className="g-4">
                   {(teams as Team[]).map(team => (
                     <TeamCard key={team.id} {...team} />
@@ -195,6 +278,11 @@ export default function HackathonActivity({
           </Col>
         )}
       </Row>
+      <TeamCreateModal
+        show={showCreateTeam}
+        hackathonName={name}
+        onClose={() => setShowCreateTeam(() => false)}
+      />
     </Container>
   );
 }

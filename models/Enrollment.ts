@@ -5,7 +5,7 @@ export interface Enrollment extends Base {
   hackathonName: string;
   userId: string;
   user: User;
-  status: 'approved';
+  status: 'none' | 'pendingApproval' | 'approved' | 'rejected';
   extensions: {
     name: string;
     value: string;

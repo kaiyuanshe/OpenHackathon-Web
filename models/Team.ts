@@ -16,7 +16,6 @@ export enum MembershipStatusEnum {
 
 export interface Team extends Base {
   hackathonName: string;
-  id: string;
   displayName: string;
   description: string;
   autoApprove: boolean;
