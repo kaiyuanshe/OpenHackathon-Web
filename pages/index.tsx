@@ -4,15 +4,13 @@ import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
 import { ActivityList } from '../components/ActivityList';
-import { ListData } from '../models/Base';
-import { Activity } from '../models/Activity';
-import { request } from './api/core';
+import activityStore from '../models/Activity';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
-  const { value } = await request<ListData<Activity>>('hackathons?top=10');
+  const activities = await activityStore.getList({}, 1, 6);
 
-  return { props: { activities: value } };
+  return { props: { activities } };
 }
 
 const HomePage = ({

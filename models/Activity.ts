@@ -1,4 +1,7 @@
-import { Base, Media } from './Base';
+import { ListModel, Stream } from 'mobx-restful';
+
+import { Base, Media, createListStream } from './Base';
+import sessionStore from './Session';
 
 export interface Activity extends Base {
   name: string;
@@ -41,3 +44,19 @@ export interface NameAvailability {
   reason: string;
   message: string;
 }
+
+export class ActivityModel extends Stream<Activity>(ListModel) {
+  client = sessionStore.client;
+  baseURI = 'hackathon';
+  pageSize = 6;
+
+  openStream() {
+    return createListStream<Activity>(
+      `${this.baseURI}s?top=6`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
+}
+
+export default new ActivityModel();
