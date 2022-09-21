@@ -34,22 +34,20 @@ export const TeamCreateModal: FC<TeamCreateProps> = ({
   };
 
   async function isNameAvailable(name = '') {
-    // TODO
-    // const errorMsg = `队伍名称 ${name} 不可用，请更换名称`;
+    const errorMsg = `队伍名称 ${name} 不可用，请更换名称`;
 
-    // if (!name) {
-    //     alert(errorMsg);
-    //     return false;
-    // }
-    // const { nameAvailable } = await requestClient<NameAvailability>(
-    //     'hackathon/checkNameAvailability',
-    //     'POST',
-    //     { name },
-    // );
-    // if (!nameAvailable) alert(errorMsg);
+    if (!name) {
+      alert(errorMsg);
+      return false;
+    }
+    const { nameAvailable } = await requestClient<NameAvailability>(
+      `hackathon/${hackathonName}/team/checkNameAvailability`,
+      'POST',
+      { name },
+    );
+    if (!nameAvailable) alert(errorMsg);
 
-    // return nameAvailable;
-    return true;
+    return nameAvailable;
   }
 
   return (
