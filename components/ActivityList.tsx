@@ -1,13 +1,17 @@
+import { debounce } from 'lodash';
+import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Loading } from 'idea-react';
-import { buildURLData, watchVisible } from 'web-utility';
+import { EdgePosition, ScrollBoundary, Loading } from 'idea-react';
 
-import { ActivityCard } from './ActivityCard';
-import { ListData } from '../models/Base';
-import { Activity, ActivityListType } from '../models/Activity';
-import { requestClient } from '../pages/api/core';
-import { getClientSession } from '../pages/api/user/session';
+import { ActivityCardProps, ActivityCard } from './ActivityCard';
+import {
+  ActivityListType,
+  Activity,
+  ActivityFilter,
+  ActivityModel,
+} from '../models/Activity';
+import sessionStore from '../models/Session';
 
 export interface ActivityListProps {
   type?: ActivityListType;
@@ -16,140 +20,88 @@ export interface ActivityListProps {
   userId?: string;
 }
 
-interface State {
-  sessionUserId?: string;
-  loading?: boolean;
-  nextLink?: string | null;
-  list: Activity[];
-}
+export type ActivityListLayoutProps = ActivityListProps &
+  Pick<ActivityCardProps, 'onPublish' | 'onDelete'>;
 
-export class ActivityList extends PureComponent<ActivityListProps, State> {
-  state: Readonly<State> = {
-    list: [],
+@observer
+export class ActivityList extends PureComponent<ActivityListProps> {
+  store = new ActivityModel();
+
+  filter: ActivityFilter = {
+    userId: this.props.userId,
+    listType: this.props.type,
   };
 
   async componentDidMount() {
-    try {
-      const { id } = await getClientSession();
+    const { value } = this.props;
 
-      this.setState({ sessionUserId: id });
-    } catch {}
+    this.store.clear();
+
+    if (value) await this.store.restoreList(value);
+
+    await this.store.getList(this.filter, this.store.pageList.length + 1);
   }
 
-  async nextPage() {
-    const { type = 'online', userId } = this.props,
-      { loading, nextLink: nextPage, list } = this.state;
-
-    if (loading || nextPage === null) return;
-
-    this.setState({ loading: true });
-
-    try {
-      const { nextLink, value } = await requestClient<ListData<Activity>>(
-        nextPage ||
-          `hackathons?${buildURLData({
-            userId,
-            listType: type,
-            orderby: 'updatedAt',
-            top: 6,
-          })}`,
-      );
-      this.setState({
-        nextLink,
-        list: [...list, ...value],
-      });
-    } catch {
-      this.setState({ nextLink: null });
-    } finally {
-      this.setState({ loading: false });
-    }
+  componentWillUnmount() {
+    this.store.clear();
   }
 
-  publishOne = async (name: string) => {
-    const { list } = this.state;
-    const current = list.find(({ name: ID }) => ID === name)!;
+  loadMore = debounce((edge: EdgePosition) => {
+    const { store, filter } = this;
 
-    if (!confirm(`确定让 ${current.displayName} 上线？`)) return;
+    if (edge === 'bottom' && !store.noMore) store.getList(filter);
+  });
 
-    this.setState({ loading: true });
-    try {
-      await requestClient(`hackathon/${name}/publish`, 'POST');
-
-      current.status = 'online';
-
-      this.setState({ list: [...list] });
-    } finally {
-      this.setState({ loading: false });
-    }
-  };
-
-  deleteOne = async (name: string) => {
-    const { list } = this.state;
-    const index = list.findIndex(({ name: ID }) => ID === name);
-
-    if (!confirm(`确定让 ${list[index].displayName} 下线？`)) return;
-
-    this.setState({ loading: true });
-    try {
-      await requestClient(`hackathon/${name}`, 'DELETE');
-
-      this.setState({
-        list: [...list.slice(0, index), ...list.slice(index + 1)],
-      });
-    } finally {
-      this.setState({ loading: false });
-    }
-  };
+  static Layout = ({
+    size,
+    type = 'online',
+    value = [],
+    userId,
+    ...props
+  }: ActivityListLayoutProps) => (
+    <Row
+      className="g-4"
+      xs={1}
+      sm={2}
+      {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
+    >
+      {value.map(item => (
+        <Col key={item.name}>
+          <ActivityCard
+            className="h-100"
+            controls={!!userId && (type === 'admin' || type === 'created')}
+            {...item}
+            {...props}
+          />
+        </Col>
+      ))}
+    </Row>
+  );
 
   render() {
-    const { type, size, value } = this.props,
-      { sessionUserId, loading, nextLink, list } = this.state;
+    const { type, size } = this.props,
+      { downloading, noMore, allItems } = this.store,
+      { user } = sessionStore;
 
     return (
-      <>
-        {loading && <Loading />}
+      <ScrollBoundary onTouch={this.loadMore}>
+        {!!downloading && <Loading />}
 
-        <Row
-          className="g-4"
-          xs={1}
-          sm={2}
-          {...(size === 'sm'
-            ? {}
-            : !size
-            ? { lg: 3, xxl: 4 }
-            : { lg: 4, xxl: 6 })}
-        >
-          {(value || list).map(item => (
-            <Col key={item.name}>
-              <ActivityCard
-                className="h-100"
-                controls={
-                  !!sessionUserId && (type === 'admin' || type === 'created')
-                }
-                {...item}
-                onPublish={this.publishOne}
-                onDelete={this.deleteOne}
-              />
-            </Col>
-          ))}
-        </Row>
-
-        {!value &&
-          (nextLink !== null ? (
-            <footer
-              className="mt-4 text-center text-muted small"
-              ref={node =>
-                node && watchVisible(node, show => show && this.nextPage())
-              }
-            >
-              加载更多……
-            </footer>
-          ) : (
-            <footer className="mt-4 text-center text-muted small">
-              没有更多
-            </footer>
-          ))}
-      </>
+        <ActivityList.Layout
+          {...{ type, size }}
+          value={allItems}
+          userId={user?.id}
+          onPublish={name =>
+            confirm(`确定让 ${name} 上线？`) && this.store.publishOne(name)
+          }
+          onDelete={name =>
+            confirm(`确定让 ${name} 下线？`) && this.store.deleteOne(name)
+          }
+        />
+        <footer className="mt-4 text-center text-muted small">
+          {noMore ? '没有更多' : '加载更多……'}
+        </footer>
+      </ScrollBoundary>
     );
   }
 }

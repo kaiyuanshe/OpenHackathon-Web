@@ -34,7 +34,7 @@ export class SessionModel extends BaseModel {
   signOut() {
     localStorage?.clear();
 
-    location.replace('/');
+    this.user = undefined;
   }
 }
 

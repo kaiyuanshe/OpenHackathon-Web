@@ -27,7 +27,7 @@ specifiers:
   lodash: ^4.17.21
   mobx: ^5.15.7
   mobx-react: ^6.3.1
-  mobx-restful: ^0.6.0-rc.12
+  mobx-restful: ^0.6.0-rc.13
   next: ^12.3.1
   next-pwa: ^5.6.0
   next-with-less: ^2.0.5
@@ -57,7 +57,7 @@ dependencies:
   lodash: 4.17.21
   mobx: 5.15.7
   mobx-react: 6.3.1_hhkghttxnhy2fe22wf4styxgna
-  mobx-restful: 0.6.0-rc.12_wg7sgs74b6jrotl3tuf2oe5bdi
+  mobx-restful: 0.6.0-rc.13_wg7sgs74b6jrotl3tuf2oe5bdi
   next: 12.3.1_sfoxds7t5ydpegc3knd667wn6m
   nookies: 2.5.2
   react: 17.0.2
@@ -5574,8 +5574,8 @@ packages:
       - react-native
     dev: false
 
-  /mobx-restful/0.6.0-rc.12_wg7sgs74b6jrotl3tuf2oe5bdi:
-    resolution: {integrity: sha512-ymrzBMNT/NIh+WHgTR5BnCnAPNlDWBNS2rgytIdct3OYLBLO55e01HhccN8ZBFjiVufZREq2lsj9om/sjXk9uA==}
+  /mobx-restful/0.6.0-rc.13_wg7sgs74b6jrotl3tuf2oe5bdi:
+    resolution: {integrity: sha512-xxQXPT/VTPj8c7el/8bGEt/MI2o2XPHlh1PCO+M+QCy9EwhDaqIgL/bxOY8pkjmjdgK7ZlRHlaoAl72Appr1Mw==}
     peerDependencies:
       mobx: '>=4 <6'
     dependencies:

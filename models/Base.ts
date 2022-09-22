@@ -20,6 +20,11 @@ export interface ErrorData {
   traceId: string;
 }
 
+export interface BaseFilter<T extends Base = Base> {
+  orderby?: keyof T;
+  top?: number;
+}
+
 export interface ListData<T> {
   nextLink: string;
   value: T[];
@@ -30,7 +35,7 @@ export const isServer = () => typeof window === 'undefined';
 export async function* createListStream<T>(
   path: string,
   client: RESTClient,
-  onEnd: (total: number) => any,
+  onCount: (total: number) => any,
 ) {
   var count = 0;
 
@@ -42,7 +47,7 @@ export async function* createListStream<T>(
     path = nextLink;
     count += value.length;
 
-    if (!path) onEnd(count);
+    onCount(path ? Infinity : count);
 
     yield* value;
   }

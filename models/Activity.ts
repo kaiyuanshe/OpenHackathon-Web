@@ -1,6 +1,7 @@
-import { ListModel, Stream } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, Media, createListStream } from './Base';
+import { Base, BaseFilter, Media, createListStream } from './Base';
 import sessionStore from './Session';
 
 export interface Activity extends Base {
@@ -45,17 +46,35 @@ export interface NameAvailability {
   message: string;
 }
 
-export class ActivityModel extends Stream<Activity>(ListModel) {
+export interface ActivityFilter extends BaseFilter<Activity> {
+  userId?: string;
+  listType?: ActivityListType;
+}
+
+export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'hackathon';
   pageSize = 6;
 
-  openStream() {
+  openStream({
+    userId,
+    listType = 'online',
+    orderby = 'updatedAt',
+  }: ActivityFilter) {
     return createListStream<Activity>(
-      `${this.baseURI}s?top=6`,
+      `${this.baseURI}s?${buildURLData({ userId, listType, orderby, top: 6 })}`,
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('uploading')
+  async publishOne(name: string) {
+    await this.client.post(`hackathon/${name}/publish`);
+
+    const current = this.allItems.find(({ name: n }) => n === name);
+
+    if (current) current.status = 'online';
   }
 }
 

@@ -49,7 +49,7 @@ const HomePage = ({
 
     <section className="my-5 py-5 bg-light text-center">
       <Container className="text-start">
-        <ActivityList value={activities.slice(0, 6)} />
+        <ActivityList.Layout value={activities} />
       </Container>
 
       <Button
