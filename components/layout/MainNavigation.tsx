@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import Link from 'next/link';
 
-import { UserBar } from '../UserBar';
+import { UserBar } from '../Session/UserBar';
 
 const Name = process.env.NEXT_PUBLIC_SITE_NAME || '';
 

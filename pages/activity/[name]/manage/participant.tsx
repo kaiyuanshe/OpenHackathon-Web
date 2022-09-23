@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Button, Form, Modal, Table, FormControlProps } from 'react-bootstrap';
 
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import styles from '../../../../styles/participant.module.less';
 import { requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';

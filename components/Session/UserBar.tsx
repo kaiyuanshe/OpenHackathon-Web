@@ -3,7 +3,7 @@ import { Button, Dropdown } from 'react-bootstrap';
 import Link from 'next/link';
 
 import { SessionBox } from './SessionBox';
-import sessionStore from '../models/Session';
+import sessionStore from '../../models/Session';
 
 export const UserBar = observer(() => {
   const { user } = sessionStore;

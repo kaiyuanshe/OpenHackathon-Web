@@ -2,7 +2,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { Container } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
-import { ActivityList } from '../../components/ActivityList';
+import { ActivityList } from '../../components/Activity/ActivityList';
 import activityStore from '../../models/Activity';
 
 export async function getServerSideProps() {

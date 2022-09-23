@@ -10,8 +10,8 @@ import {
   Activity,
   ActivityFilter,
   ActivityModel,
-} from '../models/Activity';
-import sessionStore from '../models/Session';
+} from '../../models/Activity';
+import sessionStore from '../../models/Session';
 
 export interface ActivityListProps {
   type?: ActivityListType;
@@ -49,7 +49,8 @@ export class ActivityList extends PureComponent<ActivityListProps> {
   loadMore = debounce((edge: EdgePosition) => {
     const { store, filter } = this;
 
-    if (edge === 'bottom' && !store.noMore) store.getList(filter);
+    if (edge === 'bottom' && !store.downloading && !store.noMore)
+      store.getList(filter);
   });
 
   static Layout = ({
@@ -99,7 +100,7 @@ export class ActivityList extends PureComponent<ActivityListProps> {
           }
         />
         <footer className="mt-4 text-center text-muted small">
-          {noMore ? '没有更多' : '加载更多……'}
+          {noMore || !allItems.length ? '没有更多' : '上拉加载更多……'}
         </footer>
       </ScrollBoundary>
     );

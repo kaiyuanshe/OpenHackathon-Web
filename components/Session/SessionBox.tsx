@@ -4,7 +4,7 @@ import { HTMLAttributes, UIEvent, PureComponent } from 'react';
 import { Modal } from 'react-bootstrap';
 import dynamic from 'next/dynamic';
 
-import sessionStore from '../models/Session';
+import sessionStore from '../../models/Session';
 
 const AuthingGuard = dynamic(() => import('./AuthingGuard'), { ssr: false });
 

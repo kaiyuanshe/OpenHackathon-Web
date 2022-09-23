@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formToJSON } from 'web-utility';
 
 import PageHead from '../../../../components/PageHead';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import styles from '../../../../styles/Table.module.less';
 import { request, requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';

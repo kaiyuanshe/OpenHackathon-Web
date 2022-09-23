@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 import PageHead from '../../components/PageHead';
-import { ActivityList } from '../../components/ActivityList';
+import { ActivityList } from '../../components/Activity/ActivityList';
 import userStore, { User } from '../../models/User';
 
 const UserDetailPage = ({

@@ -2,7 +2,7 @@ import { buildURLData } from 'web-utility';
 import { action } from 'mobx';
 import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, BaseFilter, Media, createListStream } from './Base';
+import { Base, Filter, Media, createListStream } from './Base';
 import sessionStore from './Session';
 import { Enrollment } from './Enrollment';
 import { TeamModel } from './Team';
@@ -49,7 +49,7 @@ export interface NameAvailability {
   message: string;
 }
 
-export interface ActivityFilter extends BaseFilter<Activity> {
+export interface ActivityFilter extends Filter<Activity> {
   userId?: string;
   listType?: ActivityListType;
 }
@@ -61,8 +61,8 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   currentTeam?: TeamModel;
 
-  teamOf(name: string) {
-    return (this.currentTeam = new TeamModel(name));
+  teamOf(name = this.currentOne.name) {
+    return (this.currentTeam = new TeamModel(`hackathon/${name}`));
   }
 
   openStream({

@@ -15,7 +15,7 @@ import { formToJSON } from 'web-utility';
 
 import { convertDatetime } from '../../../../utils/time';
 import PageHead from '../../../../components/PageHead';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
 import { requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';

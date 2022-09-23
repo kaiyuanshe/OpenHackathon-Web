@@ -1,4 +1,4 @@
-import { RESTClient } from 'mobx-restful';
+import { NewData, RESTClient } from 'mobx-restful';
 
 export interface Base {
   id?: string;
@@ -18,10 +18,11 @@ export interface ErrorData
   status: number;
 }
 
-export interface BaseFilter<T extends Base = Base> {
+export type Filter<T extends Base = Base> = NewData<T> & {
+  search?: string;
   orderby?: keyof T;
   top?: number;
-}
+};
 
 export interface ListData<T> {
   nextLink: string;

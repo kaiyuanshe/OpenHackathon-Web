@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';
 
-import { Activity } from '../models/Activity';
+import { Activity } from '../../models/Activity';
 
 export interface ActivityControlProps
   extends Pick<Activity, 'name' | 'status'> {

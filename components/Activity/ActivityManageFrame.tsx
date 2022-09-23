@@ -16,10 +16,10 @@ import {
   faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { findDeep } from '../utils/data';
-import { SessionBox } from './SessionBox';
-import { menus } from '../models/ActivityManage';
-import { MenuItem } from '../models/ActivityManage';
+import { findDeep } from '../../utils/data';
+import { SessionBox } from '../Session/SessionBox';
+import { menus } from '../../models/ActivityManage';
+import { MenuItem } from '../../models/ActivityManage';
 
 library.add(
   faEdit,

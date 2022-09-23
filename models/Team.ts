@@ -1,6 +1,8 @@
-import { ListModel, Stream } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
+import { action } from 'mobx';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream } from './Base';
+import { Base, Filter, createListStream } from './Base';
 import { User } from './User';
 import sessionStore from './Session';
 
@@ -17,46 +19,101 @@ export enum MembershipStatusEnum {
   APPROVED = 'approved',
 }
 
-export interface Team extends Base {
-  hackathonName: string;
+type TeamBase = Record<'hackathonName' | 'description', string>;
+
+export interface Team
+  extends Base,
+    TeamBase,
+    Record<'displayName' | 'creatorId', string> {
   id: string;
-  displayName: string;
-  description: string;
   autoApprove: boolean;
-  creatorId: string;
   creator: User;
   membersCount: number;
 }
 
-export interface TeamWork extends Base {
-  teamId: string;
-  hackathonName: string;
-  title: string;
-  description: string;
+export interface TeamWork
+  extends Base,
+    TeamBase,
+    Record<'teamId' | 'title' | 'url', string> {
   type: WorkTypeEnum;
-  url: string;
 }
 
-export interface TeamMember extends Omit<Base, 'id'> {
-  hackathonName: string;
-  teamId: string;
+export interface TeamMember
+  extends Omit<Base, 'id'>,
+    Omit<TeamWork, 'type' | 'title' | 'url'> {
   userId: string;
   user: User;
-  description: string;
-  role: string;
+  role: 'admin' | 'member';
   status: MembershipStatusEnum;
 }
 
-export class TeamModel extends Stream<Team>(ListModel) {
+export class TeamModel extends Stream<Team, Filter<Team>>(ListModel) {
+  client = sessionStore.client;
+  currentMember?: TeamMemberModel;
+  currentWork?: TeamWorkModel;
+
+  constructor(baseURI: string) {
+    super();
+    this.baseURI = `${baseURI}/team`;
+  }
+
+  memberOf(tid = this.currentOne.id) {
+    return (this.currentMember = new TeamMemberModel(`${this.baseURI}/${tid}`));
+  }
+
+  workOf(tid = this.currentOne.id) {
+    return (this.currentWork = new TeamWorkModel(`${this.baseURI}/${tid}`));
+  }
+
+  @action
+  @toggle('downloading')
+  async getOne(id: Team['id']) {
+    const team = await super.getOne(id);
+
+    this.memberOf();
+    this.workOf();
+
+    return team;
+  }
+
+  openStream({ search }: Filter<Team>) {
+    return createListStream<Team>(
+      `${this.baseURI}s?${buildURLData({ search })}`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
+}
+
+export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
+  ListModel,
+) {
   client = sessionStore.client;
 
-  constructor(activity: string) {
+  constructor(baseURI: string) {
     super();
-    this.baseURI = `hackathon/${activity}/team`;
+    this.baseURI = `${baseURI}/member`;
+  }
+
+  openStream(filter: Filter<TeamMember>) {
+    return createListStream<TeamMember>(
+      `${this.baseURI}s?${buildURLData(filter)}`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
+}
+
+export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
+  client = sessionStore.client;
+
+  constructor(baseURI: string) {
+    super();
+    this.baseURI = `${baseURI}/work`;
   }
 
   openStream() {
-    return createListStream<Team>(
+    return createListStream<TeamWork>(
       `${this.baseURI}s`,
       this.client,
       count => (this.totalCount = count),

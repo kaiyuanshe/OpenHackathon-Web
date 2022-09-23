@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import PageHead from '../../../../components/PageHead';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import ActivityEdit from '../../../../components/ActivityEdit';
 import activityStore, { Activity } from '../../../../models/Activity';
 import { Team } from '../../../../models/Team';
