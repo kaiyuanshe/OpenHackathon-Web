@@ -1,6 +1,7 @@
+import { buildURLData } from 'web-utility';
 import { ListModel, Stream } from 'mobx-restful';
 
-import { Base, createListStream } from './Base';
+import { Base, Filter, createListStream } from './Base';
 import sessionStore from './Session';
 
 export interface UserBase {
@@ -114,13 +115,17 @@ export interface User extends AuthingSession {
   arn: null;
 }
 
-export class UserModel extends Stream<User>(ListModel) {
+export interface UserFilter extends Filter<User> {
+  keyword?: string;
+}
+
+export class UserModel extends Stream<User, UserFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'user';
 
-  openStream() {
+  openStream(filter: UserFilter) {
     return createListStream<User>(
-      `${this.baseURI}/topUsers`,
+      `${this.baseURI}/search?${buildURLData(filter)}`,
       this.client,
       count => (this.totalCount = count),
     );

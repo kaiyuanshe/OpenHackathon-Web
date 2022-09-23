@@ -4,6 +4,7 @@ import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, Media, createListStream } from './Base';
 import sessionStore from './Session';
+import { AwardModel } from './Award';
 import { Enrollment } from './Enrollment';
 import { TeamModel } from './Team';
 
@@ -57,9 +58,15 @@ export interface ActivityFilter extends Filter<Activity> {
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'hackathon';
+  indexKey = 'name' as const;
   pageSize = 6;
 
+  currentAward?: AwardModel;
   currentTeam?: TeamModel;
+
+  awardOf(name = this.currentOne.name) {
+    return (this.currentAward = new AwardModel(`hackathon/${name}`));
+  }
 
   teamOf(name = this.currentOne.name) {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
@@ -91,6 +98,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   async getOne(name: string) {
     const { detail, ...data } = await super.getOne(name);
 
+    this.awardOf(name);
     this.teamOf(name);
 
     return (this.currentOne = {
@@ -105,10 +113,8 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   @toggle('uploading')
   async publishOne(name: string) {
     await this.client.post(`hackathon/${name}/publish`);
-
-    const current = this.allItems.find(({ name: n }) => n === name);
-
-    if (current) current.status = 'online';
+    // @ts-ignore
+    this.changeOne({ status: 'online' }, name, true);
   }
 
   @toggle('uploading')

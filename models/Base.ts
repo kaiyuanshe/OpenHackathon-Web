@@ -19,7 +19,6 @@ export interface ErrorData
 }
 
 export type Filter<T extends Base = Base> = NewData<T> & {
-  search?: string;
   orderby?: keyof T;
   top?: number;
 };

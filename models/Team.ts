@@ -6,7 +6,7 @@ import { Base, Filter, createListStream } from './Base';
 import { User } from './User';
 import sessionStore from './Session';
 
-export enum WorkTypeEnum {
+export enum TeamWorkType {
   IMAGE = 'image',
   WEBSITE = 'website',
   VIDEO = 'video',
@@ -14,7 +14,7 @@ export enum WorkTypeEnum {
   POWERPOINT = 'powerpoint',
 }
 
-export enum MembershipStatusEnum {
+export enum MembershipStatus {
   PENDINGAPPROVAL = 'pendingApproval',
   APPROVED = 'approved',
 }
@@ -31,11 +31,15 @@ export interface Team
   membersCount: number;
 }
 
+export interface TeamFilter extends Filter<Team> {
+  search?: string;
+}
+
 export interface TeamWork
   extends Base,
     TeamBase,
     Record<'teamId' | 'title' | 'url', string> {
-  type: WorkTypeEnum;
+  type: TeamWorkType;
 }
 
 export interface TeamMember
@@ -44,10 +48,10 @@ export interface TeamMember
   userId: string;
   user: User;
   role: 'admin' | 'member';
-  status: MembershipStatusEnum;
+  status: MembershipStatus;
 }
 
-export class TeamModel extends Stream<Team, Filter<Team>>(ListModel) {
+export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   client = sessionStore.client;
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
@@ -76,7 +80,7 @@ export class TeamModel extends Stream<Team, Filter<Team>>(ListModel) {
     return team;
   }
 
-  openStream({ search }: Filter<Team>) {
+  openStream({ search }: TeamFilter) {
     return createListStream<Team>(
       `${this.baseURI}s?${buildURLData({ search })}`,
       this.client,
