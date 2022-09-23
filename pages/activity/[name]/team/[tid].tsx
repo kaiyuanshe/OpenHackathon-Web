@@ -20,7 +20,7 @@ import { Icon } from 'idea-react';
 import PageHead from '../../../../components/PageHead';
 import { request, requestClient } from '../../../api/core';
 import { ListData } from '../../../../models/Base';
-import { Activity } from '../../../../models/Activity';
+import activityStore, { Activity } from '../../../../models/Activity';
 import {
   WorkTypeEnum,
   Team,
@@ -36,7 +36,7 @@ export async function getServerSideProps({
       notFound: true,
       props: {} as { team: Team; teamWorkList: ListData<TeamWork> },
     };
-  const team = await request<Team>(`hackathon/${name}/team/${tid}`);
+  const team = await activityStore.teamOf(name).getOne(tid);
 
   const teamWorkList = await request<ListData<TeamWork>>(
     `hackathon/${name}/team/${tid}/works`,

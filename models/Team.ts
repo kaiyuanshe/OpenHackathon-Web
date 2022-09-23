@@ -1,5 +1,8 @@
-import { Base } from './Base';
+import { ListModel, Stream } from 'mobx-restful';
+
+import { Base, createListStream } from './Base';
 import { User } from './User';
+import sessionStore from './Session';
 
 export enum WorkTypeEnum {
   IMAGE = 'image',
@@ -42,4 +45,21 @@ export interface TeamMember extends Omit<Base, 'id'> {
   description: string;
   role: string;
   status: MembershipStatusEnum;
+}
+
+export class TeamModel extends Stream<Team>(ListModel) {
+  client = sessionStore.client;
+
+  constructor(activity: string) {
+    super();
+    this.baseURI = `hackathon/${activity}/team`;
+  }
+
+  openStream() {
+    return createListStream<Team>(
+      `${this.baseURI}s`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
 }

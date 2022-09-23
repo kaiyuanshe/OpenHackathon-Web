@@ -6,18 +6,16 @@ export interface Base {
   updatedAt: string;
 }
 
-export interface Media {
-  name: string;
-  description: string;
-  uri: string;
+export type Media = Record<'name' | 'description' | 'uri', string>;
+
+export interface UploadUrl
+  extends Record<'filename' | 'uploadUrl' | 'url', string> {
+  expiration: number;
 }
 
-export interface ErrorData {
-  type: string;
-  title: string;
+export interface ErrorData
+  extends Record<'type' | 'title' | 'detail' | 'traceId', string> {
   status: number;
-  detail: string;
-  traceId: string;
 }
 
 export interface BaseFilter<T extends Base = Base> {

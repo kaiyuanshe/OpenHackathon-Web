@@ -1,10 +1,4 @@
-import { Base } from './Base';
-
-export interface Asset {
-  name?: string;
-  description?: string;
-  uri: string;
-}
+import { Base, Media } from './Base';
 
 export interface Award extends Base {
   hackathonName: string;
@@ -12,5 +6,5 @@ export interface Award extends Base {
   description: string;
   quantity: number;
   target: 'team' | 'individual';
-  pictures: Asset[];
+  pictures: Media[];
 }

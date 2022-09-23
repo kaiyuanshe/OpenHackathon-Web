@@ -21,14 +21,11 @@ import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
 import { ActivityEntry } from '../../../components/ActivityEntry';
 import { TeamCard } from '../../../components/TeamCard';
-import { Media, ListData } from '../../../models/Base';
-import { Activity } from '../../../models/Activity';
+import { Media } from '../../../models/Base';
+import activityStore, { Activity } from '../../../models/Activity';
 import { Team } from '../../../models/Team';
-import { request } from '../../api/core';
 
 export async function getServerSideProps({
-  req,
-  res,
   params: { name } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
   if (!name)
@@ -36,26 +33,8 @@ export async function getServerSideProps({
       notFound: true,
       props: {} as { activity: Activity; teams: Team[] },
     };
-
-  const activity = await request<Activity>(
-      `hackathon/${name}`,
-      'GET',
-      undefined,
-      { req, res },
-    ),
-    { value: teams } = await request<ListData<Team>>(
-      `hackathon/${name}/teams?top=1000`,
-      'GET',
-      undefined,
-      { req, res },
-    );
-
-  if (activity.detail) {
-    activity.detail = activity.detail
-      .replace(/\\+n/g, '\n')
-      .replace(/\\+t/g, ' ')
-      .replace(/\\+"/g, '"');
-  }
+  const activity = await activityStore.getOne(name),
+    teams = await activityStore.currentTeam!.getList();
 
   return { props: { activity, teams } };
 }

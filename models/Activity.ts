@@ -1,8 +1,11 @@
 import { buildURLData } from 'web-utility';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { action } from 'mobx';
+import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, BaseFilter, Media, createListStream } from './Base';
 import sessionStore from './Session';
+import { Enrollment } from './Enrollment';
+import { TeamModel } from './Team';
 
 export interface Activity extends Base {
   name: string;
@@ -56,6 +59,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   baseURI = 'hackathon';
   pageSize = 6;
 
+  currentTeam?: TeamModel;
+
+  teamOf(name: string) {
+    return (this.currentTeam = new TeamModel(name));
+  }
+
   openStream({
     userId,
     listType = 'online',
@@ -69,12 +78,44 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
+  async updateOne(data: NewData<Activity>, name?: string) {
+    const { body } = await (name
+      ? this.client.put<Activity>(`${this.baseURI}/${name}`, data)
+      : this.client.post<Activity>(this.baseURI, data));
+
+    return (this.currentOne = body!);
+  }
+
+  @action
+  @toggle('downloading')
+  async getOne(name: string) {
+    const { detail, ...data } = await super.getOne(name);
+
+    this.teamOf(name);
+
+    return (this.currentOne = {
+      ...data,
+      detail: detail
+        ?.replace(/\\+n/g, '\n')
+        .replace(/\\+t/g, ' ')
+        .replace(/\\+"/g, '"'),
+    });
+  }
+
+  @toggle('uploading')
   async publishOne(name: string) {
     await this.client.post(`hackathon/${name}/publish`);
 
     const current = this.allItems.find(({ name: n }) => n === name);
 
     if (current) current.status = 'online';
+  }
+
+  @toggle('uploading')
+  signOne(name: string, extensions: Enrollment['extensions']) {
+    return this.client.put(`${this.baseURI}/${name}/enrollment`, {
+      extensions,
+    });
   }
 }
 

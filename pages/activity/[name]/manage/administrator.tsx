@@ -18,7 +18,6 @@ import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
 import { requestClient } from '../../../api/core';
-import { withSession } from '../../../api/user/session';
 import { ListData } from '../../../../models/Base';
 import { AdminsJudges } from '../../../../models/ActivityManage';
 import styles from '../../../../styles/Table.module.less';
@@ -54,25 +53,23 @@ const CheckboxArr = Array.from({ length: 10 }, (e, i) => i + ''),
     {},
   );
 
-export const getServerSideProps = withSession(
-  async ({
-    params: { name } = {},
-    req,
-  }: GetServerSidePropsContext<{ name?: string }>) => {
-    if (!name)
-      return {
-        notFound: true,
-        props: {} as AdministratorPageProps,
-      };
-
+export async function getServerSideProps({
+  params: { name } = {},
+  req,
+}: GetServerSidePropsContext<{ name?: string }>) {
+  if (!name)
     return {
-      props: {
-        activity: name,
-        path: req.url,
-      },
+      notFound: true,
+      props: {} as AdministratorPageProps,
     };
-  },
-);
+
+  return {
+    props: {
+      activity: name,
+      path: req.url,
+    },
+  };
+}
 
 class AdministratorPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>,

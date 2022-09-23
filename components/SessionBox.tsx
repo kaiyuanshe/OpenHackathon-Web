@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { PureComponent, UIEvent } from 'react';
+import { HTMLAttributes, UIEvent, PureComponent } from 'react';
 import { Modal } from 'react-bootstrap';
 import dynamic from 'next/dynamic';
 
@@ -8,7 +8,7 @@ import sessionStore from '../models/Session';
 
 const AuthingGuard = dynamic(() => import('./AuthingGuard'), { ssr: false });
 
-export interface SessionBoxProps {
+export interface SessionBoxProps extends HTMLAttributes<HTMLDivElement> {
   auto?: boolean;
 }
 
@@ -22,11 +22,12 @@ export class SessionBox extends PureComponent<SessionBoxProps> {
 
   render() {
     const { cover } = this,
-      { auto, children } = this.props,
+      { auto, children, ...props } = this.props,
       { user } = sessionStore;
 
     return (
       <div
+        {...props}
         onKeyDownCapture={user || auto ? undefined : this.openDialog}
         onClickCapture={user || auto ? undefined : this.openDialog}
       >

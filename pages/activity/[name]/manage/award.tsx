@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, MouseEvent, PureComponent } from 'react';
+import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
-import { Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formToJSON } from 'web-utility';
@@ -10,7 +10,6 @@ import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import styles from '../../../../styles/Table.module.less';
 import { request, requestClient } from '../../../api/core';
-import { withSession } from '../../../api/user/session';
 import { ListData } from '../../../../models/Base';
 import { Award } from '../../../../models/Award';
 
@@ -39,32 +38,30 @@ const awardTableHead = ['权重', '类型', '照片', '名称', '描述', '操�
     team: '团队',
   };
 
-export const getServerSideProps = withSession(
-  async ({
-    params: { name } = {},
-    req,
-  }: GetServerSidePropsContext<{ name?: string }>) => {
-    if (!name)
-      return {
-        notFound: true,
-        props: {} as AwardPageProps,
-      };
-
-    const { value: awardList } = await request<ListData<Award>>(
-      `hackathon/${name}/awards`,
-      'GET',
-      undefined,
-      { req },
-    );
+export async function getServerSideProps({
+  params: { name } = {},
+  req,
+}: GetServerSidePropsContext<{ name?: string }>) {
+  if (!name)
     return {
-      props: {
-        activity: name,
-        path: req.url,
-        awardList,
-      },
+      notFound: true,
+      props: {} as AwardPageProps,
     };
-  },
-);
+
+  const { value: awardList } = await request<ListData<Award>>(
+    `hackathon/${name}/awards`,
+    'GET',
+    undefined,
+    { req },
+  );
+  return {
+    props: {
+      activity: name,
+      path: req.url,
+      awardList,
+    },
+  };
+}
 
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -260,6 +257,7 @@ class AwardPage extends PureComponent<
   render() {
     const { path, activity } = this.props,
       { awardList } = this.state;
+
     return (
       <ActivityManageFrame name={activity} path={path}>
         <PageHead title={`${activity}活动管理 奖项设置`} />

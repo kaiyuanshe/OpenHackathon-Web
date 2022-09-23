@@ -1,15 +1,13 @@
 import PageHead from '../../components/PageHead';
+import { SessionBox } from '../../components/SessionBox';
 import ActivityCreate from '../../components/ActivityCreate';
-import { withSession } from '../api/user/session';
-
-export const getServerSideProps = withSession();
 
 const createActivity = () => (
-  <>
+  <SessionBox auto>
     <PageHead title="创建活动" />
 
     <ActivityCreate />
-  </>
+  </SessionBox>
 );
 
 export default createActivity;

@@ -2,7 +2,7 @@ import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 import { Icon } from 'idea-react';
 import style from 'idea-react/source/FilePicker/index.module.less';
 
-import { uploadFile } from '../utils/uploadFile';
+import sessionStore from '../models/Session';
 
 export type FilePickerProps = PropsWithoutRef<{
   accept: `${string}/${string}`;
@@ -33,7 +33,7 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
     if (max && values.length >= max) return;
 
     for (let file of files) {
-      const fileUrl = await uploadFile(file);
+      const fileUrl = await sessionStore.uploadFile(file);
 
       values.push(fileUrl);
     }

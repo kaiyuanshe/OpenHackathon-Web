@@ -1,32 +1,32 @@
 import { FormEvent, PureComponent } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { Container, Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
-import { request, requestClient } from '../../api/core';
-import { withSession } from '../../api/user/session';
-import { Activity } from '../../../models/Activity';
+import { SessionBox } from '../../../components/SessionBox';
+import activityStore from '../../../models/Activity';
 import { Question, questions, Extensions } from '../../../models/Question';
 
-export const getServerSideProps = withSession(
-  async ({ params, res }: GetServerSidePropsContext<{ name: string }>) => {
-    const { name } = params!;
+export async function getServerSideProps({
+  params,
+  res,
+}: GetServerSidePropsContext<{ name: string }>) {
+  const { name } = params!;
 
-    const { status } = await request<Activity>(`hackathon/${name}`);
+  const { status } = await activityStore.getOne(name);
 
-    if (status !== 'online') {
-      res.statusCode = 403;
-      res.end();
-    }
-    return {
-      props: {
-        activity: params!.name,
-      },
-    };
-  },
-);
+  if (status !== 'online') {
+    res.statusCode = 403;
+    res.end();
+  }
+  return {
+    props: {
+      activity: params!.name,
+    },
+  };
+}
 
 class RegisterPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -48,9 +48,8 @@ class RegisterPage extends PureComponent<
       )
       .filter(Boolean) as Extensions[];
 
-    await requestClient(`hackathon/${activity}/enrollment`, 'PUT', {
-      extensions,
-    });
+    await activityStore.signOne(activity, extensions);
+
     self.alert(
       textJoin('黑客松活动', activity, '报名须管理员审核，请耐心等候……'),
     );
@@ -88,7 +87,7 @@ class RegisterPage extends PureComponent<
     const { activity } = this.props;
 
     return (
-      <Container>
+      <SessionBox auto className="container">
         <PageHead title={`${activity} 参赛者问卷`} />
 
         <Form onSubmit={this.handleSubmit}>
@@ -108,7 +107,7 @@ class RegisterPage extends PureComponent<
             </Button>
           </Col>
         </Form>
-      </Container>
+      </SessionBox>
     );
   }
 }

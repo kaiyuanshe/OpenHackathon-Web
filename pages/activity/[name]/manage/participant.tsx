@@ -5,7 +5,6 @@ import { Button, Form, Modal, Table, FormControlProps } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
 import styles from '../../../../styles/participant.module.less';
 import { requestClient } from '../../../api/core';
-import { withSession } from '../../../api/user/session';
 import { ListData } from '../../../../models/Base';
 import { Enrollment } from '../../../../models/Enrollment';
 
@@ -16,25 +15,23 @@ interface ActivityParticipantProps {
 //——————————————— 辅助组件 ———————————————
 
 //0.获取动态路由
-export const getServerSideProps = withSession(
-  async ({
-    params: { name } = {},
-    req,
-  }: GetServerSidePropsContext<{ name?: string }>) => {
-    if (!name)
-      return {
-        notFound: true,
-        props: {} as ActivityParticipantProps,
-      };
-
+export async function getServerSideProps({
+  params: { name } = {},
+  req,
+}: GetServerSidePropsContext<{ name?: string }>) {
+  if (!name)
     return {
-      props: {
-        activity: name,
-        path: req.url,
-      },
+      notFound: true,
+      props: {} as ActivityParticipantProps,
     };
-  },
-);
+
+  return {
+    props: {
+      activity: name,
+      path: req.url,
+    },
+  };
+}
 
 //1.用户名点击弹框
 const UserName = ({

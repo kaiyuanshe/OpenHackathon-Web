@@ -1,4 +1,7 @@
-import { Base } from './Base';
+import { ListModel, Stream } from 'mobx-restful';
+
+import { Base, createListStream } from './Base';
+import sessionStore from './Session';
 
 export interface UserBase {
   username: string;
@@ -6,20 +9,11 @@ export interface UserBase {
   phone?: string;
 }
 
-export interface Area {
-  country: string;
-  province: string;
-  city: string;
-  district: string;
-}
+export type Area = Record<'country' | 'province' | 'city' | 'district', string>;
 
-export interface GitHubUser extends UserBase, Partial<Pick<Area, 'city'>> {
-  nickname: string;
-  photo: string;
-  company: string;
-  profile: string;
-  accessToken: string;
-}
+export type GitHubUser = UserBase &
+  Partial<Pick<Area, 'city'>> &
+  Record<'nickname' | 'photo' | 'company' | 'profile' | 'accessToken', string>;
 
 export interface AuthingUserBase {
   id?: string;
@@ -119,3 +113,18 @@ export interface AuthingSession
 export interface User extends AuthingSession {
   arn: null;
 }
+
+export class UserModel extends Stream<User>(ListModel) {
+  client = sessionStore.client;
+  baseURI = 'user';
+
+  openStream() {
+    return createListStream<User>(
+      `${this.baseURI}/topUsers`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
+}
+
+export default new UserModel();
