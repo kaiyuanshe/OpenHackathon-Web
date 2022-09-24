@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
 
-export const UserBar = observer(() => {
+const UserBar = observer(() => {
   const { user } = sessionStore;
 
   return !user ? (
@@ -31,3 +31,4 @@ export const UserBar = observer(() => {
     </>
   );
 });
+export default UserBar;

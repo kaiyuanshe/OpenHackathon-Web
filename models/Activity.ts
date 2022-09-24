@@ -5,7 +5,7 @@ import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 import { Base, Filter, Media, createListStream } from './Base';
 import sessionStore from './Session';
 import { AwardModel } from './Award';
-import { Enrollment } from './Enrollment';
+import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
 
 export interface Activity extends Base {
@@ -62,10 +62,15 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   pageSize = 6;
 
   currentAward?: AwardModel;
+  currentEnrollment?: EnrollmentModel;
   currentTeam?: TeamModel;
 
   awardOf(name = this.currentOne.name) {
     return (this.currentAward = new AwardModel(`hackathon/${name}`));
+  }
+
+  enrollmentOf(name = this.currentOne.name) {
+    return (this.currentEnrollment = new EnrollmentModel(`hackathon/${name}`));
   }
 
   teamOf(name = this.currentOne.name) {
@@ -86,6 +91,15 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   @toggle('uploading')
   async updateOne(data: NewData<Activity>, name?: string) {
+    if (!name) {
+      const { body } = await this.client.post<NameAvailability>(
+        `${this.baseURI}/checkNameAvailability`,
+        { name },
+      );
+      const { nameAvailable, reason, message } = body!;
+
+      if (!nameAvailable) throw new ReferenceError(`${reason}\n${message}`);
+    }
     const { body } = await (name
       ? this.client.put<Activity>(`${this.baseURI}/${name}`, data)
       : this.client.post<Activity>(this.baseURI, data));
@@ -111,8 +125,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async publishOne(name: string) {
-    await this.client.post(`hackathon/${name}/publish`);
+  async publishOne(name: string, request = true) {
+    await this.client.post(
+      `hackathon/${name}/${request ? 'requestPublish' : 'publish'}`,
+    );
     // @ts-ignore
     this.changeOne({ status: 'online' }, name, true);
   }

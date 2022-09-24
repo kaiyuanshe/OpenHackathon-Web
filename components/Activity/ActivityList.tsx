@@ -31,8 +31,10 @@ export class ActivityList extends ScrollList<ActivityListProps> {
     onPublish: async name => {
       if (!confirm(`确定让 ${name} 上线？`)) return;
 
-      await this.store.publishOne(name);
-      this.props.onPublish?.(name);
+      const { type, onPublish } = this.props;
+
+      await this.store.publishOne(name, type !== 'admin');
+      onPublish?.(name);
     },
     onDelete: async name => {
       if (!confirm(`确定让 ${name} 下线？`)) return;

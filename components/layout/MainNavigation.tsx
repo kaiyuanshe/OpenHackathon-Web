@@ -1,7 +1,8 @@
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
-import { UserBar } from '../Session/UserBar';
+const UserBar = dynamic(() => import('../Session/UserBar'), { ssr: false });
 
 const Name = process.env.NEXT_PUBLIC_SITE_NAME || '';
 
