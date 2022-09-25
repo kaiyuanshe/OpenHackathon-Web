@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, MouseEvent, PureComponent } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import Image from 'next/image';
-import { Form, Table, Row, Col, Button } from 'react-bootstrap';
+import { Image, Form, Table, Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formToJSON } from 'web-utility';

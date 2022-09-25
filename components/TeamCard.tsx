@@ -1,4 +1,4 @@
-import { Col } from 'react-bootstrap';
+import { Image, Col } from 'react-bootstrap';
 
 import { Team } from '../models/Team';
 
@@ -25,7 +25,7 @@ export const TeamCard = ({
         <span className="pe-2">队长：</span>
 
         <span className="text-primary">
-          <img
+          <Image
             className="h-auto me-3"
             style={{ maxWidth: '1.5rem' }}
             alt="team-creator-photo"
