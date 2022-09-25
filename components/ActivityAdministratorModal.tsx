@@ -52,7 +52,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
         <Modal.Body>
           <UserList
             ref={this.userList}
-            onSelect={userId => (this.userId = userId)}
+            onSelect={([userId]) => (this.userId = userId)}
           />
           <Form onSubmit={this.increaseId} onReset={this.handleReset}>
             <Form.Group as={Row} className="mt-3 py-3 ps-2">

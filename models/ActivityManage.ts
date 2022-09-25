@@ -152,7 +152,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
     if (!type) return;
 
     await this.client.delete(`${this.baseURI}/${type}/${userId}`);
-
+    // @ts-ignore
     await this.removeOne(userId);
   }
 }

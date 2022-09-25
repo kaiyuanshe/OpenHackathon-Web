@@ -1,4 +1,5 @@
 import { debounce } from 'lodash';
+import { observable } from 'mobx';
 import { ListModel, Stream } from 'mobx-restful';
 import { Component } from 'react';
 import { EdgePosition, ScrollBoundary, Loading } from 'idea-react';
@@ -7,6 +8,8 @@ import { Base, Filter } from '../models/Base';
 
 export interface ScrollListProps<T extends Base = Base> {
   value?: T[];
+  selectedIds?: string[];
+  onSelect?: (selectedIds: string[]) => any;
 }
 
 interface ScrollListClass<P = any> {
@@ -22,6 +25,9 @@ export abstract class ScrollList<
   filter: Filter<DataType<P>> = {};
 
   extraProps?: Partial<P>;
+
+  @observable
+  selectedIds: string[] = [];
 
   static Layout: ScrollListClass['Layout'] = () => <></>;
 
@@ -53,16 +59,23 @@ export abstract class ScrollList<
 
   render() {
     const { Layout } = this.constructor as unknown as ScrollListClass,
-      { value, ...props } = this.props,
-      { extraProps } = this,
+      { value, onSelect, ...props } = this.props,
+      { extraProps, selectedIds } = this,
       { downloading, noMore, allItems } = this.store;
 
     return (
       <ScrollBoundary onTouch={this.loadMore}>
         {!!downloading && <Loading />}
 
-        <Layout {...props} {...extraProps} value={allItems} />
-
+        <Layout
+          {...props}
+          {...extraProps}
+          value={allItems}
+          selectedIds={selectedIds}
+          onSelect={(list: string[]) =>
+            (this.selectedIds = list) && onSelect?.(list)
+          }
+        />
         <footer className="mt-4 text-center text-muted small">
           {noMore || !allItems.length ? '没有更多' : '上拉加载更多……'}
         </footer>
