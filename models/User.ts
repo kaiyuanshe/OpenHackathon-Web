@@ -128,6 +128,7 @@ export class UserModel extends Stream<User, UserFilter>(ListModel) {
       `${this.baseURI}/search?${buildURLData(filter)}`,
       this.client,
       count => (this.totalCount = count),
+      'POST',
     );
   }
 }

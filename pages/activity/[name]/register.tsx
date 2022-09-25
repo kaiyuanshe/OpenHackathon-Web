@@ -5,7 +5,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
-import { SessionBox } from '../../../components/Session/SessionBox';
+import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore from '../../../models/Activity';
 import { Question, questions, Extensions } from '../../../models/Question';
 

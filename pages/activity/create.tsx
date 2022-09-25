@@ -1,5 +1,5 @@
 import PageHead from '../../components/PageHead';
-import { SessionBox } from '../../components/Session/SessionBox';
+import { SessionBox } from '../../components/User/SessionBox';
 import ActivityCreate from '../../components/ActivityCreate';
 
 const createActivity = () => (

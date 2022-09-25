@@ -4,6 +4,7 @@ import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, Media, createListStream } from './Base';
 import sessionStore from './Session';
+import { StaffModel } from './ActivityManage';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
@@ -61,9 +62,14 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   indexKey = 'name' as const;
   pageSize = 6;
 
+  currentStaff?: StaffModel;
   currentAward?: AwardModel;
   currentEnrollment?: EnrollmentModel;
   currentTeam?: TeamModel;
+
+  staffOf(name = this.currentOne.name) {
+    return (this.currentStaff = new StaffModel(`hackathon/${name}`));
+  }
 
   awardOf(name = this.currentOne.name) {
     return (this.currentAward = new AwardModel(`hackathon/${name}`));
@@ -112,7 +118,9 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   async getOne(name: string) {
     const { detail, ...data } = await super.getOne(name);
 
+    this.staffOf(name);
     this.awardOf(name);
+    this.enrollmentOf(name);
     this.teamOf(name);
 
     return (this.currentOne = {

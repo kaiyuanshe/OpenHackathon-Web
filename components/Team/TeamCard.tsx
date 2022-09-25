@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
 
-import { Team } from '../models/Team';
+import { Team } from '../../models/Team';
 
 export type TeamCardProps = HTMLAttributes<HTMLDivElement> &
   Pick<

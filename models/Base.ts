@@ -34,11 +34,14 @@ export async function* createListStream<T>(
   path: string,
   client: RESTClient,
   onCount: (total: number) => any,
+  method?: 'GET' | 'POST',
 ) {
   var count = 0;
 
   while (path) {
-    const { body } = await client.get<ListData<T>>(path);
+    const { body } = await (method === 'POST'
+      ? client.post<ListData<T>>(path)
+      : client.get<ListData<T>>(path));
 
     const { nextLink, value } = body!;
 

@@ -1,6 +1,10 @@
+import { groupBy, mergeStream } from 'web-utility';
+import { computed } from 'mobx';
+import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { Base } from './Base';
+import { Base, createListStream } from './Base';
+import sessionStore from './Session';
 import { User } from './User';
 
 export interface MenuItem {
@@ -73,9 +77,82 @@ export const menus: MenuItem[] = [
   },
 ];
 
-export interface AdminsJudges extends Base {
+export interface Staff extends Base {
+  type: 'admin' | 'judge';
   hackathonName: string;
   userId: string;
   user: User;
   description?: string;
+}
+
+export class StaffModel extends Stream<Staff>(ListModel) {
+  client = sessionStore.client;
+  indexKey = 'userId' as const;
+
+  constructor(public baseURI: string) {
+    super();
+  }
+
+  @computed
+  get typeCount() {
+    return Object.fromEntries(
+      Object.entries(groupBy(this.allItems, 'type')).map(
+        ([type, { length }]) => [type, length],
+      ),
+    ) as Record<Staff['type'], number>;
+  }
+
+  addCount = (count = 0) =>
+    this.totalCount === Infinity
+      ? (this.totalCount = count)
+      : (this.totalCount += count);
+
+  openStream() {
+    return mergeStream<Staff, void, undefined>(
+      () =>
+        createListStream<Staff>(
+          `${this.baseURI}/admins`,
+          this.client,
+          this.addCount,
+        ),
+      () =>
+        createListStream<Staff>(
+          `${this.baseURI}/judges`,
+          this.client,
+          this.addCount,
+        ),
+    );
+  }
+
+  @toggle('uploading')
+  async updateOne({ type, ...data }: NewData<Staff>, userId: string) {
+    const { body } = await this.client.put<Staff>(
+      `${this.baseURI}/${type}/${userId}`,
+      data,
+    );
+    const index = this.indexOf(userId);
+
+    if (index < 0)
+      this.restoreList(
+        [body!, ...this.allItems],
+        this.pageSize,
+        this.totalCount++,
+      );
+    // @ts-ignore
+    else this.changeOne(body!, userId);
+
+    return body!;
+  }
+
+  @toggle('uploading')
+  async deleteOne(userId: string) {
+    const { type } =
+      this.allItems.find(({ userId: id }) => id === userId) || {};
+
+    if (!type) return;
+
+    await this.client.delete(`${this.baseURI}/${type}/${userId}`);
+
+    await this.removeOne(userId);
+  }
 }

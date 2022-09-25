@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { findDeep } from '../../utils/data';
-import { SessionBox } from '../Session/SessionBox';
+import { SessionBox } from '../User/SessionBox';
 import { menus } from '../../models/ActivityManage';
 import { MenuItem } from '../../models/ActivityManage';
 
