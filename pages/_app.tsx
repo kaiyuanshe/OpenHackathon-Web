@@ -4,12 +4,6 @@ import Head from 'next/head';
 import { Layout } from '../components/layout/Layout';
 import '../styles/globals.less';
 
-globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
-  const { message } = (reason || {}) as Error;
-
-  if (message) alert(message);
-});
-
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>

@@ -8,8 +8,8 @@ import {
   faTags,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { convertDatetime } from '../utils/time';
-import { Activity } from '../models/Activity';
+import { convertDatetime } from '../../utils/time';
+import { Activity } from '../../models/Activity';
 import { ActivityEntry } from './ActivityEntry';
 import { ActivityControlProps, ActivityControl } from './ActivityControl';
 

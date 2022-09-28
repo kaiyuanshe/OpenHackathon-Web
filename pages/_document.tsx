@@ -1,4 +1,16 @@
+import { useStaticRendering } from 'mobx-react';
 import { Head, Html, Main, NextScript } from 'next/document';
+
+import { isServer } from '../models/Base';
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+useStaticRendering(isServer());
+
+globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
+  const { message } = (reason || {}) as Error;
+
+  if (message) alert(message);
+});
 
 export default function Document() {
   return (

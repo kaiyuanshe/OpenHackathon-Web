@@ -1,10 +1,7 @@
-import { Base } from './Base';
+import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
-export interface Asset {
-  name?: string;
-  description?: string;
-  uri: string;
-}
+import { Base, Media, createListStream } from './Base';
+import sessionStore from './Session';
 
 export interface Award extends Base {
   hackathonName: string;
@@ -12,5 +9,31 @@ export interface Award extends Base {
   description: string;
   quantity: number;
   target: 'team' | 'individual';
-  pictures: Asset[];
+  pictures: Media[];
+}
+
+export class AwardModel extends Stream<Award>(ListModel) {
+  client = sessionStore.client;
+
+  constructor(baseURI: string) {
+    super();
+    this.baseURI = `${baseURI}/award`;
+  }
+
+  openStream() {
+    return createListStream<Award>(
+      `${this.baseURI}s`,
+      this.client,
+      count => (this.totalCount = count),
+    );
+  }
+
+  @toggle('uploading')
+  async updateOne(data: NewData<Award>, id?: string) {
+    const { body } = await (id
+      ? this.client.patch<Award>(`${this.baseURI}/${id}`, data)
+      : this.client.put<Award>(this.baseURI, data));
+
+    return (this.currentOne = body!);
+  }
 }

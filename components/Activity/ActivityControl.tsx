@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';
 
-import { Activity } from '../models/Activity';
+import { Activity } from '../../models/Activity';
 
 export interface ActivityControlProps
   extends Pick<Activity, 'name' | 'status'> {
@@ -19,7 +19,7 @@ export function ActivityControl({
       <Button
         className="w-100 mt-2"
         variant="info"
-        href={`/activity/${name}/manage/administrator`}
+        href={`/activity/${name}/manage/edit`}
       >
         管理
       </Button>

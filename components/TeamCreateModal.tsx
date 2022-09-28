@@ -1,10 +1,11 @@
+import { formToJSON } from 'web-utility';
+import { NewData } from 'mobx-restful';
 import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
-import { formToJSON } from 'web-utility';
-import { NameAvailability } from '../models/Activity';
-import { Team } from '../models/Team';
-import { requestClient } from '../pages/api/core';
+
 import { TeamEditor } from './TeamEditor';
+import activityStore from '../models/Activity';
+import { Team } from '../models/Team';
 
 export interface TeamCreateProps {
   hackathonName: string;
@@ -21,34 +22,16 @@ export const TeamCreateModal: FC<TeamCreateProps> = ({
     event.preventDefault();
     event.stopPropagation();
 
-    const inputParams = formToJSON<Team>(event.currentTarget);
-    const teamDate = {
-      ...inputParams,
-      autoApprove: !!inputParams?.autoApprove,
-    };
-
-    await requestClient(`hackathon/${hackathonName}/team`, 'PUT', teamDate);
+    const { autoApprove, ...data } = formToJSON<NewData<Team>>(
+      event.currentTarget,
+    );
+    await activityStore
+      .teamOf(hackathonName)
+      .updateOne({ ...data, autoApprove: !!autoApprove });
 
     onClose();
     alert('队伍创建成功！');
   };
-
-  async function isNameAvailable(name = '') {
-    const errorMsg = `队伍名称 ${name} 不可用，请更换名称`;
-
-    if (!name) {
-      alert(errorMsg);
-      return false;
-    }
-    const { nameAvailable } = await requestClient<NameAvailability>(
-      `hackathon/${hackathonName}/team/checkNameAvailability`,
-      'POST',
-      { name },
-    );
-    if (!nameAvailable) alert(errorMsg);
-
-    return nameAvailable;
-  }
 
   return (
     <Modal show={show} onHide={onClose}>
@@ -56,7 +39,7 @@ export const TeamCreateModal: FC<TeamCreateProps> = ({
         <Modal.Title>创建队伍</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <TeamEditor onSubmit={submitHandler} checkName={isNameAvailable} />
+        <TeamEditor onSubmit={submitHandler} />
       </Modal.Body>
     </Modal>
   );

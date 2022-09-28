@@ -1,6 +1,6 @@
 import { PropsWithChildren, Fragment } from 'react';
 import Link from 'next/link';
-import { Nav, Breadcrumb, Row, Col } from 'react-bootstrap';
+import { Nav, Breadcrumb, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -16,9 +16,10 @@ import {
   faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { findDeep } from '../utils/data';
-import { menus } from '../models/ActivityManage';
-import { MenuItem } from '../models/ActivityManage';
+import { findDeep } from '../../utils/data';
+import { SessionBox } from '../User/SessionBox';
+import { menus } from '../../models/Staff';
+import { MenuItem } from '../../models/Staff';
 
 library.add(
   faEdit,
@@ -45,12 +46,14 @@ export function ActivityManageFrame({
   path = '',
   children,
 }: ActivityManageFrameProps) {
-  const route = findDeep(menus, 'list', ({ href }) => {
-    return !!href && path.includes(href);
-  });
+  const route = findDeep(
+    menus,
+    'list',
+    ({ href }) => !!href && path.includes(href),
+  );
 
   return (
-    <Row xs={1} md={2}>
+    <SessionBox auto className="row row-cols-xs-1 row-cols-md-2">
       <Col md="auto">
         <Nav className="flex-column px-2 border-end" variant="pills">
           {menu.map(({ title, list }) => (
@@ -93,6 +96,6 @@ export function ActivityManageFrame({
         </Breadcrumb>
         <section className="mt-3">{children}</section>
       </Col>
-    </Row>
+    </SessionBox>
   );
 }

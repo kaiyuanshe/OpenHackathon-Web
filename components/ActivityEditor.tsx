@@ -137,10 +137,10 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
         <Form.Control
           name="maxEnrollment"
           type="number"
-          placeholder="0 表示无限"
-          defaultValue={activity?.maxEnrollment || 0}
           min={0}
           max={100000}
+          placeholder="0 表示无限"
+          defaultValue={activity?.maxEnrollment || 0}
         />
       </Col>
     </Form.Group>

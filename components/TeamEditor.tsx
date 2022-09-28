@@ -1,18 +1,14 @@
 import { FC, FormEvent } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
+
 import { Team } from '../models/Team';
 
 export interface TeamEditorProps {
   team?: Team;
-  checkName?: (name?: string) => Promise<boolean>;
   onSubmit: (event: FormEvent<HTMLFormElement>) => any;
 }
 
-export const TeamEditor: FC<TeamEditorProps> = ({
-  team,
-  checkName,
-  onSubmit,
-}) => (
+export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="displayName">
       <Form.Label column sm={2}>
@@ -21,17 +17,15 @@ export const TeamEditor: FC<TeamEditorProps> = ({
       <Col sm={10}>
         <Form.Control
           name="displayName"
-          type="text"
-          placeholder="显示名称"
-          maxLength={128}
-          onBlur={({ currentTarget: { value } }) => checkName?.(value)}
           required
+          maxLength={128}
+          placeholder="显示名称"
           defaultValue={team?.displayName}
         />
       </Col>
     </Form.Group>
 
-    {/*//todo editor*/}
+    {/* todo editor */}
     <Form.Group as={Row} className="mb-3" controlId="description">
       <Form.Label column sm={2}>
         团队简介

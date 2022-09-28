@@ -1,9 +1,14 @@
-# Next-Bootstrap.ts
+# Open Hackathon - Web App
 
 [React][1] project scaffold based on [TypeScript][2], [Next.js][3], [Bootstrap][4] & [Workbox][5]. And this project bootstrapped with [`create-next-app`][6].
 
-[![NPM Dependency](https://david-dm.org/idea2app/next-bootstrap-ts.svg)][7]
-[![CI & CD](https://github.com/idea2app/Next-Bootstrap-ts/actions/workflows/main.yml/badge.svg)][8]
+[![CI & CD](https://github.com/kaiyuanshe/OpenHackathon-Web/actions/workflows/main.yml/badge.svg)][8]
+
+## Key links
+
+- [Task kanban](https://github.com/orgs/kaiyuanshe/projects/4?fullscreen=true)
+- [UI design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
+- [RESTful API](https://hackathon-api.kaiyuanshe.cn/swagger/)
 
 ## Technology stack
 
@@ -71,8 +76,7 @@ press <key>F5</key>
 [4]: https://getbootstrap.com/
 [5]: https://developers.google.com/web/tools/workbox
 [6]: https://github.com/vercel/next.js/tree/canary/packages/create-next-app
-[7]: https://david-dm.org/idea2app/next-bootstrap-ts
-[8]: https://github.com/idea2app/Next-Bootstrap-ts/actions/workflows/main.yml
+[8]: https://github.com/kaiyuanshe/OpenHackathon-Web/actions/workflows/main.yml
 [9]: https://jestjs.io/
 [10]: https://playwright.dev/
 [11]: https://github.com/features/actions
