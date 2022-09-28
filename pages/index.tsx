@@ -3,7 +3,7 @@ import type { InferGetServerSidePropsType } from 'next';
 import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
-import { ActivityList } from '../components/Activity/ActivityList';
+import ActivityList from '../components/Activity/ActivityList';
 import activityStore from '../models/Activity';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 

@@ -57,7 +57,7 @@ export class UserList extends ScrollList<UserListProps> {
       </Form>
 
       <form>
-        <Table className="my-3">
+        <Table responsive className="my-3">
           <thead>
             <tr>
               <th>#</th>

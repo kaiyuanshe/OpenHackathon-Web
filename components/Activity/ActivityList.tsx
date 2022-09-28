@@ -19,7 +19,7 @@ export interface ActivityListProps
 }
 
 @observer
-export class ActivityList extends ScrollList<ActivityListProps> {
+export default class ActivityList extends ScrollList<ActivityListProps> {
   store = new ActivityModel();
 
   filter: ActivityFilter = {

@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
 import { SessionBox } from '../../components/User/SessionBox';
-import { ActivityList } from '../../components/Activity/ActivityList';
+import ActivityList from '../../components/Activity/ActivityList';
 import sessionStore from '../../models/Session';
 
 const AdminPage = observer(() => (

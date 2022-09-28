@@ -68,7 +68,7 @@ export class EnrollmentList extends ScrollList<EnrollmentListProps> {
                 }
               >
                 {Object.entries(StatusName).map(([key, value]) => (
-                  <option key={key} value={key} defaultChecked={key === status}>
+                  <option key={key} value={key} selected={key === status}>
                     {value}
                   </option>
                 ))}

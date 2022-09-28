@@ -100,15 +100,15 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     if (!name) {
       const { body } = await this.client.post<NameAvailability>(
         `${this.baseURI}/checkNameAvailability`,
-        { name },
+        { name: data.name },
       );
       const { nameAvailable, reason, message } = body!;
 
       if (!nameAvailable) throw new ReferenceError(`${reason}\n${message}`);
     }
     const { body } = await (name
-      ? this.client.put<Activity>(`${this.baseURI}/${name}`, data)
-      : this.client.post<Activity>(this.baseURI, data));
+      ? this.client.patch<Activity>(`${this.baseURI}/${name}`, data)
+      : this.client.put<Activity>(`${this.baseURI}/${data.name}`, data));
 
     return (this.currentOne = body!);
   }
@@ -137,7 +137,6 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     await this.client.post(
       `hackathon/${name}/${request ? 'requestPublish' : 'publish'}`,
     );
-    // @ts-ignore
     this.changeOne({ status: 'online' }, name, true);
   }
 

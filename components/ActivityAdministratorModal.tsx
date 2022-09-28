@@ -10,11 +10,13 @@ import { Staff, StaffModel } from '../models/ActivityManage';
 export interface AdministratorModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
   store: StaffModel;
+  onSave?: () => any;
 }
 
 @observer
 export class AdministratorModal extends PureComponent<AdministratorModalProps> {
   private userList = createRef<UserList>();
+  private form = createRef<HTMLFormElement>();
 
   @observable
   userId = '';
@@ -24,7 +26,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     event.stopPropagation();
 
     const { currentTarget } = event,
-      { store } = this.props,
+      { store, onSave } = this.props,
       { userId } = this;
     const { type, description } =
       formToJSON<Pick<Staff, 'type' | 'description'>>(currentTarget);
@@ -32,13 +34,14 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     if (!userId) return alert('请先搜索并选择一位用户');
 
     await store.updateOne({ type, description }, userId);
-
-    this.handleReset(event);
+    onSave?.();
+    this.handleReset();
   };
 
-  handleReset = ({ currentTarget }: FormEvent<HTMLFormElement>) => {
-    currentTarget.reset();
+  handleReset = () => {
+    this.form.current?.reset();
     this.userList.current?.store.clear();
+    this.props.onHide?.();
   };
 
   render() {
@@ -54,11 +57,16 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
             ref={this.userList}
             onSelect={([userId]) => (this.userId = userId)}
           />
-          <Form onSubmit={this.increaseId} onReset={this.handleReset}>
+          <Form
+            ref={this.form}
+            onSubmit={this.increaseId}
+            onReset={this.handleReset}
+          >
             <Form.Group as={Row} className="mt-3 py-3 ps-2">
               <Col>
                 <Form.Check
                   label="管理员"
+                  id="staff-admin"
                   name="type"
                   type="radio"
                   value="admin"
@@ -68,6 +76,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
               <Col>
                 <Form.Check
                   label="裁判"
+                  id="staff-judge"
                   name="type"
                   type="radio"
                   value="judge"

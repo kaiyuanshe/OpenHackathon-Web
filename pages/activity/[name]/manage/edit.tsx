@@ -15,16 +15,22 @@ interface EditPageProps {
 
 export async function getServerSideProps({
   req,
-  params: { name } = {},
+  params: { name = '' } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
-  if (!name)
+  try {
+    const activity = await activityStore.getOne(name);
+
+    return {
+      props: { activity, path: req.url, activityName: name },
+    };
+  } catch (error) {
+    console.error(error);
+
     return {
       notFound: true,
       props: {} as EditPageProps,
     };
-  const activity = await activityStore.getOne(name);
-
-  return { props: { activity, path: req.url, activityName: name } };
+  }
 }
 
 const ActivityEditPage = ({

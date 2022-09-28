@@ -37,13 +37,14 @@ export abstract class ScrollList<
     const store = this.store as unknown as InstanceType<
         ReturnType<typeof BaseStream>
       >,
-      { value } = this.props;
+      { value } = this.props,
+      filter = this.filter as Filter<Base>;
 
     store.clear();
 
-    if (value) await store.restoreList(value);
+    if (value) await store.restoreList({ allItems: value, filter });
 
-    await store.getList(this.filter as Filter<Base>, store.pageList.length + 1);
+    await store.getList(filter, store.pageList.length + 1);
   }
 
   componentWillUnmount() {
@@ -53,7 +54,7 @@ export abstract class ScrollList<
   loadMore = debounce((edge: EdgePosition) => {
     const { store } = this;
 
-    if (edge === 'bottom' && !store.downloading && !store.noMore)
+    if (edge === 'bottom' && store.downloading < 1 && !store.noMore)
       store.getList(this.filter);
   });
 
@@ -61,11 +62,11 @@ export abstract class ScrollList<
     const { Layout } = this.constructor as unknown as ScrollListClass,
       { value, onSelect, ...props } = this.props,
       { extraProps, selectedIds } = this,
-      { downloading, noMore, allItems } = this.store;
+      { downloading, uploading, noMore, allItems } = this.store;
 
     return (
       <ScrollBoundary onTouch={this.loadMore}>
-        {!!downloading && <Loading />}
+        {(downloading > 0 || uploading > 0) && <Loading />}
 
         <Layout
           {...props}

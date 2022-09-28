@@ -123,9 +123,9 @@ export class UserModel extends Stream<User, UserFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'user';
 
-  openStream(filter: UserFilter) {
+  openStream({ keyword = 'x' }: UserFilter) {
     return createListStream<User>(
-      `${this.baseURI}/search?${buildURLData(filter)}`,
+      `${this.baseURI}/search?${buildURLData({ keyword })}`,
       this.client,
       count => (this.totalCount = count),
       'POST',

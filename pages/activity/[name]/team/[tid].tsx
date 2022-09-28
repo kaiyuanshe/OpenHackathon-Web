@@ -16,23 +16,30 @@ interface TeamPageProps {
 }
 
 export async function getServerSideProps({
-  params: { name, tid } = {},
+  params: { name = '', tid = '' } = {},
 }: GetServerSidePropsContext<{ name?: string; tid?: string }>) {
-  if (!name || !tid)
+  try {
+    const activity = await activityStore.getOne(name);
+
+    const team = await activityStore.currentTeam!.getOne(tid);
+
+    const teamMemberList =
+      await activityStore.currentTeam!.currentMember!.getList();
+
+    const teamWorkList =
+      await activityStore.currentTeam!.currentWork!.getList();
+
+    return {
+      props: { activity, team, teamMemberList, teamWorkList },
+    };
+  } catch (error) {
+    console.error(error);
+
     return {
       notFound: true,
       props: {} as TeamPageProps,
     };
-  const activity = await activityStore.getOne(name);
-
-  const team = await activityStore.currentTeam!.getOne(tid);
-
-  const teamMemberList =
-    await activityStore.currentTeam!.currentMember!.getList();
-
-  const teamWorkList = await activityStore.currentTeam!.currentWork!.getList();
-
-  return { props: { activity, team, teamMemberList, teamWorkList } };
+  }
 }
 
 const TeamPage = ({

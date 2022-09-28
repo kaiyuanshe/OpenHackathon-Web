@@ -1,4 +1,4 @@
-import { ListModel, Stream } from 'mobx-restful';
+import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Media, createListStream } from './Base';
 import sessionStore from './Session';
@@ -26,5 +26,14 @@ export class AwardModel extends Stream<Award>(ListModel) {
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('uploading')
+  async updateOne(data: NewData<Award>, id?: string) {
+    const { body } = await (id
+      ? this.client.patch<Award>(`${this.baseURI}/${id}`, data)
+      : this.client.put<Award>(this.baseURI, data));
+
+    return (this.currentOne = body!);
   }
 }

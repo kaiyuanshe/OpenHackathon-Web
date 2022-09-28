@@ -15,30 +15,27 @@ const ActivityCreate: FC = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    const { name, ...inputParams } = formToJSON<ActivityFormData>(
-      event.currentTarget,
-    );
-    inputParams.banners = [inputParams.bannerUrls ?? []]
-      .flat()
-      .map(bannerUrl => {
-        const name = bannerUrl.split('/').slice(-1)[0];
+    const data = formToJSON<ActivityFormData>(event.currentTarget);
 
-        return {
-          name,
-          description: name,
-          uri: bannerUrl,
-        };
-      });
-    inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
+    data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
+      const name = bannerUrl.split('/').slice(-1)[0];
+
+      return {
+        name,
+        description: name,
+        uri: bannerUrl,
+      };
+    });
+    data.tags = data?.tagsString?.split(/\s+/) || [];
     // @ts-ignore
-    await activityStore.updateOne(inputParams);
+    await activityStore.updateOne(data);
 
     if (confirm('活动创建成功，是否申请发布活动?')) {
-      await activityStore.publishOne(name);
+      await activityStore.publishOne(data.name);
 
       alert('已申请发布活动,请等待审核');
     }
-    location.pathname = `/activity/${name}`;
+    location.pathname = `/`;
   };
 
   return (

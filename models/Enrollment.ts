@@ -40,8 +40,8 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
       `${this.baseURI}/${userId}/${
         status === 'approved' ? 'approve' : 'reject'
       }`,
+      {},
     );
-    // @ts-ignore
     this.changeOne({ status }, userId, true);
   }
 }

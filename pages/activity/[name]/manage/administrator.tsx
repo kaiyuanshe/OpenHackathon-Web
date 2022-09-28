@@ -121,6 +121,7 @@ class AdministratorPage extends PureComponent<AdministratorPageProps> {
           store={store}
           show={show}
           onHide={() => (this.show = false)}
+          onSave={() => (this.show = false) || this.store.refreshList()}
         />
       </ActivityManageFrame>
     );

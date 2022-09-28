@@ -52,7 +52,13 @@ export class StaffList extends ScrollList<StaffListProps> {
                     (input.indeterminate =
                       !!selectedIds.length && selectedIds.length < value.length)
                   }
-                  onClick={() => onSelect?.(value.map(({ userId }) => userId))}
+                  onClick={() =>
+                    onSelect?.(
+                      selectedIds.length === value.length
+                        ? []
+                        : value.map(({ userId }) => userId),
+                    )
+                  }
                 />
               </th>
             ),

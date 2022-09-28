@@ -26,17 +26,21 @@ import activityStore, { Activity } from '../../../models/Activity';
 import { Team } from '../../../models/Team';
 
 export async function getServerSideProps({
-  params: { name } = {},
+  params: { name = '' } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
-  if (!name)
+  try {
+    const activity = await activityStore.getOne(name),
+      teams = await activityStore.currentTeam!.getList();
+
+    return { props: { activity, teams } };
+  } catch (error) {
+    console.error(error);
+
     return {
       notFound: true,
       props: {} as { activity: Activity; teams: Team[] },
     };
-  const activity = await activityStore.getOne(name),
-    teams = await activityStore.currentTeam!.getList();
-
-  return { props: { activity, teams } };
+  }
 }
 
 const HackathonActivity = ({

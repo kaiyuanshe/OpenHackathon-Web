@@ -45,6 +45,7 @@ class AwardPage extends PureComponent<
     const data = formToJSON<NewData<Award>>(form);
 
     await store.updateOne(data, store.currentOne.id);
+    await store.refreshList();
 
     store.clearCurrent();
     form.reset();
@@ -152,6 +153,7 @@ class AwardPage extends PureComponent<
           </Col>
           <Col className="flex-fill">
             <AwardList
+              ref={this.awardList}
               activity={activity}
               onEdit={this.handleReset}
               onDelete={this.handleReset}

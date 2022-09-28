@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,8 +13,12 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 import PageHead from '../../components/PageHead';
-import { ActivityList } from '../../components/Activity/ActivityList';
 import userStore, { User } from '../../models/User';
+
+const ActivityList = dynamic(
+  () => import('../../components/Activity/ActivityList'),
+  { ssr: false },
+);
 
 const UserDetailPage = ({
   id,
@@ -89,10 +94,12 @@ const UserDetailPage = ({
             <Tab eventKey="enroll" title="参与的活动">
               <ActivityList type="enrolled" userId={id} />
             </Tab>
-            <Tab eventKey="admin" title="创建的活动">
+            <Tab eventKey="created" title="创建的活动">
               <ActivityList type="created" userId={id} />
             </Tab>
-            <Tab eventKey="contact" title="关注的活动"></Tab>
+            <Tab eventKey="admin" title="管理的活动">
+              <ActivityList type="admin" userId={id} />
+            </Tab>
           </Tabs>
         </Container>
       </Col>
@@ -101,16 +108,20 @@ const UserDetailPage = ({
 );
 
 export async function getServerSideProps({
-  params: { id } = {},
+  params: { id = '' } = {},
 }: GetServerSidePropsContext<{ id?: string }>) {
-  if (!id)
+  try {
+    return {
+      props: await userStore.getOne(id),
+    };
+  } catch (error) {
+    console.error(error);
+
     return {
       notFound: true,
       props: {} as User,
     };
-  const userInfo = await userStore.getOne(id);
-
-  return { props: userInfo };
+  }
 }
 
 export default UserDetailPage;

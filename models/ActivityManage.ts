@@ -109,18 +109,22 @@ export class StaffModel extends Stream<Staff>(ListModel) {
 
   openStream() {
     return mergeStream<Staff, void, undefined>(
-      () =>
-        createListStream<Staff>(
+      async function* (this: StaffModel) {
+        for await (const item of createListStream<Staff>(
           `${this.baseURI}/admins`,
           this.client,
           this.addCount,
-        ),
-      () =>
-        createListStream<Staff>(
+        ))
+          yield { ...item, type: 'admin' as const };
+      }.bind(this),
+      async function* (this: StaffModel) {
+        for await (const item of createListStream<Staff>(
           `${this.baseURI}/judges`,
           this.client,
           this.addCount,
-        ),
+        ))
+          yield { ...item, type: 'judge' as const };
+      }.bind(this),
     );
   }
 
@@ -132,14 +136,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
     );
     const index = this.indexOf(userId);
 
-    if (index < 0)
-      this.restoreList(
-        [body!, ...this.allItems],
-        this.pageSize,
-        this.totalCount++,
-      );
-    // @ts-ignore
-    else this.changeOne(body!, userId);
+    if (index > -1) this.changeOne(body!, userId);
 
     return body!;
   }
@@ -152,7 +149,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
     if (!type) return;
 
     await this.client.delete(`${this.baseURI}/${type}/${userId}`);
-    // @ts-ignore
+
     await this.removeOne(userId);
   }
 }
