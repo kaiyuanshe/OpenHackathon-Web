@@ -1,5 +1,7 @@
-import React from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { PureComponent } from 'react';
 import {
   Container,
   Row,
@@ -8,21 +10,27 @@ import {
   Tab,
   Carousel,
   Image,
+  Button,
 } from 'react-bootstrap';
 import { OpenMap } from 'idea-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
+  faFlag,
   faLocationDot,
+  faSignIn,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { convertDatetime } from '../../../utils/time';
 import PageHead from '../../../components/PageHead';
-import { ActivityEntry } from '../../../components/Activity/ActivityEntry';
+import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { TeamList } from '../../../components/Team/TeamList';
-import { Media } from '../../../models/Base';
+import { TeamCreateModal } from '../../../components/TeamCreateModal';
+
+import { convertDatetime } from '../../../utils/time';
+import { Media, isServer } from '../../../models/Base';
 import activityStore, { Activity } from '../../../models/Activity';
+import { Enrollment } from '../../../models/Enrollment';
 import { Team } from '../../../models/Team';
 
 export async function getServerSideProps({
@@ -43,43 +51,56 @@ export async function getServerSideProps({
   }
 }
 
-const HackathonActivity = ({
-  activity: {
-    name,
-    displayName,
-    tags,
-    banners,
-    enrollmentStartedAt,
-    enrollmentEndedAt,
-    eventStartedAt,
-    eventEndedAt,
-    location,
-    enrollment,
-    detail,
-    ...rest
-  },
-  teams,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => (
-  <Container>
-    <PageHead title={displayName} />
+const StatusName: Record<Enrollment['status'], string> = {
+  approved: '已报名成功',
+  rejected: '已拒绝',
+  none: '未报名',
+  pendingApproval: '已报名，等待通过',
+};
 
-    <Row xs={1} sm={1} lg={2}>
-      <Carousel>
-        {((banners || []) as Media[]).map(({ uri }) => (
-          <Carousel.Item key={uri}>
-            <Image className="d-block w-100" src={uri} alt={name} />
-          </Carousel.Item>
-        ))}
-      </Carousel>
-      <Col className="d-flex flex-column justify-content-start">
-        <h2>{displayName}</h2>
-        <aside className="pb-2">
-          {((tags || []) as string[]).map(tag => (
-            <span key={tag} className="badge bg-success me-2">
-              {tag}
-            </span>
-          ))}
-        </aside>
+@observer
+export default class ActivityPage extends PureComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> {
+  @observable
+  showCreateTeam = false;
+
+  async componentDidMount() {
+    if (isServer()) return;
+
+    const { name } = this.props.activity;
+
+    const { status } = await activityStore.enrollmentOf(name).getSessionOne();
+
+    if (status === 'approved')
+      try {
+        await activityStore.teamOf(name).getSessionOne();
+      } catch {}
+  }
+
+  renderMeta() {
+    const { status } = activityStore.currentEnrollment?.sessionOne || {},
+      { sessionOne: myTeam } = activityStore.currentTeam || {},
+      {
+        name,
+        location,
+        enrollment,
+        enrollmentStartedAt,
+        enrollmentEndedAt,
+        eventStartedAt,
+        eventEndedAt,
+        ...rest
+      } = this.props.activity;
+
+    const now = Date.now(),
+      enrollmentEnd = new Date(enrollmentEndedAt),
+      enrollmentStart = new Date(enrollmentStartedAt);
+    const isShowSignupBtn =
+      (!status || ['none', 'reject'].includes(status)) && now < +enrollmentEnd;
+    const isDisableSignupBtn = now < +enrollmentStart;
+
+    return (
+      <>
         <ul className="list-unstyled">
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
@@ -124,52 +145,114 @@ const HackathonActivity = ({
             </Col>
             <Col>{enrollment}</Col>
           </Row>
+          <Row as="li" className="my-2">
+            <Col md={4} lg={3}>
+              <FontAwesomeIcon className="text-success me-2" icon={faFlag} />
+              活动状态
+            </Col>
+            <Col>
+              {getActivityStatusText({
+                ...rest,
+                enrollmentStartedAt,
+                enrollmentEndedAt,
+                eventStartedAt,
+                eventEndedAt,
+              })}
+            </Col>
+          </Row>
+          <Row as="li" className="my-2">
+            <Col md={4} lg={3}>
+              <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
+              报名状态
+            </Col>
+            <Col>{status && StatusName[status]}</Col>
+          </Row>
         </ul>
-        <ActivityEntry
-          {...{
-            ...rest,
-            enrollmentStartedAt,
-            enrollmentEndedAt,
-            eventStartedAt,
-            eventEndedAt,
-          }}
-          href={`/activity/${name}/register`}
-        />
-      </Col>
-    </Row>
-    <Row className="mt-3">
-      <Col lg={9} md={12} sm={12}>
-        <Tabs defaultActiveKey="detail" id="activity-detail-tabs">
-          <Tab
-            as="article"
-            className="pt-2"
-            eventKey="detail"
-            title="活动详情"
-            dangerouslySetInnerHTML={{ __html: detail }}
+        {isShowSignupBtn && (
+          <Button
+            href={`/activity/${name}/register`}
+            disabled={isDisableSignupBtn}
           >
-            {/*todo update no data*/}
-          </Tab>
-          <Tab className="pt-2" eventKey="update" title="最新动态">
-            <div className="h1 my-5 text-center">暂无消息</div>
-          </Tab>
-          <Tab eventKey="team" title="所有团队" className="pt-2">
-            <TeamList activity={name} value={teams} />
-          </Tab>
-        </Tabs>
-      </Col>
-      {displayName && location && (
-        <Col className="d-flex flex-column" style={{ height: '50vh' }}>
-          <h2>比赛地点</h2>
+            立即报名
+          </Button>
+        )}
+        {status === 'approved' && !myTeam && (
+          <Button onClick={() => (this.showCreateTeam = true)}>创建队伍</Button>
+        )}
+      </>
+    );
+  }
 
-          {typeof window !== 'undefined' && (
-            <OpenMap zoom={10} title={displayName} address={location}>
-              暂无地址导航
-            </OpenMap>
+  render() {
+    const { name, displayName, tags, banners, location, detail } =
+        this.props.activity,
+      { teams } = this.props,
+      { showCreateTeam } = this;
+
+    return (
+      <Container>
+        <PageHead title={displayName} />
+
+        <Row xs={1} sm={1} lg={2}>
+          <Carousel>
+            {((banners || []) as Media[]).map(({ uri }) => (
+              <Carousel.Item key={uri}>
+                <Image className="d-block w-100" src={uri} alt={name} />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+          <Col className="d-flex flex-column justify-content-start">
+            <h2>{displayName}</h2>
+            <aside className="pb-2">
+              {((tags || []) as string[]).map(tag => (
+                <span key={tag} className="badge bg-success me-2">
+                  {tag}
+                </span>
+              ))}
+            </aside>
+
+            {this.renderMeta()}
+          </Col>
+        </Row>
+        <Row className="mt-3">
+          <Col lg={9} md={12} sm={12}>
+            <Tabs defaultActiveKey="detail" id="activity-detail-tabs">
+              <Tab
+                as="article"
+                className="pt-2"
+                eventKey="detail"
+                title="活动详情"
+                dangerouslySetInnerHTML={{ __html: detail }}
+              >
+                {/*todo update no data*/}
+              </Tab>
+              <Tab className="pt-2" eventKey="update" title="最新动态">
+                <div className="h1 my-5 text-center">暂无消息</div>
+              </Tab>
+              <Tab eventKey="team" title="所有团队" className="pt-2">
+                <TeamList activity={name} value={teams} />
+              </Tab>
+            </Tabs>
+          </Col>
+          {displayName && location && (
+            <Col className="d-flex flex-column" style={{ height: '50vh' }}>
+              <h2>比赛地点</h2>
+
+              {!isServer() && (
+                <OpenMap zoom={10} title={displayName} address={location}>
+                  暂无地址导航
+                </OpenMap>
+              )}
+            </Col>
           )}
-        </Col>
-      )}
-    </Row>
-  </Container>
-);
+        </Row>
 
-export default HackathonActivity;
+        <TeamCreateModal
+          show={showCreateTeam}
+          hackathonName={name}
+          onClose={() => (this.showCreateTeam = false)}
+        />
+      </Container>
+    );
+  }
+}

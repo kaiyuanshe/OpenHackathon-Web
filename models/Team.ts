@@ -1,10 +1,11 @@
 import { buildURLData } from 'web-utility';
-import { action } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { observable, action } from 'mobx';
+import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, createListStream } from './Base';
 import { User } from './User';
 import sessionStore from './Session';
+import { NameAvailability } from './Activity';
 
 export enum TeamWorkType {
   IMAGE = 'image',
@@ -56,6 +57,9 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
 
+  @observable
+  sessionOne?: Team;
+
   constructor(baseURI: string) {
     super();
     this.baseURI = `${baseURI}/team`;
@@ -80,12 +84,37 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
     return team;
   }
 
+  @toggle('downloading')
+  async getSessionOne() {
+    const { body } = await this.client.get<Team>(this.baseURI);
+
+    return (this.sessionOne = body!);
+  }
+
   openStream({ search }: TeamFilter) {
     return createListStream<Team>(
       `${this.baseURI}s?${buildURLData({ search })}`,
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('uploading')
+  async updateOne(data: NewData<Team>, id?: string) {
+    if (!id) {
+      const { body } = await this.client.post<NameAvailability>(
+        `${this.baseURI}/checkNameAvailability`,
+        { name: data.id },
+      );
+      const { nameAvailable, reason, message } = body!;
+
+      if (!nameAvailable) throw new ReferenceError(`${reason}\n${message}`);
+    }
+    const { body } = await (id
+      ? this.client.patch<Team>(`${this.baseURI}/${id}`, data)
+      : this.client.put<Team>(this.baseURI, data));
+
+    return (this.currentOne = body!);
   }
 }
 

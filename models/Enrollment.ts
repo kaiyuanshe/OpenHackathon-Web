@@ -1,4 +1,5 @@
 import { buildURLData } from 'web-utility';
+import { observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, createListStream } from './Base';
@@ -21,6 +22,9 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
   client = sessionStore.client;
   indexKey = 'userId' as const;
 
+  @observable
+  sessionOne?: Enrollment;
+
   constructor(baseURI: string) {
     super();
     this.baseURI = `${baseURI}/enrollment`;
@@ -32,6 +36,13 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('downloading')
+  async getSessionOne() {
+    const { body } = await this.client.get<Enrollment>(this.baseURI);
+
+    return (this.sessionOne = body!);
   }
 
   @toggle('uploading')

@@ -18,8 +18,8 @@ import {
 
 import { findDeep } from '../../utils/data';
 import { SessionBox } from '../User/SessionBox';
-import { menus } from '../../models/ActivityManage';
-import { MenuItem } from '../../models/ActivityManage';
+import { menus } from '../../models/Staff';
+import { MenuItem } from '../../models/Staff';
 
 library.add(
   faEdit,

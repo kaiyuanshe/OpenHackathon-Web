@@ -4,7 +4,7 @@ import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, Media, createListStream } from './Base';
 import sessionStore from './Session';
-import { StaffModel } from './ActivityManage';
+import { StaffModel } from './Staff';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';

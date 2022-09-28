@@ -5,7 +5,7 @@ import { Table, Form } from 'react-bootstrap';
 import { ScrollListProps, ScrollList } from '../ScrollList';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { Staff, StaffModel } from '../../models/ActivityManage';
+import { Staff, StaffModel } from '../../models/Staff';
 
 export interface StaffListProps extends ScrollListProps<Staff> {
   store: StaffModel;

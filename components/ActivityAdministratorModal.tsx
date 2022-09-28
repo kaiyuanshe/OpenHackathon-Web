@@ -5,7 +5,7 @@ import { Row, Col, Form, Button, ModalProps, Modal } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { UserList } from './User/UserList';
-import { Staff, StaffModel } from '../models/ActivityManage';
+import { Staff, StaffModel } from '../models/Staff';
 
 export interface AdministratorModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
