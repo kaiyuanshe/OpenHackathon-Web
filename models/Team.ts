@@ -1,4 +1,4 @@
-import { Base, Media } from './Base';
+import { Base } from './Base';
 import { User } from './User';
 
 export enum WorkTypeEnum {

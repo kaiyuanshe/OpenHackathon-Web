@@ -3,8 +3,8 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { TeamWork } from '../../models/Team';
 
 type WorkEditorProps = {
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   work?: TeamWork;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => any;
 };
 
 export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
@@ -21,7 +21,7 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
           pattern="[a-zA-Z0-9]+"
           required
           defaultValue={work?.title}
-          readOnly={Boolean(work)}
+          readOnly={!!work}
         />
       </Col>
     </Form.Group>
@@ -37,7 +37,7 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
           placeholder="请填写作品描述"
           required
           defaultValue={work?.description}
-          readOnly={Boolean(work)}
+          readOnly={!!work}
         />
       </Col>
     </Form.Group>
@@ -58,6 +58,14 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
       <Form.Label column sm={2}>
       图片地址
       </Form.Label>
+       <FileUpload 
+   accept="image/*" 
+   name="bannerUrls" 
+   max={10} 
+   multiple 
+   required 
+   defaultValue={activity?.banners?.map(({ uri }) => uri)} 
+ /> 
       <Col sm={10}>
         <Form.Control
           name="image"

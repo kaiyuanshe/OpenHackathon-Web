@@ -8,13 +8,14 @@ import { WorkEditor } from './WorkEditor';
 
 const WorkCreate: FC = () => {
   const router = useRouter();
+  const { name, tid } = router.query || {};
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
     const inputParams = formToJSON<TeamWork>(event.currentTarget);
     await requestClient(
-      `hackathon/${router.query.name}/team/${router.query.tid}/work`,
+      `hackathon/${name}/team/${tid}/work`,
       'PUT',
       inputParams,
     );
