@@ -39,6 +39,11 @@ export const menus: MenuItem[] = [
         icon: 'trophy',
       },
       {
+        title: '参赛团队',
+        href: 'team',
+        icon: 'people-group',
+      },
+      {
         title: '作品评奖',
         href: 'evaluation',
         icon: 'star',

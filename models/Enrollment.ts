@@ -1,5 +1,5 @@
 import { buildURLData } from 'web-utility';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, createListStream } from './Base';
@@ -24,6 +24,11 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
 
   @observable
   sessionOne?: Enrollment;
+
+  @computed
+  get exportURL() {
+    return sessionStore.exportURLOf('enrollments', this.baseURI);
+  }
 
   constructor(baseURI: string) {
     super();
