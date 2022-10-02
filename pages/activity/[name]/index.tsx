@@ -72,13 +72,14 @@ export default class ActivityPage extends PureComponent<
     if (isServer()) return;
 
     const { name } = this.props.activity;
+    try {
+      const { status } = await activityStore.enrollmentOf(name).getSessionOne();
 
-    const { status } = await activityStore.enrollmentOf(name).getSessionOne();
-
-    if (status === 'approved')
-      try {
-        await this.teamStore.getSessionOne();
-      } catch {}
+      if (status === 'approved')
+        try {
+          await this.teamStore.getSessionOne();
+        } catch {}
+    } catch {}
   }
 
   renderMeta() {
