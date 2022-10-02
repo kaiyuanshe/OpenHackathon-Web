@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Breadcrumb } from 'react-bootstrap';
 import { Icon } from 'idea-react';
 
 import PageHead from '../../../../components/PageHead';
+import { CommentBox } from '../../../../components/CommentBox';
 import { TeamMemberList } from '../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../components/Team/TeamWorkList';
 import activityStore, { Activity } from '../../../../models/Activity';
@@ -99,6 +100,8 @@ const TeamPage = ({
         <TeamWorkList activity={hackathonName} team={id} value={teamWorkList} />
       </Col>
     </Row>
+
+    <CommentBox />
   </Container>
 );
 

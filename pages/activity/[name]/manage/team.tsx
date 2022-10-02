@@ -1,7 +1,8 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { PureComponent, FormEvent } from 'react';
+import { Form, Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamList } from '../../../../components/Team/TeamList';
@@ -23,19 +24,36 @@ export default class TeamManagePage extends PureComponent<
 > {
   store = activityStore.teamOf(this.props.name);
 
+  onSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { search } = formToJSON<{ search: string }>(event.currentTarget);
+
+    this.store.clear();
+    return this.store.getList({ search });
+  };
+
   render() {
     const { path, name } = this.props,
       { exportURL, workExportURL } = this.store;
 
     return (
       <ActivityManageFrame path={path} name={name}>
-        <header className="d-flex justify-content-end mb-3">
+        <header className="d-flex justify-content-between mb-3">
+          <Form className="d-flex" onSubmit={this.onSearch}>
+            <Form.Control type="search" name="search" />
+
+            <Button type="submit" className="ms-3 text-nowrap">
+              搜索
+            </Button>
+          </Form>
           <DropdownButton variant="success" title="导出">
             <Dropdown.Item href={exportURL}>所有团队</Dropdown.Item>
             <Dropdown.Item href={workExportURL}>所有作品</Dropdown.Item>
           </DropdownButton>
         </header>
-        <TeamList activity={name} />
+        <TeamList store={this.store} />
       </ActivityManageFrame>
     );
   }
