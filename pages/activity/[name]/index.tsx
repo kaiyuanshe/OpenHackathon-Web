@@ -23,6 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import PageHead from '../../../components/PageHead';
+import { CommentBox } from '../../../components/CommentBox';
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
@@ -62,6 +63,8 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  teamStore = activityStore.teamOf(this.props.activity.name);
+
   @observable
   showCreateTeam = false;
 
@@ -74,13 +77,13 @@ export default class ActivityPage extends PureComponent<
 
     if (status === 'approved')
       try {
-        await activityStore.teamOf(name).getSessionOne();
+        await this.teamStore.getSessionOne();
       } catch {}
   }
 
   renderMeta() {
     const { status } = activityStore.currentEnrollment?.sessionOne || {},
-      { sessionOne: myTeam } = activityStore.currentTeam || {},
+      { sessionOne: myTeam } = this.teamStore || {},
       {
         name,
         location,
@@ -230,7 +233,7 @@ export default class ActivityPage extends PureComponent<
                 <div className="h1 my-5 text-center">暂无消息</div>
               </Tab>
               <Tab eventKey="team" title="所有团队" className="pt-2">
-                <TeamList activity={name} value={teams} />
+                <TeamList store={this.teamStore} />
               </Tab>
             </Tabs>
           </Col>
@@ -246,6 +249,8 @@ export default class ActivityPage extends PureComponent<
             </Col>
           )}
         </Row>
+
+        <CommentBox />
 
         <TeamCreateModal
           show={showCreateTeam}
