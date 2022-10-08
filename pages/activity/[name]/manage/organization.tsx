@@ -46,7 +46,6 @@ export default class OrganizationPage extends PureComponent<
   };
 
   renderList() {
-    // const { allItems, typeCount } = this.store;
     const { allItems, typeCount } = this.store;
 
     return (

@@ -64,11 +64,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                 onClick={
                   onSelect &&
                   (({ currentTarget: { checked } }) => {
-                    if (checked)
-                      return onSelect(
-                        [...selectedIds, id],
-                        // [...selectedIds, id].uniqueBy(),
-                      );
+                    if (checked) return onSelect([...selectedIds, id]);
                     const index = selectedIds.indexOf(id);
 
                     onSelect([
@@ -81,7 +77,6 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
             </td>
             <td>{name}</td>
             <td>{description}</td>
-            {/*<td>{type}</td>*/}
             <td>{OrganizationTypeName[type]}</td>
             <td>
               {logo! && (
