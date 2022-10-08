@@ -10,12 +10,9 @@ import {
   Badge,
   Card,
 } from 'react-bootstrap';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import PageHead from '../../../../components/PageHead';
 import { Award } from '../../../../models/Award';
-import { ListData } from '../../../../models/Base';
-import { request } from '../../../api/core';
-import { withSession } from '../../../api/user/session';
 
 interface State {}
 interface EvaluationPageProps {
@@ -24,39 +21,25 @@ interface EvaluationPageProps {
   awardList: Award[];
 }
 
-export const getServerSideProps = withSession(
-  async ({
-    params: { name } = {},
-    req,
-  }: GetServerSidePropsContext<{ name?: string }>) => {
-    if (!name)
-      return {
+export const getServerSideProps = ({
+  params: { name } = {},
+  req,
+}: GetServerSidePropsContext<{ name?: string }>) =>
+  !name
+    ? {
         notFound: true,
         props: {} as EvaluationPageProps,
+      }
+    : {
+        props: {
+          activity: name,
+          path: req.url,
+        },
       };
 
-    const { value: awardList } = await request<ListData<Award>>(
-      `hackathon/${name}/awards`,
-      'GET',
-      undefined,
-      { req },
-    );
-    return {
-      props: {
-        activity: name,
-        path: req.url,
-        awardList,
-      },
-    };
-  },
-);
-
 class EvaluationPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>,
-  State
+  InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  state: Readonly<State> = {};
-
   render() {
     const { path, activity } = this.props;
     return (
