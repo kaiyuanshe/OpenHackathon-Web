@@ -4,10 +4,15 @@ import { formToJSON } from 'web-utility';
 
 import { WorkEditor } from './WorkEditor';
 import activityStore from '../../models/Activity';
-import { TeamWorkModel } from '../../models/Team';
-import { withRouter } from 'next/router';
-class WorkEdit extends PureComponent<work> {
-  store: TeamWorkModel;
+import { TeamWork, TeamWorkModel } from '../../models/Team';
+import { NextRouter, withRouter } from 'next/router';
+class WorkEdit extends PureComponent<{
+  work: TeamWork;
+  router: NextRouter | any;
+}> {
+  store = activityStore
+    .teamOf(this.props.router.query.name)
+    .workOf(this.props.router.query.tid);
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -18,9 +23,6 @@ class WorkEdit extends PureComponent<work> {
     );
   };
   render() {
-    this.store = activityStore
-      .teamOf(this.props.router.query.name)
-      .workOf(this.props.router.query.tid);
     return (
       <Container>
         <h2 className="text-center">编辑作品</h2>

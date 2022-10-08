@@ -7,10 +7,11 @@ import PageHead from '../../../../../../../components/PageHead';
 import WorkEdit from '../../../../../../../components/work/WorkEdit';
 import { TeamWork } from '../../../../../../../models/Team';
 import activityStore from '../../../../../../../models/Activity';
+import { IDType } from 'mobx-restful';
 
 export async function getServerSideProps({
   req,
-  params: { name = '', tid, wid } = {},
+  params: { name = '', tid, wid = '' } = {},
 }: GetServerSidePropsContext<Partial<Record<'name' | 'tid' | 'wid', string>>>) {
   try {
     const work = await activityStore.teamOf(name).workOf(tid).getOne(wid);
@@ -23,7 +24,7 @@ export async function getServerSideProps({
 
     return {
       notFound: true,
-      props: {},
+      props: { work: {} as TeamWork },
     };
   }
 }

@@ -5,9 +5,13 @@ import { formToJSON } from 'web-utility';
 import { WorkEditor } from './WorkEditor';
 import activityStore from '../../models/Activity';
 import { TeamWorkModel } from '../../models/Team';
-import { withRouter } from 'next/router';
-class WorkCreate extends PureComponent {
-  store: TeamWorkModel;
+import { NextRouter, withRouter } from 'next/router';
+class WorkCreate extends PureComponent<{
+  router: NextRouter | any;
+}> {
+  store = activityStore
+    .teamOf(this.props.router.query.name)
+    .workOf(this.props.router.query.tid);
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();

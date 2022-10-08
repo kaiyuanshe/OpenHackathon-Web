@@ -80,7 +80,6 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   teamOf(name = this.currentOne.name) {
-    console.log('teamOf', name);
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
   }
   openStream({
