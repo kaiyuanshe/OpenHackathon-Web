@@ -1,17 +1,19 @@
+import { observer } from 'mobx-react';
 import { Container } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
-import { ActivityList } from '../../components/ActivityList';
-import { withSession } from '../api/user/session';
+import { SessionBox } from '../../components/User/SessionBox';
+import ActivityList from '../../components/Activity/ActivityList';
+import sessionStore from '../../models/Session';
 
-export const getServerSideProps = withSession();
-
-export default function AdminPage() {
-  return (
+const AdminPage = observer(() => (
+  <SessionBox auto>
     <Container fluid>
       <PageHead title="平台管理" />
 
-      <ActivityList type="admin" size="lg" />
+      <ActivityList type="admin" size="lg" userId={sessionStore.user?.id} />
     </Container>
-  );
-}
+  </SessionBox>
+));
+
+export default AdminPage;

@@ -3,16 +3,14 @@ import type { InferGetServerSidePropsType } from 'next';
 import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
-import { ActivityList } from '../components/ActivityList';
-import { ListData } from '../models/Base';
-import { Activity } from '../models/Activity';
-import { request } from './api/core';
+import ActivityList from '../components/Activity/ActivityList';
+import activityStore from '../models/Activity';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
-  const { value } = await request<ListData<Activity>>('hackathons?top=10');
+  const activities = await activityStore.getList({}, 1, 6);
 
-  return { props: { activities: value } };
+  return { props: { activities } };
 }
 
 const HomePage = ({
@@ -51,7 +49,7 @@ const HomePage = ({
 
     <section className="my-5 py-5 bg-light text-center">
       <Container className="text-start">
-        <ActivityList value={activities.slice(0, 6)} />
+        <ActivityList.Layout value={activities} />
       </Container>
 
       <Button

@@ -1,12 +1,10 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 
 import PageHead from '../../../../components/PageHead';
-import { withSession } from '../../../api/user/session';
-import { Activity } from '../../../../models/Activity';
-import { Team } from '../../../../models/Team';
-import { request } from '../../../api/core';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import ActivityEdit from '../../../../components/ActivityEdit';
-import { ActivityManageFrame } from '../../../../components/ActivityManageFrame';
+import activityStore, { Activity } from '../../../../models/Activity';
+import { Team } from '../../../../models/Team';
 
 interface EditPageProps {
   activity: Activity;
@@ -15,45 +13,36 @@ interface EditPageProps {
   activityName: string;
 }
 
-export const getServerSideProps = withSession(
-  async ({
-    req,
-    res,
-    params: { name } = {},
-  }: GetServerSidePropsContext<{ name?: string }>) => {
-    if (!name)
-      return {
-        notFound: true,
-        props: {} as EditPageProps,
-      };
+export async function getServerSideProps({
+  req,
+  params: { name = '' } = {},
+}: GetServerSidePropsContext<{ name?: string }>) {
+  try {
+    const activity = await activityStore.getOne(name);
 
-    const activity = await request<Activity>(
-      `hackathon/${name}`,
-      'GET',
-      undefined,
-      { req, res },
-    );
+    return {
+      props: { activity, path: req.url, activityName: name },
+    };
+  } catch (error) {
+    console.error(error);
 
-    if (activity.detail) {
-      activity.detail = activity.detail
-        .replace(/\\+n/g, '\n')
-        .replace(/\\+t/g, ' ')
-        .replace(/\\+"/g, '"');
-    }
+    return {
+      notFound: true,
+      props: {} as EditPageProps,
+    };
+  }
+}
 
-    return { props: { activity, path: req.url, activityName: name } };
-  },
-);
-
-const editActivity = ({
+const ActivityEditPage = ({
   activity,
   path,
   activityName,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <ActivityManageFrame name={activityName} path={path}>
     <PageHead title={`${activityName}活动管理 编辑活动`} />
+
     <ActivityEdit activity={activity} />
   </ActivityManageFrame>
 );
 
-export default editActivity;
+export default ActivityEditPage;

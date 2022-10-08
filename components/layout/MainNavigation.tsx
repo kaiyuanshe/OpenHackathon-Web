@@ -1,12 +1,13 @@
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
-import { UserBar } from '../UserBar';
+const UserBar = dynamic(() => import('../User/UserBar'), { ssr: false });
 
 const Name = process.env.NEXT_PUBLIC_SITE_NAME || '';
 
 export const MainNavigation = () => (
-  <Navbar bg="dark" variant="dark" fixed="top" expand="sm">
+  <Navbar bg="dark" variant="dark" fixed="top" expand="md">
     <Container>
       <Navbar.Brand href="/">
         <img

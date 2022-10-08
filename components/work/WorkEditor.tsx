@@ -21,7 +21,6 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
           pattern="[a-zA-Z0-9]+"
           required
           defaultValue={work?.title}
-          readOnly={!!work}
         />
       </Col>
     </Form.Group>
@@ -37,7 +36,6 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
           placeholder="请填写作品描述"
           required
           defaultValue={work?.description}
-          readOnly={!!work}
         />
       </Col>
     </Form.Group>
@@ -46,12 +44,7 @@ export const WorkEditor: FC<WorkEditorProps> = ({ onSubmit, work }) => (
         项目地址
       </Form.Label>
       <Col sm={10}>
-        <Form.Control
-          name="url"
-          type="uri"
-          placeholder="项目演示地址"
-          defaultValue={work?.url}
-        />
+        <Form.Control name="url" type="uri" placeholder="项目演示地址" />
       </Col>
     </Form.Group>
     {/* <Form.Group as={Row} className="mb-3" controlId="url">

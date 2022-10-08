@@ -1,35 +1,33 @@
-import { FormEvent, FC } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
-import { useRouter } from 'next/router';
-import { makeArray, formToJSON } from 'web-utility';
-import { TeamWork } from '../../models/Team';
-import { requestClient } from '../../pages/api/core';
+import { formToJSON } from 'web-utility';
+
 import { WorkEditor } from './WorkEditor';
-
-const WorkCreate: FC = () => {
-  const router = useRouter();
-  const { name, tid } = router.query || {};
-
-  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
+import activityStore from '../../models/Activity';
+import { TeamWorkModel } from '../../models/Team';
+import { withRouter } from 'next/router';
+class WorkCreate extends PureComponent {
+  store: TeamWorkModel;
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    const inputParams = formToJSON<TeamWork>(event.currentTarget);
-    await requestClient(
-      `hackathon/${name}/team/${tid}/work`,
-      'PUT',
-      inputParams,
-    );
-    await router.push(
-      `/activity/${router.query.name}/team/${router.query.tid}`,
+    const data = formToJSON(event.target as HTMLFormElement);
+    await this.store.updateOne(data);
+    await this.props.router.push(
+      `/activity/${this.props.router.query.name}/team/${this.props.router.query.tid}`,
     );
   };
+  render() {
+    this.store = activityStore
+      .teamOf(this.props.router.query.name)
+      .workOf(this.props.router.query.tid);
+    return (
+      <Container>
+        <h2 className="text-center">创建作品</h2>
+        <WorkEditor onSubmit={this.handleSubmit} />
+      </Container>
+    );
+  }
+}
 
-  return (
-    <Container>
-      <h2 className="text-center">创建作品</h2>
-      <WorkEditor onSubmit={submitHandler} />
-    </Container>
-  );
-};
-
-export default WorkCreate;
+export default withRouter(WorkCreate);

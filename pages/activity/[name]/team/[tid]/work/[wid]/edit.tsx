@@ -6,31 +6,27 @@ import type {
 import PageHead from '../../../../../../../components/PageHead';
 import WorkEdit from '../../../../../../../components/work/WorkEdit';
 import { TeamWork } from '../../../../../../../models/Team';
-import { withSession } from '../../../../../../api/user/session';
-import { request } from '../../../../../../api/core';
-export const getServerSideProps = withSession(
-  async ({
-    req,
-    res,
-    params: { name, tid, wid } = {},
-  }: GetServerSidePropsContext<
-    Partial<Record<'name' | 'tid' | 'wid', string>>
-  >) => {
-    if (!name || !tid || !wid)
-      return {
-        notFound: true,
-        props: {} as { work: TeamWork },
-      };
+import activityStore from '../../../../../../../models/Activity';
 
-    const work = await request<TeamWork>(
-      `hackathon/${name}/team/${tid}/work/${wid}`,
-      'GET',
-      undefined,
-      { req, res },
-    );
-    return { props: { work } };
-  },
-);
+export async function getServerSideProps({
+  req,
+  params: { name = '', tid, wid } = {},
+}: GetServerSidePropsContext<Partial<Record<'name' | 'tid' | 'wid', string>>>) {
+  try {
+    const work = await activityStore.teamOf(name).workOf(tid).getOne(wid);
+
+    return {
+      props: { work, path: req.url },
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      notFound: true,
+      props: {},
+    };
+  }
+}
 const creatework = ({
   work,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (

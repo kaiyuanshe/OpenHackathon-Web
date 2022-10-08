@@ -2,8 +2,7 @@ import { formToJSON } from 'web-utility';
 import { FC, FormEvent } from 'react';
 import { Container } from 'react-bootstrap';
 
-import { requestClient } from '../pages/api/core';
-import { Activity } from '../models/Activity';
+import activityStore, { Activity } from '../models/Activity';
 import { ActivityEditor } from './ActivityEditor';
 import { ActivityFormData } from './ActivityCreate';
 
@@ -26,8 +25,8 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
         };
       });
     inputParams.tags = inputParams?.tagsString?.split(/\s+/) || [];
-
-    await requestClient(`hackathon/${activity.name}`, 'PUT', inputParams);
+    // @ts-ignore
+    await activityStore.updateOne(inputParams, activity.name);
 
     alert('修改成功');
   };
