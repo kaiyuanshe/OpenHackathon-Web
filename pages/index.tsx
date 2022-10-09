@@ -4,17 +4,26 @@ import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 
 import PageHead from '../components/PageHead';
 import ActivityList from '../components/Activity/ActivityList';
+import { TopUserList } from '../components/User/TopUserList';
 import activityStore from '../models/Activity';
+import userStore from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
   const activities = await activityStore.getList({}, 1, 6);
+  const topUsers = await userStore.getUserTopList();
+  // const users ='five'
+  // console.log(topUsers);
+  // console.log(activities);
 
-  return { props: { activities } };
+  const usersString = JSON.stringify(topUsers);
+  return { props: { activities, usersString, topUsers } };
 }
 
 const HomePage = ({
   activities,
+  topUsers,
+  usersString,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <>
     <PageHead />
@@ -61,6 +70,19 @@ const HomePage = ({
         更多活动
       </Button>
     </section>
+
+    <div
+      className="my-5 py-5  text-center"
+      style={{
+        background: 'linear-gradient(#F8F9FA,#fff)',
+        marginTop: '-3rem!important',
+      }}
+    >
+      <Container className="text-start">
+        <TopUserList.Layout value={topUsers} />
+        {/* {usersString} */}
+      </Container>
+    </div>
 
     <Container className="text-center">
       {Object.entries(partner).map(([type, list]) => (

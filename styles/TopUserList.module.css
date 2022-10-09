@@ -1,0 +1,220 @@
+.topUserRow .imgBox {
+  width: 2rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  vertical-align: middle;
+  display: inline-block;
+}
+.topUserRow .imgBox img.topUserAvatar {
+  width: 100%;
+  min-height: 100%;
+  -webkit-transition: 0.6s;
+  transition: 0.6s;
+}
+.topUserRow .showTitle {
+  position: relative;
+  height: 4.8rem;
+  padding-top: 1.2rem;
+  z-index: 4;
+  box-shadow: -0.1rem 0 0.3rem 0 #7f7e7e;
+  background-attachment: fixed;
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/rrrr.png");
+  background-size: 20rem auto;
+  margin-top: 1.5rem;
+  border-radius: 0.4rem;
+}
+.topUserRow .showTitle::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(161, 160, 152, 0.7);
+}
+.topUserRow .showTitle .showMedal {
+  position: absolute;
+  top: -1.2rem;
+  left: 5%;
+}
+.topUserRow .showTitle .showMedal i {
+  display: inline-block;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 1rem;
+  margin-left: 0.2rem;
+  overflow: hidden;
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#FFD83A, #FDEBA0);
+  background-blend-mode: lighten;
+  background-position: center;
+  background-size: 1.5rem 1.5rem;
+  background-repeat: no-repeat;
+  border: 0.1rem solid #FFD83A;
+  box-shadow: 0 0 0.5rem 0 #FFD83A;
+}
+.topUserRow .showTitle .showMedal i:first-child {
+  border-color: #D8D8D8;
+  box-shadow: 0 0 0.5rem 0 #D8D8D8;
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#D8D8D8, #EEEEEE);
+}
+.topUserRow .showTitle .showMedal i:last-child {
+  border-color: #FAB36E;
+  box-shadow: 0 0 0.5rem 0 #FAB36E;
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#FAB36E, #FBE7D3);
+}
+.topUserRow .showTitle h3 {
+  position: relative;
+  font-weight: bold;
+  z-index: 2;
+  font-size: 2rem;
+  text-align: center;
+  letter-spacing: 0.4rem;
+  width: 8rem;
+  margin: 0 auto;
+  text-shadow: 0 0 0.2rem rgba(200, 200, 255, 0.3);
+  color: transparent;
+  font-family: "'book antiqua', palatino, serif";
+  background-image: linear-gradient(to right, #FFD83A 20%, #D8D8D8 60%, #FAB36E 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.topUserRow .topUserUl {
+  margin-top: 1rem;
+  padding-left: 0;
+  position: relative;
+  z-index: 5;
+  justify-content: space-around;
+  list-style: none;
+}
+.topUserRow .topUserUl li {
+  width: 33.33%;
+  display: inline-block;
+  text-align: center;
+  cursor: default;
+}
+.topUserRow .topUserUl li:first-child {
+  padding-top: 1rem;
+}
+.topUserRow .topUserUl li:first-child .showBox {
+  color: #D8D8D8;
+  border-bottom: 1.2rem solid #D8D8D8;
+}
+.topUserRow .topUserUl li:first-child .showBox i {
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#D8D8D8, #EEEEEE);
+}
+.topUserRow .topUserUl li:first-child .imgBox {
+  width: 6rem;
+  animation-delay: 1.4s;
+}
+.topUserRow .topUserUl li:last-child {
+  padding-top: 1.5rem;
+}
+.topUserRow .topUserUl li:last-child .showBox {
+  border-bottom: 1.2rem solid #FAB36E;
+  color: #FAB36E;
+}
+.topUserRow .topUserUl li:last-child .showBox i {
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#FAB36E, #FBE7D3);
+}
+.topUserRow .topUserUl li:last-child .imgBox {
+  width: 5.6rem;
+  animation-delay: 2.4s;
+}
+.topUserRow .topUserUl li:hover .imgBox {
+  animation-play-state: paused;
+}
+.topUserRow .topUserUl .showBox {
+  min-height: 6rem;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1.2rem solid #FFD83A;
+  z-index: 3;
+  padding-top: 0.3rem;
+  color: #FFD83A;
+}
+.topUserRow .topUserUl .showBox p {
+  margin-bottom: 0;
+}
+.topUserRow .topUserUl .showBox span {
+  display: block;
+}
+.topUserRow .topUserUl .showBox i {
+  width: 2.5rem;
+  height: 2.6rem;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.3rem;
+  overflow: hidden;
+  border-radius: 2rem;
+  background-image: url("https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg"), linear-gradient(#FFD83A, #FDEBA0);
+  background-blend-mode: lighten;
+  background-position: center;
+  background-size: 2.5rem auto;
+  background-repeat: no-repeat;
+}
+.topUserRow .topUserUl .imgBox {
+  position: relative;
+  width: 6.4rem;
+  z-index: 2;
+  margin: 0 auto;
+  border-radius: 3rem;
+  box-shadow: 0 0 0.5rem 0 #c6c6c6;
+  animation: 4s suspension ease-in-out infinite;
+  -webkit-transition: all 0.6s;
+  transition: all 0.6s;
+}
+.topUserRow .topUserList tr {
+  position: relative;
+}
+.topUserRow .topUserList tr::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #9fc2ef;
+  transition: all 0.5s;
+}
+.topUserRow .topUserList tr:hover::before {
+  left: 0;
+  width: 100%;
+}
+.topUserRow .topUserList td {
+  max-width: 50%;
+  vertical-align: middle!important;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+.topUserRow .topUserList td .usernameBox {
+  font-size: 0;
+}
+.topUserRow .topUserList td .usernameBox:hover .imgBox > img {
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
+}
+.topUserRow .topUserList td .usernameBox span {
+  margin-left: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: var(--bs-body-font-size);
+}
+@keyframes suspension {
+  0% {
+    position: relative;
+    top: 0px;
+  }
+  50% {
+    position: relative;
+    top: -0.8rem;
+  }
+  100% {
+    position: relative;
+    top: 0px;
+  }
+}

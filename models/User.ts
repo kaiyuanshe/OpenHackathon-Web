@@ -1,7 +1,7 @@
 import { buildURLData } from 'web-utility';
 import { ListModel, Stream } from 'mobx-restful';
 
-import { Base, Filter, createListStream } from './Base';
+import { Base, Filter, createListStream, ListData } from './Base';
 import sessionStore from './Session';
 
 export interface UserBase {
@@ -115,6 +115,14 @@ export interface User extends AuthingSession {
   arn: null;
 }
 
+export interface TopUser {
+  userId: string;
+  user: User;
+  rank: number;
+  score: number;
+  createdAt: null;
+  updatedAt: null;
+}
 export interface UserFilter extends Filter<User> {
   keyword?: string;
 }
@@ -122,6 +130,22 @@ export interface UserFilter extends Filter<User> {
 export class UserModel extends Stream<User, UserFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'user';
+
+  // getUserTopList(){
+  //   return createListStream<TopUser>(
+  //     `${this.baseURI}/topUsers`,
+  //     this.client,
+  //     count => (this.totalCount = count),
+  //     'GET',
+  //   );
+  // }
+  async getUserTopList() {
+    const { body } = await this.client.get<ListData<TopUser>>(
+      `${this.baseURI}/topUsers`,
+    );
+    const { value } = body!;
+    return value;
+  }
 
   openStream({ keyword = 'x' }: UserFilter) {
     return createListStream<User>(
