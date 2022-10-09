@@ -12,18 +12,12 @@ import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 export async function getServerSideProps() {
   const activities = await activityStore.getList({}, 1, 6);
   const topUsers = await userStore.getUserTopList();
-  // const users ='five'
-  // console.log(topUsers);
-  // console.log(activities);
-
-  const usersString = JSON.stringify(topUsers);
-  return { props: { activities, usersString, topUsers } };
+  return { props: { activities, topUsers } };
 }
 
 const HomePage = ({
   activities,
   topUsers,
-  usersString,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <>
     <PageHead />
@@ -72,7 +66,7 @@ const HomePage = ({
     </section>
 
     <div
-      className="my-5 py-5  text-center"
+      className="my-5 text-center"
       style={{
         background: 'linear-gradient(#F8F9FA,#fff)',
         marginTop: '-3rem!important',
@@ -80,7 +74,6 @@ const HomePage = ({
     >
       <Container className="text-start">
         <TopUserList.Layout value={topUsers} />
-        {/* {usersString} */}
       </Container>
     </div>
 

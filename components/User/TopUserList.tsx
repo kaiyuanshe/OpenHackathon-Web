@@ -5,7 +5,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-import styles from '../../styles/topUserList.module.less';
+import styles from '../../styles/TopUserList.module.less';
 export interface TopUserListProps {
   value: TopUser[];
 }
