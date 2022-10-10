@@ -21,7 +21,7 @@
     box-shadow: -0.1rem 0 0.3rem 0 #7f7e7e;
     background-attachment: fixed;
     background-image: url('https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/rrrr.png');
-    background-size: 20rem auto;
+    background-size: 21rem auto;
     margin-top: 1.5rem;
     border-radius: 0.4rem;
     &::before {
@@ -72,23 +72,35 @@
       font-size: 2rem;
       text-align: center;
       letter-spacing: 0.4rem;
-      width: 8rem;
+      width: 10rem;
       margin: 0 auto;
-      text-shadow: 0 0 0.2rem rgba(200, 200, 255, 0.3);
+      cursor: default;
+      text-shadow: 0px 1px 0px #c0c0c0, 0px 2px 0px #b0b0b0, 0px 3px 0px #a0a0a0,
+        0px 4px 0px #909090, 0px 5px 10px rgba(0, 0, 0, 0.6);
       color: transparent;
       font-family: "'book antiqua', palatino, serif";
-      background-image: linear-gradient(
-        to right,
-        #ffd83a 20%,
-        #d8d8d8 60%,
-        #fab36e 75%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
+      &::after {
+        content: attr(data-text);
+        display: block;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 10rem;
+        margin: 0 auto;
+        text-shadow: none;
+        background-image: linear-gradient(
+          to right,
+          #d8d8d8 10%,
+          #ffd83a 60%,
+          #fab36e 75%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
     }
   }
   .topUserUl {
-    // direction: none;
     margin-top: 1rem;
     padding-left: 0;
     position: relative;
@@ -105,6 +117,7 @@
         .showBox {
           color: #d8d8d8;
           border-bottom: 1.2rem solid #d8d8d8;
+          text-shadow: 0px 1px 0px #d9cdcd 0px 2px 5px rgba(133, 132, 130, 0.4);
           i {
             background-image: url(@logo-img), linear-gradient(#d8d8d8, #eeeeee);
           }
@@ -119,6 +132,8 @@
         .showBox {
           border-bottom: 1.2rem solid #fab36e;
           color: #fab36e;
+          text-shadow: 0px 1px 0px #aa8865, 0px 2px 5px rgba(167, 129, 67, 0.4);
+
           i {
             background-image: url(@logo-img), linear-gradient(#fab36e, #fbe7d3);
           }
@@ -143,6 +158,9 @@
       z-index: 3;
       padding-top: 0.3rem;
       color: #ffd83a;
+
+      text-shadow: 0px 1px 0px #969653, 0px 2px 5px rgba(240, 219, 100, 0.4);
+
       p {
         margin-bottom: 0;
       }
@@ -150,7 +168,6 @@
         display: block;
       }
       i {
-        // box-shadow: 0  -0.5rem 2rem #FFD83A;
         width: 2.5rem;
         height: 2.6rem;
         display: block;
@@ -172,7 +189,7 @@
       margin: 0 auto;
       border-radius: 3rem;
       box-shadow: 0 0 0.5rem 0 #c6c6c6;
-      animation: 4s suspension ease-in-out infinite;
+      animation: 3.5s suspension ease-in-out infinite;
       -webkit-transition: all 0.6s;
       transition: all 0.6s;
     }

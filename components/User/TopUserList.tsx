@@ -22,7 +22,7 @@ export class TopUserList {
               <i></i>
               <i></i>
             </div>
-            <h3>黑客馆</h3>
+            <h3 data-text="黑客馆" >黑客馆</h3>
           </div>
           <ul className={styles.topUserUl}>
             {value.slice(0, 3).map(({ userId, score, rank, user }) => (

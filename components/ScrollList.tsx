@@ -66,6 +66,7 @@ export abstract class ScrollList<
 
     return (
       <ScrollBoundary onTouch={this.loadMore}>
+        <div>
         {(downloading > 0 || uploading > 0) && <Loading />}
 
         <Layout
@@ -80,6 +81,7 @@ export abstract class ScrollList<
         <footer className="mt-4 text-center text-muted small">
           {noMore || !allItems.length ? '没有更多' : '上拉加载更多……'}
         </footer>
+        </div>
       </ScrollBoundary>
     );
   }

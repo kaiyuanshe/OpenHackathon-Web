@@ -76,7 +76,7 @@ export interface AuthingSession
   mainDepartmentId: null;
   middleName: null;
   name: null;
-  oauth: string;
+  oAuth: string;
   passwordSecurityLevel: null;
   phoneCountryCode: null;
   phoneVerified: boolean;
