@@ -1,5 +1,5 @@
 import { buildURLData } from 'web-utility';
-import { observable, action } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, createListStream } from './Base';
@@ -59,6 +59,16 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
 
   @observable
   sessionOne?: Team;
+
+  @computed
+  get exportURL() {
+    return sessionStore.exportURLOf('teams', this.baseURI);
+  }
+
+  @computed
+  get workExportURL() {
+    return sessionStore.exportURLOf('teamWorks', this.baseURI);
+  }
 
   constructor(baseURI: string) {
     super();

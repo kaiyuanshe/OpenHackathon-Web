@@ -22,9 +22,6 @@ class WorkCreate extends PureComponent<{
     );
   };
   render() {
-    this.store = activityStore
-      .teamOf(this.props.router.query.name)
-      .workOf(this.props.router.query.tid);
     return (
       <Container>
         <h2 className="text-center">创建作品</h2>

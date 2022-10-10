@@ -12,6 +12,7 @@ export interface MenuItem {
   href?: string;
   icon?: IconProp;
   list?: MenuItem[];
+  roles?: Staff['type'][];
 }
 
 export const menus: MenuItem[] = [
@@ -37,6 +38,12 @@ export const menus: MenuItem[] = [
         title: '奖项设置',
         href: 'award',
         icon: 'trophy',
+      },
+      {
+        title: '参赛团队',
+        href: 'team',
+        icon: 'people-group',
+        roles: ['judge'],
       },
       {
         title: '作品评奖',
