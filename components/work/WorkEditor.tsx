@@ -90,7 +90,7 @@ export const WorkEditor: FC<WorkEditorProps> = ({
               id={typeItem.value}
               key={typeItem.value}
               onClick={e => {
-                work.type = e.target.value;
+                // work.type = e.target.value;
                 console.log(work);
               }}
               defaultChecked={work.type === typeItem.value}
