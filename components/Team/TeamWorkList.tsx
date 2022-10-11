@@ -28,15 +28,14 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
         <Accordion.Item eventKey={id!} key={id}>
           <Accordion.Header>
             {title} - {updatedAt ? updatedAt.slice(0, 10) + ' 更新' : ''}
-          </Accordion.Header>
-          <Accordion.Body>
             <Link href={`/activity/${activity}/team/${team}/work/${id}/edit`}>
               <FontAwesomeIcon
-                style={{ cursor: 'pointer' }}
-                className="mb-2.5"
+                style={{ cursor: 'pointer', marginLeft: '5px' }}
                 icon={faPenToSquare}
               />
             </Link>
+          </Accordion.Header>
+          <Accordion.Body>
             <p>{description}</p>
             {type === TeamWorkType.IMAGE ? (
               <Image src={url} className="mw-100" alt={title} />

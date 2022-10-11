@@ -74,7 +74,8 @@ export const WorkEditor: FC<WorkEditorProps> = ({
           />
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3">
+      {work.type}
+      <Form.Group as={Row} className="mb-3" controlId="type">
         <Form.Label column sm={2}>
           作品类型
         </Form.Label>
@@ -84,28 +85,34 @@ export const WorkEditor: FC<WorkEditorProps> = ({
               type="radio"
               inline
               label={typeItem.value}
-              name={typeItem.title}
+              name="type"
               value={typeItem.value}
               id={typeItem.value}
               key={typeItem.value}
+              onClick={e => {
+                work.type = e.target.value;
+                console.log(work);
+              }}
               defaultChecked={work.type === typeItem.value}
             />
           ))}
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3" controlId="url">
-        <Form.Label column sm={2}>
-          作品在线链接
-        </Form.Label>
-        <Col sm={10}>
-          <Form.Control
-            name="url"
-            type="uri"
-            defaultValue={work.url}
-            placeholder="作品链接"
-          />
-        </Col>
-      </Form.Group>
+      {work.type === 'website' && (
+        <Form.Group as={Row} className="mb-3" controlId="url">
+          <Form.Label column sm={2}>
+            作品在线链接
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              name="url"
+              type="uri"
+              defaultValue={work.url}
+              placeholder="作品链接"
+            />
+          </Col>
+        </Form.Group>
+      )}
       <Form.Group as={Row} className="mb-3" controlId="url">
         <Form.Label column sm={2}>
           上传作品
