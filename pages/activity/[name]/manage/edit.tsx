@@ -1,46 +1,30 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 
-import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import ActivityEdit from '../../../../components/ActivityEdit';
+import { withRoute } from '../../../api/core';
 import activityStore, { Activity } from '../../../../models/Activity';
-import { Team } from '../../../../models/Team';
 
-interface EditPageProps {
-  activity: Activity;
-  teams: Team[];
-  path: string;
-  activityName: string;
-}
-
-export async function getServerSideProps({
-  req,
-  params: { name = '' } = {},
-}: GetServerSidePropsContext<{ name?: string }>) {
+export const getServerSideProps = withRoute<
+  { name: string },
+  { activity: Activity }
+>(async ({ params: { name = '' } = {} }) => {
   try {
     const activity = await activityStore.getOne(name);
 
-    return {
-      props: { activity, path: req.url, activityName: name },
-    };
+    return { props: { activity } };
   } catch (error) {
     console.error(error);
 
-    return {
-      notFound: true,
-      props: {} as EditPageProps,
-    };
+    return { notFound: true };
   }
-}
+});
 
 const ActivityEditPage = ({
   activity,
-  path,
-  activityName,
+  route: { resolvedUrl, params },
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
-  <ActivityManageFrame name={activityName} path={path}>
-    <PageHead title={`${activityName}活动管理 编辑活动`} />
-
+  <ActivityManageFrame name={params!.name} path={resolvedUrl} title="编辑活动">
     <ActivityEdit activity={activity} />
   </ActivityManageFrame>
 );

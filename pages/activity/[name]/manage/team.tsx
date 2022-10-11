@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { observer } from 'mobx-react';
 import { PureComponent, FormEvent } from 'react';
 import { Form, Button, Dropdown, DropdownButton } from 'react-bootstrap';
@@ -6,23 +6,16 @@ import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamList } from '../../../../components/Team/TeamList';
+import { withRoute } from '../../../api/core';
 import activityStore from '../../../../models/Activity';
 
-export const getServerSideProps = async ({
-  req,
-  params,
-}: GetServerSidePropsContext<{
-  name: string;
-}>) =>
-  params?.name
-    ? { props: { path: req.url, name: params.name } }
-    : { notFound: true, props: {} as Record<'path' | 'name', string> };
+export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
 export default class TeamManagePage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  store = activityStore.teamOf(this.props.name);
+  store = activityStore.teamOf(this.props.route.params!.name);
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,11 +28,15 @@ export default class TeamManagePage extends PureComponent<
   };
 
   render() {
-    const { path, name } = this.props,
+    const { resolvedUrl, params } = this.props.route,
       { exportURL, workExportURL } = this.store;
 
     return (
-      <ActivityManageFrame path={path} name={name}>
+      <ActivityManageFrame
+        path={resolvedUrl}
+        name={params!.name}
+        title="团队管理"
+      >
         <header className="d-flex justify-content-between mb-3">
           <Form className="d-flex" onSubmit={this.onSearch}>
             <Form.Control type="search" name="search" />
