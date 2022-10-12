@@ -4,9 +4,11 @@ import Link from 'next/link';
 
 import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
+import { useRouter } from 'next/router';
 
 const UserBar = observer(() => {
   const { user } = sessionStore;
+  const { asPath } = useRouter();
 
   return !user ? (
     <SessionBox>
@@ -18,6 +20,12 @@ const UserBar = observer(() => {
         <Button variant="success" className="my-2 my-md-0 me-3">
           创建黑客松活动
         </Button>
+      </Link>
+      <Link href={asPath} locale="en-US">
+        en-US
+      </Link>
+      <Link href={asPath} locale="zh-Hans">
+        zh-Hans
       </Link>
       <Dropdown className="my-2 my-md-0">
         <Dropdown.Toggle>{user.nickname}</Dropdown.Toggle>
