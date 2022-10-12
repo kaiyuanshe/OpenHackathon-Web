@@ -8,6 +8,7 @@ import { StaffModel } from './Staff';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
+import { MessageModel } from './Message';
 
 export interface Activity extends Base {
   name: string;
@@ -65,6 +66,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentStaff?: StaffModel;
   currentAward?: AwardModel;
   currentEnrollment?: EnrollmentModel;
+  currentMessage?:MessageModel;
   currentTeam?: TeamModel;
 
   staffOf(name = this.currentOne.name) {
@@ -77,6 +79,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   enrollmentOf(name = this.currentOne.name) {
     return (this.currentEnrollment = new EnrollmentModel(`hackathon/${name}`));
+  }
+
+  messageOf(name = this.currentOne.name) {
+    return (this.currentMessage = new MessageModel(`hackathon/${name}`));
   }
 
   teamOf(name = this.currentOne.name) {
