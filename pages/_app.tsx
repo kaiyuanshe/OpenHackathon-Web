@@ -5,7 +5,7 @@ import { Image } from 'react-bootstrap';
 import { MainNavigation } from '../components/layout/MainNavigation';
 import '../styles/globals.less';
 import { useTranslation } from 'react-i18next';
-import './i18n';
+import '../utils/i18n';
 
 export default function MyApp({
   router: { pathname },
