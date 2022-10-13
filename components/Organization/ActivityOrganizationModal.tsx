@@ -93,13 +93,11 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
                 aria-label="Default select example"
               >
                 {Object.entries(OrganizationTypeName).map(
-                  ([key, value], idx) => {
-                    return (
-                      <option key={idx + key} value={key}>
+                  ([key, value]) => (
+                      <option key={key} value={key}>
                         {value}
                       </option>
-                    );
-                  },
+                    ),
                 )}
               </Form.Select>
             </Form.Group>
