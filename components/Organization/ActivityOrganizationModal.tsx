@@ -109,22 +109,6 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
               required
             />
           </Form.Group>
-          {/* 名称和描述默认为组织名称 */}
-          {/*<Form.Group className="mt-2">*/}
-          {/*  <Form.Label htmlFor="LogoName">Logo 名称</Form.Label>*/}
-          {/*  <Form.Control id="LogoName" type="text" placeholder="请输入 Logo 名称" />*/}
-          {/*</Form.Group>*/}
-          {/*<Form.Group className="mt-2">*/}
-          {/*  <Form.Label htmlFor="Description">Logo 描述</Form.Label>*/}
-          {/*  <Form.Control id="Description" type="text" placeholder="请输入 Logo 描述" />*/}
-          {/*</Form.Group>*/}
-
-          {/* 后端未添加该属性 https://hackathon-api.kaiyuanshe.cn/swagger/index.html#operations-OpenHackathon-put_v2_hackathon__hackathonName__organizer */}
-          {/*<Form.Group className="mt-2">*/}
-          {/*  <Form.Label htmlFor="URL">URL</Form.Label>*/}
-          {/*  <Form.Control id="URL" type="text" placeholder="请输入 URL" />*/}
-          {/*</Form.Group>*/}
-
           <Modal.Footer>
             <Button variant="secondary" type="reset">
               取消
