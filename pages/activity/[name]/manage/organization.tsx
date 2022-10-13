@@ -65,7 +65,7 @@ export default class OrganizationPage extends PureComponent<
         <ListGroup.Item className="d-flex justify-content-between">
           合作伙伴
           <Badge className="ms-2" bg="secondary">
-            {allItems.length - (typeCount.host ? typeCount.host : 0)}
+            {allItems.length - (typeCount.host || 0)}
           </Badge>
         </ListGroup.Item>
       </ListGroup>
