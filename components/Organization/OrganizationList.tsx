@@ -65,6 +65,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                   onSelect &&
                   (({ currentTarget: { checked } }) => {
                     if (checked) return onSelect([...selectedIds, id]);
+
                     const index = selectedIds.indexOf(id);
 
                     onSelect([
