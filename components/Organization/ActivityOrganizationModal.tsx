@@ -60,8 +60,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
         <Modal.Header closeButton>
           <Modal.Title>增加主办方信息</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form
+        <Modal.Body as="form"
             ref={this.form}
             onSubmit={this.increaseId}
             onReset={this.handleReset}
