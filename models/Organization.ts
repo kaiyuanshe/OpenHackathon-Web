@@ -32,7 +32,6 @@ export interface Organization extends Base {
 
 export class OrganizationModel extends Stream<Organization>(ListModel) {
   client = sessionStore.client;
-  indexKey = 'id' as const;
 
   constructor(public baseURI: string) {
     super();
