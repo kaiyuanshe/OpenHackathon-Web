@@ -94,7 +94,7 @@ export default class OrganizationPage extends PureComponent<
                   <FontAwesomeIcon className="me-2" icon={faPlus} />
                   增加
                 </Button>
-                <Button variant="danger" type="submit" id="delete">
+                <Button variant="danger" type="submit">
                   <FontAwesomeIcon className="me-2" icon={faTrash} />
                   删除
                 </Button>
