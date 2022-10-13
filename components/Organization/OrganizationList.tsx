@@ -85,7 +85,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                   width="48"
                   src={logo?.uri}
                   alt={
-                    logo?.description === null ? description : logo.description
+                    logo?.description || description
                   }
                   title={logo?.name === null ? name : logo.name}
                 />
