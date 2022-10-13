@@ -59,7 +59,7 @@ export default class OrganizationPage extends PureComponent<
         <ListGroup.Item className="d-flex justify-content-between">
           主办方
           <Badge className="ms-2" bg="secondary">
-            {typeCount.host || typeCount.host}
+            {typeCount.host || 0}
           </Badge>
         </ListGroup.Item>
         <ListGroup.Item className="d-flex justify-content-between">
