@@ -101,12 +101,10 @@ export default class OrganizationPage extends PureComponent<
               </Col>
             </Col>
             <Col className="flex-fill">
-              <div>
                 <OrganizationList
                   store={store}
                   onSelect={list => (this.selectedIds = list)}
                 />
-              </div>
             </Col>
           </Row>
         </Form>
