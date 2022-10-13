@@ -26,12 +26,12 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { currentTarget } = event,
-      { store, onSave } = this.props;
+    const { store, onSave } = this.props;
+
     const { name, description, type, logoURI } =
       formToJSON<
         Pick<OrganizationForm, 'name' | 'description' | 'type' | 'logoURI'>
-      >(currentTarget);
+      >(event.currentTarget);
 
     await store.updateOne({
       name,
