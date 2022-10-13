@@ -56,8 +56,11 @@ export class OrganizationModel extends Stream<Organization>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne({ ...data }: NewData<Organization>) {
-    const { body } = await this.client.put<Organization>(this.baseURI, data);
+  async updateOne(data: NewData<Organization>, id?: IDType) {
+    const { body } = await (id
+        ? this.client.patch<Organization>(`${this.baseURI}/${id}`, data)
+        : this.client.put<Organization>(this.baseURI, data)
+    );
     return body!;
   }
 }
