@@ -5,26 +5,29 @@ import { computed } from 'mobx';
 import { groupBy } from 'web-utility';
 
 // Type of organizer. host:主办, organizer:承办，coorganzer:协办, sponsor:赞助, titleSponsor:冠名
-export const OrganizationTypeName = {
-  host: '主办',
-  organizer: '承办',
-  coorganizer: '协办',
-  sponsor: '赞助',
-  titleSponsor: '冠名',
-};
+import { Media } from './Base';
 
-interface OrganizationLogo {
-  name?: string;
-  description?: string;
-  uri: string;
+export enum OrganizationType {
+  Host = 'host'.
+  Organizer = 'organizer',
+  Coorganizer = 'coorganizer',
+  Sponsor = 'sponsor',
+  TitleSponsor = 'titleSponsor',
 }
 
+export const OrganizationTypeName = {
+  [OrganizationType.Host]: '主办',
+  [OrganizationType.Organizer]: '承办',
+  [OrganizationType.Coorganizer]: '协办',
+  [OrganizationType.Sponsor]: '赞助',
+  [OrganizationType.TitleSponsor]: '冠名',
+};
+
 export interface Organization extends Base {
-  id: string;
   name: string;
   description?: string;
-  type: 'host' | 'organizer' | 'coorganizer' | 'sponsor' | 'titleSponsor';
-  logo?: OrganizationLogo;
+  type: OrganizationType;
+  logo?: Media;
 }
 
 export class OrganizationModel extends Stream<Organization>(ListModel) {
