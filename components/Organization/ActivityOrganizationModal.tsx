@@ -131,7 +131,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
               <Button variant="secondary" type="reset">
                 取消
               </Button>
-              <Button variant="primary" type="submit" id="increase">
+              <Button variant="primary" type="submit">
                 保存
               </Button>
             </Modal.Footer>
