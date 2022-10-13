@@ -81,8 +81,8 @@ export default class OrganizationPage extends PureComponent<
         <PageHead title={`${name} 活动管理 主办方`} />
 
         <Form onSubmit={this.handleSubmit}>
-          <Row xs="1" sm="2">
-            <Col sm="auto" md="auto">
+          <Row xs={1} sm={2}>
+            <Col>
               {this.renderList()}
 
               <Col className="d-flex flex-column">
