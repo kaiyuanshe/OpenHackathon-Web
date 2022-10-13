@@ -22,7 +22,7 @@ interface OrganizationForm extends Organization {
 export class OrganizationModal extends PureComponent<OrganizationModalProps> {
   private form = createRef<HTMLFormElement>();
 
-  increaseId = async (event: FormEvent<HTMLFormElement>) => {
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -62,7 +62,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
         <Modal.Body
           as="form"
           ref={this.form}
-          onSubmit={this.increaseId}
+          onSubmit={this.handleSubmit}
           onReset={this.handleReset}
         >
           <Form.Group className="mt-2">
