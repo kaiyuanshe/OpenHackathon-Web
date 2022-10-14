@@ -79,8 +79,7 @@ export default class OrganizationPage extends PureComponent<
       { store, show } = this;
 
     return (
-      <ActivityManageFrame path={path} name={name}>
-        <PageHead title={`${name} 活动管理 主办方`} />
+      <ActivityManageFrame path={path} name={name} title="主办方管理">
 
         <Form onSubmit={this.handleSubmit}>
           <Row xs={1} sm={2}>
