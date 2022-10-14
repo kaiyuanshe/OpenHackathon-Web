@@ -1,15 +1,17 @@
-import { FormEvent, PureComponent } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import PageHead from '../../../../components/PageHead';
+import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import PageHead from '../../../../components/PageHead';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationList } from '../../../../components/Organization/OrganizationList';
-import activityStore from '../../../../models/Activity';
-import { observable } from 'mobx';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
+
+import activityStore from '../../../../models/Activity';
 
 export const getServerSideProps = async ({
   req,
