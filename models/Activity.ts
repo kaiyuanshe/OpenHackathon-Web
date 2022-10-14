@@ -8,6 +8,7 @@ import { StaffModel } from './Staff';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
+import { OrganizationModel } from './Organization';
 
 export interface Activity extends Base {
   name: string;
@@ -66,6 +67,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentAward?: AwardModel;
   currentEnrollment?: EnrollmentModel;
   currentTeam?: TeamModel;
+  currentOrganization?: OrganizationModel;
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));
@@ -81,6 +83,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   teamOf(name = this.currentOne.name) {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
+  }
+
+  organizationOf(name = this.currentOne.name) {
+    return (this.currentOrganization = new OrganizationModel(
+      `hackathon/${name}`,
+    ));
   }
 
   openStream({
@@ -122,6 +130,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.awardOf(name);
     this.enrollmentOf(name);
     this.teamOf(name);
+    this.organizationOf(name);
 
     return (this.currentOne = {
       ...data,
