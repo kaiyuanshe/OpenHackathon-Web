@@ -87,7 +87,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                   alt={
                     logo?.description || description
                   }
-                  title={logo?.name === null ? name : logo.name}
+                  title={logo?.name || name}
                 />
               )}
             </td>
