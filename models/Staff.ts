@@ -28,6 +28,7 @@ export const menus: MenuItem[] = [
         title: '报名用户',
         href: 'participant',
         icon: 'user',
+        list: [{ title: '报名统计', href: 'participant/statistic' }],
       },
       {
         title: '管理员',

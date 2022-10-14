@@ -1,38 +1,24 @@
+import { InferGetServerSidePropsType } from 'next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Row, Col, ListGroup, Form, Button } from 'react-bootstrap';
-import { GetServerSidePropsContext } from 'next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import PageHead from '../../../../components/PageHead';
 import { StaffList } from '../../../../components/User/StaffList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
+import { withRoute } from '../../../api/core';
 import activityStore from '../../../../models/Activity';
 
-interface AdministratorPageProps {
-  activity: string;
-  path: string;
-}
-
-export const getServerSideProps = ({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) =>
-  !name
-    ? {
-        notFound: true,
-        props: {} as AdministratorPageProps,
-      }
-    : {
-        props: { activity: name, path: req.url },
-      };
+export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
-class AdministratorPage extends PureComponent<AdministratorPageProps> {
-  store = activityStore.staffOf(this.props.activity);
+export default class AdministratorPage extends PureComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> {
+  store = activityStore.staffOf(this.props.route.params!.name + '');
 
   selectedIds: string[] = [];
 
@@ -81,13 +67,15 @@ class AdministratorPage extends PureComponent<AdministratorPageProps> {
   }
 
   render() {
-    const { activity, path } = this.props,
+    const { resolvedUrl, params } = this.props.route,
       { store, show } = this;
 
     return (
-      <ActivityManageFrame name={activity} path={path}>
-        <PageHead title={`${activity} 活动管理 管理员`} />
-
+      <ActivityManageFrame
+        name={params!.name}
+        path={resolvedUrl}
+        title="管理员"
+      >
         <Form onSubmit={this.handleSubmit}>
           <Row xs="1" sm="2">
             <Col sm="auto" md="auto">
@@ -127,5 +115,3 @@ class AdministratorPage extends PureComponent<AdministratorPageProps> {
     );
   }
 }
-
-export default AdministratorPage;
