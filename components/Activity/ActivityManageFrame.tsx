@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
-import { Breadcrumb, Nav } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -22,6 +22,7 @@ import {
 import { findDeep } from '../../utils/data';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
+import { MainBreadcrumb } from '../MainBreadcrumb';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import activityStore from '../../models/Activity';
@@ -105,34 +106,9 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
     );
   }
 
-  renderMain() {
-    const { children, name } = this.props,
-      { currentRoute } = this;
-
-    return (
-      <>
-        <Breadcrumb className="p-1 bg-light rounded">
-          {currentRoute.map(
-            ({ href = menus[0].list?.[0].href, title }, index, { length }) => (
-              <Breadcrumb.Item
-                className="mt-3"
-                key={title}
-                href={`/activity/${name}/manage/${href}`}
-                active={index + 1 === length}
-              >
-                {title}
-              </Breadcrumb.Item>
-            ),
-          )}
-        </Breadcrumb>
-        <div className="mt-3">{children}</div>
-      </>
-    );
-  }
-
   render() {
-    const { name, title } = this.props,
-      { authorized } = this;
+    const { authorized, currentRoute } = this,
+      { children, name, title } = this.props;
 
     return (
       <SessionBox
@@ -147,7 +123,8 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
             {this.renderNav()}
 
             <main className="h-100 flex-fill ms-3 overflow-auto">
-              {this.renderMain()}
+              <MainBreadcrumb currentRoute={currentRoute} />
+              <div className="mt-3">{children}</div>
             </main>
           </>
         ) : (

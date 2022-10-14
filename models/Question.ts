@@ -65,7 +65,7 @@ export const questions: Question[] = [
   },
   {
     title: '您是否愿意进行组队？',
-    options: ['是', '否，喜欢个人', '否，已有队伍'],
+    options: ['是', '否，喜欢个人', '否，已有团队'],
   },
   {
     title: '您介意新手加入您的团队？',
