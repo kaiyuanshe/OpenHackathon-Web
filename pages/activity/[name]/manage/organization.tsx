@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
@@ -6,28 +6,20 @@ import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationList } from '../../../../components/Organization/OrganizationList';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 
 import activityStore from '../../../../models/Activity';
+import { withRoute } from '../../../api/core';
 
-export const getServerSideProps = async ({
-  req,
-  params,
-}: GetServerSidePropsContext<{
-  name?: string;
-}>) =>
-  params?.name
-    ? { props: { path: req.url, name: params.name } }
-    : { notFound: true, props: {} as Record<'path' | 'name', string> };
+export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
 export default class OrganizationPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  store = activityStore.organizationOf(this.props.name);
+  store = activityStore.organizationOf(this.props.route.params!.name);
 
   selectedIds: string[] = [];
 
@@ -75,12 +67,16 @@ export default class OrganizationPage extends PureComponent<
   }
 
   render() {
-    const { path, name } = this.props,
+    const { resolvedUrl, params } = this.props.route,
       { store, show } = this;
+    const activity = params!.name;
 
     return (
-      <ActivityManageFrame path={path} name={name} title="主办方管理">
-
+      <ActivityManageFrame
+        name={activity}
+        path={resolvedUrl}
+        title="主办方管理"
+      >
         <Form onSubmit={this.handleSubmit}>
           <Row xs={1} sm={2}>
             <Col sm="auto" md="auto">
