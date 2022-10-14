@@ -38,7 +38,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
       type,
       logo: {
         name,
-        description,
+        description: description!,
         uri: logoURI,
       },
     });

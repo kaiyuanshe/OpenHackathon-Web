@@ -41,7 +41,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                 onSelect?.(
                   selectedIds.length === value.length
                     ? []
-                    : value.map(({ id }) => id),
+                    : value.map(({ id }) => String(id)),
                 )
               }
             />
@@ -60,13 +60,13 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                 inline
                 type="checkbox"
                 name="organizationId"
-                checked={selectedIds?.includes(id)}
+                checked={selectedIds?.includes(String(id))}
                 onClick={
                   onSelect &&
                   (({ currentTarget: { checked } }) => {
-                    if (checked) return onSelect([...selectedIds, id]);
+                    if (checked) return onSelect([...selectedIds, String(id)]);
 
-                    const index = selectedIds.indexOf(id);
+                    const index = selectedIds.indexOf(String(id));
 
                     onSelect([
                       ...selectedIds.slice(0, index),
@@ -84,9 +84,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
                 <Image
                   width="48"
                   src={logo?.uri}
-                  alt={
-                    logo?.description || description
-                  }
+                  alt={logo?.description || description}
                   title={logo?.name || name}
                 />
               )}
