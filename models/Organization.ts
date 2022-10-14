@@ -1,11 +1,9 @@
-import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
-import sessionStore from './Session';
-import { Base, createListStream } from './Base';
-import { computed } from 'mobx';
 import { groupBy } from 'web-utility';
+import { computed } from 'mobx';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 
-// Type of organizer. host:主办, organizer:承办，coorganzer:协办, sponsor:赞助, titleSponsor:冠名
-import { Media } from './Base';
+import { Base, Media, createListStream } from './Base';
+import sessionStore from './Session';
 
 export enum OrganizationType {
   Host = 'host'.
