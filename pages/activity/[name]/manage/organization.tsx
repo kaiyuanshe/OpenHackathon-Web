@@ -83,7 +83,7 @@ export default class OrganizationPage extends PureComponent<
 
         <Form onSubmit={this.handleSubmit}>
           <Row xs={1} sm={2}>
-            <Col>
+            <Col sm="auto" md="auto">
               {this.renderList()}
 
               <Col className="d-flex flex-column">
@@ -102,10 +102,10 @@ export default class OrganizationPage extends PureComponent<
               </Col>
             </Col>
             <Col className="flex-fill">
-                <OrganizationList
-                  store={store}
-                  onSelect={list => (this.selectedIds = list)}
-                />
+              <OrganizationList
+                store={store}
+                onSelect={list => (this.selectedIds = list)}
+              />
             </Col>
           </Row>
         </Form>
