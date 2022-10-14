@@ -6,7 +6,7 @@ import { Base, Media, createListStream } from './Base';
 import sessionStore from './Session';
 
 export enum OrganizationType {
-  Host = 'host'.
+  Host = 'host',
   Organizer = 'organizer',
   Coorganizer = 'coorganizer',
   Sponsor = 'sponsor',
@@ -56,9 +56,8 @@ export class OrganizationModel extends Stream<Organization>(ListModel) {
   @toggle('uploading')
   async updateOne(data: NewData<Organization>, id?: IDType) {
     const { body } = await (id
-        ? this.client.patch<Organization>(`${this.baseURI}/${id}`, data)
-        : this.client.put<Organization>(this.baseURI, data)
-    );
+      ? this.client.patch<Organization>(`${this.baseURI}/${id}`, data)
+      : this.client.put<Organization>(this.baseURI, data));
     return body!;
   }
 }
