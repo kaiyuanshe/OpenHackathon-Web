@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
+import { Form, Image, Table } from 'react-bootstrap';
+
+import { ScrollList, ScrollListProps } from '../ScrollList';
+import styles from '../../styles/Table.module.less';
 import {
   Organization,
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
-import { ScrollList, ScrollListProps } from '../ScrollList';
-import { Form, Image, Table } from 'react-bootstrap';
-import styles from '../../styles/Table.module.less';
 
 export interface OrganizationListProps extends ScrollListProps<Organization> {
   store: OrganizationModel;
