@@ -6,7 +6,7 @@ import type {
 import { Container, Row, Col, Card, Tabs, Tab, Button } from 'react-bootstrap';
 import { observer } from 'mobx-react';
 import { Icon } from 'idea-react';
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { formToJSON } from 'web-utility';
 
 import PageHead from '../../../../../components/PageHead';
@@ -77,6 +77,7 @@ export default class TeamPage extends PureComponent<
   @observable
   isShowJoinReqModal = false;
 
+  @computed
   get currentRoute() {
     const {
       activity: { displayName: hackathonDisplayName },
@@ -91,6 +92,24 @@ export default class TeamPage extends PureComponent<
         title: displayName,
       },
     ];
+  }
+
+  @computed
+  get isShowJoinTeamBtn() {
+    const now = Date.now(),
+      { eventStartedAt, eventEndedAt } = this.props.activity,
+      { currentEnrollment, currentTeam } = activityStore;
+    return (
+      now > +new Date(eventStartedAt) &&
+      now < +new Date(eventEndedAt) &&
+      currentEnrollment?.sessionOne?.status === 'approved' &&
+      !currentTeam?.sessionOne
+    );
+  }
+
+  @computed
+  get isShowLeaveTeamBtn() {
+    return activityStore.currentTeam?.sessionOne?.id === this.props.team.id;
   }
 
   handleJoinTeam = async (event: FormEvent<HTMLFormElement>) => {
@@ -116,6 +135,7 @@ export default class TeamPage extends PureComponent<
 
   async componentDidMount() {
     if (isServer()) return;
+
     const { name } = this.props.activity,
       { user } = sessionStore;
 
@@ -140,36 +160,22 @@ export default class TeamPage extends PureComponent<
   }
 
   render() {
-    const {
-      activity: {
-        displayName: hackathonDisplayName,
-        eventStartedAt,
-        eventEndedAt,
-      },
-      team: {
+    const hackathonDisplayName = this.props.activity.displayName,
+      {
         id,
         hackathonName,
         displayName,
         description,
         creator: { photo },
-      },
-      teamMemberList,
-      teamWorkList,
-    } = this.props;
-
-    const now = Date.now(),
-      eventStarted = new Date(eventStartedAt),
-      eventEnded = new Date(eventEndedAt),
-      { status } = activityStore?.currentEnrollment?.sessionOne || {},
-      { sessionOne } = activityStore.currentTeam || {},
-      isShowJoinTeamBtn =
-        now > +eventStarted &&
-        now < +eventEnded &&
-        status === 'approved' &&
-        !sessionOne,
-      isShowLeaveTeamBtn = sessionOne && sessionOne.id === id;
-
-    const { currentRoute, isShowJoinReqModal, handleJoinTeam } = this;
+      } = this.props.team,
+      { teamMemberList, teamWorkList } = this.props,
+      {
+        currentRoute,
+        isShowJoinReqModal,
+        handleJoinTeam,
+        isShowJoinTeamBtn,
+        isShowLeaveTeamBtn,
+      } = this;
 
     return (
       <Container as="main">

@@ -84,11 +84,7 @@ export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> 
                       onChange={({ currentTarget: { value } }) =>
                         onApprove?.(userId, value as MembershipStatus)
                       }
-                      defaultValue={
-                        Object.entries(StatusName).filter(
-                          ([key, _]) => key === status,
-                        )[0][0]
-                      }
+                      defaultValue={status}
                     >
                       {Object.entries(StatusName).map(([key, value]) => (
                         <option key={key} value={key}>

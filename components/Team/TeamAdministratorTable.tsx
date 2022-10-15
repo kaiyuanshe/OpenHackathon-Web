@@ -94,9 +94,10 @@ export class TeamAdministratorTable extends ScrollList<TeamAdministratorTablePro
                         onChange={({ currentTarget: { value } }) =>
                           onUpdateRole?.(userId, value as TeamMember['role'])
                         }
+                        defaultValue={role}
                       >
                         {Object.entries(RoleName).map(([key, value]) => (
-                          <option key={key} value={key} selected={key === role}>
+                          <option key={key} value={key}>
                             {value}
                           </option>
                         ))}
