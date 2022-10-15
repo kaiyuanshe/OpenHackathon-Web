@@ -24,6 +24,12 @@ import { findDeep } from '../../utils/data';
 
 library.add(faTrophy, faUser, faUserSecret);
 
+export interface TeamManageBaseRouterProps {
+  path: string;
+  name: string;
+  tid: string;
+}
+
 export interface TeamManageFrameProps extends ActivityManageFrameProps {
   tid: string;
 }

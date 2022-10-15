@@ -3,17 +3,7 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Tabs,
-  Tab,
-  Button,
-  Modal,
-  Form,
-} from 'react-bootstrap';
+import { Container, Row, Col, Card, Tabs, Tab, Button } from 'react-bootstrap';
 import { observer } from 'mobx-react';
 import { Icon } from 'idea-react';
 import { observable } from 'mobx';
@@ -22,6 +12,9 @@ import { formToJSON } from 'web-utility';
 import PageHead from '../../../../../components/PageHead';
 import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
+import { CommentBox } from '../../../../../components/CommentBox';
+import { MainBreadcrumb } from '../../../../../components/MainBreadcrumb';
+import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import activityStore, { Activity } from '../../../../../models/Activity';
 import {
   Team,
@@ -32,8 +25,6 @@ import {
 } from '../../../../../models/Team';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import sessionStore from '../../../../../models/Session';
-import { CommentBox } from '../../../../../components/CommentBox';
-import { MainBreadcrumb } from '../../../../../components/MainBreadcrumb';
 
 interface TeamPageProps {
   activity: Activity;
@@ -85,6 +76,22 @@ export default class TeamPage extends PureComponent<
 
   @observable
   isShowJoinReqModal = false;
+
+  get currentRoute() {
+    const {
+      activity: { displayName: hackathonDisplayName },
+      team: { hackathonName, displayName },
+    } = this.props;
+    return [
+      {
+        title: hackathonDisplayName,
+        href: `/activity/${hackathonName}`,
+      },
+      {
+        title: displayName,
+      },
+    ];
+  }
 
   handleJoinTeam = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -162,16 +169,7 @@ export default class TeamPage extends PureComponent<
         !sessionOne,
       isShowLeaveTeamBtn = sessionOne && sessionOne.id === id;
 
-    const currentRoute = [
-        {
-          title: hackathonDisplayName,
-          href: `/activity/${hackathonName}`,
-        },
-        {
-          title: displayName,
-        },
-      ],
-      { isShowJoinReqModal, handleJoinTeam } = this;
+    const { currentRoute, isShowJoinReqModal, handleJoinTeam } = this;
 
     return (
       <Container as="main">
@@ -249,34 +247,11 @@ export default class TeamPage extends PureComponent<
         </Row>
         <CommentBox />
 
-        <Modal
+        <JoinTeamModal
           show={isShowJoinReqModal}
           onHide={() => (this.isShowJoinReqModal = false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>加入团队</Modal.Title>
-          </Modal.Header>
-          <Modal.Body as="form" onSubmit={handleJoinTeam}>
-            <Form.Group className="mb-3" controlId="description">
-              <Form.Label column sm={12}>
-                备注
-              </Form.Label>
-              <Col sm={12}>
-                <Form.Control
-                  as="textarea"
-                  name="description"
-                  maxLength={512}
-                  rows={3}
-                  placeholder="可输入备注信息，以便团队管理员更快通过审核。"
-                />
-              </Col>
-            </Form.Group>
-
-            <Button className="w-100" variant="primary" type="submit">
-              发送
-            </Button>
-          </Modal.Body>
-        </Modal>
+          onSubmit={handleJoinTeam}
+        />
       </Container>
     );
   }

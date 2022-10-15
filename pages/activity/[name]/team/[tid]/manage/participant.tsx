@@ -1,43 +1,37 @@
 import { observer } from 'mobx-react';
-import { GetServerSidePropsContext } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
 
-import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
+import {
+  TeamManageBaseRouterProps,
+  TeamManageFrame,
+} from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTable } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
+import { withRoute } from '../../../../../api/core';
 
-interface TeamParticipantPageProps {
-  activity: string;
-  path: string;
-  teamId: string;
-}
+export interface TeamParticipantPageProps extends TeamManageBaseRouterProps {}
 
-export const getServerSideProps = ({
-  params: { name, tid } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string; tid?: string }>) =>
-  !name || !tid
-    ? {
-        notFound: true,
-        props: {} as TeamParticipantPageProps,
-      }
-    : {
-        props: { activity: name, path: req.url, teamId: tid },
-      };
+export const getServerSideProps = withRoute<TeamParticipantPageProps>();
 
 @observer
-export default class TeamParticipantPage extends PureComponent<TeamParticipantPageProps> {
-  store = activityStore.teamOf(this.props.activity).memberOf(this.props.teamId);
+export default class TeamParticipantPage extends PureComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> {
+  store = activityStore
+    .teamOf(this.props.route.params!.name)
+    .memberOf(this.props.route.params!.tid);
 
   render() {
     const { store } = this;
-    const { activity, path, teamId } = this.props;
+    const { resolvedUrl, params } = this.props.route;
+    const { name, tid } = params!;
 
     return (
       <TeamManageFrame
-        name={activity}
-        tid={teamId}
-        path={path}
+        name={name}
+        tid={tid}
+        path={resolvedUrl}
         title="团队报名"
       >
         <TeamParticipantTable store={store} />

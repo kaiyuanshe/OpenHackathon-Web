@@ -36,10 +36,8 @@ export interface TeamFilter extends Filter<Team> {
   search?: string;
 }
 
-export interface TeamMemberFilter extends Filter<TeamMember> {
-  role?: 'admin' | 'member';
-  status?: MembershipStatus;
-}
+export type TeamMemberFilter = Filter<TeamMember> &
+  Partial<Pick<TeamMember, 'role' | 'status'>>;
 
 export interface TeamWork
   extends Base,
@@ -57,8 +55,7 @@ export interface TeamMember
   status: MembershipStatus;
 }
 
-export interface JoinTeamReqBody {
-  role?: 'admin' | 'member';
+export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
   description?: string;
 }
 
@@ -177,7 +174,7 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
 
   @toggle('uploading')
   leaveTeam() {
-    return this.client.delete(`${this.baseURI}`);
+    return this.client.delete(this.baseURI);
   }
 
   @toggle('uploading')
