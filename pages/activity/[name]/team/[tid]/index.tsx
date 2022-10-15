@@ -77,7 +77,6 @@ export default class TeamPage extends PureComponent<
   @observable
   isShowJoinReqModal = false;
 
-  @computed
   get currentRoute() {
     const {
       activity: { displayName: hackathonDisplayName },
