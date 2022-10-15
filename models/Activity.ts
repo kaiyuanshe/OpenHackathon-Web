@@ -1,5 +1,5 @@
 import { buildURLData } from 'web-utility';
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, Media, createListStream } from './Base';
@@ -57,6 +57,10 @@ export interface ActivityFilter extends Filter<Activity> {
   listType?: ActivityListType;
 }
 
+export interface ActivityLogsFilter extends Filter<Activity> {
+  name: string;
+}
+
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'hackathon';
@@ -65,7 +69,9 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   currentStaff?: StaffModel;
   currentAward?: AwardModel;
+  @observable
   currentEnrollment?: EnrollmentModel;
+  @observable
   currentTeam?: TeamModel;
   currentOrganization?: OrganizationModel;
 
