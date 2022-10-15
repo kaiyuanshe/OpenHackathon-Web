@@ -33,7 +33,6 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
     if (max && values.length >= max) return;
 
     for (let file of files) {
-      console.log(file);
       const fileUrl = await sessionStore.uploadFile(file);
       values.push(fileUrl);
     }

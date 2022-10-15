@@ -82,6 +82,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   teamOf(name = this.currentOne.name) {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
   }
+
   openStream({
     userId,
     listType = 'online',

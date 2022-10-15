@@ -1,11 +1,10 @@
 import PageHead from '../../../../../../components/PageHead';
-import WorkCreate from '../../../../../../components/work/WorkCreate';
+import WorkEdit from '../../../../../../components/work/WorkEdit';
 
 const createActivity = () => (
   <>
     <PageHead title="创建作品" />
-
-    <WorkCreate />
+    <WorkEdit />
   </>
 );
 

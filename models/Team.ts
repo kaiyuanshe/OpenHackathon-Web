@@ -161,6 +161,7 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
       count => (this.totalCount = count),
     );
   }
+
   @toggle('uploading')
   async updateOne(data: NewData<TeamWork>, id?: string) {
     const { body } = await (id
