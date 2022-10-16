@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Button, Form, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 import { ScrollListProps, ScrollList } from './ScrollList';
 import styles from '../styles/participant.module.less';
@@ -7,31 +7,24 @@ import activityStore from '../models/Activity';
 import { Message } from '../models/Message';
 
 export interface MessageListProps extends ScrollListProps<Message> {
-    activity: string;
-    createdAt: string;
-    updatedAt: string;
-    hackathonName: string;
-    id: string;
-    title: string;
-    content: string;
+  activity: string;
 }
 @observer
-export class MessageList extends ScrollList<MessageListProps>{
-    store = activityStore.messageOf(this.props.activity);
-    
+export class MessageList extends ScrollList<MessageListProps> {
+  store = activityStore.messageOf(this.props.activity);
 
-  static Layout = ({ value = [], hackathonName,title,content }: MessageListProps) => (
+  static Layout = ({ value = [] }: MessageListProps) => (
     <Table className={styles['container-table']}>
       <thead>
         <tr>
           <th>#</th>
           <th>公告名称</th>
-           <th>链接</th>
-           <th>类型</th>
+          <th>链接</th>
+          <th>类型</th>
         </tr>
       </thead>
       <tbody>
-        {value.map(({ id,hackathonName, title, content }, index) => (
+        {value.map(({ id, hackathonName, title, content }, index) => (
           <tr key={id}>
             <td>{index + 1}</td>
             <td>{hackathonName}</td>

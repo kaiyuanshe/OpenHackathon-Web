@@ -1,39 +1,24 @@
-
-import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { FormEvent, PureComponent } from 'react';
-import { observer } from 'mobx-react';
-import { observable } from 'mobx';
-import { Message } from '../../../../models/Message';
-import { MessageList } from '../../../../components/MessageList';
-import { GetServerSidePropsContext } from 'next';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FormEvent, PureComponent } from 'react';
+import { observer } from 'mobx-react';
+import { observable } from 'mobx';
+import { InferGetServerSidePropsType } from 'next';
+
+import { MessageList } from '../../../../components/MessageList';
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
+import { Message } from '../../../../models/Message';
 import activityStore from '../../../../models/Activity';
+import { withRoute } from '../../../api/core';
 
-
-interface ActivityMessageProps {
-  activity: string;
-  path: string;
-}
-
-export function getServerSideProps({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) {
-  return !name
-    ? {
-      notFound: true,
-      props: {} as ActivityMessageProps,
-    }
-    : {
-      props: { activity: name, path: req.url },
-    };
-}
+export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
-export default class MessageListPage extends PureComponent<ActivityMessageProps> {
-  store = activityStore.staffOf(this.props.activity);
+export default class MessageListPage extends PureComponent<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> {
+  store = activityStore.messageOf(this.props.route.params!.name);
 
   @observable
   extensions?: Message;
@@ -57,11 +42,11 @@ export default class MessageListPage extends PureComponent<ActivityMessageProps>
   };
 
   render() {
-    const { activity, path } = this.props;
+    const basePath = this.store.baseURI;
+    const activity = this.props.route.params!.name;
 
     return (
-      <ActivityManageFrame name={activity} path={path}>
-
+      <ActivityManageFrame name={activity} path={basePath} title="公告管理">
         <Button
           variant="success"
           className="my-3"
@@ -74,10 +59,8 @@ export default class MessageListPage extends PureComponent<ActivityMessageProps>
           <FontAwesomeIcon className="me-2" icon={faTrash} />
           删除
         </Button>
-        <MessageList
-          activity={activity} />
-
-      </ActivityManageFrame >
+        <MessageList activity={activity} />
+      </ActivityManageFrame>
     );
   }
 }

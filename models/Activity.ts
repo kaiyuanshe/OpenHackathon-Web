@@ -72,7 +72,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentAward?: AwardModel;
   @observable
   currentEnrollment?: EnrollmentModel;
-  currentMessage?:MessageModel;
+  currentMessage?: MessageModel;
   @observable
   currentTeam?: TeamModel;
   currentOrganization?: OrganizationModel;
