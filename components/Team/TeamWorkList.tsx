@@ -22,13 +22,24 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
+  onSearch?: (id: string) => void;
 }
 
 @observer
 export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
-
-  static Layout = ({ value = [], size, activity, team }: TeamWorkListProps) => (
+  extraProps: any = {
+    onDelete: id => {
+      this.store.deleteOne(id);
+    },
+  };
+  static Layout = ({
+    value = [],
+    size,
+    onDelete,
+    activity,
+    team,
+  }: TeamWorkListProps) => (
     <Accordion>
       <Link href={`/activity/${activity}/team/${team}/work/create`}>
         <Button variant="success" className="me-3 mb-2">
@@ -56,14 +67,32 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                   <Link
                     href={`/activity/${activity}/team/${team}/work/${id}/edit`}
                   >
-                    <span>{title}</span>
+                    <a>{title}</a>
                   </Link>
                 </Card.Title>
                 <Row className="border-bottom py-2 g-4">
                   <span className="text-muted text-truncate">
-                    {' '}
                     {description}
                   </span>
+                </Row>
+                <Row className="border-bottom py-2 g-4">
+                  {type === TeamWorkType.IMAGE ? (
+                    <Image src={url} className="mw-100" alt={title} />
+                  ) : type === TeamWorkType.VIDEO ? (
+                    <Ratio aspectRatio="16x9">
+                      <video controls width="250" src={url} />
+                    </Ratio>
+                  ) : (
+                    <a
+                      className="text-primary"
+                      target="_blank"
+                      href={url}
+                      title="查看作品"
+                      rel="noreferrer"
+                    >
+                      查看作品
+                    </a>
+                  )}
                 </Row>
                 <Row as="small" className="border-bottom py-2 g-4">
                   <Col className="text-truncate" title="更新时间">
@@ -75,6 +104,15 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                   </Col>
                 </Row>
               </Card.Body>
+              <Card.Footer>
+                <Button
+                  className="w-100 mt-2"
+                  variant="danger"
+                  onClick={() => onDelete(id)}
+                >
+                  删除
+                </Button>
+              </Card.Footer>
             </Card>
           </Col>
         ))}
