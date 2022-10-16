@@ -1,9 +1,9 @@
-import { FormEvent, PureComponent } from 'react';
+import { FormEvent, MouseEventHandler, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import activityStore from '../../models/Activity';
-import { TeamWork, TeamWorkModel } from '../../models/Team';
+import { TeamWork } from '../../models/Team';
 import { NextRouter, withRouter } from 'next/router';
 import { FileUpload } from '../FileUpload';
 const workTypes = [
@@ -37,13 +37,13 @@ const workTypes = [
   },
 ];
 class WorkEdit extends PureComponent<{
-  work: TeamWork;
+  work?: TeamWork;
   router: NextRouter | any;
 }> {
   store = activityStore
     .teamOf(this.props.router.query.name)
     .workOf(this.props.router.query.tid);
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = { work: props.work || { type: 'website' } };
   }
@@ -56,11 +56,12 @@ class WorkEdit extends PureComponent<{
       `/activity/${this.props.router.query.name}/team/${this.props.router.query.tid}`,
     );
   };
-  changeWorkType = e => {
-    this.setState({ work: { ...this.props.work, type: e.target.value } });
+  changeWorkType = (event: FormEvent<HTMLInputElement>) => {
+    const value = (event.target as HTMLInputElement).value;
+    this.setState({ work: { ...this.props.work, type: value } });
   };
   render = () => {
-    const { work } = this.state;
+    const { work } = this.state as { work: TeamWork };
     return (
       <Container>
         <h2 className="text-center">编辑作品</h2>
