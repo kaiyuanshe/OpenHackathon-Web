@@ -15,7 +15,7 @@ const UserBar = observer(() => {
   const { user } = sessionStore;
   const { asPath } = useRouter();
   const { i18n } = useTranslation();
-  const changeLanguage = language => {
+  const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
     localStorage.language = language;
   };
