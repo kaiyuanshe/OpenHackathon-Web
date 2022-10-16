@@ -22,14 +22,15 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
-  onSearch?: (id: string) => void;
+  onDelete?: (id: any) => void;
 }
 
 @observer
 export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
-  extraProps: any = {
-    onDelete: id => {
+  extraProps: Partial<TeamWorkListProps> = {
+    onDelete: (id: any) => {
+      if (!id) return;
       this.store.deleteOne(id);
     },
   };
@@ -108,7 +109,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                 <Button
                   className="w-100 mt-2"
                   variant="danger"
-                  onClick={() => onDelete(id)}
+                  onClick={() => onDelete?.(id)}
                 >
                   删除
                 </Button>
