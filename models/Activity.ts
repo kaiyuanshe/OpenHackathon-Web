@@ -143,6 +143,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.enrollmentOf(name);
     this.teamOf(name);
     this.organizationOf(name);
+    this.messageOf(name);
 
     return (this.currentOne = {
       ...data,

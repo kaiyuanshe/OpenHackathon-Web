@@ -33,9 +33,6 @@ export const MainNavigation = () => (
           <Link href="https://github.com/kaiyuanshe/OpenHackathon-Web" passHref>
             <Nav.Link target="_blank">开源代码</Nav.Link>
           </Link>
-          <Link href="/notice/" passHref>
-            <Nav.Link>公告</Nav.Link>
-          </Link>
         </Nav>
 
         <UserBar />

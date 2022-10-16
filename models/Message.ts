@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { ListModel, Stream } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter } from './Base';
@@ -16,7 +16,7 @@ export interface Message extends Base {
 
 export type MessageFilter = Filter<Message>;
 
-export class MessageModel extends Stream<Message,MessageFilter>(ListModel) {
+export class MessageModel extends Stream<Message, MessageFilter>(ListModel) {
   client = sessionStore.client;
   indexKey = "id" as const;
 
@@ -25,14 +25,31 @@ export class MessageModel extends Stream<Message,MessageFilter>(ListModel) {
 
   constructor(baseURI: string) {
     super();
-    this.baseURI = `${baseURI}`;
+    this.baseURI = `${baseURI}/announcements`;
   }
 
   openStream(filter: MessageFilter) {
     return createListStream<Message>(
-      `${this.baseURI}/announcements`,
+      `${this.baseURI}s?${buildURLData(filter)}`,
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+
+  @toggle('downloading')
+  async getSessionOne() {
+    const { body } = await this.client.get<Message>(this.baseURI);
+
+    return (this.sessionOne = body!);
+  }
+
+  @toggle('uploading')
+  async verifyOne(id: string) {
+    await this.client.post(
+      `${this.baseURI}/${id}`,
+      {},
+    );
+    this.changeOne({}, id, true);
   }
 }
