@@ -2,17 +2,18 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
 
+//Translate
+import '../utils/i18n';
+import { t } from 'i18next';
+
 import { MainNavigation } from '../components/layout/MainNavigation';
 import '../styles/globals.less';
-import { useTranslation } from 'react-i18next';
-import '../utils/i18n';
 
 export default function MyApp({
   router: { pathname },
   Component,
   pageProps,
 }: AppProps) {
-  const { t } = useTranslation();
   return (
     <>
       <Head>
@@ -38,7 +39,6 @@ export default function MyApp({
               <Image src="/nextjs.png" alt="Next Logo" width={48} />
             </span>
             idea2app 脚手架强力驱动
-            {t('title')}
           </a>
         </footer>
       )}

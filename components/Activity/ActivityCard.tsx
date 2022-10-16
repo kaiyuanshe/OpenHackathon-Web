@@ -12,6 +12,7 @@ import { convertDatetime } from '../../utils/time';
 import { Activity } from '../../models/Activity';
 import { ActivityEntry } from './ActivityEntry';
 import { ActivityControlProps, ActivityControl } from './ActivityControl';
+import { t } from 'i18next';
 
 export interface ActivityCardProps extends Activity, ActivityControlProps {
   className?: string;
@@ -62,7 +63,9 @@ export function ActivityCard({
       <Card.Footer>
         <Row as="small" className="text-muted g-4" xs={1} sm={2}>
           <Col></Col>
-          <Col className="text-end">{enrollment}人已报名</Col>
+          <Col className="text-end">
+            {enrollment} {t('people_registered')}
+          </Col>
         </Row>
 
         {controls ? (

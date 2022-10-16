@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en from '../locale/en.json';
-import zh from '../locale/zh.json';
+import en from '../locale/en-US.json';
+import zh from '../locale/zh-Hans.json';
 
 i18n.use(initReactI18next).init({
   // we init with resources
@@ -13,6 +13,7 @@ i18n.use(initReactI18next).init({
       translations: zh,
     },
   },
+  lng: 'en-US',
   fallbackLng: 'zh-Hans',
   debug: true,
 
@@ -26,5 +27,3 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
 });
-
-export default i18n;
