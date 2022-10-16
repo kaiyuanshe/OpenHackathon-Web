@@ -12,6 +12,7 @@ export interface MenuItem {
   href?: string;
   icon?: IconProp;
   list?: MenuItem[];
+  roles?: Staff['type'][];
 }
 
 export const menus: MenuItem[] = [
@@ -27,6 +28,7 @@ export const menus: MenuItem[] = [
         title: '报名用户',
         href: 'participant',
         icon: 'user',
+        list: [{ title: '报名统计', href: 'participant/statistic' }],
       },
       {
         title: '管理员',
@@ -37,6 +39,12 @@ export const menus: MenuItem[] = [
         title: '奖项设置',
         href: 'award',
         icon: 'trophy',
+      },
+      {
+        title: '参赛团队',
+        href: 'team',
+        icon: 'people-group',
+        roles: ['judge'],
       },
       {
         title: '作品评奖',
@@ -77,8 +85,34 @@ export const menus: MenuItem[] = [
   },
 ];
 
+export const activityTeamMenus: MenuItem[] = [
+  {
+    title: '团队管理',
+    list: [
+      // {
+      //   title: '编辑信息',
+      //   href: 'edit',
+      //   icon: 'trophy',
+      //   roles: ['admin']
+      // },
+      {
+        title: '团队报名',
+        href: 'participant',
+        icon: 'user',
+        roles: ['admin'],
+      },
+      {
+        title: '角色管理',
+        href: 'role',
+        icon: 'user-secret',
+        roles: ['admin'],
+      },
+    ],
+  },
+];
+
 export interface Staff extends Base {
-  type: 'admin' | 'judge';
+  type: 'admin' | 'judge' | 'member';
   hackathonName: string;
   userId: string;
   user: User;

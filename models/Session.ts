@@ -1,3 +1,4 @@
+import { buildURLData } from 'web-utility';
 import { observable } from 'mobx';
 import { BaseModel, toggle } from 'mobx-restful';
 import { HTTPClient } from 'koajax';
@@ -49,6 +50,20 @@ export class SessionModel extends BaseModel {
     await uploadBlob(body!.uploadUrl, 'PUT', file, { 'Content-Type': type });
 
     return body!.url;
+  }
+
+  exportURLOf(
+    reportType: 'enrollments' | 'teams' | 'teamWorks',
+    baseURI: string,
+  ) {
+    const { client, user } = this;
+
+    return (
+      new URL(
+        `report?${buildURLData({ reportType, token: user?.token })}`,
+        `${client.baseURI}${baseURI}`,
+      ) + ''
+    );
   }
 }
 

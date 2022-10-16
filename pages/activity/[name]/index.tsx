@@ -3,14 +3,14 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
 import {
+  Button,
+  Carousel,
   Container,
-  Row,
   Col,
+  Image,
+  Row,
   Tabs,
   Tab,
-  Carousel,
-  Image,
-  Button,
 } from 'react-bootstrap';
 import { OpenMap } from 'idea-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,31 +22,30 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 
-import PageHead from '../../../components/PageHead';
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { CommentBox } from '../../../components/CommentBox';
+import PageHead from '../../../components/PageHead';
+import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
-
-import { convertDatetime } from '../../../utils/time';
-import { Media, isServer } from '../../../models/Base';
 import activityStore, { Activity } from '../../../models/Activity';
+import { Media, isServer } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
-import { Team } from '../../../models/Team';
+import { convertDatetime } from '../../../utils/time';
 
 export async function getServerSideProps({
   params: { name = '' } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
   try {
-    const activity = await activityStore.getOne(name),
-      teams = await activityStore.currentTeam!.getList();
+    const activity = await activityStore.getOne(name);
 
-    return { props: { activity, teams } };
+    return { props: { activity } };
   } catch (error) {
     console.error(error);
 
     return {
       notFound: true,
-      props: {} as { activity: Activity; teams: Team[] },
+      props: {} as { activity: Activity },
     };
   }
 }
@@ -62,6 +61,8 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  teamStore = activityStore.teamOf(this.props.activity.name);
+
   @observable
   showCreateTeam = false;
 
@@ -69,18 +70,19 @@ export default class ActivityPage extends PureComponent<
     if (isServer()) return;
 
     const { name } = this.props.activity;
+    try {
+      const { status } = await activityStore.enrollmentOf(name).getSessionOne();
 
-    const { status } = await activityStore.enrollmentOf(name).getSessionOne();
-
-    if (status === 'approved')
-      try {
-        await activityStore.teamOf(name).getSessionOne();
-      } catch {}
+      if (status === 'approved')
+        try {
+          await this.teamStore.getSessionOne();
+        } catch {}
+    } catch {}
   }
 
   renderMeta() {
     const { status } = activityStore.currentEnrollment?.sessionOne || {},
-      { sessionOne: myTeam } = activityStore.currentTeam || {},
+      { sessionOne: myTeam } = this.teamStore || {},
       {
         name,
         location,
@@ -94,10 +96,19 @@ export default class ActivityPage extends PureComponent<
 
     const now = Date.now(),
       enrollmentEnd = new Date(enrollmentEndedAt),
-      enrollmentStart = new Date(enrollmentStartedAt);
+      enrollmentStart = new Date(enrollmentStartedAt),
+      eventEnded = new Date(eventEndedAt),
+      eventStarted = new Date(eventStartedAt);
     const isShowSignupBtn =
-      (!status || ['none', 'reject'].includes(status)) && now < +enrollmentEnd;
+      now > +enrollmentStart &&
+      now < +enrollmentEnd &&
+      (!status || ['none', 'reject'].includes(status));
     const isDisableSignupBtn = now < +enrollmentStart;
+    const isShowCreateTeamBtn =
+      now > +eventStarted &&
+      now < +eventEnded &&
+      status === 'approved' &&
+      !myTeam;
 
     return (
       <>
@@ -165,7 +176,7 @@ export default class ActivityPage extends PureComponent<
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
               报名状态
             </Col>
-            <Col>{status && StatusName[status]}</Col>
+            <Col>{StatusName[status || 'none']}</Col>
           </Row>
         </ul>
         {isShowSignupBtn && (
@@ -176,8 +187,8 @@ export default class ActivityPage extends PureComponent<
             立即报名
           </Button>
         )}
-        {status === 'approved' && !myTeam && (
-          <Button onClick={() => (this.showCreateTeam = true)}>创建队伍</Button>
+        {isShowCreateTeamBtn && (
+          <Button onClick={() => (this.showCreateTeam = true)}>创建团队</Button>
         )}
       </>
     );
@@ -186,8 +197,8 @@ export default class ActivityPage extends PureComponent<
   render() {
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
-      { teams } = this.props,
-      { showCreateTeam } = this;
+      { showCreateTeam } = this,
+      myTeam = this.teamStore.sessionOne;
 
     return (
       <Container>
@@ -229,8 +240,20 @@ export default class ActivityPage extends PureComponent<
               <Tab className="pt-2" eventKey="update" title="最新动态">
                 <div className="h1 my-5 text-center">暂无消息</div>
               </Tab>
-              <Tab eventKey="team" title="所有团队" className="pt-2">
-                <TeamList activity={name} value={teams} />
+              <Tab eventKey="team" title="参赛团队" className="pt-2">
+                <h3>我的团队</h3>
+                {myTeam ? (
+                  <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
+                    <Col>
+                      <TeamCard {...myTeam} />
+                    </Col>
+                  </Row>
+                ) : (
+                  '暂未加入任何团队'
+                )}
+                <hr />
+                <h3>所有团队</h3>
+                <TeamList store={this.teamStore} />
               </Tab>
             </Tabs>
           </Col>
@@ -246,6 +269,8 @@ export default class ActivityPage extends PureComponent<
             </Col>
           )}
         </Row>
+
+        <CommentBox />
 
         <TeamCreateModal
           show={showCreateTeam}
