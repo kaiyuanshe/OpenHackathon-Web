@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
-import { Nav, Breadcrumb, Col } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -20,7 +20,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { findDeep } from '../../utils/data';
+import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
+import { MainBreadcrumb } from '../MainBreadcrumb';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import activityStore from '../../models/Activity';
@@ -40,6 +42,7 @@ library.add(
 );
 
 export interface ActivityManageFrameProps {
+  title: string;
   name: string;
   path?: string;
   menu?: MenuItem[];
@@ -51,12 +54,29 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
     activityStore.getOne(this.props.name);
   }
 
+  get currentRoute() {
+    const { path = '' } = this.props;
+
+    return findDeep(menus, 'list', ({ href }) => !!href && path.endsWith(href));
+  }
+
+  @computed
+  get authorized() {
+    const { roles: role } = activityStore.currentOne,
+      { currentRoute } = this;
+
+    return (
+      role?.isAdmin ||
+      (role?.isJudge && currentRoute.at(-1)?.roles?.includes('judge'))
+    );
+  }
+
   renderNav() {
     const { name, menu = menus } = this.props,
       { roles: role } = activityStore.currentOne;
 
     return (
-      <Nav className="flex-column px-2 border-end" variant="pills">
+      <Nav className="h-100 flex-column px-2 border-end" variant="pills">
         {menu.map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
@@ -70,7 +90,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
                     href={`/activity/${name}/manage/${href}`}
                     passHref
                   >
-                    <Nav.Link>
+                    <Nav.Link className="text-nowrap">
                       <FontAwesomeIcon
                         icon={icon}
                         className="text-primary ms-3 me-3"
@@ -86,63 +106,26 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
     );
   }
 
-  get currentRoute() {
-    const { path = '' } = this.props;
-
-    return findDeep(menus, 'list', ({ href }) => !!href && path.includes(href));
-  }
-
-  @computed
-  get authorized() {
-    const { roles: role } = activityStore.currentOne,
-      { currentRoute } = this;
-
-    return (
-      role?.isAdmin ||
-      (role?.isJudge && currentRoute.at(-1)?.roles?.includes('judge'))
-    );
-  }
-
-  renderMain() {
-    const { children } = this.props,
-      { currentRoute } = this;
-
-    return (
-      <>
-        <Breadcrumb className="p-1 bg-light rounded">
-          {currentRoute.map(({ href, title }, index, { length }) => (
-            <Breadcrumb.Item
-              className="mt-3"
-              key={title}
-              href={href}
-              active={index + 1 === length}
-            >
-              {title}
-            </Breadcrumb.Item>
-          ))}
-        </Breadcrumb>
-        <div className="mt-3">{children}</div>
-      </>
-    );
-  }
-
   render() {
-    const { authorized } = this;
+    const { authorized, currentRoute } = this,
+      { children, name, title } = this.props;
 
     return (
       <SessionBox
         auto
-        className={
-          authorized
-            ? 'row row-cols-xs-1 row-cols-md-2'
-            : 'vh-100 d-flex justify-content-center align-items-center'
-        }
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: 'calc(100vh - 3.5rem)' }}
       >
+        <PageHead title={`${title} - ${name} 活动管理`} />
+
         {authorized ? (
           <>
-            <Col md="auto">{this.renderNav()}</Col>
+            {this.renderNav()}
 
-            <Col className="flex-fill me-4">{this.renderMain()}</Col>
+            <main className="h-100 flex-fill ms-3 overflow-auto">
+              <MainBreadcrumb currentRoute={currentRoute} />
+              <div className="mt-3">{children}</div>
+            </main>
           </>
         ) : (
           <div className="display-3">暂无权限</div>

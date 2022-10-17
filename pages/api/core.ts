@@ -1,7 +1,15 @@
+import { ParsedUrlQuery } from 'querystring';
 import { HTTPError, Request, request as call } from 'koajax';
-import { NextApiRequest, NextApiResponse } from 'next';
+import {
+  NextApiRequest,
+  NextApiResponse,
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next';
 
-import { ErrorData } from '../../models/Base';
+import { ErrorBaseData } from '../../models/Base';
 
 /**
  * 上传blob文件
@@ -24,7 +32,7 @@ export async function uploadBlob<T = void>(
 
   if (!data || !('traceId' in data)) return data!;
 
-  const { status, title, detail } = data as unknown as ErrorData;
+  const { status, title, detail } = data as unknown as ErrorBaseData;
 
   throw new HTTPError(detail || title, {
     status,
@@ -50,5 +58,38 @@ export function safeAPI(handler: NextAPI): NextAPI {
         res.send(error.body);
       }
     }
+  };
+}
+
+interface RouteProps<T extends ParsedUrlQuery> {
+  route: Pick<
+    GetServerSidePropsContext<T>,
+    'resolvedUrl' | 'params' | 'query' | 'locales'
+  >;
+}
+
+export function withRoute<
+  R extends Record<string, any>,
+  P extends Record<string, any> = {},
+  O extends GetServerSideProps<P, R> = GetServerSideProps<P, R>,
+>(
+  origin?: O,
+): GetServerSideProps<RouteProps<R> & InferGetServerSidePropsType<O>, R> {
+  return async context => {
+    const options =
+        (await origin?.(context)) || ({} as GetServerSidePropsResult<{}>),
+      { resolvedUrl, params, query, locales } = context;
+
+    return {
+      ...options,
+      props: {
+        ...('props' in options ? options.props : {}),
+        route: JSON.parse(
+          JSON.stringify({ resolvedUrl, params, query, locales }),
+        ),
+      },
+    } as GetServerSidePropsResult<
+      RouteProps<R> & InferGetServerSidePropsType<O>
+    >;
   };
 }

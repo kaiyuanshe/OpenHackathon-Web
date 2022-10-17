@@ -115,13 +115,11 @@ export interface User extends AuthingSession {
   arn: null;
 }
 
-export interface TopUser {
+export interface TopUser extends Base {
   userId: string;
   user: User;
   rank: number;
   score: number;
-  createdAt: null;
-  updatedAt: null;
 }
 export interface UserFilter extends Filter<User> {
   keyword?: string;
@@ -131,20 +129,11 @@ export class UserModel extends Stream<User, UserFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'user';
 
-  // getUserTopList(){
-  //   return createListStream<TopUser>(
-  //     `${this.baseURI}/topUsers`,
-  //     this.client,
-  //     count => (this.totalCount = count),
-  //     'GET',
-  //   );
-  // }
   async getUserTopList() {
     const { body } = await this.client.get<ListData<TopUser>>(
       `${this.baseURI}/topUsers`,
     );
-    const { value } = body!;
-    return value;
+    return body!.value;
   }
 
   openStream({ keyword = 'x' }: UserFilter) {

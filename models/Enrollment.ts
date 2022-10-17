@@ -1,6 +1,6 @@
-import { buildURLData } from 'web-utility';
+import { groupBy, countBy, buildURLData } from 'web-utility';
 import { observable, computed } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Statistic, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, Filter, createListStream } from './Base';
 import { User } from './User';
@@ -16,6 +16,12 @@ export interface Enrollment extends Base {
 
 export type EnrollmentFilter = Filter<Enrollment>;
 
+export interface EnrollmentStatistic
+  extends Statistic<Enrollment>,
+    Statistic<Required<User>> {
+  extensions?: Record<string, Record<string, number>>;
+}
+
 export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
   ListModel,
 ) {
@@ -24,6 +30,9 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
 
   @observable
   sessionOne?: Enrollment;
+
+  @observable
+  statistic: EnrollmentStatistic = {};
 
   @computed
   get exportURL() {
@@ -59,5 +68,38 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
       {},
     );
     this.changeOne({ status }, userId, true);
+  }
+
+  async getStatistic() {
+    await this.countAll(['status']);
+
+    const { allItems } = this;
+
+    const questionGroup = groupBy(
+      allItems.map(({ extensions }) => extensions).flat(),
+      ({ name }) => name,
+    );
+    const extensions = Object.fromEntries(
+      Object.entries(questionGroup).map(([title, answers]) => {
+        const { _, ...data } = countBy(answers, ({ value }) =>
+          /https?:\/\//.test(value) ? '_' : value.split(','),
+        );
+        return [title, data];
+      }),
+    );
+    const createdAt = countBy(
+      allItems,
+      ({ createdAt }) => createdAt.split('T')[0],
+    );
+    const { _, ...city } = countBy(
+      allItems,
+      ({ user: { city } }) => city?.split(/\W+/)[0] || '_',
+    );
+    return (this.statistic = {
+      ...this.statistic,
+      createdAt,
+      city,
+      extensions,
+    });
   }
 }

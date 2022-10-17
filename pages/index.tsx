@@ -12,6 +12,7 @@ import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 export async function getServerSideProps() {
   const activities = await activityStore.getList({}, 1, 6);
   const topUsers = await userStore.getUserTopList();
+
   return { props: { activities, topUsers } };
 }
 
@@ -73,7 +74,7 @@ const HomePage = ({
       }}
     >
       <Container className="text-start">
-        <TopUserList.Layout value={topUsers} />
+        <TopUserList value={topUsers} />
       </Container>
     </div>
 
