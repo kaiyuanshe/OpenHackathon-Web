@@ -35,7 +35,7 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
               className={`shadow-lg overflow-hidden rounded-circle m-auto ${styles.imgBox}`}
             >
               <Image
-                className={'w-100'}
+                className="w-100"
                 src={user?.photo}
                 alt={
                   user?.nickname || user?.name || user?.username || '神秘黑客'
