@@ -1,5 +1,5 @@
 import { FC, FormEvent } from 'react';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import { Team } from '../models/Team';
 

@@ -1,13 +1,13 @@
-import { ParsedUrlQuery } from 'querystring';
 import { HTTPError, Request, request as call } from 'koajax';
 import {
-  NextApiRequest,
-  NextApiResponse,
+  GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  GetServerSideProps,
   InferGetServerSidePropsType,
+  NextApiRequest,
+  NextApiResponse,
 } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
 import { ErrorBaseData } from '../../models/Base';
 

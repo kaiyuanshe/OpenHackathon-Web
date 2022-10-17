@@ -1,14 +1,14 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { InferGetServerSidePropsType } from 'next';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import { EnrollmentList } from '../../../../../components/EnrollmentList';
-import { withRoute } from '../../../../api/core';
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
+import { withRoute } from '../../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

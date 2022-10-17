@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import { ActivityCardProps, ActivityCard } from './ActivityCard';
 import {
-  ActivityListType,
   Activity,
   ActivityFilter,
+  ActivityListType,
   ActivityModel,
 } from '../../models/Activity';
+import { ScrollList, ScrollListProps } from '../ScrollList';
+import { ActivityCard, ActivityCardProps } from './ActivityCard';
 
 export interface ActivityListProps
   extends ScrollListProps<Activity>,

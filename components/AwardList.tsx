@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react';
-import { Table, Button, Image } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { observer } from 'mobx-react';
+import { Button, Image, Table } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from './ScrollList';
-import styles from '../styles/Table.module.less';
 import activityStore from '../models/Activity';
 import { Award } from '../models/Award';
+import styles from '../styles/Table.module.less';
+import { ScrollList, ScrollListProps } from './ScrollList';
 
 export interface AwardListProps extends ScrollListProps<Award> {
   activity: string;

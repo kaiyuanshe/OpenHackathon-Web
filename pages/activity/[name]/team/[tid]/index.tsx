@@ -1,30 +1,30 @@
-import { FormEvent, PureComponent } from 'react';
+import { Icon } from 'idea-react';
+import { computed, observable } from 'mobx';
+import { observer } from 'mobx-react';
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
-import { Container, Row, Col, Card, Tabs, Tab, Button } from 'react-bootstrap';
-import { observer } from 'mobx-react';
-import { Icon } from 'idea-react';
-import { computed, observable } from 'mobx';
+import { FormEvent, PureComponent } from 'react';
+import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import PageHead from '../../../../../components/PageHead';
-import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
-import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import { CommentBox } from '../../../../../components/CommentBox';
 import { MainBreadcrumb } from '../../../../../components/MainBreadcrumb';
+import PageHead from '../../../../../components/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
+import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
+import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { Activity } from '../../../../../models/Activity';
-import {
-  Team,
-  TeamWork,
-  TeamMember,
-  JoinTeamReqBody,
-  MembershipStatus,
-} from '../../../../../models/Team';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import sessionStore from '../../../../../models/Session';
+import {
+  JoinTeamReqBody,
+  MembershipStatus,
+  Team,
+  TeamMember,
+  TeamWork,
+} from '../../../../../models/Team';
 
 interface TeamPageProps {
   activity: Activity;

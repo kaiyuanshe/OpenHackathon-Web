@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from './ScrollList';
-import styles from '../styles/participant.module.less';
 import activityStore from '../models/Activity';
 import { Enrollment } from '../models/Enrollment';
+import styles from '../styles/participant.module.less';
+import { ScrollList, ScrollListProps } from './ScrollList';
 
 export interface EnrollmentListProps extends ScrollListProps<Enrollment> {
   activity: string;

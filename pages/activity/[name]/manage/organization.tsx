@@ -1,15 +1,14 @@
-import { InferGetServerSidePropsType } from 'next';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { OrganizationList } from '../../../../components/Organization/OrganizationList';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
-
+import { OrganizationList } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 

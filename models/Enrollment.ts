@@ -1,10 +1,10 @@
-import { groupBy, countBy, buildURLData } from 'web-utility';
-import { observable, computed } from 'mobx';
-import { Statistic, ListModel, Stream, toggle } from 'mobx-restful';
+import { computed, observable } from 'mobx';
+import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
+import { buildURLData, countBy, groupBy } from 'web-utility';
 
-import { Base, Filter, createListStream } from './Base';
-import { User } from './User';
+import { Base, createListStream, Filter } from './Base';
 import sessionStore from './Session';
+import { User } from './User';
 
 export interface Enrollment extends Base {
   hackathonName: string;

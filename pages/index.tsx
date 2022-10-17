@@ -1,9 +1,9 @@
-import { Fragment } from 'react';
 import type { InferGetServerSidePropsType } from 'next';
-import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
+import { Fragment } from 'react';
+import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
-import PageHead from '../components/PageHead';
 import ActivityList from '../components/Activity/ActivityList';
+import PageHead from '../components/PageHead';
 import activityStore from '../models/Activity';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 

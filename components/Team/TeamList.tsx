@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
-import { Row, Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import { TeamCard } from './TeamCard';
 import { Team, TeamModel } from '../../models/Team';
+import { ScrollList, ScrollListProps } from '../ScrollList';
+import { TeamCard } from './TeamCard';
 
 export interface TeamListProps extends ScrollListProps<Team> {
   store: TeamModel;

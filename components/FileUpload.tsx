@@ -1,6 +1,6 @@
-import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 import { Icon } from 'idea-react';
 import style from 'idea-react/source/FilePicker/index.module.less';
+import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 
 import sessionStore from '../models/Session';
 

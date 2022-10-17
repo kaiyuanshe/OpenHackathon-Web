@@ -1,5 +1,5 @@
-import { NewData, RESTClient } from 'mobx-restful';
 import { HTTPError } from 'koajax';
+import { NewData, RESTClient } from 'mobx-restful';
 
 export interface Base {
   id?: string;
