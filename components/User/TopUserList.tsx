@@ -20,7 +20,7 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
         </div>
         <h3
           data-text="黑客馆"
-          className="position-relative m-auto mb-0  fw-bold text-center"
+          className="position-relative m-auto mb-0 fw-bold text-center"
         >
           黑客馆
         </h3>
