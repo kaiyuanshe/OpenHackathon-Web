@@ -70,7 +70,7 @@ const HomePage = ({
       className="my-5 text-center"
       style={{
         background: 'linear-gradient(#F8F9FA,#fff)',
-        marginTop: '-3rem!important',
+        marginTop: '-3rem',
       }}
     >
       <Container className="text-start">
