@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { FC, FormEvent } from 'react';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 
@@ -53,7 +54,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           type="radio"
           id="autoApprove-true"
           name="autoApprove"
-          label="是"
+          label={t('yes')}
           defaultChecked={!!team?.autoApprove}
           value={1}
         />
@@ -62,7 +63,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           type="radio"
           id="autoApprove-false"
           name="autoApprove"
-          label="否"
+          label={t('no')}
           defaultChecked={!team?.autoApprove}
           value={0}
         />
@@ -71,7 +72,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
 
     <Row>
       <Button variant="primary" type="submit" className="center">
-        提交
+        {t('submit')}
       </Button>
     </Row>
   </Form>

@@ -5,6 +5,7 @@ import { Component } from 'react';
 import { EdgePosition, ScrollBoundary, Loading } from 'idea-react';
 
 import { Base, Filter } from '../models/Base';
+import { t } from 'i18next';
 
 export interface ScrollListProps<T extends Base = Base> {
   value?: T[];
@@ -79,7 +80,7 @@ export abstract class ScrollList<
             }
           />
           <footer className="mt-4 text-center text-muted small">
-            {noMore || !allItems.length ? '没有更多' : '上拉加载更多……'}
+            {noMore || !allItems.length ? t('no_more') : '上拉加载更多……'}
           </footer>
         </div>
       </ScrollBoundary>

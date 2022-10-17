@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
+import { t } from 'i18next';
 import {
   Container,
   Row,
@@ -145,7 +146,7 @@ export default class ActivityPage extends PureComponent<
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
               <FontAwesomeIcon className="text-success me-2" icon={faUsers} />
-              报名人数
+              {t('registration_count')}
             </Col>
             <Col>{enrollment}</Col>
           </Row>
@@ -225,15 +226,15 @@ export default class ActivityPage extends PureComponent<
                 as="article"
                 className="pt-2"
                 eventKey="detail"
-                title="活动详情"
+                title={t('hackathon_detail')}
                 dangerouslySetInnerHTML={{ __html: detail }}
               >
                 {/*todo update no data*/}
               </Tab>
-              <Tab className="pt-2" eventKey="update" title="最新动态">
+              <Tab className="pt-2" eventKey="update" title={t('latest_news')}>
                 <div className="h1 my-5 text-center">暂无消息</div>
               </Tab>
-              <Tab eventKey="team" title="所有团队" className="pt-2">
+              <Tab eventKey="team" title={t('all_teams')} className="pt-2">
                 <TeamList store={this.teamStore} />
               </Tab>
             </Tabs>

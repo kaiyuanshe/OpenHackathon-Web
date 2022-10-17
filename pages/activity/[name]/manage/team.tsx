@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { PureComponent, FormEvent } from 'react';
 import { Form, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
+import { t } from 'i18next';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamList } from '../../../../components/Team/TeamList';
@@ -46,7 +47,7 @@ export default class TeamManagePage extends PureComponent<
             </Button>
           </Form>
           <DropdownButton variant="success" title="导出">
-            <Dropdown.Item href={exportURL}>所有团队</Dropdown.Item>
+            <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
             <Dropdown.Item href={workExportURL}>所有作品</Dropdown.Item>
           </DropdownButton>
         </header>

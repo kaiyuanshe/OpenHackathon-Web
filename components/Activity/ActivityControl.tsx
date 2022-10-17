@@ -1,4 +1,5 @@
 import { Button } from 'react-bootstrap';
+import { t } from 'i18next';
 
 import { Activity } from '../../models/Activity';
 
@@ -21,7 +22,7 @@ export function ActivityControl({
         variant="info"
         href={`/activity/${name}/manage/edit`}
       >
-        管理
+        {t('manage_this_hackathon')}
       </Button>
       {status !== 'online' ? (
         <Button

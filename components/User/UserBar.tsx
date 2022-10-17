@@ -9,15 +9,13 @@ import { t } from 'i18next';
 
 import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
-
 const { localStorage } = globalThis;
+
 const UserBar = observer(() => {
   const { user } = sessionStore;
-  const { asPath } = useRouter();
   const { i18n } = useTranslation();
   const changeLanguage = (language: string) => {
-    i18n.changeLanguage(language);
-    localStorage.language = language;
+    i18n.changeLanguage((localStorage.language = language));
   };
   return !user ? (
     <SessionBox>
@@ -35,7 +33,7 @@ const UserBar = observer(() => {
         <Dropdown.Menu>
           <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
           <Dropdown.Item onClick={() => sessionStore.signOut()}>
-            登出
+            {t('sign_out')}
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -49,6 +47,9 @@ const UserBar = observer(() => {
           </Dropdown.Item>
           <Dropdown.Item onClick={() => changeLanguage('zh-Hans')}>
             {t('zh-Hans')}
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => changeLanguage('zh-Hant-TW')}>
+            中文繁体-台湾
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -1,5 +1,6 @@
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import { t } from 'i18next';
 import { FileUpload } from './FileUpload';
 import { DateTimeInput } from './DateTimeInput';
 import { Activity } from '../models/Activity';
@@ -18,7 +19,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="name">
       <Form.Label column sm={2}>
-        名称（必填）
+        {t('name')}（必填）
       </Form.Label>
       <Col sm={10}>
         <Form.Control
@@ -163,14 +164,14 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
     {/*//todo editor*/}
     <Form.Group as={Row} className="mb-3" controlId="briefInfo">
       <Form.Label column sm={2}>
-        活动详情
+        {t('hackathon_detail')}
       </Form.Label>
       <Col sm={10}>
         <Form.Control
           name="detail"
           as="textarea"
           rows={3}
-          placeholder="活动详情"
+          placeholder={t('hackathon_detail')}
           defaultValue={activity?.detail}
           required
         />
@@ -178,7 +179,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
     </Form.Group>
 
     <Button variant="primary" type="submit">
-      提交
+      {t('submit')}
     </Button>
   </Form>
 );

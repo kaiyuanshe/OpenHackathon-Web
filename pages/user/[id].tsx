@@ -14,6 +14,7 @@ import {
 
 import PageHead from '../../components/PageHead';
 import userStore, { User } from '../../models/User';
+import { t } from 'i18next';
 
 const ActivityList = dynamic(
   () => import('../../components/Activity/ActivityList'),
@@ -91,10 +92,10 @@ const UserDetailPage = ({
             defaultActiveKey="enroll"
             className="w-100 mb-3 justify-content-center"
           >
-            <Tab eventKey="enroll" title="参与的活动">
+            <Tab eventKey="enroll" title={t('joined_hackathons')}>
               <ActivityList type="enrolled" userId={id} />
             </Tab>
-            <Tab eventKey="created" title="创建的活动">
+            <Tab eventKey="created" title={t('owned_hackathons')}>
               <ActivityList type="created" userId={id} />
             </Tab>
             <Tab eventKey="admin" title="管理的活动">
