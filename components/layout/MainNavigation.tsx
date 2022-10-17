@@ -15,6 +15,7 @@ export const MainNavigation = () => (
           className="align-top me-3"
           style={{ width: '2rem' }}
           src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
+          alt="logo"
         />
         {Name}
       </Navbar.Brand>

@@ -66,7 +66,11 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
           >
             <input type="hidden" name={name} value={URI} />
 
-            {isImage ? <Image src={URI} /> : URI.split('/').slice(-1)[0]}
+            {isImage ? (
+              <Image src={URI} alt={name} />
+            ) : (
+              URI.split('/').slice(-1)[0]
+            )}
             <Icon
               className={style.close}
               name="x"
