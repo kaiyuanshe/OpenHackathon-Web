@@ -10,7 +10,7 @@
     "export": "npm run build  &&  next export",
     "start": "next start",
     "lint": "next lint",
-    "test": "npm run lint  &&  lint-staged",
+    "test": "lint-staged  &&  npm run lint",
     "e2e": "jest"
   },
   "dependencies": {
