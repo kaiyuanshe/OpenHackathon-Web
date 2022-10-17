@@ -43,7 +43,7 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
               />
             </div>
             <div
-              className={`position-relative overflow-hidden  ${styles.showBox} `}
+              className={`position-relative overflow-hidden ${styles.showBox}`}
             >
               <i className="d-block overflow-hidden m-auto mb-1 rounded-circle" />
               <span className="d-block mb-0">
