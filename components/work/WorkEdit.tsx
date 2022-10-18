@@ -128,7 +128,7 @@ class WorkEdit extends PureComponent<{
                   name="url"
                   max={1}
                   required
-                  defaultValue={work?.url ? [work?.url] : []}
+                  defaultValue={work?.url ? [work.url] : []}
                 />
               </Col>
             </Form.Group>
