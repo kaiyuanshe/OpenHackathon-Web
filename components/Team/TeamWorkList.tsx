@@ -28,12 +28,11 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
 @observer
 export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
+
   extraProps: Partial<TeamWorkListProps> = {
-    onDelete: (id: any) => {
-      if (!id) return;
-      this.store.deleteOne(id);
-    },
+    onDelete: id => id && confirm('确定删除该作品？') && this.store.deleteOne(id),
   };
+
   static Layout = ({
     value = [],
     size,
