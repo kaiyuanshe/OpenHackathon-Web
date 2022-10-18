@@ -22,7 +22,7 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
-  onDelete?: (id: any) => void;
+  onDelete?: (id: TeamWork['id']) => any;
 }
 
 @observer
