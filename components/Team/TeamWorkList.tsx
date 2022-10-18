@@ -98,9 +98,9 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                 <Row as="small" className="border-bottom py-2 g-4">
                   <Col className="text-truncate" title="更新时间">
                     <FontAwesomeIcon
-                      className="text-success"
+                      className="text-success me-2"
                       icon={faCalendarDay}
-                    />{' '}
+                    />
                     {updatedAt}
                   </Col>
                 </Row>

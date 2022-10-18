@@ -1,41 +1,24 @@
-import { FormEvent, MouseEventHandler, PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
+import { observable } from 'mobx';
 import { formToJSON } from 'web-utility';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+
 import activityStore from '../../models/Activity';
 import { TeamWork } from '../../models/Team';
 import { NextRouter, withRouter } from 'next/router';
 import { FileUpload } from '../FileUpload';
+import { TeamWorkType } from '../../models/Team';
 const workTypes = [
-  {
-    title: '网站',
-    value: 'website',
-  },
-  {
-    title: '图片',
-    value: 'image',
-  },
-  {
-    title: '视频',
-    value: 'video',
-  },
-  {
-    title: 'Word',
-    value: 'word',
-  },
-  {
-    title: 'PowerPoint',
-    value: 'powerpoint',
-  },
-  {
-    title: 'PDF',
-    value: 'pdf',
-  },
-  {
-    title: 'ZIP',
-    value: 'zip',
-  },
+  { title: '网站', value: 'website' },
+  { title: '图片', value: 'image' },
+  { title: '视频', value: 'video' },
+  { title: 'Word', value: 'word' },
+  { title: 'PowerPoint', value: 'powerpoint' },
+  { title: 'PDF', value: 'pdf' },
+  { title: 'ZIP', value: 'zip' },
 ];
+//TODO 当前表单组件用类组件的形式
 class WorkEdit extends PureComponent<{
   work?: TeamWork;
   router: NextRouter | any;
@@ -43,25 +26,26 @@ class WorkEdit extends PureComponent<{
   store = activityStore
     .teamOf(this.props.router.query.name)
     .workOf(this.props.router.query.tid);
-  constructor(props: any) {
-    super(props);
-    this.state = { work: props.work || { type: 'website' } };
-  }
+
+  @observable
+  work: Partial<TeamWork> =
+    this.props.work || ({ type: TeamWorkType.WEBSITE } as TeamWork);
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
     const data = formToJSON(event.target as HTMLFormElement);
     await this.store.updateOne(data);
-    await this.props.router.push(
-      `/activity/${this.props.router.query.name}/team/${this.props.router.query.tid}`,
+    const { router } = this.props;
+    await router.push(
+      `/activity/${router.query.name}/team/${router.query.tid}`,
     );
   };
-  changeWorkType = (event: FormEvent<HTMLInputElement>) => {
-    const value = (event.target as HTMLInputElement).value;
-    this.setState({ work: { ...this.props.work, type: value } });
-  };
+  changeWorkType = ({
+    currentTarget: { value },
+  }: FormEvent<HTMLInputElement>) =>
+    (this.work = { ...this.props.work, type: value as TeamWorkType });
   render = () => {
-    const { work } = this.state as { work: TeamWork };
+    const { work } = this.props;
     return (
       <Container>
         <h2 className="text-center">编辑作品</h2>
@@ -77,7 +61,7 @@ class WorkEdit extends PureComponent<{
                 placeholder="请填写作品名称"
                 pattern="[a-zA-Z0-9]+"
                 required
-                defaultValue={work.title}
+                defaultValue={work?.title}
               />
             </Col>
           </Form.Group>
@@ -92,7 +76,7 @@ class WorkEdit extends PureComponent<{
                 rows={3}
                 placeholder="请填写作品描述"
                 required
-                defaultValue={work.description}
+                defaultValue={work?.description}
               />
             </Col>
           </Form.Group>
@@ -101,22 +85,22 @@ class WorkEdit extends PureComponent<{
               作品类型
             </Form.Label>
             <Col sm={10}>
-              {workTypes.map(typeItem => (
+              {workTypes.map(({ value }) => (
                 <Form.Check
                   type="radio"
                   inline
-                  label={typeItem.value}
+                  label={value}
                   name="type"
-                  value={typeItem.value}
-                  id={typeItem.value}
-                  key={typeItem.value}
+                  value={value}
+                  id={value}
+                  key={value}
                   onClick={this.changeWorkType}
-                  defaultChecked={work.type === typeItem.value}
+                  defaultChecked={work?.type === value}
                 />
               ))}
             </Col>
           </Form.Group>
-          {work.type === 'website' && (
+          {work?.type === 'website' && (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
                 作品在线链接
@@ -131,7 +115,7 @@ class WorkEdit extends PureComponent<{
               </Col>
             </Form.Group>
           )}
-          {work.type !== 'website' && (
+          {work?.type !== 'website' && (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
                 上传作品
@@ -142,7 +126,7 @@ class WorkEdit extends PureComponent<{
                   name="url"
                   max={1}
                   required
-                  defaultValue={work.url ? [work.url] : []}
+                  defaultValue={work?.url ? [work?.url] : []}
                 />
               </Col>
             </Form.Group>
