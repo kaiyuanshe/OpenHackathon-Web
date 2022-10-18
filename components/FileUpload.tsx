@@ -1,7 +1,7 @@
 import { Icon } from 'idea-react';
 import style from 'idea-react/source/FilePicker/index.module.less';
-import Image from 'next/image';
 import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
+import { Image } from 'react-bootstrap';
 
 import sessionStore from '../models/Session';
 

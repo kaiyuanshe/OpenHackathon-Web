@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Image, Nav, Navbar } from 'react-bootstrap';
 
 const UserBar = dynamic(() => import('../User/UserBar'), { ssr: false });
 
