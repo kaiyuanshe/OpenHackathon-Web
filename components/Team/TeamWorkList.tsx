@@ -92,15 +92,13 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     </a>
                   )}
                 </Row>
-                <Row as="small" className="border-bottom py-2 g-4">
-                  <Col className="text-truncate" title="更新时间">
+                <time className="border-bottom p-2 text-truncate" title="更新时间" dateTime={updatedAt}>
                     <FontAwesomeIcon
                       className="text-success me-2"
                       icon={faCalendarDay}
                     />
-                    {updatedAt}
-                  </Col>
-                </Row>
+                    {new Date(updatedAt).toLocaleString()}
+                </time>
               </Card.Body>
               <Card.Footer>
                 <Button
