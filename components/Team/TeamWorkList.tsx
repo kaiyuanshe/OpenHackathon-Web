@@ -41,7 +41,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
     team,
   }: TeamWorkListProps) => (
     <Accordion>
-      <Link href={`/activity/${activity}/team/${team}/work/create`}>
+      <Link href={`/activity/${activity}/team/${team}/work/create`} passHref>
         <Button variant="success" className="me-3 mb-2">
           提交作品
         </Button>
