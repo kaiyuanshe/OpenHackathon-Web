@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button, Dropdown } from 'react-bootstrap';
 
-import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
+import { SessionBox } from './SessionBox';
 
 const UserBar = observer(() => {
   const { user } = sessionStore;

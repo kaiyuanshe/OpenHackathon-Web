@@ -1,17 +1,17 @@
-import classNames from 'classnames';
-import Link from 'next/link';
-import { Row, Col, Card } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
   faMapLocationDot,
   faTags,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
+import Link from 'next/link';
+import { Card, Col, Row } from 'react-bootstrap';
 
-import { convertDatetime } from '../../utils/time';
 import { Activity } from '../../models/Activity';
+import { convertDatetime } from '../../utils/time';
+import { ActivityControl, ActivityControlProps } from './ActivityControl';
 import { ActivityEntry } from './ActivityEntry';
-import { ActivityControlProps, ActivityControl } from './ActivityControl';
 
 export interface ActivityCardProps extends Activity, ActivityControlProps {
   className?: string;

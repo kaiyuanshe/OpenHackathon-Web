@@ -1,16 +1,16 @@
-import classNames from 'classnames';
-import React from 'react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { Container, Row, Col, Card, Button, Tabs, Tab } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGithub,
   faQq,
-  faWeixin,
   faWeibo,
+  faWeixin,
 } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import React from 'react';
+import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
 import userStore, { User } from '../../models/User';

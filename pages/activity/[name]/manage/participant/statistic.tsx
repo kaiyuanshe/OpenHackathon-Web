@@ -1,13 +1,13 @@
+import { Loading } from 'idea-react';
+import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
-import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
-import { Loading } from 'idea-react';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
-import { withRoute } from '../../../../api/core';
 import activityStore from '../../../../../models/Activity';
+import { withRoute } from '../../../../api/core';
 
 const EnrollmentStatisticCharts = dynamic(
   () => import('../../../../../components/Activity/EnrollmentStatistic'),

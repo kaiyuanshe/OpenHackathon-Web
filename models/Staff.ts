@@ -1,7 +1,7 @@
-import { groupBy, mergeStream } from 'web-utility';
-import { computed } from 'mobx';
-import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { computed } from 'mobx';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { groupBy, mergeStream } from 'web-utility';
 
 import { Base, createListStream } from './Base';
 import sessionStore from './Session';

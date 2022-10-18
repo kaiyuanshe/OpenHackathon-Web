@@ -1,13 +1,13 @@
 import { NewData } from 'mobx-restful';
-import { FormEvent, PureComponent, createRef } from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
 import { InferGetServerSidePropsType } from 'next';
+import { createRef, FormEvent, PureComponent } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
-import { withRoute } from '../../../api/core';
 import { Award } from '../../../../models/Award';
+import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

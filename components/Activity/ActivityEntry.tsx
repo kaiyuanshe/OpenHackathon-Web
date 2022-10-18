@@ -1,8 +1,8 @@
-import { diffTime } from 'web-utility';
 import { Button } from 'react-bootstrap';
+import { diffTime } from 'web-utility';
 
-import { TimeUnit } from '../../utils/time';
 import { Activity } from '../../models/Activity';
+import { TimeUnit } from '../../utils/time';
 
 export type ActivityStatusTextProps = Pick<
   Activity,

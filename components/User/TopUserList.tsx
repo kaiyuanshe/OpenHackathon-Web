@@ -1,9 +1,9 @@
-import { Row, Col, Table, Image, Badge } from 'react-bootstrap';
+import { Badge,Col, Image, Row, Table } from 'react-bootstrap';
 import { parseJSON } from 'web-utility';
 
 import { TopUser } from '../../models/User';
-import { TopUserAddress } from './TopUserAddress';
 import styles from '../../styles/TopUserList.module.less';
+import { TopUserAddress } from './TopUserAddress';
 
 export interface TopUserListProps {
   value: TopUser[];

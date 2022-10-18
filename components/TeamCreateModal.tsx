@@ -3,9 +3,9 @@ import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { TeamEditor } from './TeamEditor';
 import activityStore from '../models/Activity';
 import { Team } from '../models/Team';
+import { TeamEditor } from './TeamEditor';
 
 export interface TeamCreateModalProps {
   hackathonName: string;

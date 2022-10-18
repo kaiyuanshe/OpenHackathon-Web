@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
-import { Ratio, Image, Accordion } from 'react-bootstrap';
+import { Accordion, Image, Ratio } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import { TeamWork, TeamWorkType } from '../../models/Team';
 import activityStore from '../../models/Activity';
+import { TeamWork, TeamWorkType } from '../../models/Team';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;

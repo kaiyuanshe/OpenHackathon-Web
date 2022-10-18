@@ -1,11 +1,12 @@
 import 'array-unique-proposal';
-import { observer } from 'mobx-react';
-import { Table, Form } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
+import { observer } from 'mobx-react';
+import { Form, Table } from 'react-bootstrap';
+
+import { Staff, StaffModel } from '../../models/Staff';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { Staff, StaffModel } from '../../models/Staff';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface StaffListProps extends ScrollListProps<Staff> {
   store: StaffModel;

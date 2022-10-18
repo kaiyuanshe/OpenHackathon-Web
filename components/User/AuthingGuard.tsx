@@ -1,5 +1,6 @@
-import { Guard, GuardEvents } from '@authing/native-js-ui-components';
 import '@authing/native-js-ui-components/lib/index.min.css';
+
+import { Guard, GuardEvents } from '@authing/native-js-ui-components';
 
 const title = process.env.NEXT_PUBLIC_SITE_NAME,
   AppId = process.env.NEXT_PUBLIC_AUTHING_APP_ID!;

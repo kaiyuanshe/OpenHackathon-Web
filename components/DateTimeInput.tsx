@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Row, Col, Form, InputGroup } from 'react-bootstrap';
+import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
 export interface DateTimeInputProps {

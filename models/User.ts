@@ -1,7 +1,7 @@
-import { buildURLData } from 'web-utility';
 import { ListModel, Stream } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
 
-import { Base, Filter, createListStream, ListData } from './Base';
+import { Base, createListStream, Filter, ListData } from './Base';
 import sessionStore from './Session';
 
 export interface UserBase {

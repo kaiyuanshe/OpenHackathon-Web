@@ -1,8 +1,8 @@
 import { InferGetServerSidePropsType } from 'next';
 import { Container } from 'react-bootstrap';
 
-import PageHead from '../../components/PageHead';
 import ActivityList from '../../components/Activity/ActivityList';
+import PageHead from '../../components/PageHead';
 import activityStore from '../../models/Activity';
 
 export async function getServerSideProps() {

@@ -1,4 +1,4 @@
-import { Second, Minute, Hour, Day, Week, Month, Year } from 'web-utility';
+import { Day, Hour, Minute, Month, Second, Week, Year } from 'web-utility';
 
 export const TimeUnit = new Map([
   ['秒', Second],

@@ -1,31 +1,31 @@
-import Link from 'next/link';
-import { computed } from 'mobx';
-import { observer } from 'mobx-react';
-import { Fragment, PureComponent } from 'react';
-import { Nav } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faBullhorn,
+  faDesktop,
   faEdit,
+  faPeopleGroup,
+  faSitemap,
+  faStar,
+  faThLarge,
+  faTrophy,
+  faUpload,
   faUser,
   faUserSecret,
-  faPeopleGroup,
-  faTrophy,
-  faStar,
-  faSitemap,
-  faBullhorn,
-  faUpload,
-  faThLarge,
-  faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { computed } from 'mobx';
+import { observer } from 'mobx-react';
+import Link from 'next/link';
+import { Fragment, PureComponent } from 'react';
+import { Nav } from 'react-bootstrap';
 
-import { findDeep } from '../../utils/data';
-import PageHead from '../PageHead';
-import { SessionBox } from '../User/SessionBox';
-import { MainBreadcrumb } from '../MainBreadcrumb';
+import activityStore from '../../models/Activity';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
-import activityStore from '../../models/Activity';
+import { findDeep } from '../../utils/data';
+import { MainBreadcrumb } from '../MainBreadcrumb';
+import PageHead from '../PageHead';
+import { SessionBox } from '../User/SessionBox';
 
 library.add(
   faEdit,

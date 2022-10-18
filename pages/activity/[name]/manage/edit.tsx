@@ -2,8 +2,8 @@ import { InferGetServerSidePropsType } from 'next';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import ActivityEdit from '../../../../components/ActivityEdit';
-import { withRoute } from '../../../api/core';
 import activityStore, { Activity } from '../../../../models/Activity';
+import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<
   { name: string },
