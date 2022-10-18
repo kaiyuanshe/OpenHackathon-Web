@@ -44,8 +44,10 @@ class WorkEdit extends PureComponent<{
     currentTarget: { value },
   }: FormEvent<HTMLInputElement>) =>
     (this.work = { ...this.props.work, type: value as TeamWorkType });
+
   render = () => {
-    const { work } = this.props;
+    const { work } = this;
+
     return (
       <Container>
         <h2 className="text-center">编辑作品</h2>
