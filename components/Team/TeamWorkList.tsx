@@ -70,11 +70,9 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     <a>{title}</a>
                   </Link>
                 </Card.Title>
-                <Row className="border-bottom py-2 g-4">
-                  <span className="text-muted text-truncate">
+                <p className="border-bottom p-2 text-muted text-truncate">
                     {description}
-                  </span>
-                </Row>
+                </p>
                 <Row className="border-bottom py-2 g-4">
                   {type === TeamWorkType.IMAGE ? (
                     <Image src={url} className="mw-100" alt={title} />
