@@ -67,7 +67,7 @@ const HomePage = ({
     </section>
 
     <div
-      className="my-5 text-center"
+      className="text-center"
       style={{
         background: 'linear-gradient(#F8F9FA,#fff)',
         marginTop: '-3rem',
