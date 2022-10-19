@@ -1,19 +1,3 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { observable } from 'mobx';
-import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Tabs,
-  Tab,
-  Carousel,
-  Image,
-  Button,
-} from 'react-bootstrap';
-import { OpenMap } from 'idea-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
   faFlag,
@@ -21,33 +5,47 @@ import {
   faSignIn,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenMap } from 'idea-react';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { PureComponent } from 'react';
+import {
+  Button,
+  Carousel,
+  Col,
+  Container,
+  Image,
+  Row,
+  Tab,
+  Tabs,
+} from 'react-bootstrap';
 
-import PageHead from '../../../components/PageHead';
-import { CommentBox } from '../../../components/CommentBox';
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { CommentBox } from '../../../components/CommentBox';
+import PageHead from '../../../components/PageHead';
+import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
-
-import { convertDatetime } from '../../../utils/time';
-import { Media, isServer } from '../../../models/Base';
 import activityStore, { Activity } from '../../../models/Activity';
+import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
-import { Team } from '../../../models/Team';
+import { convertDatetime } from '../../../utils/time';
 
 export async function getServerSideProps({
   params: { name = '' } = {},
 }: GetServerSidePropsContext<{ name?: string }>) {
   try {
-    const activity = await activityStore.getOne(name),
-      teams = await activityStore.currentTeam!.getList();
+    const activity = await activityStore.getOne(name);
 
-    return { props: { activity, teams } };
+    return { props: { activity } };
   } catch (error) {
     console.error(error);
 
     return {
       notFound: true,
-      props: {} as { activity: Activity; teams: Team[] },
+      props: {} as { activity: Activity },
     };
   }
 }
@@ -98,10 +96,19 @@ export default class ActivityPage extends PureComponent<
 
     const now = Date.now(),
       enrollmentEnd = new Date(enrollmentEndedAt),
-      enrollmentStart = new Date(enrollmentStartedAt);
+      enrollmentStart = new Date(enrollmentStartedAt),
+      eventEnded = new Date(eventEndedAt),
+      eventStarted = new Date(eventStartedAt);
     const isShowSignupBtn =
-      (!status || ['none', 'reject'].includes(status)) && now < +enrollmentEnd;
+      now > +enrollmentStart &&
+      now < +enrollmentEnd &&
+      (!status || ['none', 'reject'].includes(status));
     const isDisableSignupBtn = now < +enrollmentStart;
+    const isShowCreateTeamBtn =
+      now > +eventStarted &&
+      now < +eventEnded &&
+      status === 'approved' &&
+      !myTeam;
 
     return (
       <>
@@ -169,7 +176,7 @@ export default class ActivityPage extends PureComponent<
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
               报名状态
             </Col>
-            <Col>{status && StatusName[status]}</Col>
+            <Col>{StatusName[status || 'none']}</Col>
           </Row>
         </ul>
         {isShowSignupBtn && (
@@ -180,8 +187,8 @@ export default class ActivityPage extends PureComponent<
             立即报名
           </Button>
         )}
-        {status === 'approved' && !myTeam && (
-          <Button onClick={() => (this.showCreateTeam = true)}>创建队伍</Button>
+        {isShowCreateTeamBtn && (
+          <Button onClick={() => (this.showCreateTeam = true)}>创建团队</Button>
         )}
       </>
     );
@@ -190,8 +197,8 @@ export default class ActivityPage extends PureComponent<
   render() {
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
-      { teams } = this.props,
-      { showCreateTeam } = this;
+      { showCreateTeam } = this,
+      myTeam = this.teamStore.sessionOne;
 
     return (
       <Container>
@@ -233,7 +240,19 @@ export default class ActivityPage extends PureComponent<
               <Tab className="pt-2" eventKey="update" title="最新动态">
                 <div className="h1 my-5 text-center">暂无消息</div>
               </Tab>
-              <Tab eventKey="team" title="所有团队" className="pt-2">
+              <Tab eventKey="team" title="参赛团队" className="pt-2">
+                <h3>我的团队</h3>
+                {myTeam ? (
+                  <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
+                    <Col>
+                      <TeamCard {...myTeam} />
+                    </Col>
+                  </Row>
+                ) : (
+                  '暂未加入任何团队'
+                )}
+                <hr />
+                <h3>所有团队</h3>
                 <TeamList store={this.teamStore} />
               </Tab>
             </Tabs>

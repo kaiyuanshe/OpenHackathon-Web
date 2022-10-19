@@ -1,7 +1,7 @@
-import { groupBy, mergeStream } from 'web-utility';
-import { computed } from 'mobx';
-import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { computed } from 'mobx';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { groupBy, mergeStream } from 'web-utility';
 
 import { Base, createListStream } from './Base';
 import sessionStore from './Session';
@@ -85,8 +85,34 @@ export const menus: MenuItem[] = [
   },
 ];
 
+export const activityTeamMenus: MenuItem[] = [
+  {
+    title: '团队管理',
+    list: [
+      // {
+      //   title: '编辑信息',
+      //   href: 'edit',
+      //   icon: 'trophy',
+      //   roles: ['admin']
+      // },
+      {
+        title: '团队报名',
+        href: 'participant',
+        icon: 'user',
+        roles: ['admin'],
+      },
+      {
+        title: '角色管理',
+        href: 'role',
+        icon: 'user-secret',
+        roles: ['admin'],
+      },
+    ],
+  },
+];
+
 export interface Staff extends Base {
-  type: 'admin' | 'judge';
+  type: 'admin' | 'judge' | 'member';
   hackathonName: string;
   userId: string;
   user: User;

@@ -1,9 +1,10 @@
+import '../styles/globals.less';
+
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
-import '../styles/globals.less';
 
 export default function MyApp({
   router: { pathname },

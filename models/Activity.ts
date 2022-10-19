@@ -1,12 +1,13 @@
+import { action, observable } from 'mobx';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
-import { action } from 'mobx';
-import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, Filter, Media, createListStream } from './Base';
+import { AwardModel } from './Award';
+import { Base, createListStream, Filter, Media } from './Base';
+import { Enrollment, EnrollmentModel } from './Enrollment';
+import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
-import { AwardModel } from './Award';
-import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
 
 export interface Activity extends Base {
@@ -56,6 +57,10 @@ export interface ActivityFilter extends Filter<Activity> {
   listType?: ActivityListType;
 }
 
+export interface ActivityLogsFilter extends Filter<Activity> {
+  name: string;
+}
+
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'hackathon';
@@ -64,8 +69,11 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   currentStaff?: StaffModel;
   currentAward?: AwardModel;
+  @observable
   currentEnrollment?: EnrollmentModel;
+  @observable
   currentTeam?: TeamModel;
+  currentOrganization?: OrganizationModel;
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));
@@ -81,6 +89,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   teamOf(name = this.currentOne.name) {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
+  }
+
+  organizationOf(name = this.currentOne.name) {
+    return (this.currentOrganization = new OrganizationModel(
+      `hackathon/${name}`,
+    ));
   }
 
   openStream({
@@ -122,6 +136,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.awardOf(name);
     this.enrollmentOf(name);
     this.teamOf(name);
+    this.organizationOf(name);
 
     return (this.currentOne = {
       ...data,

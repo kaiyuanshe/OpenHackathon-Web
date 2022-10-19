@@ -1,14 +1,14 @@
+import { observable } from 'mobx';
+import { NextRouter, withRouter } from 'next/router';
 import { FormEvent, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
-import { observable } from 'mobx';
-import { formToJSON } from 'web-utility';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import { TeamWork } from '../../models/Team';
-import { NextRouter, withRouter } from 'next/router';
-import { FileUpload } from '../FileUpload';
 import { TeamWorkType } from '../../models/Team';
+import { FileUpload } from '../FileUpload';
 const workTypes = [
   { title: '网站', value: 'website' },
   { title: '图片', value: 'image' },
@@ -133,7 +133,7 @@ class WorkEdit extends PureComponent<{
               </Col>
             </Form.Group>
           )}
-          <Button variant="primary" type="submit">
+          <Button className="mb-3" variant="primary" type="submit">
             提交
           </Button>
         </Form>

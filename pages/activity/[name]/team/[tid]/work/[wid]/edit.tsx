@@ -2,10 +2,11 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
+
 import PageHead from '../../../../../../../components/PageHead';
 import WorkEdit from '../../../../../../../components/work/WorkEdit';
-import { TeamWork } from '../../../../../../../models/Team';
 import activityStore from '../../../../../../../models/Activity';
+import { TeamWork } from '../../../../../../../models/Team';
 //TODO new getServerSideProps
 // export const getServerSideProps = withRoute<
 //   { name: string; tid: string; wid: string },

@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react';
-import { Button, Dropdown } from 'react-bootstrap';
 import Link from 'next/link';
+import { Button, Dropdown } from 'react-bootstrap';
 
-import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
+import { SessionBox } from './SessionBox';
 
 const UserBar = observer(() => {
   const { user } = sessionStore;
+  const showName = user ? user.nickname || user.email || user.phone : '';
 
   return !user ? (
     <SessionBox>
@@ -20,7 +21,7 @@ const UserBar = observer(() => {
         </Button>
       </Link>
       <Dropdown className="my-2 my-md-0">
-        <Dropdown.Toggle>{user.nickname}</Dropdown.Toggle>
+        <Dropdown.Toggle>{showName}</Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
           <Dropdown.Item onClick={() => sessionStore.signOut()}>

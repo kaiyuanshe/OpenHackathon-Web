@@ -1,8 +1,9 @@
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { FileUpload } from './FileUpload';
-import { DateTimeInput } from './DateTimeInput';
+
 import { Activity } from '../models/Activity';
+import { DateTimeInput } from './DateTimeInput';
+import { FileUpload } from './FileUpload';
 
 type ActivityEditorProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;

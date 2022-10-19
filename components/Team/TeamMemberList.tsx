@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react';
 import { Image } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
 import activityStore from '../../models/Activity';
 import { TeamMember } from '../../models/Team';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface TeamMemberListProps extends ScrollListProps<TeamMember> {
   activity: string;

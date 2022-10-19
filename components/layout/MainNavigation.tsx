@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
@@ -10,10 +11,11 @@ export const MainNavigation = () => (
   <Navbar bg="dark" variant="dark" fixed="top" expand="md">
     <Container>
       <Navbar.Brand href="/">
-        <img
+        <Image
           className="align-top me-3"
           style={{ width: '2rem' }}
           src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
+          alt="logo"
         />
         {Name}
       </Navbar.Brand>

@@ -1,13 +1,13 @@
-import { FormEvent, PureComponent } from 'react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import { FormEvent, PureComponent } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore from '../../../models/Activity';
-import { Question, questions, Extensions } from '../../../models/Question';
+import { Extensions, Question, questions } from '../../../models/Question';
 
 export async function getServerSideProps({
   params,

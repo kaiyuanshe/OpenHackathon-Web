@@ -7,34 +7,33 @@ import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
-import { StaffList } from '../../../../components/User/StaffList';
+import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
+import { OrganizationList } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
-export default class AdministratorPage extends PureComponent<
+export default class OrganizationPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  store = activityStore.staffOf(this.props.route.params!.name + '');
+  store = activityStore.organizationOf(this.props.route.params!.name);
 
   selectedIds: string[] = [];
 
   @observable
   show = false;
 
-  //处理删除管理员或裁判
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
     const { selectedIds } = this;
 
-    if (!selectedIds[0]) return alert('请至少选择一位用户');
+    if (!selectedIds[0]) return alert('请至少选择一位主办方/合作伙伴!');
 
-    if (!confirm('确认删除所选管理员/裁判？')) return;
+    if (!confirm('确认删除所选主办方/合作伙伴？')) return;
 
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
@@ -45,21 +44,21 @@ export default class AdministratorPage extends PureComponent<
     return (
       <ListGroup>
         <ListGroup.Item className="d-flex justify-content-between">
-          全部用户
+          全部
           <Badge className="ms-2" bg="secondary">
             {allItems.length}
           </Badge>
         </ListGroup.Item>
         <ListGroup.Item className="d-flex justify-content-between">
-          管理员
+          主办方
           <Badge className="ms-2" bg="secondary">
-            {typeCount.admin}
+            {typeCount.host || 0}
           </Badge>
         </ListGroup.Item>
         <ListGroup.Item className="d-flex justify-content-between">
-          裁判
+          合作伙伴
           <Badge className="ms-2" bg="secondary">
-            {typeCount.judge}
+            {allItems.length - (typeCount.host || 0)}
           </Badge>
         </ListGroup.Item>
       </ListGroup>
@@ -69,15 +68,16 @@ export default class AdministratorPage extends PureComponent<
   render() {
     const { resolvedUrl, params } = this.props.route,
       { store, show } = this;
+    const activity = params!.name;
 
     return (
       <ActivityManageFrame
-        name={params!.name}
+        name={activity}
         path={resolvedUrl}
-        title="管理员"
+        title="主办方管理"
       >
         <Form onSubmit={this.handleSubmit}>
-          <Row xs="1" sm="2">
+          <Row xs={1} sm={2}>
             <Col sm="auto" md="auto">
               {this.renderList()}
 
@@ -90,14 +90,14 @@ export default class AdministratorPage extends PureComponent<
                   <FontAwesomeIcon className="me-2" icon={faPlus} />
                   增加
                 </Button>
-                <Button variant="danger" type="submit" id="delete">
+                <Button variant="danger" type="submit">
                   <FontAwesomeIcon className="me-2" icon={faTrash} />
                   删除
                 </Button>
               </Col>
             </Col>
             <Col className="flex-fill">
-              <StaffList
+              <OrganizationList
                 store={store}
                 onSelect={list => (this.selectedIds = list)}
               />
@@ -105,7 +105,7 @@ export default class AdministratorPage extends PureComponent<
           </Row>
         </Form>
 
-        <AdministratorModal
+        <OrganizationModal
           store={store}
           show={show}
           onHide={() => (this.show = false)}

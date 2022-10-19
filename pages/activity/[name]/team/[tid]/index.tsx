@@ -1,13 +1,13 @@
-import type { GetServerSidePropsContext } from 'next';
-import { Container, Row, Col, Card, Breadcrumb } from 'react-bootstrap';
 import { Icon } from 'idea-react';
+import type { GetServerSidePropsContext } from 'next';
+import { Breadcrumb, Card, Col, Container, Row } from 'react-bootstrap';
 
-import PageHead from '../../../../../components/PageHead';
 import { CommentBox } from '../../../../../components/CommentBox';
+import PageHead from '../../../../../components/PageHead';
 import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { Activity } from '../../../../../models/Activity';
-import { Team, TeamWork, TeamMember } from '../../../../../models/Team';
+import { Team, TeamMember, TeamWork } from '../../../../../models/Team';
 
 interface TeamPageProps {
   activity: Activity;

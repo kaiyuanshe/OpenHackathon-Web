@@ -1,19 +1,19 @@
-import { formToJSON } from 'web-utility';
 import { NewData } from 'mobx-restful';
 import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
+import { formToJSON } from 'web-utility';
 
-import { TeamEditor } from './TeamEditor';
 import activityStore from '../models/Activity';
 import { Team } from '../models/Team';
+import { TeamEditor } from './TeamEditor';
 
-export interface TeamCreateProps {
+export interface TeamCreateModalProps {
   hackathonName: string;
   show: boolean;
   onClose: () => any;
 }
 
-export const TeamCreateModal: FC<TeamCreateProps> = ({
+export const TeamCreateModal: FC<TeamCreateModalProps> = ({
   hackathonName,
   show,
   onClose,
@@ -28,15 +28,14 @@ export const TeamCreateModal: FC<TeamCreateProps> = ({
     await activityStore
       .teamOf(hackathonName)
       .updateOne({ ...data, autoApprove: !!autoApprove });
-
+    alert('团队创建成功！');
     onClose();
-    alert('队伍创建成功！');
   };
 
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>创建队伍</Modal.Title>
+        <Modal.Title>创建团队</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <TeamEditor onSubmit={submitHandler} />

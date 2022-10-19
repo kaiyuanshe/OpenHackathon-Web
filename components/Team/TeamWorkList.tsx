@@ -1,22 +1,20 @@
+import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
-
 import Link from 'next/link';
 import {
-  Ratio,
-  Image,
-  Row,
-  Col,
-  Card,
   Accordion,
   Button,
+  Card,
+  Col,
+  Image,
+  Ratio,
+  Row,
 } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
-
-import { TeamWork, TeamWorkType } from '../../models/Team';
 import activityStore from '../../models/Activity';
+import { TeamWork, TeamWorkType } from '../../models/Team';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;
@@ -30,7 +28,8 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
   extraProps: Partial<TeamWorkListProps> = {
-    onDelete: id => id && confirm('确定删除该作品？') && this.store.deleteOne(id),
+    onDelete: id =>
+      id && confirm('确定删除该作品？') && this.store.deleteOne(id),
   };
 
   static Layout = ({
@@ -71,7 +70,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                   </Link>
                 </Card.Title>
                 <p className="border-bottom p-2 text-muted text-truncate">
-                    {description}
+                  {description}
                 </p>
                 <Row className="border-bottom py-2 g-4">
                   {type === TeamWorkType.IMAGE ? (
@@ -92,12 +91,16 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     </a>
                   )}
                 </Row>
-                <time className="border-bottom p-2 text-truncate" title="更新时间" dateTime={updatedAt}>
-                    <FontAwesomeIcon
-                      className="text-success me-2"
-                      icon={faCalendarDay}
-                    />
-                    {new Date(updatedAt).toLocaleString()}
+                <time
+                  className="border-bottom p-2 text-truncate"
+                  title="更新时间"
+                  dateTime={updatedAt}
+                >
+                  <FontAwesomeIcon
+                    className="text-success me-2"
+                    icon={faCalendarDay}
+                  />
+                  {new Date(updatedAt).toLocaleString()}
                 </time>
               </Card.Body>
               <Card.Footer>
