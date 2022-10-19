@@ -1,31 +1,15 @@
 import { NewData } from 'mobx-restful';
 import { FormEvent, PureComponent, createRef } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import { formToJSON } from 'web-utility';
 
-import PageHead from '../../../../components/PageHead';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
+import { withRoute } from '../../../api/core';
 import { Award } from '../../../../models/Award';
 
-interface AwardPageProps {
-  activity: string;
-  path: string;
-}
-
-export const getServerSideProps = ({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) =>
-  !name
-    ? {
-        notFound: true,
-        props: {} as AwardPageProps,
-      }
-    : {
-        props: { activity: name, path: req.url },
-      };
+export const getServerSideProps = withRoute<{ name: string }>();
 
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -141,12 +125,11 @@ class AwardPage extends PureComponent<
   };
 
   render() {
-    const { path, activity } = this.props;
+    const { resolvedUrl, params } = this.props.route;
+    const activity = params!.name;
 
     return (
-      <ActivityManageFrame name={activity} path={path}>
-        <PageHead title={`${activity}活动管理 奖项设置`} />
-
+      <ActivityManageFrame name={activity} path={resolvedUrl} title="奖项设置">
         <Row xs="1" sm="2" className="my-3">
           <Col sm="4" md="4">
             {this.renderForm()}
