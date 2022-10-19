@@ -4,53 +4,61 @@ import { memoize } from 'lodash';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { averageOf } from 'web-utility';
 
-import { Base } from './Base';
+import { Base, createListStream } from './Base';
 import sessionStore from './Session';
+import { TeamWork, TeamWorkType } from './Team';
 
 type Repository = components['schemas']['repository'];
 
 export interface GitRepository
   extends Base,
-    Pick<Repository, 'name' | 'full_name' | 'url' | 'is_template' | 'topics'> {
+    Pick<
+      Repository,
+      | 'name'
+      | 'full_name'
+      | 'html_url'
+      | 'is_template'
+      | 'topics'
+      | 'description'
+      | 'homepage'
+    > {
   languages?: string[];
 }
 
-export class GitModel extends Stream<GitRepository>(ListModel) {
-  baseURI = 'repos';
+const gitClient = new HTTPClient({
+  baseURI: 'https://api.github.com/',
+  responseType: 'json',
+}).use(({ request }, next) => {
+  const token = sessionStore.user?.identities?.[0].accessToken;
 
-  client = new HTTPClient({
-    baseURI: 'https://api.github.com/',
-    responseType: 'json',
-  }).use(({ request }, next) => {
-    const token = sessionStore.user?.identities?.[0].accessToken;
+  if (token)
+    request.headers = {
+      ...request.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  return next();
+});
 
-    if (token)
-      request.headers = {
-        ...request.headers,
-        Authorization: `Bearer ${token}`,
-      };
-    return next();
-  });
-
-  getOne = memoize(async (URI: string): Promise<GitRepository> => {
-    const { body } = await this.client.get<Repository>(
-      `${this.baseURI}/${URI}`,
-    );
+const getGitRepository = memoize(
+  async (URI: string): Promise<GitRepository> => {
+    const { body } = await gitClient.get<Repository>(`repos/${URI}`);
     const {
       node_id,
       created_at,
       updated_at,
       name,
       full_name,
-      url,
+      html_url,
       is_template,
       languages_url,
       topics,
+      description,
+      homepage,
     } = body!;
 
-    const { body: languageCount } = await this.client.get<
-      Record<string, number>
-    >(languages_url);
+    const { body: languageCount } = await gitClient.get<Record<string, number>>(
+      languages_url,
+    );
 
     const languageAverage = averageOf(...Object.values(languageCount!));
 
@@ -58,18 +66,30 @@ export class GitModel extends Stream<GitRepository>(ListModel) {
       .filter(([_, score]) => score >= languageAverage)
       .sort(([_, a], [__, b]) => b - a);
 
-    return (this.currentOne = {
+    return {
       id: node_id,
       createdAt: created_at || '',
       updatedAt: updated_at || '',
       name,
       full_name,
-      url,
+      html_url,
       is_template,
       topics,
       languages: languageList.map(([name]) => name),
-    });
-  });
+      description,
+      homepage,
+    };
+  },
+);
+
+export class GitModel extends Stream<GitRepository>(ListModel) {
+  baseURI = 'repos';
+  client = gitClient;
+
+  @toggle('downloading')
+  async getOne(URI: string) {
+    return (this.currentOne = await getGitRepository(URI));
+  }
 
   async *openStream() {
     this.totalCount = DefaultTemplates.length;
@@ -89,6 +109,11 @@ export class GitModel extends Stream<GitRepository>(ListModel) {
     );
     return body!;
   }
+
+  @toggle('uploading')
+  addCollaborator(URI: string, user: string) {
+    return this.client.put(`${this.baseURI}/${URI}/collaborators/${user}`);
+  }
 }
 
 const DefaultTemplates = [
@@ -104,3 +129,30 @@ const DefaultTemplates = [
   'https://github.com/idea2app/Kotlin-Spring-Boot',
   'https://github.com/idea2app/ThinkPHP-scaffold',
 ];
+
+export class WorkspaceModel extends GitModel {
+  client = sessionStore.client;
+
+  constructor(baseURI: string) {
+    super();
+    this.baseURI = `${baseURI}/work`;
+  }
+
+  async *openStream() {
+    var dropCount = 0;
+
+    for await (const { type, url } of createListStream<TeamWork>(
+      `${this.baseURI}s`,
+      this.client,
+      count => (this.totalCount = count - dropCount),
+    )) {
+      const { origin, pathname } = new URL(url);
+
+      if (type !== TeamWorkType.WEBSITE || origin !== 'https://github.com')
+        dropCount++;
+      else {
+        yield await getGitRepository(pathname.slice(1));
+      }
+    }
+  }
+}

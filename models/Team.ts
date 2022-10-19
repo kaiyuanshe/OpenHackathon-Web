@@ -4,6 +4,7 @@ import { buildURLData } from 'web-utility';
 
 import { NameAvailability } from './Activity';
 import { Base, createListStream, Filter, integrateError } from './Base';
+import { WorkspaceModel } from './Git';
 import sessionStore from './Session';
 import { User } from './User';
 
@@ -63,6 +64,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   client = sessionStore.client;
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
+  currentWorkspace?: WorkspaceModel;
 
   @observable
   sessionOne?: Team;
@@ -88,6 +90,12 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
 
   workOf(tid = this.currentOne.id) {
     return (this.currentWork = new TeamWorkModel(`${this.baseURI}/${tid}`));
+  }
+
+  workspaceOf(tid = this.currentOne.id) {
+    return (this.currentWorkspace = new WorkspaceModel(
+      `${this.baseURI}/${tid}`,
+    ));
   }
 
   @action

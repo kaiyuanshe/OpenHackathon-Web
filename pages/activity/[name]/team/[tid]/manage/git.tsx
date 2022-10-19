@@ -7,8 +7,8 @@ import { formToJSON } from 'web-utility';
 
 import { GitList } from '../../../../../../components/Activity/GitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
-import { TeamWorkList } from '../../../../../../components/Team/TeamWorkList';
 import activityStore from '../../../../../../models/Activity';
+import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
 import { withRoute } from '../../../../../api/core';
 
@@ -18,6 +18,10 @@ export const getServerSideProps = withRoute<{ name: string; tid: string }>();
 export default class GitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  teamStore = activityStore.teamOf(this.props.route.params!.name);
+  memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
+  workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
+
   @observable
   creatorOpen = false;
 
@@ -32,14 +36,32 @@ export default class GitPage extends PureComponent<
 
     const { full_name, html_url } =
         await activityStore.currentGit.createOneFrom(template, repository),
-      { name, tid } = this.props.route.params!;
+      { tid } = this.props.route.params!;
 
-    await activityStore.teamOf(name).workOf(tid).updateOne({
+    await this.teamStore.workOf(tid).updateOne({
       type: TeamWorkType.WEBSITE,
       title: full_name,
       url: html_url,
     });
   };
+
+  async handleAuthorization(URI: string) {
+    const members = await this.memberStore.getAll();
+
+    for (const {
+      user: { id, identities, oAuth },
+    } of members) {
+      const isGitHub = (identities || []).some(
+        ({ provider }) => provider === 'github',
+      );
+      if (isGitHub && id !== sessionStore.user?.id)
+        try {
+          const { login } = JSON.parse(oAuth);
+
+          await activityStore.currentGit.addCollaborator(URI, login);
+        } catch {}
+    }
+  }
 
   renderCreator() {
     const { currentGit } = activityStore;
@@ -53,7 +75,7 @@ export default class GitPage extends PureComponent<
               创建
             </Button>
           </div>
-          <GitList type="team" store={currentGit} />
+          <GitList store={currentGit} />
         </Modal.Body>
       </Modal>
     );
@@ -70,13 +92,32 @@ export default class GitPage extends PureComponent<
         title="云开发环境"
       >
         <Container fluid>
-          <header className="d-flex justify-content-end">
+          <header className="d-flex justify-content-end mb-3">
             <Button variant="success" onClick={() => (this.creatorOpen = true)}>
               创建开发环境
             </Button>
           </header>
 
-          <TeamWorkList activity={params!.name} team={params!.tid} />
+          <GitList
+            store={this.workspaceStore}
+            renderController={({ full_name, html_url }) => (
+              <>
+                <Button
+                  variant="danger"
+                  onClick={() => this.handleAuthorization(full_name)}
+                >
+                  授权全部队友
+                </Button>
+                <Button
+                  variant="warning"
+                  target="_blank"
+                  href={`https://gitpod.io/#${html_url}`}
+                >
+                  即刻云开发
+                </Button>
+              </>
+            )}
+          />
         </Container>
 
         {this.renderCreator()}
