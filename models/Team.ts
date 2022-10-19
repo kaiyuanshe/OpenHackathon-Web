@@ -200,6 +200,7 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
     super();
     this.baseURI = `${baseURI}/work`;
   }
+
   openStream() {
     return createListStream<TeamWork>(
       `${this.baseURI}s`,

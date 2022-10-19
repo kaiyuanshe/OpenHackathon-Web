@@ -60,14 +60,12 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
             <Card className="border-success">
               <Card.Body>
                 <Card.Title
+                  as="a"
                   className="text-primary text-truncate"
                   title={title}
+                  href={`/activity/${activity}/team/${team}/work/${id}/edit`}
                 >
-                  <Link
-                    href={`/activity/${activity}/team/${team}/work/${id}/edit`}
-                  >
-                    <a>{title}</a>
-                  </Link>
+                  {title}
                 </Card.Title>
                 <p className="border-bottom p-2 text-muted text-truncate">
                   {description}

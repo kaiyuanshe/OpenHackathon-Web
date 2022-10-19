@@ -35,6 +35,7 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
 
     for (let file of files) {
       const fileUrl = await sessionStore.uploadFile(file);
+
       values.push(fileUrl);
     }
     this.setState({ values: [...values] });
