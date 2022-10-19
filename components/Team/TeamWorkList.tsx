@@ -22,18 +22,17 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
-  onDelete?: (id: any) => void;
+  onDelete?: (id: TeamWork['id']) => any;
 }
 
 @observer
 export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
+
   extraProps: Partial<TeamWorkListProps> = {
-    onDelete: (id: any) => {
-      if (!id) return;
-      this.store.deleteOne(id);
-    },
+    onDelete: id => id && confirm('确定删除该作品？') && this.store.deleteOne(id),
   };
+
   static Layout = ({
     value = [],
     size,
@@ -42,7 +41,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
     team,
   }: TeamWorkListProps) => (
     <Accordion>
-      <Link href={`/activity/${activity}/team/${team}/work/create`}>
+      <Link href={`/activity/${activity}/team/${team}/work/create`} passHref>
         <Button variant="success" className="me-3 mb-2">
           提交作品
         </Button>
@@ -71,11 +70,9 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     <a>{title}</a>
                   </Link>
                 </Card.Title>
-                <Row className="border-bottom py-2 g-4">
-                  <span className="text-muted text-truncate">
+                <p className="border-bottom p-2 text-muted text-truncate">
                     {description}
-                  </span>
-                </Row>
+                </p>
                 <Row className="border-bottom py-2 g-4">
                   {type === TeamWorkType.IMAGE ? (
                     <Image src={url} className="mw-100" alt={title} />
@@ -95,15 +92,13 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     </a>
                   )}
                 </Row>
-                <Row as="small" className="border-bottom py-2 g-4">
-                  <Col className="text-truncate" title="更新时间">
+                <time className="border-bottom p-2 text-truncate" title="更新时间" dateTime={updatedAt}>
                     <FontAwesomeIcon
                       className="text-success me-2"
                       icon={faCalendarDay}
                     />
-                    {updatedAt}
-                  </Col>
-                </Row>
+                    {new Date(updatedAt).toLocaleString()}
+                </time>
               </Card.Body>
               <Card.Footer>
                 <Button
