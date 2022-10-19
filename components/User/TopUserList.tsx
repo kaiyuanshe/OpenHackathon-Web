@@ -1,4 +1,4 @@
-import { Badge,Col, Image, Row, Table } from 'react-bootstrap';
+import { Badge, Col, Image, Row, Table } from 'react-bootstrap';
 import { parseJSON } from 'web-utility';
 
 import { TopUser } from '../../models/User';
