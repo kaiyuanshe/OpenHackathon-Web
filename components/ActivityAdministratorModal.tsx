@@ -1,11 +1,11 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { PureComponent, FormEvent, createRef } from 'react';
-import { Row, Col, Form, Button, ModalProps, Modal } from 'react-bootstrap';
+import { createRef, FormEvent, PureComponent } from 'react';
+import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { UserList } from './User/UserList';
 import { Staff, StaffModel } from '../models/Staff';
+import { UserList } from './User/UserList';
 
 export interface AdministratorModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

@@ -1,11 +1,11 @@
+import { action, computed, observable } from 'mobx';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
-import { observable, computed, action } from 'mobx';
-import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, Filter, createListStream, integrateError } from './Base';
-import { User } from './User';
-import sessionStore from './Session';
 import { NameAvailability } from './Activity';
+import { Base, createListStream, Filter, integrateError } from './Base';
+import sessionStore from './Session';
+import { User } from './User';
 
 export enum TeamWorkType {
   IMAGE = 'image',
@@ -207,5 +207,14 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('uploading')
+  async updateOne(data: NewData<TeamWork>, id?: string) {
+    const { body } = await (id
+      ? this.client.patch<TeamWork>(`${this.baseURI}/${id}`, data)
+      : this.client.put<TeamWork>(this.baseURI, data));
+
+    return (this.currentOne = body!);
   }
 }

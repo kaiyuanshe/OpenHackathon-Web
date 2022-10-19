@@ -1,19 +1,3 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { observable } from 'mobx';
-import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
-import {
-  Button,
-  Carousel,
-  Container,
-  Col,
-  Image,
-  Row,
-  Tabs,
-  Tab,
-} from 'react-bootstrap';
-import { OpenMap } from 'idea-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDay,
   faFlag,
@@ -21,6 +5,22 @@ import {
   faSignIn,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenMap } from 'idea-react';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { PureComponent } from 'react';
+import {
+  Button,
+  Carousel,
+  Col,
+  Container,
+  Image,
+  Row,
+  Tab,
+  Tabs,
+} from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
@@ -29,7 +29,7 @@ import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
 import activityStore, { Activity } from '../../../models/Activity';
-import { Media, isServer } from '../../../models/Base';
+import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { convertDatetime } from '../../../utils/time';
 

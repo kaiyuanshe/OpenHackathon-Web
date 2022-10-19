@@ -1,15 +1,15 @@
-import { buildURLData } from 'web-utility';
 import { action, observable } from 'mobx';
-import { NewData, ListModel, Stream, toggle } from 'mobx-restful';
+import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
 
-import { Base, Filter, Media, createListStream } from './Base';
-import sessionStore from './Session';
-import { StaffModel } from './Staff';
 import { AwardModel } from './Award';
+import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
+import sessionStore from './Session';
+import { StaffModel } from './Staff';
 
 export interface Activity extends Base {
   name: string;

@@ -1,15 +1,16 @@
 import 'array-unique-proposal';
-import { observer } from 'mobx-react';
-import { Table, Form } from 'react-bootstrap';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import styles from '../../styles/Table.module.less';
+import { observer } from 'mobx-react';
+import { Form, Table } from 'react-bootstrap';
+
 import {
   MembershipStatus,
   TeamMember,
   TeamMemberModel,
 } from '../../models/Team';
+import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface TeamParticipantTableProps extends ScrollListProps<TeamMember> {
   store: TeamMemberModel;

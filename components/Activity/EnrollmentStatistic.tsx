@@ -1,15 +1,15 @@
-import { isEmpty } from 'web-utility';
-import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 import {
+  LineSeries,
+  PieSeries,
   SVGCharts,
   Title,
   XAxis,
   YAxis,
-  LineSeries,
-  PieSeries,
 } from 'echarts-jsx';
+import { observer } from 'mobx-react';
+import { PureComponent } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { isEmpty } from 'web-utility';
 
 import { EnrollmentModel } from '../../models/Enrollment';
 

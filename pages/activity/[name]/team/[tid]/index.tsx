@@ -1,30 +1,29 @@
-import { FormEvent, PureComponent } from 'react';
+import { Icon } from 'idea-react';
+import { computed, observable } from 'mobx';
+import { observer } from 'mobx-react';
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next';
-import { Container, Row, Col, Card, Tabs, Tab, Button } from 'react-bootstrap';
-import { observer } from 'mobx-react';
-import { Icon } from 'idea-react';
-import { computed, observable } from 'mobx';
+import { FormEvent, PureComponent } from 'react';
+import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import PageHead from '../../../../../components/PageHead';
-import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
-import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import { CommentBox } from '../../../../../components/CommentBox';
 import { MainBreadcrumb } from '../../../../../components/MainBreadcrumb';
+import PageHead from '../../../../../components/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
+import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
+import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { Activity } from '../../../../../models/Activity';
-import {
-  Team,
-  TeamWork,
-  TeamMember,
-  JoinTeamReqBody,
-  MembershipStatus,
-} from '../../../../../models/Team';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import sessionStore from '../../../../../models/Session';
+import {
+  MembershipStatus,
+  Team,
+  TeamMember,
+  TeamWork,
+} from '../../../../../models/Team';
 
 interface TeamPageProps {
   activity: Activity;
@@ -82,14 +81,13 @@ export default class TeamPage extends PureComponent<
       activity: { displayName: hackathonDisplayName },
       team: { hackathonName, displayName },
     } = this.props;
+
     return [
       {
         title: hackathonDisplayName,
         href: `/activity/${hackathonName}`,
       },
-      {
-        title: displayName,
-      },
+      { title: displayName },
     ];
   }
 
@@ -98,6 +96,7 @@ export default class TeamPage extends PureComponent<
     const now = Date.now(),
       { eventStartedAt, eventEndedAt } = this.props.activity,
       { currentEnrollment, currentTeam } = activityStore;
+
     return (
       now > +new Date(eventStartedAt) &&
       now < +new Date(eventEndedAt) &&
@@ -115,8 +114,8 @@ export default class TeamPage extends PureComponent<
     event.preventDefault();
     event.stopPropagation();
 
-    const inputParams = formToJSON<JoinTeamReqBody>(event.currentTarget);
-    await this.store.joinTeam(inputParams);
+    await this.store.joinTeam(formToJSON(event.currentTarget));
+
     this.isShowJoinReqModal = false;
   };
 
@@ -125,11 +124,12 @@ export default class TeamPage extends PureComponent<
       this.currentUserInThisTeam?.status === MembershipStatus.APPROVED
         ? '退出团队'
         : '取消申请';
-    if (confirm(`请确定是否${operation}`)) {
-      await this.store.leaveTeam();
 
-      alert(`${operation}成功`);
-    }
+    if (!confirm(`请确定是否${operation}`)) return;
+
+    await this.store.leaveTeam();
+
+    alert(`${operation}成功`);
   };
 
   async componentDidMount() {
@@ -149,6 +149,7 @@ export default class TeamPage extends PureComponent<
       this.teamMemberRole = this.currentUserInThisTeam?.role || '';
     } catch (error: any) {
       const { status } = error as ErrorBaseData;
+
       if (status !== 404) this.teamMemberRole = '';
     }
 
@@ -170,6 +171,8 @@ export default class TeamPage extends PureComponent<
       { teamMemberList, teamWorkList } = this.props,
       {
         currentRoute,
+        currentUserInThisTeam,
+        teamMemberRole,
         isShowJoinReqModal,
         handleJoinTeam,
         isShowJoinTeamBtn,
@@ -202,7 +205,7 @@ export default class TeamPage extends PureComponent<
                     加入团队
                   </Button>
                 )}
-                {this.teamMemberRole === 'admin' && (
+                {teamMemberRole === 'admin' && (
                   <Button
                     className="w-100 mt-2"
                     href={`/activity/${hackathonName}/team/${id}/manage/participant`}
@@ -216,8 +219,7 @@ export default class TeamPage extends PureComponent<
                     variant="danger"
                     onClick={this.handleLeaveTeam}
                   >
-                    {this.currentUserInThisTeam?.status ===
-                    MembershipStatus.APPROVED
+                    {currentUserInThisTeam?.status === MembershipStatus.APPROVED
                       ? '退出团队'
                       : '取消申请'}
                   </Button>
