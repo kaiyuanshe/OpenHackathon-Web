@@ -8,8 +8,10 @@ export interface MessageEditorProps {
   onSubmit: (event: FormEvent<HTMLFormElement>) => any;
 }
 
-export const MessageEditor: FC<MessageEditorProps> = ({ message,onSubmit }) => (
-  
+export const MessageEditor: FC<MessageEditorProps> = ({
+  message,
+  onSubmit,
+}) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="content">
       <Form.Label column sm={2}>
@@ -70,10 +72,8 @@ export const MessageEditor: FC<MessageEditorProps> = ({ message,onSubmit }) => (
       </Col>
     </Form.Group>
 
-    <Row>
-      <Button variant="primary" type="submit" className="center">
-        提交
-      </Button>
-    </Row>
+    <footer className="text-center">
+      <Button variant="primary" type="submit">提交</Button>
+    </footer>
   </Form>
 );

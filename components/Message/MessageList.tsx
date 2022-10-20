@@ -56,7 +56,7 @@ export class MessageList extends ScrollList<MessageListProps> {
                 onSelect?.(
                   selectedIds.length === value.length
                     ? []
-                    : value.map(({ id }) => String(id)),
+                    : value.map(({ id }) => id + ''),
                 )
               }
             />
@@ -68,20 +68,20 @@ export class MessageList extends ScrollList<MessageListProps> {
         </tr>
       </thead>
       <tbody>
-        {value.map(({ id, hackathonName, title, content }, index) => (
+        {value.map(({ id, hackathonName, title, content }) => (
           <tr key={id}>
             <td>
               <Form.Check
                 inline
                 type="checkbox"
                 name="announcementId"
-                checked={selectedIds?.includes(String(id))}
+                checked={selectedIds?.includes(id + '')}
                 onClick={
                   onSelect &&
                   (({ currentTarget: { checked } }) => {
-                    if (checked) return onSelect([...selectedIds, String(id)]);
+                    if (checked) return onSelect([...selectedIds, id + '']);
 
-                    const index = selectedIds.indexOf(String(id));
+                    const index = selectedIds.indexOf(id + '');
 
                     onSelect([
                       ...selectedIds.slice(0, index),

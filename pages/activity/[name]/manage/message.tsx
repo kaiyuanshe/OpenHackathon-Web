@@ -70,9 +70,7 @@ export default class MessageListPage extends PureComponent<
         <MessageList
           store={store}
           onSelect={list => (this.selectedIds = list)}
-          onEdit={() => {
-            this.show = true;
-          }}
+          onEdit={() => (this.show = true)}
           onDelete={this.handleReset}
         />
 

@@ -39,7 +39,8 @@ export class MessageModal extends PureComponent<MessageModalProps> {
   };
 
   render() {
-    const { show, onHide } = this.props;
+    const { show, onHide, store } = this.props;
+    const { content,title } = store.currentOne;
 
     return (
       <Modal show={show} onHide={onHide} centered>
@@ -59,7 +60,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
               name="content"
               type="text"
               placeholder="公告内容"
-              defaultValue={this.props.store.currentOne.content}
+              defaultValue={content}
               required
             />
           </Form.Group>
@@ -70,7 +71,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
               name="title"
               type="text"
               placeholder="链接地址"
-              defaultValue={this.props.store.currentOne.title}
+              defaultValue={title}
               required
             />
           </Form.Group>
