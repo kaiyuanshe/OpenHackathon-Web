@@ -30,7 +30,7 @@ export const ActivityEditor: FC<ActivityEditorProps> = ({
           onBlur={({ currentTarget: { value } }) => isNameAvailable?.(value)}
           required
           defaultValue={activity?.name}
-          readOnly={Boolean(activity)}
+          readOnly={!!activity}
         />
       </Col>
     </Form.Group>

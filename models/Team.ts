@@ -216,4 +216,13 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
       count => (this.totalCount = count),
     );
   }
+
+  @toggle('uploading')
+  async updateOne(data: NewData<TeamWork>, id?: string) {
+    const { body } = await (id
+      ? this.client.patch<TeamWork>(`${this.baseURI}/${id}`, data)
+      : this.client.put<TeamWork>(this.baseURI, data));
+
+    return (this.currentOne = body!);
+  }
 }
