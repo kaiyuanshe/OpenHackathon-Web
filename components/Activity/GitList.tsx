@@ -37,18 +37,20 @@ export class GitList extends ScrollList<GitListProps> {
                   </a>
                 </Card.Title>
 
-                <ul className="list-inline mb-3">
+                <nav className="mb-3">
                   {topics.map(topic => (
                     <Badge
                       key={topic}
-                      as="li"
-                      className="list-inline-item"
+                      className="me-1"
                       bg={text2color(topic, ['light'])}
+                      as="a"
+                      target="_blank"
+                      href={`https://github.com/topics/${topic}`}
                     >
                       {topic}
                     </Badge>
                   ))}
-                </ul>
+                </nav>
                 <Row as="ul" className="list-unstyled g-4" xs={4}>
                   {languages.map(language => (
                     <Col as="li" key={language}>
@@ -74,6 +76,8 @@ export class GitList extends ScrollList<GitListProps> {
                   ...rest,
                 }) || (
                   <Form.Check
+                    className="d-flex align-items-center"
+                    style={{ gap: '0.5rem' }}
                     type="radio"
                     id={full_name}
                     name="template"

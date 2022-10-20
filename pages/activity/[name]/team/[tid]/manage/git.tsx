@@ -2,10 +2,20 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Container, Form, Modal } from 'react-bootstrap';
-import { formToJSON } from 'web-utility';
+import {
+  Button,
+  Container,
+  Dropdown,
+  DropdownButton,
+  Form,
+  Modal,
+} from 'react-bootstrap';
+import { buildURLData, formToJSON } from 'web-utility';
 
-import { GitList } from '../../../../../../components/Activity/GitList';
+import {
+  GitList,
+  GitListProps,
+} from '../../../../../../components/Activity/GitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
@@ -20,6 +30,7 @@ export default class GitPage extends PureComponent<
 > {
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
+  workStore = this.teamStore.workOf(this.props.route.params!.tid);
   workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
 
   @observable
@@ -35,10 +46,9 @@ export default class GitPage extends PureComponent<
     }>(event.currentTarget);
 
     const { full_name, html_url } =
-        await activityStore.currentGit.createOneFrom(template, repository),
-      { tid } = this.props.route.params!;
+      await activityStore.currentGit.createOneFrom(template, repository);
 
-    await this.teamStore.workOf(tid).updateOne({
+    await this.workStore.updateOne({
       type: TeamWorkType.WEBSITE,
       title: full_name,
       url: html_url,
@@ -65,13 +75,18 @@ export default class GitPage extends PureComponent<
 
   renderCreator() {
     const { currentGit } = activityStore;
+    const uploading = currentGit.uploading || this.workStore.uploading;
 
     return (
       <Modal show={this.creatorOpen} onHide={() => (this.creatorOpen = false)}>
         <Modal.Body as="form" onSubmit={this.handleCreate}>
           <div className="d-flex mb-3">
             <Form.Control name="repository" required placeholder="仓库名" />
-            <Button className="text-nowrap ms-3" type="submit">
+            <Button
+              className="text-nowrap ms-3"
+              type="submit"
+              disabled={uploading > 0}
+            >
               创建
             </Button>
           </div>
@@ -80,6 +95,38 @@ export default class GitPage extends PureComponent<
       </Modal>
     );
   }
+
+  renderController: GitListProps['renderController'] = ({
+    id,
+    full_name,
+    default_branch,
+    html_url,
+  }) => (
+    <>
+      <Button
+        variant="danger"
+        onClick={() => this.handleAuthorization(full_name)}
+      >
+        授权全部队友
+      </Button>
+
+      <DropdownButton variant="warning" title="即刻云开发">
+        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
+          GitPod
+        </Dropdown.Item>
+        <Dropdown.Item
+          target="_blank"
+          href={`https://github.com/codespaces/new?${buildURLData({
+            hide_repo_select: true,
+            repo: id,
+            ref: default_branch,
+          })}`}
+        >
+          GitHub codespaces
+        </Dropdown.Item>
+      </DropdownButton>
+    </>
+  );
 
   render() {
     const { resolvedUrl, params } = this.props.route;
@@ -100,23 +147,7 @@ export default class GitPage extends PureComponent<
 
           <GitList
             store={this.workspaceStore}
-            renderController={({ full_name, html_url }) => (
-              <>
-                <Button
-                  variant="danger"
-                  onClick={() => this.handleAuthorization(full_name)}
-                >
-                  授权全部队友
-                </Button>
-                <Button
-                  variant="warning"
-                  target="_blank"
-                  href={`https://gitpod.io/#${html_url}`}
-                >
-                  即刻云开发
-                </Button>
-              </>
-            )}
+            renderController={this.renderController}
           />
         </Container>
 

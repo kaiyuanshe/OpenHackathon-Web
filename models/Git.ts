@@ -18,6 +18,7 @@ export interface GitRepository
       | 'full_name'
       | 'html_url'
       | 'is_template'
+      | 'default_branch'
       | 'topics'
       | 'description'
       | 'homepage'
@@ -43,13 +44,14 @@ const getGitRepository = memoize(
   async (URI: string): Promise<GitRepository> => {
     const { body } = await gitClient.get<Repository>(`repos/${URI}`);
     const {
-      node_id,
+      id,
       created_at,
       updated_at,
       name,
       full_name,
       html_url,
       is_template,
+      default_branch,
       languages_url,
       topics,
       description,
@@ -67,13 +69,14 @@ const getGitRepository = memoize(
       .sort(([_, a], [__, b]) => b - a);
 
     return {
-      id: node_id,
+      id: id + '',
       createdAt: created_at || '',
       updatedAt: updated_at || '',
       name,
       full_name,
       html_url,
       is_template,
+      default_branch,
       topics,
       languages: languageList.map(([name]) => name),
       description,
