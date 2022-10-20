@@ -1,5 +1,5 @@
 import { HTTPClient } from 'koajax';
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
@@ -12,6 +12,13 @@ const { localStorage } = globalThis;
 export class SessionModel extends BaseModel {
   @observable
   user?: User = localStorage?.user && JSON.parse(localStorage.user);
+
+  @computed
+  get userOAuth() {
+    const { oAuth } = this.user || {};
+
+    return oAuth && JSON.parse(oAuth);
+  }
 
   client = new HTTPClient({
     baseURI: process.env.NEXT_PUBLIC_API_HOST,

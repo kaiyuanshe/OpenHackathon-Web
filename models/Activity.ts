@@ -5,6 +5,7 @@ import { buildURLData } from 'web-utility';
 import { AwardModel } from './Award';
 import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
+import { GitModel } from './Git';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
@@ -68,6 +69,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   pageSize = 6;
 
   currentStaff?: StaffModel;
+  currentGit = new GitModel();
   currentAward?: AwardModel;
   @observable
   currentEnrollment?: EnrollmentModel;

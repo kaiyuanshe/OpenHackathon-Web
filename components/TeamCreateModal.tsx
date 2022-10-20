@@ -28,6 +28,8 @@ export const TeamCreateModal: FC<TeamCreateModalProps> = ({
     await activityStore
       .teamOf(hackathonName)
       .updateOne({ ...data, autoApprove: !!autoApprove });
+    await activityStore.currentTeam?.getSessionOne();
+
     alert('团队创建成功！');
     onClose();
   };

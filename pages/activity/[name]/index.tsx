@@ -190,6 +190,14 @@ export default class ActivityPage extends PureComponent<
         {isShowCreateTeamBtn && (
           <Button onClick={() => (this.showCreateTeam = true)}>创建团队</Button>
         )}
+        {myTeam && (
+          <Button
+            variant="warning"
+            href={`/activity/${name}/team/${myTeam.id}/manage/git`}
+          >
+            云开发
+          </Button>
+        )}
       </>
     );
   }

@@ -107,6 +107,11 @@ export const activityTeamMenus: MenuItem[] = [
         icon: 'user-secret',
         roles: ['admin'],
       },
+      {
+        title: '云开发环境',
+        href: 'git',
+        icon: 'cloud',
+      },
     ],
   },
 ];
