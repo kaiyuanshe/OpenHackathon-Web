@@ -1,5 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faCloud,
   faTrophy,
   faUser,
   faUserSecret,
@@ -22,7 +23,7 @@ import { MainBreadcrumb } from '../MainBreadcrumb';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 
-library.add(faTrophy, faUser, faUserSecret);
+library.add(faTrophy, faUser, faUserSecret, faCloud);
 
 export interface TeamManageBaseRouterProps {
   path: string;
