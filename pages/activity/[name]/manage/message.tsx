@@ -22,6 +22,13 @@ export default class MessageListPage extends PureComponent<
   store = activityStore.messageOf(this.props.route.params!.name);
   form = createRef<HTMLFormElement>();
 
+  @observable
+  show = false;
+
+  selectedIds: string[] = [];
+
+  handleReset = () => this.form.current?.reset();
+
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -34,13 +41,6 @@ export default class MessageListPage extends PureComponent<
 
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
-
-  selectedIds: string[] = [];
-
-  @observable
-  show = false;
-
-  handleReset = () => this.form.current?.reset();
 
   render() {
     const { resolvedUrl, params } = this.props.route,
