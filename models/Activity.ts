@@ -5,11 +5,12 @@ import { buildURLData } from 'web-utility';
 import { AwardModel } from './Award';
 import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
+import { TeamModel } from './Team';
+import { MessageModel } from './Message';
 import { GitModel } from './Git';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
-import { TeamModel } from './Team';
 
 export interface Activity extends Base {
   name: string;
@@ -73,6 +74,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentAward?: AwardModel;
   @observable
   currentEnrollment?: EnrollmentModel;
+  currentMessage?: MessageModel;
   @observable
   currentTeam?: TeamModel;
   currentOrganization?: OrganizationModel;
@@ -87,6 +89,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   enrollmentOf(name = this.currentOne.name) {
     return (this.currentEnrollment = new EnrollmentModel(`hackathon/${name}`));
+  }
+
+  messageOf(name = this.currentOne.name) {
+    return (this.currentMessage = new MessageModel(`hackathon/${name}`));
   }
 
   teamOf(name = this.currentOne.name) {
@@ -139,6 +145,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.enrollmentOf(name);
     this.teamOf(name);
     this.organizationOf(name);
+    this.messageOf(name);
 
     return (this.currentOne = {
       ...data,
