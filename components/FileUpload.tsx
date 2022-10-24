@@ -1,6 +1,7 @@
-import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 import { Icon } from 'idea-react';
 import style from 'idea-react/source/FilePicker/index.module.less';
+import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
+import { Image } from 'react-bootstrap';
 
 import sessionStore from '../models/Session';
 
@@ -65,7 +66,11 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
           >
             <input type="hidden" name={name} value={URI} />
 
-            {isImage ? <img src={URI} /> : URI.split('/').slice(-1)[0]}
+            {isImage ? (
+              <Image src={URI} alt={name} />
+            ) : (
+              URI.split('/').slice(-1)[0]
+            )}
             <Icon
               className={style.close}
               name="x"

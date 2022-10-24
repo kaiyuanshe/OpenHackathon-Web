@@ -1,17 +1,24 @@
-import { buildURLData } from 'web-utility';
-import { observable } from 'mobx';
-import { BaseModel, toggle } from 'mobx-restful';
 import { HTTPClient } from 'koajax';
+import { computed, observable } from 'mobx';
+import { BaseModel, toggle } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
 
+import { uploadBlob } from '../pages/api/core';
 import { UploadUrl } from './Base';
 import { AuthingUserBase, User } from './User';
-import { uploadBlob } from '../pages/api/core';
 
 const { localStorage } = globalThis;
 
 export class SessionModel extends BaseModel {
   @observable
   user?: User = localStorage?.user && JSON.parse(localStorage.user);
+
+  @computed
+  get userOAuth() {
+    const { oAuth } = this.user || {};
+
+    return oAuth && JSON.parse(oAuth);
+  }
 
   client = new HTTPClient({
     baseURI: process.env.NEXT_PUBLIC_API_HOST,

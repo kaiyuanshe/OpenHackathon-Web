@@ -1,11 +1,11 @@
+import { t } from 'i18next';
+import { EdgePosition, Loading, ScrollBoundary } from 'idea-react';
 import { debounce } from 'lodash';
 import { observable } from 'mobx';
 import { ListModel, Stream } from 'mobx-restful';
 import { Component } from 'react';
-import { EdgePosition, ScrollBoundary, Loading } from 'idea-react';
 
 import { Base, Filter } from '../models/Base';
-import { t } from 'i18next';
 
 export interface ScrollListProps<T extends Base = Base> {
   value?: T[];

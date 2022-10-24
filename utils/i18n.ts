@@ -1,8 +1,9 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import en from '../locale/en-US.json';
-import zh from '../locale/zh-Hans.json';
-import zhTW from '../locale/zh-Hant-TW.json';
+
+import en from '../locales/en-US.json';
+import zh from '../locales/zh-Hans.json';
+import zhTW from '../locales/zh-Hant-TW.json';
 i18n.use(initReactI18next).init({
   // we init with resources
   resources: {

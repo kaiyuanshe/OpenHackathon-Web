@@ -1,30 +1,31 @@
-import Link from 'next/link';
-import { computed } from 'mobx';
-import { observer } from 'mobx-react';
-import { Fragment, PureComponent } from 'react';
-import { Breadcrumb, Nav } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faBullhorn,
+  faDesktop,
   faEdit,
+  faPeopleGroup,
+  faSitemap,
+  faStar,
+  faThLarge,
+  faTrophy,
+  faUpload,
   faUser,
   faUserSecret,
-  faPeopleGroup,
-  faTrophy,
-  faStar,
-  faSitemap,
-  faBullhorn,
-  faUpload,
-  faThLarge,
-  faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { computed } from 'mobx';
+import { observer } from 'mobx-react';
+import Link from 'next/link';
+import { Fragment, PureComponent } from 'react';
+import { Nav } from 'react-bootstrap';
 
-import { findDeep } from '../../utils/data';
-import PageHead from '../PageHead';
-import { SessionBox } from '../User/SessionBox';
+import activityStore from '../../models/Activity';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
-import activityStore from '../../models/Activity';
+import { findDeep } from '../../utils/data';
+import { MainBreadcrumb } from '../MainBreadcrumb';
+import PageHead from '../PageHead';
+import { SessionBox } from '../User/SessionBox';
 
 library.add(
   faEdit,
@@ -105,34 +106,9 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
     );
   }
 
-  renderMain() {
-    const { children, name } = this.props,
-      { currentRoute } = this;
-
-    return (
-      <>
-        <Breadcrumb className="p-1 bg-light rounded">
-          {currentRoute.map(
-            ({ href = menus[0].list?.[0].href, title }, index, { length }) => (
-              <Breadcrumb.Item
-                className="mt-3"
-                key={title}
-                href={`/activity/${name}/manage/${href}`}
-                active={index + 1 === length}
-              >
-                {title}
-              </Breadcrumb.Item>
-            ),
-          )}
-        </Breadcrumb>
-        <div className="mt-3">{children}</div>
-      </>
-    );
-  }
-
   render() {
-    const { name, title } = this.props,
-      { authorized } = this;
+    const { authorized, currentRoute } = this,
+      { children, name, title } = this.props;
 
     return (
       <SessionBox
@@ -147,7 +123,8 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
             {this.renderNav()}
 
             <main className="h-100 flex-fill ms-3 overflow-auto">
-              {this.renderMain()}
+              <MainBreadcrumb currentRoute={currentRoute} />
+              <div className="mt-3">{children}</div>
             </main>
           </>
         ) : (

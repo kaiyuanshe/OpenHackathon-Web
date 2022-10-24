@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { FC, FormEvent } from 'react';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import { Team } from '../models/Team';
 
@@ -12,10 +12,10 @@ export interface TeamEditorProps {
 export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="displayName">
-      <Form.Label column sm={2}>
+      <Form.Label column sm={3}>
         名称（必填）
       </Form.Label>
-      <Col sm={10}>
+      <Col sm={9}>
         <Form.Control
           name="displayName"
           required
@@ -28,10 +28,10 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
 
     {/* todo editor */}
     <Form.Group as={Row} className="mb-3" controlId="description">
-      <Form.Label column sm={2}>
+      <Form.Label column sm={3}>
         团队简介
       </Form.Label>
-      <Col sm={10}>
+      <Col sm={9}>
         <Form.Control
           name="description"
           as="textarea"
@@ -44,11 +44,15 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
       </Col>
     </Form.Group>
 
-    <Form.Group as={Row} className="mb-3" controlId="autoApprove">
-      <Form.Label column sm={2}>
+    <Form.Group
+      as={Row}
+      className="mb-3 align-items-center"
+      controlId="autoApprove"
+    >
+      <Form.Label column sm={3}>
         自动同意
       </Form.Label>
-      <Col sm={10}>
+      <Col sm={9}>
         <Form.Check
           inline
           type="radio"

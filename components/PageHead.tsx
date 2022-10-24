@@ -1,5 +1,5 @@
-import type { FC } from 'react';
 import Head from 'next/head';
+import type { FC } from 'react';
 
 export interface PageHeadProps {
   title?: string;

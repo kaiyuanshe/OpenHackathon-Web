@@ -1,18 +1,17 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
-import { Button, Dropdown } from 'react-bootstrap';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-
+import { Button, Dropdown } from 'react-bootstrap';
 //i18n
 import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
 
-import { SessionBox } from './SessionBox';
 import sessionStore from '../../models/Session';
+import { SessionBox } from './SessionBox';
 const { localStorage } = globalThis;
 
 const UserBar = observer(() => {
   const { user } = sessionStore;
+  const showName = user ? user.nickname || user.email || user.phone : '';
   const { i18n } = useTranslation();
   const changeLanguage = (language: string) => {
     i18n.changeLanguage((localStorage.language = language));
@@ -29,7 +28,7 @@ const UserBar = observer(() => {
         </Button>
       </Link>
       <Dropdown className="my-2 my-md-0">
-        <Dropdown.Toggle>{user.nickname}</Dropdown.Toggle>
+        <Dropdown.Toggle>{showName}</Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
           <Dropdown.Item onClick={() => sessionStore.signOut()}>

@@ -1,10 +1,10 @@
-import { formToJSON } from 'web-utility';
 import { FC, FormEvent } from 'react';
 import { Container } from 'react-bootstrap';
+import { formToJSON } from 'web-utility';
 
 import activityStore, { Activity } from '../models/Activity';
-import { ActivityEditor } from './ActivityEditor';
 import { ActivityFormData } from './ActivityCreate';
+import { ActivityEditor } from './ActivityEditor';
 
 const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {

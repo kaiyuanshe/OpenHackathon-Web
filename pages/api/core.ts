@@ -1,15 +1,15 @@
-import { ParsedUrlQuery } from 'querystring';
 import { HTTPError, Request, request as call } from 'koajax';
 import {
-  NextApiRequest,
-  NextApiResponse,
+  GetServerSideProps,
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  GetServerSideProps,
   InferGetServerSidePropsType,
+  NextApiRequest,
+  NextApiResponse,
 } from 'next';
+import { ParsedUrlQuery } from 'querystring';
 
-import { ErrorData } from '../../models/Base';
+import { ErrorBaseData } from '../../models/Base';
 
 /**
  * 上传blob文件
@@ -32,7 +32,7 @@ export async function uploadBlob<T = void>(
 
   if (!data || !('traceId' in data)) return data!;
 
-  const { status, title, detail } = data as unknown as ErrorData;
+  const { status, title, detail } = data as unknown as ErrorBaseData;
 
   throw new HTTPError(detail || title, {
     status,

@@ -1,9 +1,9 @@
-import { FormEvent, FC } from 'react';
+import { FC, FormEvent } from 'react';
 import { Container } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { ActivityEditor } from './ActivityEditor';
 import activityStore, { Activity } from '../models/Activity';
+import { ActivityEditor } from './ActivityEditor';
 
 export interface ActivityFormData extends Activity {
   tagsString?: string;

@@ -1,5 +1,5 @@
-import { Button } from 'react-bootstrap';
 import { t } from 'i18next';
+import { Button } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
 

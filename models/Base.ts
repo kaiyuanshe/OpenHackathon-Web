@@ -1,3 +1,4 @@
+import { HTTPError } from 'koajax';
 import { NewData, RESTClient } from 'mobx-restful';
 
 export interface Base {
@@ -13,9 +14,13 @@ export interface UploadUrl
   expiration: number;
 }
 
-export interface ErrorData
-  extends Record<'type' | 'title' | 'detail' | 'traceId', string> {
+export interface ErrorBaseData
+  extends Record<'type' | 'title' | 'detail' | 'traceId' | 'instance', string> {
   status: number;
+}
+
+export interface ErrorData extends ErrorBaseData {
+  errors: Record<string, string[]>;
 }
 
 export type Filter<T extends Base = Base> = NewData<T> & {
@@ -53,3 +58,11 @@ export async function* createListStream<T>(
     yield* value;
   }
 }
+
+export const integrateError = ({ body }: HTTPError<ErrorData>) => {
+  const { title, errors, detail } = body || {};
+  const message = errors?.name?.join('');
+  return new ReferenceError(
+    message ? `${title || ''}\n${message}` : detail || '',
+  );
+};

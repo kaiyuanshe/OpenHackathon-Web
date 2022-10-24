@@ -1,21 +1,25 @@
-import { Fragment } from 'react';
-import type { InferGetServerSidePropsType } from 'next';
-import { Container, Row, Col, Button, Carousel, Image } from 'react-bootstrap';
 import { t } from 'i18next';
+import type { InferGetServerSidePropsType } from 'next';
+import { Fragment } from 'react';
+import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
-import PageHead from '../components/PageHead';
 import ActivityList from '../components/Activity/ActivityList';
+import PageHead from '../components/PageHead';
+import { TopUserList } from '../components/User/TopUserList';
 import activityStore from '../models/Activity';
+import userStore from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 export async function getServerSideProps() {
   const activities = await activityStore.getList({}, 1, 6);
+  const topUsers = await userStore.getUserTopList();
 
-  return { props: { activities } };
+  return { props: { activities, topUsers } };
 }
 
 const HomePage = ({
   activities,
+  topUsers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <>
     <PageHead />
@@ -62,6 +66,18 @@ const HomePage = ({
         {t('more_events')}
       </Button>
     </section>
+
+    <div
+      className="text-center"
+      style={{
+        background: 'linear-gradient(#F8F9FA,#fff)',
+        marginTop: '-3rem',
+      }}
+    >
+      <Container className="text-start">
+        <TopUserList value={topUsers} />
+      </Container>
+    </div>
 
     <Container className="text-center">
       {Object.entries(partner).map(([type, list]) => (
