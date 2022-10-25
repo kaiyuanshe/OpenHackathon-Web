@@ -4,21 +4,26 @@ import { InferGetServerSidePropsType } from 'next';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
+import { observer } from 'mobx-react';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
-import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
+import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 
+export const getServerSideProps = withRoute<{ name: string }>();
+
+@observer
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   store = activityStore.awardOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();
+  store = activityStore.awardOf(this.props.route.params!.name);
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -134,7 +139,8 @@ class AwardPage extends PureComponent<
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route;
+    const { resolvedUrl, params } = this.props.route,
+      { store } = this;
 
     return (
       <ActivityManageFrame
@@ -148,9 +154,10 @@ class AwardPage extends PureComponent<
           </Col>
           <Col className="flex-fill">
             <AwardList
-              store={this.store}
-              onEdit={this.handleReset}
+              store={store}
+              activity={params!.name}
               onDelete={this.handleReset}
+              onEdit={this.handleReset}
             />
           </Col>
         </Row>

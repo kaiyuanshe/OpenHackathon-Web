@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import {
   Row,
   Col,
@@ -11,8 +11,12 @@ import {
   Card,
 } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import PageHead from '../../../../components/PageHead';
+import { withRoute } from '../../../api/core';
 import { Award } from '../../../../models/Award';
+import { formToJSON } from 'web-utility';
+
+import activityStore from '../../../../models/Activity';
+import { TeamList } from '../../../../components/Team/TeamList';
 
 interface State {}
 interface EvaluationPageProps {
@@ -21,33 +25,33 @@ interface EvaluationPageProps {
   awardList: Award[];
 }
 
-export const getServerSideProps = ({
-  params: { name } = {},
-  req,
-}: GetServerSidePropsContext<{ name?: string }>) =>
-  !name
-    ? {
-        notFound: true,
-        props: {} as EvaluationPageProps,
-      }
-    : {
-        props: {
-          activity: name,
-          path: req.url,
-        },
-      };
+export const getServerSideProps = withRoute<{ name: string }>();
 
 class EvaluationPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  store = activityStore.teamOf(this.props.route.params!.name);
+
+  onSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { search } = formToJSON<{ search: string }>(event.currentTarget);
+
+    this.store.clear();
+    return this.store.getList({ search });
+  };
   render() {
-    const { path, activity } = this.props;
+    const { resolvedUrl, params } = this.props.route;
     return (
-      <ActivityManageFrame name={activity} path={path}>
-        <PageHead title={`${activity}活动管理 作品评奖`} />
+      <ActivityManageFrame
+        path={resolvedUrl}
+        name={params!.name}
+        title={`${params!.name}活动管理 作品评奖`}
+      >
         <Row xs={1} md={2}>
-          <Col md={8} className="p-2">
-            <Form>
+          <Col md={8} className="ms-2 p-2">
+            <Form onSubmit={this.onSearch}>
               <InputGroup>
                 <Form.Control
                   id="teamSearch"
@@ -60,9 +64,11 @@ class EvaluationPage extends PureComponent<
                 <Button type="submit">搜索</Button>
               </InputGroup>
             </Form>
-            <Card></Card>
+            <div className="my-3">
+              <TeamList store={this.store} />
+            </div>
           </Col>
-          <Col md={4} className="p-2">
+          <Col md={3} className="p-2">
             <ListGroup as="ol" numbered>
               <ListGroup.Item className="d-flex align-items-center justify-content-between">
                 全部奖项
