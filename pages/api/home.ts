@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 export interface Organization {
   name: string;
   url: string;
@@ -10,8 +12,8 @@ export enum OrganizationType {
 }
 
 export const OrganizationTypeName = {
-  [OrganizationType.sponsor]: '赞助伙伴',
-  [OrganizationType.host]: '合作主办',
+  [OrganizationType.sponsor]: t('sponsors'),
+  [OrganizationType.host]: t('partners'),
 };
 
 export const partner: Record<OrganizationType, Organization[]> = {

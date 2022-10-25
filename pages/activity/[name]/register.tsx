@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
@@ -51,7 +52,7 @@ class RegisterPage extends PureComponent<
     await activityStore.signOne(activity, extensions);
 
     self.alert(
-      textJoin('黑客松活动', activity, '报名须管理员审核，请耐心等候……'),
+      textJoin(t('hackathons'), activity, '报名须管理员审核，请耐心等候……'),
     );
     location.href = `/activity/${activity}`;
   };

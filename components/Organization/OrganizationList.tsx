@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Image, Table } from 'react-bootstrap';
 
@@ -47,8 +48,8 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
               }
             />
           </th>
-          <th>名称</th>
-          <th>介绍</th>
+          <th>{t('name')}</th>
+          <th>{t('introduction')}</th>
           <th>类型</th>
           <th>logo</th>
         </tr>

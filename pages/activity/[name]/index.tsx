@@ -120,7 +120,7 @@ export default class ActivityPage extends PureComponent<
                 className="text-success me-2"
                 icon={faCalendarDay}
               />
-              报名时段
+              {t('registration_period')}
             </Col>
             <Col>
               {convertDatetime(enrollmentStartedAt)} ~{' '}
@@ -133,7 +133,7 @@ export default class ActivityPage extends PureComponent<
                 className="text-success me-2"
                 icon={faCalendarDay}
               />
-              活动时段
+              {t('activity_period')}
             </Col>
             <Col>
               {convertDatetime(eventStartedAt)} ~{' '}
@@ -249,8 +249,8 @@ export default class ActivityPage extends PureComponent<
               <Tab className="pt-2" eventKey="update" title={t('latest_news')}>
                 <div className="h1 my-5 text-center">暂无消息</div>
               </Tab>
-              <Tab eventKey="team" title="参赛团队" className="pt-2">
-                <h3>我的团队</h3>
+              <Tab eventKey="team" title={t('my_team')} className="pt-2">
+                <h3>{t('my_team')}</h3>
                 {myTeam ? (
                   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
                     <Col>

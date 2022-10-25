@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -93,7 +94,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
 
             <Modal.Footer>
               <Button variant="secondary" type="reset">
-                取消
+                {t('cancel')}
               </Button>
               <Button variant="primary" type="submit" id="increase">
                 保存

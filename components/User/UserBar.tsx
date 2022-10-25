@@ -14,6 +14,7 @@ const UserBar = observer(() => {
   const showName = user ? user.nickname || user.email || user.phone : '';
   const { i18n } = useTranslation();
   const changeLanguage = (language: string) => {
+    console.log(language);
     i18n.changeLanguage((localStorage.language = language));
   };
   return !user ? (
@@ -30,7 +31,9 @@ const UserBar = observer(() => {
       <Dropdown className="my-2 my-md-0">
         <Dropdown.Toggle>{showName}</Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item href={`/user/${user.id}`}>个人主页</Dropdown.Item>
+          <Dropdown.Item href={`/user/${user.id}`}>
+            {t('home_page')}
+          </Dropdown.Item>
           <Dropdown.Item onClick={() => sessionStore.signOut()}>
             {t('sign_out')}
           </Dropdown.Item>

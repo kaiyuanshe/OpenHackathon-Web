@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { t } from 'i18next';
 import { HTMLAttributes } from 'react';
 import { Image } from 'react-bootstrap';
 
@@ -27,7 +28,9 @@ export const TeamCard = ({
       {displayName}
     </a>
     <p className="border-bottom">
-      共<span className="text-success mx-2">{membersCount}</span>人
+      {t('a_total_of')}
+      <span className="text-success mx-2">{membersCount}</span>
+      {t('people')}
     </p>
     <a className="d-flex" href={`/user/${creatorId}`}>
       <span className="pe-2">队长：</span>

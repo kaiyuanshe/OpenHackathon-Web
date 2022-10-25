@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
@@ -112,10 +113,10 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           </Form.Group>
           <Modal.Footer>
             <Button variant="secondary" type="reset">
-              取消
+              {t('cancel')}
             </Button>
             <Button variant="primary" type="submit">
-              保存
+              {t('save')}
             </Button>
           </Modal.Footer>
         </Modal.Body>

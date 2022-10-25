@@ -1,5 +1,6 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
@@ -15,8 +16,8 @@ export interface AwardListProps extends ScrollListProps<Award> {
 }
 
 export const AwardTargetName = {
-  individual: '个人',
-  team: '团队',
+  individual: t('personal'),
+  team: t('team'),
 };
 const awardTableHead = ['权重', '类型', '照片', '名称', '描述', '操作'];
 

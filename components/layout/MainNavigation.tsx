@@ -1,20 +1,20 @@
 import { t } from 'i18next';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Image, Nav, Navbar } from 'react-bootstrap';
 
 const UserBar = dynamic(() => import('../User/UserBar'), { ssr: false });
+
 export const MainNavigation = () => (
   <Navbar bg="dark" variant="dark" fixed="top" expand="md">
     <Container>
       <Navbar.Brand href="/">
-        {/* <Image
+        <Image
           className="align-top me-3"
           style={{ width: '2rem' }}
           src="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
           alt="logo"
-        /> */}
+        />
         {t('open_hackathon_platform')}
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbar-inner" />

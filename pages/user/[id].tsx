@@ -33,7 +33,7 @@ const UserDetailPage = ({
         'url(https://hackathon-api.static.kaiyuanshe.cn/static/profile-back-pattern.png)',
     }}
   >
-    <PageHead title="用户资料" />
+    <PageHead title={t('profile')} />
 
     <Row>
       <Col lg="auto">
@@ -80,7 +80,7 @@ const UserDetailPage = ({
             </Card.Body>
             <Card.Body className="text-center border-top p-3">
               <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-                <Button variant="warning">编辑用户资料</Button>
+                <Button variant="warning">{t('edit_profile')}</Button>
               </Link>
             </Card.Body>
           </Card>
@@ -92,13 +92,13 @@ const UserDetailPage = ({
             defaultActiveKey="enroll"
             className="w-100 mb-3 justify-content-center"
           >
-            <Tab eventKey="enroll" title={t('joined_hackathons')}>
+            <Tab eventKey="enroll" title={t('followed_hackathons')}>
               <ActivityList type="enrolled" userId={id} />
             </Tab>
             <Tab eventKey="created" title={t('owned_hackathons')}>
               <ActivityList type="created" userId={id} />
             </Tab>
-            <Tab eventKey="admin" title="管理的活动">
+            <Tab eventKey="admin" title={t('joined_hackathons')}>
               <ActivityList type="admin" userId={id} />
             </Tab>
           </Tabs>
