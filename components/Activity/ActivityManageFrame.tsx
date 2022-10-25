@@ -20,6 +20,7 @@ import { Fragment, PureComponent } from 'react';
 import { Nav } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
+import sessionStore from '../../models/Session';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import { findDeep } from '../../utils/data';
@@ -50,8 +51,10 @@ export interface ActivityManageFrameProps {
 
 @observer
 export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
-  componentDidMount() {
-    activityStore.getOne(this.props.name);
+  async componentDidMount() {
+    await activityStore.getOne(this.props.name);
+
+    if (!activityStore.currentOne.roles) sessionStore.signOut();
   }
 
   get currentRoute() {

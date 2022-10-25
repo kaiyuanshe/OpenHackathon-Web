@@ -5,12 +5,12 @@ import { buildURLData } from 'web-utility';
 import { AwardModel } from './Award';
 import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
-import { TeamModel } from './Team';
-import { MessageModel } from './Message';
 import { GitModel } from './Git';
+import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
+import { TeamModel } from './Team';
 
 export interface Activity extends Base {
   name: string;
@@ -33,7 +33,7 @@ export interface Activity extends Base {
   enrollmentEndedAt: string;
   judgeStartedAt: string;
   judgeEndedAt: string;
-  roles: {
+  roles: null | {
     isAdmin: boolean;
     isJudge: boolean;
     isEnrolled: boolean;

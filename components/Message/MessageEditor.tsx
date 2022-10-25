@@ -1,5 +1,5 @@
 import { FC, FormEvent } from 'react';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Button,Col, Form, Row } from 'react-bootstrap';
 
 import { Message } from '../../models/Message';
 
@@ -73,7 +73,9 @@ export const MessageEditor: FC<MessageEditorProps> = ({
     </Form.Group>
 
     <footer className="text-center">
-      <Button variant="primary" type="submit">提交</Button>
+      <Button variant="primary" type="submit">
+        提交
+      </Button>
     </footer>
   </Form>
 );
