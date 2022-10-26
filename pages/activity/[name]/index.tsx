@@ -267,7 +267,7 @@ export default class ActivityPage extends PureComponent<
               </Tab>
             </Tabs>
           </Col>
-          <Col className="d-flex flex-column" style={{ height: '50vh' }}>
+          <Col className="d-flex flex-column">
             <div className="mb-3">
               <h2>主办方信息</h2>
               <OrganizationCardList store={this.organizationStore} />
