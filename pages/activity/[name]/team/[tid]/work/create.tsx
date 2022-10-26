@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import type { InferGetServerSidePropsType } from 'next';
 
 import PageHead from '../../../../../../components/PageHead';
@@ -11,7 +12,7 @@ export default function WorkCreatePage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
-      <PageHead title="提交作品" />
+      <PageHead title={t('submit_work')} />
 
       <WorkEdit {...params!} />
     </>

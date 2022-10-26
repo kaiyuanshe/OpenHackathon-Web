@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -54,7 +55,7 @@ class AwardPage extends PureComponent<
       >
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
-            名称
+            {t('name')}
           </Form.Label>
 
           <Col sm="10">
@@ -68,12 +69,12 @@ class AwardPage extends PureComponent<
         </Form.Group>
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
-            描述
+            {t('introduction')}
           </Form.Label>
           <Col sm="10">
             <Form.Control
               name="description"
-              aria-label="描述"
+              aria-label={t('introduction')}
               maxLength={256}
               required
               defaultValue={description}
@@ -82,7 +83,7 @@ class AwardPage extends PureComponent<
         </Form.Group>
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
-            权重
+            {t('weights')}
           </Form.Label>
           <Col sm="10">
             <Form.Control
@@ -96,7 +97,7 @@ class AwardPage extends PureComponent<
         </Form.Group>
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
-            类型
+            {t('type')}
           </Form.Label>
           <Col sm="10">
             <Form.Select name="target">
@@ -114,10 +115,11 @@ class AwardPage extends PureComponent<
         </Form.Group>
         <Col className="d-flex justify-content-around p-4">
           <Button type="reset" variant="danger">
-            清空表单
+            {t('clear_form')}
           </Button>
           <Button type="submit" variant={id ? 'warning' : 'success'}>
-            {id ? '更新' : '新增'}奖项
+            {id ? t('update') : t('add')}
+            {t('award')}
           </Button>
         </Col>
       </Form>
@@ -129,7 +131,11 @@ class AwardPage extends PureComponent<
     const activity = params!.name;
 
     return (
-      <ActivityManageFrame name={activity} path={resolvedUrl} title="奖项设置">
+      <ActivityManageFrame
+        name={activity}
+        path={resolvedUrl}
+        title={t('prize_settings')}
+      >
         <Row xs="1" sm="2" className="my-3">
           <Col sm="4" md="4">
             {this.renderForm()}

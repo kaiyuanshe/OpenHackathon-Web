@@ -36,19 +36,19 @@ export default class TeamManagePage extends PureComponent<
       <ActivityManageFrame
         path={resolvedUrl}
         name={params!.name}
-        title="团队管理"
+        title={t('team_manage')}
       >
         <header className="d-flex justify-content-between mb-3">
           <Form className="d-flex" onSubmit={this.onSearch}>
             <Form.Control type="search" name="search" />
 
             <Button type="submit" className="ms-3 text-nowrap">
-              搜索
+              {t('search')}
             </Button>
           </Form>
-          <DropdownButton variant="success" title="导出">
+          <DropdownButton variant="success" title={t('export')}>
             <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
-            <Dropdown.Item href={workExportURL}>所有作品</Dropdown.Item>
+            <Dropdown.Item href={workExportURL}>{t('all_works')}</Dropdown.Item>
           </DropdownButton>
         </header>
         <TeamList store={this.store} />

@@ -1,8 +1,9 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
 import activityStore from '../models/Activity';
-import { Enrollment } from '../models/Enrollment';
+import { Enrollment, statusName } from '../models/Enrollment';
 import styles from '../styles/participant.module.less';
 import { ScrollList, ScrollListProps } from './ScrollList';
 
@@ -11,13 +12,6 @@ export interface EnrollmentListProps extends ScrollListProps<Enrollment> {
   onPopUp?: (extensions: Enrollment['extensions']) => any;
   onVerify?: (userId: string, status: Enrollment['status']) => any;
 }
-
-const StatusName: Record<Enrollment['status'], string> = {
-  approved: '通过',
-  rejected: '拒绝',
-  none: '未审核',
-  pendingApproval: '审核中',
-};
 
 @observer
 export class EnrollmentList extends ScrollList<EnrollmentListProps> {
@@ -36,8 +30,8 @@ export class EnrollmentList extends ScrollList<EnrollmentListProps> {
       <thead>
         <tr>
           <th>#</th>
-          <th>注册名</th>
-          <th>邮箱</th>
+          <th>{t('user_name')}</th>
+          <th>{t('mail')}</th>
           <th>登录方式</th>
           <th>联系电话</th>
           <th>联系地址</th>
@@ -67,7 +61,7 @@ export class EnrollmentList extends ScrollList<EnrollmentListProps> {
                   onVerify?.(user.id!, value as Enrollment['status'])
                 }
               >
-                {Object.entries(StatusName).map(([key, value]) => (
+                {Object.entries(statusName).map(([key, value]) => (
                   <option key={key} value={key} selected={key === status}>
                     {value}
                   </option>

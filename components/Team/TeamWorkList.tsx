@@ -1,5 +1,6 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import Link from 'next/link';
 import {
@@ -42,7 +43,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
     <Accordion>
       <Link href={`/activity/${activity}/team/${team}/work/create`} passHref>
         <Button variant="success" className="me-3 mb-2">
-          提交作品
+          {t('submit_work')}
         </Button>
       </Link>
       <Row
@@ -82,16 +83,16 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                       className="text-primary"
                       target="_blank"
                       href={url}
-                      title="查看作品"
+                      title={t('view_work')}
                       rel="noreferrer"
                     >
-                      查看作品
+                      {t('view_work')}
                     </a>
                   )}
                 </Row>
                 <time
                   className="border-bottom p-2 text-truncate"
-                  title="更新时间"
+                  title={t('update_time')}
                   dateTime={updatedAt}
                 >
                   <FontAwesomeIcon
@@ -107,7 +108,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                   variant="danger"
                   onClick={() => onDelete?.(id)}
                 >
-                  删除
+                  {t('delete')}
                 </Button>
               </Card.Footer>
             </Card>

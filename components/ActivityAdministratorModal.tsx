@@ -66,7 +66,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
             <Form.Group as={Row} className="mt-3 py-3 ps-2">
               <Col>
                 <Form.Check
-                  label="管理员"
+                  label={t('admin')}
                   id="staff-admin"
                   name="type"
                   type="radio"
@@ -76,7 +76,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
               </Col>
               <Col>
                 <Form.Check
-                  label="裁判"
+                  label={t('referee')}
                   id="staff-judge"
                   name="type"
                   type="radio"
@@ -87,7 +87,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
 
             <Form.Group as={Row} className="mb-3">
               <Col sm={8}>
-                <Form.Control name="description" placeholder="备注" />
+                <Form.Control name="description" placeholder={t('remark')} />
               </Col>
               <Form.Label column sm={4} htmlFor="description" />
             </Form.Group>
@@ -97,7 +97,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
                 {t('cancel')}
               </Button>
               <Button variant="primary" type="submit" id="increase">
-                保存
+                {t('save')}
               </Button>
             </Modal.Footer>
           </Form>

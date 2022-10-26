@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { FC, FormEvent } from 'react';
 import { Container } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -33,7 +34,7 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
 
   return (
     <Container>
-      <h2 className="text-center">创建活动</h2>
+      <h2 className="text-center">{t('create_activity')}</h2>
 
       <ActivityEditor onSubmit={submitHandler} activity={activity} />
     </Container>

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -81,13 +82,17 @@ export default class GitPage extends PureComponent<
       <Modal show={this.creatorOpen} onHide={() => (this.creatorOpen = false)}>
         <Modal.Body as="form" onSubmit={this.handleCreate}>
           <div className="d-flex mb-3">
-            <Form.Control name="repository" required placeholder="仓库名" />
+            <Form.Control
+              name="repository"
+              required
+              placeholder={t('repository_name')}
+            />
             <Button
               className="text-nowrap ms-3"
               type="submit"
               disabled={uploading > 0}
             >
-              创建
+              {t('create')}
             </Button>
           </div>
           <GitList store={currentGit} />
@@ -107,10 +112,10 @@ export default class GitPage extends PureComponent<
         variant="danger"
         onClick={() => this.handleAuthorization(full_name)}
       >
-        授权全部队友
+        {t('authorize_all_teammates')}
       </Button>
 
-      <DropdownButton variant="warning" title="即刻云开发">
+      <DropdownButton variant="warning" title={t('instant_cloud_development')}>
         <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
           GitPod
         </Dropdown.Item>
@@ -136,12 +141,12 @@ export default class GitPage extends PureComponent<
         path={resolvedUrl}
         name={params!.name + ''}
         tid={params!.tid}
-        title="云开发环境"
+        title={t('cloud_development_environment')}
       >
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
             <Button variant="success" onClick={() => (this.creatorOpen = true)}>
-              创建开发环境
+              {t('creat_clound_environment')}
             </Button>
           </header>
 

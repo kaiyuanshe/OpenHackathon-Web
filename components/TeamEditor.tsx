@@ -13,7 +13,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="displayName">
       <Form.Label column sm={3}>
-        名称（必填）
+        {t('name')}（必填）
       </Form.Label>
       <Col sm={9}>
         <Form.Control

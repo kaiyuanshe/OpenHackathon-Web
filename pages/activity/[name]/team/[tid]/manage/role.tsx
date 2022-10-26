@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -36,7 +37,7 @@ export default class TeamAdministratorPage extends PureComponent<
         name={name}
         tid={tid}
         path={resolvedUrl}
-        title="角色管理"
+        title={t('role_management')}
       >
         <TeamAdministratorTable
           store={store}

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Badge, Col, Image, Row, Table } from 'react-bootstrap';
 import { parseJSON } from 'web-utility';
 
@@ -19,10 +20,10 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
           <i className="d-inline-block ms-1 overflow-hidden rounded-circle" />
         </div>
         <h3
-          data-text="黑客馆"
+          data-text={t('hacker_pavilion')}
           className="position-relative m-auto mb-0 fw-bold text-center"
         >
-          黑客馆
+          {t('hacker_pavilion')}
         </h3>
       </div>
       <Row
@@ -38,7 +39,10 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
                 className="w-100"
                 src={user?.photo}
                 alt={
-                  user?.nickname || user?.name || user?.username || '神秘黑客'
+                  user?.nickname ||
+                  user?.name ||
+                  user?.username ||
+                  t('mystery_hacker')
                 }
               />
             </div>
@@ -47,7 +51,10 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
             >
               <i className="d-block overflow-hidden m-auto mb-1 rounded-circle" />
               <span className="d-block mb-0">
-                {user?.nickname || user?.name || user?.username || '神秘黑客'}
+                {user?.nickname ||
+                  user?.name ||
+                  user?.username ||
+                  t('mystery_hacker')}
               </span>
               <strong>{score}</strong>
               <TopUserAddress
@@ -81,7 +88,7 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
                       user?.nickname ||
                       user?.name ||
                       user?.username ||
-                      '神秘黑客'
+                      t('mystery_hacker')
                     }
                   />
                 </div>
@@ -91,7 +98,10 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
                     color: `rgb(248, ${(rank - 2) * 15}, ${(rank - 2) * 35})`,
                   }}
                 >
-                  {user?.nickname || user?.name || user?.username || '神秘黑客'}
+                  {user?.nickname ||
+                    user?.name ||
+                    user?.username ||
+                    t('mystery_hacker')}
                 </span>
               </td>
               <td className="align-middle">{score}</td>

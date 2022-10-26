@@ -52,7 +52,7 @@ class RegisterPage extends PureComponent<
     await activityStore.signOne(activity, extensions);
 
     self.alert(
-      textJoin(t('hackathons'), activity, '报名须管理员审核，请耐心等候……'),
+      textJoin(t('hackathons'), activity, t('registration_needs_review')),
     );
     location.href = `/activity/${activity}`;
   };
@@ -89,14 +89,14 @@ class RegisterPage extends PureComponent<
 
     return (
       <SessionBox auto className="container">
-        <PageHead title={`${activity} 参赛者问卷`} />
+        <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
-          <legend className="text-center">参赛者问卷</legend>
+          <legend className="text-center">{t('questionnaire')}</legend>
           <small className="text-muted mt-2">
-            建议您先完善或更新
+            {t('please_complete_all_mandatory_fields_before_you_proceed')}
             <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-              <a className="text-primary ms-2"> 个人资料</a>
+              <a className="text-primary ms-2"> {t('personal_profile')}</a>
             </Link>
           </small>
           <Col as="ol" className="my-3">
@@ -104,7 +104,7 @@ class RegisterPage extends PureComponent<
           </Col>
           <Col className="text-center pt-2">
             <Button type="submit" variant="success">
-              报名参加
+              {t('enter_for')}
             </Button>
           </Col>
         </Form>

@@ -33,7 +33,7 @@ export const TeamCard = ({
       {t('people')}
     </p>
     <a className="d-flex" href={`/user/${creatorId}`}>
-      <span className="pe-2">队长：</span>
+      <span className="pe-2">{t('team_leader')}</span>
 
       <span className="text-primary">
         <Image

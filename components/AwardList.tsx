@@ -73,7 +73,7 @@ export class AwardList extends ScrollList<AwardListProps> {
                 onClick={() => onDelete?.(id!)}
               >
                 <FontAwesomeIcon icon={faTrash} className="me-2" />
-                删除
+                {t('delete')}
               </Button>
             </td>
           </tr>

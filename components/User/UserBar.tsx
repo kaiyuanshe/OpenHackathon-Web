@@ -19,7 +19,7 @@ const UserBar = observer(() => {
   };
   return !user ? (
     <SessionBox>
-      <Button>登入</Button>
+      <Button>{t('sign_in')}</Button>
     </SessionBox>
   ) : (
     <>
