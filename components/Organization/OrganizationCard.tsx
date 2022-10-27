@@ -13,8 +13,7 @@ export const OrganizationCard = ({
     <Card.Body>
       <Card.Title>{name}</Card.Title>
       <Card.Subtitle>{OrganizationTypeName[type]}</Card.Subtitle>
-      <hr></hr>
-      <Card.Text>{description}</Card.Text>
+      <Card.Text className="border-top my-2 pt-2">{description}</Card.Text>
     </Card.Body>
   </Card>
 );
