@@ -23,6 +23,7 @@ import {
 } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { ActivityLogList } from '../../../components/Activity/ActivityLogList';
 import { CommentBox } from '../../../components/CommentBox';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
@@ -62,6 +63,7 @@ export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   teamStore = activityStore.teamOf(this.props.activity.name);
+  logStore = activityStore.logOf(this.props.activity.name);
 
   @observable
   showCreateTeam = false;
@@ -245,8 +247,8 @@ export default class ActivityPage extends PureComponent<
               >
                 {/*todo update no data*/}
               </Tab>
-              <Tab className="pt-2" eventKey="update" title="最新动态">
-                <div className="h1 my-5 text-center">暂无消息</div>
+              <Tab className="pt-2" eventKey="log" title="最新动态">
+                <ActivityLogList store={this.logStore} />
               </Tab>
               <Tab eventKey="team" title="参赛团队" className="pt-2">
                 <h3>我的团队</h3>
