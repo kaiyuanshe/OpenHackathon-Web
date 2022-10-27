@@ -1,5 +1,7 @@
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { FormEvent, PureComponent } from 'react';
+import { createRef, FormEvent, PureComponent } from 'react';
 import {
   Row,
   Col,
@@ -10,15 +12,15 @@ import {
   Badge,
   Card,
 } from 'react-bootstrap';
-import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { withRoute } from '../../../api/core';
-import { Award } from '../../../../models/Award';
 import { formToJSON } from 'web-utility';
 
+import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
+import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
-import { TeamList } from '../../../../components/Team/TeamList';
+import { Award } from '../../../../models/Award';
+import { Team } from '../../../../models/Team';
+import { withRoute } from '../../../api/core';
 
-interface State {}
 interface EvaluationPageProps {
   activity: string;
   path: string;
@@ -27,10 +29,86 @@ interface EvaluationPageProps {
 
 export const getServerSideProps = withRoute<{ name: string }>();
 
+@observer
 class EvaluationPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   store = activityStore.teamOf(this.props.route.params!.name);
+  awardStore = activityStore.awardOf(this.props.route.params!.name);
+
+  form = createRef<HTMLFormElement>();
+
+  componentDidMount() {
+    this.awardStore.getAll();
+  }
+
+  renderForm = () => {
+    const { allItems } = this.awardStore,
+      { id: awardTeamId, displayName: awardTeamName } = this.store.currentOne;
+
+    return (
+      <Form
+        className="p-3 text-nowrap border"
+        ref={this.form}
+        onReset={this.handleReset}
+        onSubmit={this.handleSubmit}
+      >
+        <h2>{awardTeamId ? `授予${awardTeamName}` : '全部奖项'}</h2>
+        {allItems
+          .filter(({ target }) => target === 'team')
+          .map(({ id, name, quantity }) =>
+            awardTeamId ? (
+              <Form.Check
+                type="radio"
+                className="mx-2 my-3"
+                key={id}
+                label={name}
+              />
+            ) : (
+              <li key={id} className="list-unstyled mx-2 my-3">
+                {name}
+              </li>
+            ),
+          )}
+        {awardTeamId && (
+          <div className="d-flex justify-content-around my-4">
+            <Button type="submit" variant="primary">
+              确认
+            </Button>
+            <Button type="reset" variant="danger">
+              取消
+            </Button>
+          </div>
+        )}
+      </Form>
+    );
+  };
+
+  handleAssign = () => {};
+  handleReset = () => {
+    const { store } = this,
+      form = this.form.current;
+    form?.reset();
+    store.clearCurrent();
+  };
+
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { store } = this,
+      form = this.form.current;
+
+    if (!store || !form) return;
+
+    // const data = formToJSON<NewData<Award>>(form);
+
+    // await store.updateOne(data, store.currentOne.id);
+    // await store.refreshList();
+
+    store.clearCurrent();
+    form.reset();
+  };
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,6 +119,7 @@ class EvaluationPage extends PureComponent<
     this.store.clear();
     return this.store.getList({ search });
   };
+
   render() {
     const { resolvedUrl, params } = this.props.route;
     return (
@@ -65,16 +144,11 @@ class EvaluationPage extends PureComponent<
               </InputGroup>
             </Form>
             <div className="my-3">
-              <TeamList store={this.store} />
+              <TeamAwardList store={this.store} onAssign={this.handleAssign} />
             </div>
           </Col>
           <Col md={3} className="p-2">
-            <ListGroup as="ol" numbered>
-              <ListGroup.Item className="d-flex align-items-center justify-content-between">
-                全部奖项
-                <Badge bg="secondary">0</Badge>
-              </ListGroup.Item>
-            </ListGroup>
+            {this.renderForm()}
           </Col>
         </Row>
       </ActivityManageFrame>
