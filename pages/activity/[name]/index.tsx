@@ -24,6 +24,7 @@ import {
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
+import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -62,6 +63,7 @@ export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   teamStore = activityStore.teamOf(this.props.activity.name);
+  organizationStore = activityStore.organizationOf(this.props.activity.name);
 
   @observable
   showCreateTeam = false;
@@ -234,7 +236,7 @@ export default class ActivityPage extends PureComponent<
           </Col>
         </Row>
         <Row className="mt-3">
-          <Col lg={9} md={12} sm={12}>
+          <Col lg={9} md={12} sm={12} className="mb-3">
             <Tabs defaultActiveKey="detail" id="activity-detail-tabs">
               <Tab
                 as="article"
@@ -265,17 +267,22 @@ export default class ActivityPage extends PureComponent<
               </Tab>
             </Tabs>
           </Col>
-          {displayName && location && (
-            <Col className="d-flex flex-column" style={{ height: '50vh' }}>
-              <h2>比赛地点</h2>
+          <Col className="d-flex flex-column">
+            <h2>主办方信息</h2>
+            <OrganizationCardList store={this.organizationStore} />
 
-              {!isServer() && (
-                <OpenMap zoom={10} title={displayName} address={location}>
-                  暂无地址导航
-                </OpenMap>
-              )}
-            </Col>
-          )}
+            {displayName && location && (
+              <>
+                <h2 className="mt-3">比赛地点</h2>
+
+                {!isServer() && (
+                  <OpenMap zoom={10} title={displayName} address={location}>
+                    暂无地址导航
+                  </OpenMap>
+                )}
+              </>
+            )}
+          </Col>
         </Row>
 
         <CommentBox />
