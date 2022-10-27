@@ -12,9 +12,10 @@ export interface Log extends Base {
 
 export class LogModel extends Stream<Log>(ListModel) {
   client = sessionStore.client;
-  constructor(public baseURI: string) {
+
+  constructor(baseURI: string) {
     super();
-    this.baseURI = `${this.baseURI}/activityLogs`;
+    this.baseURI = `${baseURI}/activityLogs`;
   }
 
   openStream() {
