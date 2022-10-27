@@ -14,13 +14,13 @@ export class ActivityLogList extends ScrollList<ActivityLogListProps> {
 
   static Layout = ({ value = [] }: ActivityLogListProps) => (
     <ul>
-      {value.map(item => {
+      {value.map(item => (
         <li key={item.id}>
           <span>{item.activityLogType}</span>
           <span>{item.message}</span>
           <span>{item.messageFormat}</span>
-        </li>;
-      })}
+        </li>
+      ))}
     </ul>
   );
 }
