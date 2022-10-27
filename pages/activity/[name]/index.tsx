@@ -268,13 +268,12 @@ export default class ActivityPage extends PureComponent<
             </Tabs>
           </Col>
           <Col className="d-flex flex-column">
-            <div className="mb-3">
-              <h2>主办方信息</h2>
-              <OrganizationCardList store={this.organizationStore} />
-            </div>
+            <h2>主办方信息</h2>
+            <OrganizationCardList store={this.organizationStore} />
+
             {displayName && location && (
               <>
-                <h2>比赛地点</h2>
+                <h2 className="mt-3">比赛地点</h2>
 
                 {!isServer() && (
                   <OpenMap zoom={10} title={displayName} address={location}>
