@@ -40,7 +40,8 @@ export class MessageModal extends PureComponent<MessageModalProps> {
 
   render() {
     const { show, onHide, store } = this.props;
-    const { content, title } = store.currentOne;
+    const { content, title } = store.currentOne,
+      loading = store.uploading > 0;
 
     return (
       <Modal show={show} onHide={onHide} centered>
@@ -90,10 +91,10 @@ export class MessageModal extends PureComponent<MessageModalProps> {
             </Form.Select>
           </Form.Group>
           <Modal.Footer>
-            <Button variant="secondary" type="reset">
+            <Button variant="secondary" type="reset" disabled={loading}>
               取消
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={loading}>
               保存
             </Button>
           </Modal.Footer>

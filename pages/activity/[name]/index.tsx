@@ -6,8 +6,8 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { OpenMap } from 'idea-react';
-import { observable } from 'mobx';
+import { Loading, OpenMap } from 'idea-react';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -63,19 +63,29 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  logStore = activityStore.logOf(this.props.activity.name);
-  teamStore = activityStore.teamOf(this.props.activity.name);
   organizationStore = activityStore.organizationOf(this.props.activity.name);
+  logStore = activityStore.logOf(this.props.activity.name);
+  enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
+  teamStore = activityStore.teamOf(this.props.activity.name);
 
   @observable
   showCreateTeam = false;
 
+  @computed
+  get loading() {
+    return (
+      (this.organizationStore.downloading ||
+        this.logStore.downloading ||
+        this.enrollmentStore.downloading ||
+        this.teamStore.downloading) > 0
+    );
+  }
+
   async componentDidMount() {
     if (isServer()) return;
 
-    const { name } = this.props.activity;
     try {
-      const { status } = await activityStore.enrollmentOf(name).getSessionOne();
+      const { status } = await this.enrollmentStore.getSessionOne();
 
       if (status === 'approved')
         try {
@@ -85,7 +95,7 @@ export default class ActivityPage extends PureComponent<
   }
 
   renderMeta() {
-    const { status } = activityStore.currentEnrollment?.sessionOne || {},
+    const { status } = this.enrollmentStore.sessionOne || {},
       { sessionOne: myTeam } = this.teamStore || {},
       {
         name,
@@ -209,12 +219,14 @@ export default class ActivityPage extends PureComponent<
   render() {
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
-      { showCreateTeam } = this,
+      { showCreateTeam, loading } = this,
       myTeam = this.teamStore.sessionOne;
 
     return (
-      <Container>
+      <Container className="mt-3">
         <PageHead title={displayName} />
+
+        {loading && <Loading />}
 
         <Row xs={1} sm={1} lg={2}>
           <Carousel>

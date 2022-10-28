@@ -73,10 +73,10 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
       </Col>
     </Form.Group>
 
-    <Row>
-      <Button variant="primary" type="submit" className="center">
-        提交
+    <footer className="text-center my-2">
+      <Button className="px-5" type="submit" variant="success">
+        创建
       </Button>
-    </Row>
+    </footer>
   </Form>
 );

@@ -1,5 +1,7 @@
-import { Icon } from 'idea-react';
+import { Icon, Loading } from 'idea-react';
 import style from 'idea-react/source/FilePicker/index.module.less';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 import { ChangeEvent, PropsWithoutRef, PureComponent } from 'react';
 import { Image } from 'react-bootstrap';
 
@@ -14,14 +16,10 @@ export type FilePickerProps = PropsWithoutRef<{
   max?: number;
 }>;
 
-interface State {
-  values: string[];
-}
-
-export class FileUpload extends PureComponent<FilePickerProps, State> {
-  state: Readonly<State> = {
-    values: this.props.defaultValue || [],
-  };
+@observer
+export class FileUpload extends PureComponent<FilePickerProps> {
+  @observable
+  values = this.props.defaultValue || [];
 
   addOne = async ({
     currentTarget: { files },
@@ -29,7 +27,7 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
     if (!files) return;
 
     const { max } = this.props,
-      { values } = this.state;
+      { values } = this;
 
     if (max && values.length >= max) return;
 
@@ -38,23 +36,21 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
 
       values.push(fileUrl);
     }
-    this.setState({ values: [...values] });
+    this.values = [...values];
   };
 
   deleteOne(index: number) {
-    const { values } = this.state;
+    const { values } = this;
     const current = values[index];
 
     if (current.startsWith('blob:')) URL.revokeObjectURL(current);
 
-    this.setState({
-      values: [...values.slice(0, index), ...values.slice(index + 1)],
-    });
+    this.values = [...values.slice(0, index), ...values.slice(index + 1)];
   }
 
-  render() {
+  renderList() {
     const { accept, name, multiple, required, max } = this.props,
-      { values } = this.state;
+      { values } = this;
     const isImage = accept.startsWith('image/');
 
     return (
@@ -92,6 +88,18 @@ export class FileUpload extends PureComponent<FilePickerProps, State> {
           </li>
         )}
       </ul>
+    );
+  }
+
+  render() {
+    const { uploading } = sessionStore;
+
+    return (
+      <>
+        {uploading > 0 && <Loading />}
+
+        {this.renderList()}
+      </>
     );
   }
 }

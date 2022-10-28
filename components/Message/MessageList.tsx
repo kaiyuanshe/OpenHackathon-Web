@@ -12,6 +12,7 @@ export interface MessageListProps extends ScrollListProps<Message> {
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
+
 @observer
 export class MessageList extends ScrollList<MessageListProps> {
   store = this.props.store;
@@ -95,15 +96,20 @@ export class MessageList extends ScrollList<MessageListProps> {
             <td>{title}</td>
             <td>{content}</td>
             <td>
-              <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
-                <FontAwesomeIcon icon={faEdit} className="me-2" />
+              <Button
+                className="me-2"
+                variant="primary"
+                size="sm"
+                onClick={() => onEdit?.(id!)}
+              >
+                <FontAwesomeIcon icon={faEdit} />
               </Button>
               <Button
                 variant="danger"
                 size="sm"
                 onClick={() => onDelete?.(id!)}
               >
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
             </td>
           </tr>

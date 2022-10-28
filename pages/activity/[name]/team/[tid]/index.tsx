@@ -180,7 +180,7 @@ export default class TeamPage extends PureComponent<
       } = this;
 
     return (
-      <Container as="main">
+      <Container as="main" className="mt-4">
         <PageHead title={`${displayName} - ${hackathonDisplayName}`} />
 
         <MainBreadcrumb currentRoute={currentRoute} />
@@ -247,6 +247,7 @@ export default class TeamPage extends PureComponent<
                   activity={hackathonName}
                   team={id}
                   value={teamWorkList}
+                  controls={!!currentUserInThisTeam}
                 />
               </Tab>
             </Tabs>

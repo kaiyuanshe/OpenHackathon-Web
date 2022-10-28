@@ -34,7 +34,7 @@ export interface Activity extends Base {
   enrollmentEndedAt: string;
   judgeStartedAt: string;
   judgeEndedAt: string;
-  roles: {
+  roles: null | {
     isAdmin: boolean;
     isJudge: boolean;
     isEnrolled: boolean;
