@@ -1,11 +1,11 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
-import styles from '../../styles/participant.module.less';
 import { Message, MessageModel } from '../../models/Message';
+import styles from '../../styles/participant.module.less';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;

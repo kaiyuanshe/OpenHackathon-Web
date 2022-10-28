@@ -21,7 +21,7 @@ export class OrganizationCardList extends ScrollList<OrganizationListProps> {
   static Layout = ({ value = [] }: OrganizationListProps) => (
     <div>
       {value.map(item => (
-        <Row key={item.id}>
+        <Row key={item.id} className="p-2">
           <OrganizationCard {...item} />
         </Row>
       ))}

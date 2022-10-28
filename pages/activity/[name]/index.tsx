@@ -23,6 +23,7 @@ import {
 } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { ActivityLogList } from '../../../components/Activity/ActivityLogList';
 import { CommentBox } from '../../../components/CommentBox';
 import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
@@ -62,6 +63,7 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  logStore = activityStore.logOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
   organizationStore = activityStore.organizationOf(this.props.activity.name);
 
@@ -247,8 +249,8 @@ export default class ActivityPage extends PureComponent<
               >
                 {/*todo update no data*/}
               </Tab>
-              <Tab className="pt-2" eventKey="update" title="最新动态">
-                <div className="h1 my-5 text-center">暂无消息</div>
+              <Tab className="pt-2" eventKey="log" title="最新动态">
+                <ActivityLogList store={this.logStore} />
               </Tab>
               <Tab eventKey="team" title="参赛团队" className="pt-2">
                 <h3>我的团队</h3>
@@ -276,9 +278,11 @@ export default class ActivityPage extends PureComponent<
                 <h2 className="mt-3">比赛地点</h2>
 
                 {!isServer() && (
-                  <OpenMap zoom={10} title={displayName} address={location}>
-                    暂无地址导航
-                  </OpenMap>
+                  <div style={{ minHeight: '10rem' }}>
+                    <OpenMap zoom={10} title={displayName} address={location}>
+                      暂无地址导航
+                    </OpenMap>
+                  </div>
                 )}
               </>
             )}

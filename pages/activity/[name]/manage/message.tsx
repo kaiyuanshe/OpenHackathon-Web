@@ -1,14 +1,14 @@
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { createRef, FormEvent, PureComponent } from 'react';
-import { observer } from 'mobx-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
+import { createRef, FormEvent, PureComponent } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
-import { MessageList } from '../../../../components/Message/MessageList';
-import { MessageModal } from '../../../../components/Message/ActivityMessageModal';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
+import { MessageModal } from '../../../../components/Message/ActivityMessageModal';
+import { MessageList } from '../../../../components/Message/MessageList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 
