@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
 import { formToJSON, textJoin } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
@@ -84,7 +84,8 @@ class RegisterPage extends PureComponent<
     );
 
   render() {
-    const { activity } = this.props;
+    const { activity } = this.props,
+      { uploading } = activityStore;
 
     return (
       <SessionBox auto className="container">
@@ -98,14 +99,18 @@ class RegisterPage extends PureComponent<
               <a className="text-primary ms-2"> 个人资料</a>
             </Link>
           </small>
-          <Col as="ol" className="my-3">
-            {questions.map(this.renderField)}
-          </Col>
-          <Col className="text-center pt-2">
-            <Button type="submit" variant="success">
+          <ol className="my-3">{questions.map(this.renderField)}</ol>
+
+          <footer className="text-center my-2">
+            <Button
+              className="px-5"
+              type="submit"
+              variant="success"
+              disabled={uploading > 0}
+            >
               报名参加
             </Button>
-          </Col>
+          </footer>
         </Form>
       </SessionBox>
     );

@@ -5,7 +5,7 @@ import { Button, Form, Table } from 'react-bootstrap';
 
 import { Message, MessageModel } from '../../models/Message';
 import styles from '../../styles/participant.module.less';
-import { ScrollList,ScrollListProps } from '../ScrollList';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
@@ -96,15 +96,20 @@ export class MessageList extends ScrollList<MessageListProps> {
             <td>{title}</td>
             <td>{content}</td>
             <td>
-              <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
-                <FontAwesomeIcon icon={faEdit} className="me-2" />
+              <Button
+                className="me-2"
+                variant="primary"
+                size="sm"
+                onClick={() => onEdit?.(id!)}
+              >
+                <FontAwesomeIcon icon={faEdit} />
               </Button>
               <Button
                 variant="danger"
                 size="sm"
                 onClick={() => onDelete?.(id!)}
               >
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
             </td>
           </tr>

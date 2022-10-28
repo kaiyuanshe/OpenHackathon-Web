@@ -7,6 +7,7 @@ import {
   ActivityListType,
   ActivityModel,
 } from '../../models/Activity';
+import sessionStore from '../../models/Session';
 import { ScrollList, ScrollListProps } from '../ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
 
@@ -61,7 +62,11 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
         <Col key={item.name}>
           <ActivityCard
             className="h-100"
-            controls={!!userId && (type === 'admin' || type === 'created')}
+            controls={
+              !!userId &&
+              userId === sessionStore.user?.id &&
+              (type === 'admin' || type === 'created')
+            }
             {...item}
             {...props}
           />

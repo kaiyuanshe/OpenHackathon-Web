@@ -8,8 +8,8 @@ const createActivity = () => (
   <SessionBox auto>
     <PageHead title="创建活动" />
 
-    <Container>
-      <h2 className="text-center">创建活动</h2>
+    <Container className="my-4">
+      <h2 className="text-center mb-3">创建活动</h2>
 
       <ActivityEditor />
     </Container>

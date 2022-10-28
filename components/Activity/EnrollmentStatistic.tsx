@@ -93,7 +93,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
           {Object.entries(extensions).map(
             ([title, answers]) =>
               !isEmpty(answers) && (
-                <Col as="section">
+                <Col as="section" key={title}>
                   <SVGCharts>
                     <Title>{title}</Title>
                     <PieSeries

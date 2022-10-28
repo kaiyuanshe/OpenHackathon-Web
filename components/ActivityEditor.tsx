@@ -1,3 +1,4 @@
+import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
@@ -54,25 +55,30 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
   render() {
     const {
-      name,
-      displayName,
-      tags,
-      banners,
-      location,
-      enrollmentStartedAt,
-      enrollmentEndedAt,
-      eventStartedAt,
-      eventEndedAt,
-      judgeStartedAt,
-      judgeEndedAt,
-      ribbon,
-      maxEnrollment,
-      summary,
-      detail,
-    } = activityStore.currentOne;
+        name,
+        displayName,
+        tags = [],
+        banners,
+        location,
+        enrollmentStartedAt,
+        enrollmentEndedAt,
+        eventStartedAt,
+        eventEndedAt,
+        judgeStartedAt,
+        judgeEndedAt,
+        ribbon,
+        maxEnrollment,
+        summary,
+        detail,
+      } = activityStore.currentOne,
+      { downloading, uploading } = activityStore;
+
+    const loading = downloading > 0 || uploading > 0;
 
     return (
-      <Form onSubmit={this.submitHandler}>
+      <Form className="container-fluid" onSubmit={this.submitHandler}>
+        {loading && <Loading />}
+
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
             名称（必填）
@@ -233,9 +239,11 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Col>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          提交
-        </Button>
+        <footer className="text-center">
+          <Button type="submit" className="px-5">
+            提交
+          </Button>
+        </footer>
       </Form>
     );
   }

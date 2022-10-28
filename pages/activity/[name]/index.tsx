@@ -209,7 +209,7 @@ export default class ActivityPage extends PureComponent<
       myTeam = this.teamStore.sessionOne;
 
     return (
-      <Container>
+      <Container className="mt-3">
         <PageHead title={displayName} />
 
         <Row xs={1} sm={1} lg={2}>
