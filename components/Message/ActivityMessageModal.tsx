@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import { createRef,FormEvent, PureComponent } from 'react';
-import { Button, Form, Modal,ModalProps } from 'react-bootstrap';
+import { createRef, FormEvent, PureComponent } from 'react';
+import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Message, MessageModel, MessageTypeName } from '../../models/Message';

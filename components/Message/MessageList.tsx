@@ -5,7 +5,7 @@ import { Button, Form, Table } from 'react-bootstrap';
 
 import { Message, MessageModel } from '../../models/Message';
 import styles from '../../styles/participant.module.less';
-import { ScrollList,ScrollListProps } from '../ScrollList';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
