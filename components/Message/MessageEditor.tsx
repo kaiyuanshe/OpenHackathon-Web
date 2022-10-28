@@ -1,5 +1,5 @@
 import { FC, FormEvent } from 'react';
-import { Button,Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import { Message } from '../../models/Message';
 
