@@ -14,14 +14,14 @@ export class ActivityLogList extends ScrollList<ActivityLogListProps> {
 
   static Layout = ({ value = [] }: ActivityLogListProps) => (
     <ListGroup as="ol" numbered>
-      {value.map(item => (
+      {value.map(({ id, message, activityLogType }) => (
         <ListGroup.Item
-          key={item.id}
+          key={id}
           as="li"
           className="d-flex justify-content-between"
         >
-          <div className="ms-2 me-auto">{item.message}</div>
-          <Badge>{item.activityLogType}</Badge>
+          <div className="ms-2 me-auto">{message}</div>
+          <Badge>{activityLogType}</Badge>
         </ListGroup.Item>
       ))}
     </ListGroup>
