@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Col } from 'react-bootstrap';
+import { Badge, ListGroup } from 'react-bootstrap';
 
 import { Log, LogModel } from '../../models/Log';
 import { ScrollList, ScrollListProps } from '../ScrollList';
@@ -13,14 +13,17 @@ export class ActivityLogList extends ScrollList<ActivityLogListProps> {
   store = this.props.store;
 
   static Layout = ({ value = [] }: ActivityLogListProps) => (
-    <ul>
+    <ListGroup as="ol" numbered>
       {value.map(item => (
-        <li key={item.id}>
-          <span>{item.activityLogType}</span>
-          <span>{item.message}</span>
-          <span>{item.messageFormat}</span>
-        </li>
+        <ListGroup.Item
+          key={item.id}
+          as="li"
+          className="d-flex justify-content-between"
+        >
+          <div className="ms-2 me-auto">{item.message}</div>
+          <Badge>{item.activityLogType}</Badge>
+        </ListGroup.Item>
       ))}
-    </ul>
+    </ListGroup>
   );
 }
