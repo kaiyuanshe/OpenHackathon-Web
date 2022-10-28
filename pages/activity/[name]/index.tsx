@@ -278,9 +278,11 @@ export default class ActivityPage extends PureComponent<
                 <h2 className="mt-3">比赛地点</h2>
 
                 {!isServer() && (
-                  <OpenMap zoom={10} title={displayName} address={location}>
-                    暂无地址导航
-                  </OpenMap>
+                  <div style={{ minHeight: '10rem' }}>
+                    <OpenMap zoom={10} title={displayName} address={location}>
+                      暂无地址导航
+                    </OpenMap>
+                  </div>
                 )}
               </>
             )}
