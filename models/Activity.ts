@@ -7,6 +7,7 @@ import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { GitModel } from './Git';
 import { LogModel } from './Log';
+import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
@@ -74,6 +75,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentAward?: AwardModel;
   @observable
   currentEnrollment?: EnrollmentModel;
+  currentMessage?: MessageModel;
   @observable
   currentTeam?: TeamModel;
   currentLog?: LogModel;
@@ -89,6 +91,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   enrollmentOf(name = this.currentOne.name) {
     return (this.currentEnrollment = new EnrollmentModel(`hackathon/${name}`));
+  }
+
+  messageOf(name = this.currentOne.name) {
+    return (this.currentMessage = new MessageModel(`hackathon/${name}`));
   }
 
   teamOf(name = this.currentOne.name) {
@@ -145,6 +151,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.enrollmentOf(name);
     this.teamOf(name);
     this.organizationOf(name);
+    this.messageOf(name);
 
     return (this.currentOne = {
       ...data,

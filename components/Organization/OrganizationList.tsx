@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { Form, Image, Table } from 'react-bootstrap';
+import { Form, Image, Row, Table } from 'react-bootstrap';
 
 import {
   Organization,
@@ -8,9 +8,25 @@ import {
 } from '../../models/Organization';
 import styles from '../../styles/Table.module.less';
 import { ScrollList, ScrollListProps } from '../ScrollList';
+import { OrganizationCard } from './OrganizationCard';
 
 export interface OrganizationListProps extends ScrollListProps<Organization> {
   store: OrganizationModel;
+}
+
+@observer
+export class OrganizationCardList extends ScrollList<OrganizationListProps> {
+  store = this.props.store;
+
+  static Layout = ({ value = [] }: OrganizationListProps) => (
+    <div>
+      {value.map(item => (
+        <Row key={item.id}>
+          <OrganizationCard {...item} />
+        </Row>
+      ))}
+    </div>
+  );
 }
 
 @observer
