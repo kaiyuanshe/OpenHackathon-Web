@@ -24,6 +24,7 @@ import {
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
+import { MessageList } from '../../../components/Message/MessageList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -62,9 +63,13 @@ export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   teamStore = activityStore.teamOf(this.props.activity.name);
+  messageStore = activityStore.messageOf(this.props.activity.name);
 
   @observable
   showCreateTeam = false;
+
+  @observable
+  hideMessageListNotNeed = true;
 
   async componentDidMount() {
     if (isServer()) return;
@@ -206,7 +211,8 @@ export default class ActivityPage extends PureComponent<
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
       { showCreateTeam } = this,
-      myTeam = this.teamStore.sessionOne;
+      myTeam = this.teamStore.sessionOne,
+      myMessage = this.messageStore;
 
     return (
       <Container>
@@ -246,7 +252,10 @@ export default class ActivityPage extends PureComponent<
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="update" title="最新动态">
-                <div className="h1 my-5 text-center">暂无消息</div>
+                  <MessageList
+                    store={myMessage}
+                    hide={this.hideMessageListNotNeed}
+                  />
               </Tab>
               <Tab eventKey="team" title="参赛团队" className="pt-2">
                 <h3>我的团队</h3>

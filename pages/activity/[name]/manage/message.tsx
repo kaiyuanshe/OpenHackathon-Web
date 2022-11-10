@@ -25,6 +25,9 @@ export default class MessageListPage extends PureComponent<
   @observable
   show = false;
 
+  @observable
+  hide = false;
+
   selectedIds: string[] = [];
 
   handleReset = () => this.form.current?.reset();
@@ -69,6 +72,7 @@ export default class MessageListPage extends PureComponent<
         </Form>
         <MessageList
           store={store}
+          hide={this.hide}
           onSelect={list => (this.selectedIds = list)}
           onEdit={() => (this.show = true)}
           onDelete={this.handleReset}

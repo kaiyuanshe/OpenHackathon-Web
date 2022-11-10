@@ -5,10 +5,16 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { ScrollListProps, ScrollList } from '../ScrollList';
 import styles from '../../styles/participant.module.less';
-import { Message, MessageModel } from '../../models/Message';
+import {
+  Message,
+  MessageModel,
+  MessageType,
+  MessageTypeName,
+} from '../../models/Message';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
+  hide: boolean;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
@@ -32,6 +38,7 @@ export class MessageList extends ScrollList<MessageListProps> {
   static Layout = ({
     value = [],
     selectedIds = [],
+    hide,
     onSelect,
     onEdit,
     onDelete,
@@ -39,7 +46,7 @@ export class MessageList extends ScrollList<MessageListProps> {
     <Table hover responsive="lg" className={styles.table}>
       <thead>
         <tr>
-          <th>
+          <th hidden={hide}>
             <Form.Check
               inline
               type="checkbox"
@@ -64,13 +71,13 @@ export class MessageList extends ScrollList<MessageListProps> {
           <th>公告名称</th>
           <th>链接</th>
           <th>类型</th>
-          <th>操作</th>
+          <th hidden={hide}>操作</th>
         </tr>
       </thead>
       <tbody>
-        {value.map(({ id, hackathonName, title, content }) => (
+        {value.map(({ id, title, content }) => (
           <tr key={id}>
-            <td>
+            <td hidden={hide}>
               <Form.Check
                 inline
                 type="checkbox"
@@ -91,10 +98,10 @@ export class MessageList extends ScrollList<MessageListProps> {
                 }
               />
             </td>
-            <td>{hackathonName}</td>
-            <td>{title}</td>
             <td>{content}</td>
-            <td>
+            <td>{title}</td>
+            <td>{MessageTypeName[MessageType.Hackathon]}</td>
+            <td hidden={hide}>
               <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
                 <FontAwesomeIcon icon={faEdit} className="me-2" />
               </Button>

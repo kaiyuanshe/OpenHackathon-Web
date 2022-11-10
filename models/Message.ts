@@ -13,7 +13,6 @@ export const MessageTypeName = {
 };
 
 export interface Message extends Base {
-  hackathonName: string;
   title: string;
   content: string;
 }
