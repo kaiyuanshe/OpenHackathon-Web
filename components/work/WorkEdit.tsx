@@ -61,7 +61,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               <Form.Control
                 name="title"
                 type="text"
-                placeholder="请填写作品名称"
+                placeholder={t('please_enter_name')}
                 pattern="[a-zA-Z0-9]+"
                 required
                 defaultValue={currentOne?.title}
@@ -77,7 +77,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                 name="description"
                 as="textarea"
                 rows={3}
-                placeholder="请填写作品描述"
+                placeholder={t('please_enter_description')}
                 required
                 defaultValue={currentOne?.description}
               />
@@ -105,14 +105,14 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
           {currentOne?.type === 'website' && (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
-                作品在线链接
+                {t('work_url')}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
                   name="url"
                   type="uri"
                   defaultValue={currentOne.url}
-                  placeholder="作品链接"
+                  placeholder={t('work_url')}
                 />
               </Col>
             </Form.Group>

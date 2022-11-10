@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
@@ -29,7 +30,7 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
 
   extraProps: Partial<ActivityListProps> = {
     onPublish: async name => {
-      if (!confirm(`确定让 ${name} 上线？`)) return;
+      if (!confirm(t('sure_publish', { name }))) return;
 
       const { type, onPublish } = this.props;
 
@@ -37,7 +38,7 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
       onPublish?.(name);
     },
     onDelete: async name => {
-      if (!confirm(`确定让 ${name} 下线？`)) return;
+      if (!confirm(t('sure_offline', { name }))) return;
 
       await this.store.deleteOne(name);
       this.props.onDelete?.(name);

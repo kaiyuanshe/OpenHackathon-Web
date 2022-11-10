@@ -30,7 +30,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
 
   extraProps: Partial<TeamWorkListProps> = {
     onDelete: id =>
-      id && confirm('确定删除该作品？') && this.store.deleteOne(id),
+      id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id),
   };
 
   static Layout = ({

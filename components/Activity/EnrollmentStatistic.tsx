@@ -6,6 +6,7 @@ import {
   XAxis,
   YAxis,
 } from 'echarts-jsx';
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -40,7 +41,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
 
     return (
       <SVGCharts>
-        <Title>报名趋势</Title>
+        <Title>{t('sign_up_trends')}</Title>
 
         <XAxis data={date} />
         <YAxis />
@@ -58,14 +59,14 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
 
     return (
       <Container fluid>
-        <h2 className="my-4">基本信息</h2>
+        <h2 className="my-4">{t('basic_info')}</h2>
 
         {this.renderTimeline()}
 
         <Row sm={1} md={2}>
           <Col>
             <SVGCharts>
-              <Title>城市分布</Title>
+              <Title>{t('city_distribution')}</Title>
               <PieSeries
                 data={Object.entries(city).map(([name, value]) => ({
                   name,
@@ -76,7 +77,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
           </Col>
           <Col>
             <SVGCharts>
-              <Title>审核状态</Title>
+              <Title>{t('approval_status')}</Title>
               <PieSeries
                 data={Object.entries(status).map(([name, value]) => ({
                   name,
@@ -87,7 +88,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
           </Col>
         </Row>
 
-        <h2 className="my-4">自定义问卷</h2>
+        <h2 className="my-4">{t('custom_questionnaire')}</h2>
 
         <Row sm={1} md={2}>
           {Object.entries(extensions).map(

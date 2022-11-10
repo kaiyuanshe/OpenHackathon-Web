@@ -25,14 +25,14 @@ const StatusName: Record<TeamMember['status'], string> = {
 
 const TableHeads = [
   '#',
-  '昵称',
-  '邮箱',
-  '联系电话',
-  '联系地址',
-  '申请时间',
-  '申请角色',
-  '备注',
-  '状态',
+  t('nick_name'),
+  t('mail'),
+  t('phone_number'),
+  t('contact_address'),
+  t('apply_time'),
+  t('apply_role'),
+  t('remark'),
+  t('status'),
 ];
 
 @observer

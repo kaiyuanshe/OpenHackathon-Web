@@ -32,11 +32,11 @@ export class EnrollmentList extends ScrollList<EnrollmentListProps> {
           <th>#</th>
           <th>{t('user_name')}</th>
           <th>{t('mail')}</th>
-          <th>登录方式</th>
-          <th>联系电话</th>
-          <th>联系地址</th>
-          <th>报名时间</th>
-          <th>状态</th>
+          <th>{t('login_way')}</th>
+          <th>{t('phone_number')}</th>
+          <th>{t('contact_address')}</th>
+          <th>{t('enrollment')}</th>
+          <th>{t('status')}</th>
         </tr>
       </thead>
       <tbody>

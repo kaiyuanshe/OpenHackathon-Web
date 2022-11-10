@@ -30,7 +30,7 @@ export function ActivityControl({
           variant="success"
           onClick={() => onPublish?.(name)}
         >
-          {status === 'planning' && '申请'}上线
+          {status === 'planning' ? t('apply_publish') : t('publish')}
         </Button>
       ) : (
         <Button
@@ -38,7 +38,7 @@ export function ActivityControl({
           variant="warning"
           onClick={() => onDelete?.(name)}
         >
-          下线
+          {t('offline')}
         </Button>
       )}
     </>

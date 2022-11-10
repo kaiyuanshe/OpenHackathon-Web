@@ -50,7 +50,7 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
           </th>
           <th>{t('name')}</th>
           <th>{t('introduction')}</th>
-          <th>类型</th>
+          <th>{t('type')}</th>
           <th>logo</th>
         </tr>
       </thead>

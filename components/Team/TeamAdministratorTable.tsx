@@ -26,9 +26,9 @@ const TableHeads = [
   '#',
   t('nick_name'),
   t('mail'),
-  '联系电话',
-  '联系地址',
-  '最后登录时间',
+  t('phone_number'),
+  t('contact_address'),
+  t('last_login_time'),
   t('remark'),
   t('role_type'),
 ];

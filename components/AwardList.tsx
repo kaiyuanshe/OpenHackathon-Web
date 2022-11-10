@@ -19,7 +19,14 @@ export const AwardTargetName = {
   individual: t('personal'),
   team: t('team'),
 };
-const awardTableHead = ['权重', '类型', '照片', '名称', '描述', '操作'];
+const awardTableHead = [
+  t('weights'),
+  t('type'),
+  t('photo'),
+  t('name'),
+  t('description'),
+  t('operate'),
+];
 
 @observer
 export class AwardList extends ScrollList<AwardListProps> {
@@ -31,7 +38,7 @@ export class AwardList extends ScrollList<AwardListProps> {
       this.store.getOne(id);
     },
     onDelete: id => {
-      if (!confirm('确定删除该奖项？')) return;
+      if (!confirm(t('sure_delete_this_work'))) return;
 
       this.props.onDelete?.(id);
       this.store.deleteOne(id);

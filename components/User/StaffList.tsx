@@ -17,10 +17,10 @@ const TableHeads = [
   t('all'),
   t('name'),
   t('mail'),
-  '角色类型',
+  t('role_type'),
   t('status'),
-  '帐户来源',
-  '最后登录时间',
+  t('role_source'),
+  t('last_login_time'),
   t('create_time'),
   t('remark'),
 ];

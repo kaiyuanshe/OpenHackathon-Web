@@ -29,7 +29,7 @@ const ActivityEdit: FC<{ activity: Activity }> = ({ activity }) => {
     // @ts-ignore
     await activityStore.updateOne(inputParams, activity.name);
 
-    alert('修改成功');
+    alert(t('edited_success'));
   };
 
   return (

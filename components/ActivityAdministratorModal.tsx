@@ -32,7 +32,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     const { type, description } =
       formToJSON<Pick<Staff, 'type' | 'description'>>(currentTarget);
 
-    if (!userId) return alert('请先搜索并选择一位用户');
+    if (!userId) return alert(t('search_an_user'));
 
     await store.updateOne({ type, description }, userId);
     onSave?.();
@@ -51,7 +51,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     return (
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>增加管理员</Modal.Title>
+          <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <UserList

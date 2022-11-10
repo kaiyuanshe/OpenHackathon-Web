@@ -45,13 +45,13 @@ const UserBar = observer(() => {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => changeLanguage('en-US')}>
-            {t('en-US')}
+            English
           </Dropdown.Item>
           <Dropdown.Item onClick={() => changeLanguage('zh-Hans')}>
-            {t('zh-Hans')}
+            简体中文
           </Dropdown.Item>
           <Dropdown.Item onClick={() => changeLanguage('zh-Hant-TW')}>
-            中文繁体-台湾
+            中文繁體-臺灣
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

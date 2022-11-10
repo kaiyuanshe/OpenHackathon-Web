@@ -13,14 +13,15 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="displayName">
       <Form.Label column sm={3}>
-        {t('name')}（必填）
+        {t('disaplay_name')}
+        {t('quote_required')}
       </Form.Label>
       <Col sm={9}>
         <Form.Control
           name="displayName"
           required
           maxLength={128}
-          placeholder="显示名称"
+          placeholder={t('disaplay_name')}
           defaultValue={team?.displayName}
         />
       </Col>
@@ -29,7 +30,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
     {/* todo editor */}
     <Form.Group as={Row} className="mb-3" controlId="description">
       <Form.Label column sm={3}>
-        团队简介
+        {t('team_introduction')}
       </Form.Label>
       <Col sm={9}>
         <Form.Control
@@ -37,7 +38,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           as="textarea"
           rows={3}
           maxLength={512}
-          placeholder="团队简介"
+          placeholder={t('team_introduction')}
           defaultValue={team?.description}
           required
         />
@@ -50,7 +51,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
       controlId="autoApprove"
     >
       <Form.Label column sm={3}>
-        自动同意
+        {t('auto_approve')}
       </Form.Label>
       <Col sm={9}>
         <Form.Check
