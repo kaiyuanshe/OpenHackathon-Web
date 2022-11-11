@@ -6,8 +6,9 @@ import { AwardModel } from './Award';
 import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { TeamModel } from './Team';
-import { MessageModel } from './Message';
 import { GitModel } from './Git';
+import { LogModel } from './Log';
+import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
@@ -33,7 +34,7 @@ export interface Activity extends Base {
   enrollmentEndedAt: string;
   judgeStartedAt: string;
   judgeEndedAt: string;
-  roles: {
+  roles: null | {
     isAdmin: boolean;
     isJudge: boolean;
     isEnrolled: boolean;
@@ -77,6 +78,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentMessage?: MessageModel;
   @observable
   currentTeam?: TeamModel;
+  currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
 
   staffOf(name = this.currentOne.name) {
@@ -97,6 +99,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   teamOf(name = this.currentOne.name) {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
+  }
+
+  logOf(name = this.currentOne.name) {
+    return (this.currentLog = new LogModel(`hackathon/${name}`));
   }
 
   organizationOf(name = this.currentOne.name) {

@@ -68,11 +68,11 @@ export default class OrganizationPage extends PureComponent<
   render() {
     const { resolvedUrl, params } = this.props.route,
       { store, show } = this;
-    const activity = params!.name;
+    const loading = store.uploading > 0;
 
     return (
       <ActivityManageFrame
-        name={activity}
+        name={params!.name}
         path={resolvedUrl}
         title="主办方管理"
       >
@@ -85,12 +85,13 @@ export default class OrganizationPage extends PureComponent<
                 <Button
                   variant="success"
                   className="my-3"
+                  disabled={loading}
                   onClick={() => (this.show = true)}
                 >
                   <FontAwesomeIcon className="me-2" icon={faPlus} />
                   增加
                 </Button>
-                <Button variant="danger" type="submit">
+                <Button variant="danger" type="submit" disabled={loading}>
                   <FontAwesomeIcon className="me-2" icon={faTrash} />
                   删除
                 </Button>
@@ -109,7 +110,7 @@ export default class OrganizationPage extends PureComponent<
           store={store}
           show={show}
           onHide={() => (this.show = false)}
-          onSave={() => (this.show = false) || this.store.refreshList()}
+          onSave={() => (this.show = false) || store.refreshList()}
         />
       </ActivityManageFrame>
     );

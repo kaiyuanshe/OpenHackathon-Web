@@ -6,8 +6,8 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { OpenMap } from 'idea-react';
-import { observable } from 'mobx';
+import { Loading, OpenMap } from 'idea-react';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -23,8 +23,10 @@ import {
 } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { ActivityLogList } from '../../../components/Activity/ActivityLogList';
 import { CommentBox } from '../../../components/CommentBox';
 import { MessageList } from '../../../components/Message/MessageList';
+import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -62,6 +64,9 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
+  organizationStore = activityStore.organizationOf(this.props.activity.name);
+  logStore = activityStore.logOf(this.props.activity.name);
+  enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
   messageStore = activityStore.messageOf(this.props.activity.name);
 
@@ -71,12 +76,21 @@ export default class ActivityPage extends PureComponent<
   @observable
   hideMessageListNotNeed = true;
 
+  @computed
+  get loading() {
+    return (
+      (this.organizationStore.downloading ||
+        this.logStore.downloading ||
+        this.enrollmentStore.downloading ||
+        this.teamStore.downloading) > 0
+    );
+  }
+
   async componentDidMount() {
     if (isServer()) return;
 
-    const { name } = this.props.activity;
     try {
-      const { status } = await activityStore.enrollmentOf(name).getSessionOne();
+      const { status } = await this.enrollmentStore.getSessionOne();
 
       if (status === 'approved')
         try {
@@ -86,7 +100,7 @@ export default class ActivityPage extends PureComponent<
   }
 
   renderMeta() {
-    const { status } = activityStore.currentEnrollment?.sessionOne || {},
+    const { status } = this.enrollmentStore.sessionOne || {},
       { sessionOne: myTeam } = this.teamStore || {},
       {
         name,
@@ -210,13 +224,15 @@ export default class ActivityPage extends PureComponent<
   render() {
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
-      { showCreateTeam } = this,
+      { showCreateTeam, loading } = this,
       myTeam = this.teamStore.sessionOne,
       myMessage = this.messageStore;
 
     return (
-      <Container>
+      <Container className="mt-3">
         <PageHead title={displayName} />
+
+        {loading && <Loading />}
 
         <Row xs={1} sm={1} lg={2}>
           <Carousel>
@@ -240,7 +256,7 @@ export default class ActivityPage extends PureComponent<
           </Col>
         </Row>
         <Row className="mt-3">
-          <Col lg={9} md={12} sm={12}>
+          <Col lg={9} md={12} sm={12} className="mb-3">
             <Tabs defaultActiveKey="detail" id="activity-detail-tabs">
               <Tab
                 as="article"
@@ -251,11 +267,12 @@ export default class ActivityPage extends PureComponent<
               >
                 {/*todo update no data*/}
               </Tab>
-              <Tab className="pt-2" eventKey="update" title="最新动态">
-                  <MessageList
-                    store={myMessage}
-                    hide={this.hideMessageListNotNeed}
-                  />
+              <Tab className="pt-2" eventKey="log" title="最新动态">
+                <ActivityLogList store={this.logStore} />
+                {/* <MessageList
+                  store={myMessage}
+                  hide={this.hideMessageListNotNeed}
+                /> */}
               </Tab>
               <Tab eventKey="team" title="参赛团队" className="pt-2">
                 <h3>我的团队</h3>
@@ -274,17 +291,24 @@ export default class ActivityPage extends PureComponent<
               </Tab>
             </Tabs>
           </Col>
-          {displayName && location && (
-            <Col className="d-flex flex-column" style={{ height: '50vh' }}>
-              <h2>比赛地点</h2>
+          <Col className="d-flex flex-column">
+            <h2>主办方信息</h2>
+            <OrganizationCardList store={this.organizationStore} />
 
-              {!isServer() && (
-                <OpenMap zoom={10} title={displayName} address={location}>
-                  暂无地址导航
-                </OpenMap>
-              )}
-            </Col>
-          )}
+            {displayName && location && (
+              <>
+                <h2 className="mt-3">比赛地点</h2>
+
+                {!isServer() && (
+                  <div style={{ minHeight: '10rem' }}>
+                    <OpenMap zoom={10} title={displayName} address={location}>
+                      暂无地址导航
+                    </OpenMap>
+                  </div>
+                )}
+              </>
+            )}
+          </Col>
         </Row>
 
         <CommentBox />

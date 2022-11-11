@@ -1,6 +1,6 @@
 # Open Hackathon - Web App
 
-[React][1] project scaffold based on [TypeScript][2], [Next.js][3], [Bootstrap][4] & [Workbox][5]. And this project bootstrapped with [`create-next-app`][6].
+Open-source Hackathon Platform with Git-based Cloud Development Environment
 
 [![CI & CD](https://github.com/kaiyuanshe/OpenHackathon-Web/actions/workflows/main.yml/badge.svg)][8]
 

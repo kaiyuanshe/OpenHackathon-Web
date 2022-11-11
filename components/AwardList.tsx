@@ -3,13 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
-import activityStore from '../models/Activity';
-import { Award } from '../models/Award';
+import { Award, AwardModel } from '../models/Award';
 import styles from '../styles/Table.module.less';
 import { ScrollList, ScrollListProps } from './ScrollList';
 
 export interface AwardListProps extends ScrollListProps<Award> {
-  activity: string;
+  store: AwardModel;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
@@ -22,7 +21,7 @@ const awardTableHead = ['权重', '类型', '照片', '名称', '描述', '操�
 
 @observer
 export class AwardList extends ScrollList<AwardListProps> {
-  store = activityStore.awardOf(this.props.activity);
+  store = this.props.store;
 
   extraProps: Partial<AwardListProps> = {
     onEdit: id => {

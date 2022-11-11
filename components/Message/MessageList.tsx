@@ -3,14 +3,9 @@ import { Button, Form, Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { ScrollListProps, ScrollList } from '../ScrollList';
+import { Message, MessageModel, MessageType, MessageTypeName } from '../../models/Message';
 import styles from '../../styles/participant.module.less';
-import {
-  Message,
-  MessageModel,
-  MessageType,
-  MessageTypeName,
-} from '../../models/Message';
+import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
@@ -110,7 +105,7 @@ export class MessageList extends ScrollList<MessageListProps> {
                 size="sm"
                 onClick={() => onDelete?.(id!)}
               >
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
             </td>
           </tr>

@@ -67,19 +67,9 @@ export const menus: MenuItem[] = [
     title: '高级设置',
     list: [
       {
-        title: '云资源',
-        href: 'cloud',
-        icon: 'upload',
-      },
-      {
-        title: '虚拟环境',
-        href: 'virtualenv',
-        icon: 'th-large',
-      },
-      {
-        title: '环境监控',
-        href: 'monitorenv',
-        icon: 'desktop',
+        title: '云开发环境',
+        href: 'git',
+        icon: 'cloud',
       },
     ],
   },
@@ -142,7 +132,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   }
 
   addCount = (count = 0) =>
-    this.totalCount === Infinity
+    this.totalCount === undefined || this.totalCount === Infinity
       ? (this.totalCount = count)
       : (this.totalCount += count);
 

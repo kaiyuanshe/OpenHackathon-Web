@@ -23,7 +23,7 @@ const HomePage = ({
   <>
     <PageHead />
 
-    <Container>
+    <Container className="mt-5">
       <Carousel>
         {activities
           .filter(({ banners }) => banners?.[0])
