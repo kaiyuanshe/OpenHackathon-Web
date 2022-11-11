@@ -23,7 +23,6 @@ import {
 } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
-import { ActivityLogList } from '../../../components/Activity/ActivityLogList';
 import { CommentBox } from '../../../components/CommentBox';
 import { MessageList } from '../../../components/Message/MessageList';
 import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
@@ -268,11 +267,10 @@ export default class ActivityPage extends PureComponent<
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="log" title="最新动态">
-                <ActivityLogList store={this.logStore} />
-                {/* <MessageList
+                <MessageList
                   store={myMessage}
                   hide={this.hideMessageListNotNeed}
-                /> */}
+                />
               </Tab>
               <Tab eventKey="team" title="参赛团队" className="pt-2">
                 <h3>我的团队</h3>
