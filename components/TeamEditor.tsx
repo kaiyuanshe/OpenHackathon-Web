@@ -75,10 +75,10 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
       </Col>
     </Form.Group>
 
-    <Row>
-      <Button variant="primary" type="submit" className="center">
+    <footer className="text-center my-2">
+      <Button className="px-5" type="submit" variant="success">
         {t('submit')}
       </Button>
-    </Row>
+    </footer>
   </Form>
 );

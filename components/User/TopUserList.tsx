@@ -49,14 +49,19 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
             <div
               className={`position-relative overflow-hidden ${styles.showBox}`}
             >
-              <i className="d-block overflow-hidden m-auto mb-1 rounded-circle" />
-              <span className="d-block mb-0">
-                {user?.nickname ||
-                  user?.name ||
-                  user?.username ||
-                  t('mystery_hacker')}
-              </span>
-              <strong>{score}</strong>
+              <div className="position-relative">
+                <i className="d-block overflow-hidden m-auto mb-1 rounded-circle" />
+                <a
+                  className="d-block mb-0 stretched-link"
+                  href={`/user/${userId}`}
+                >
+                  {user?.nickname ||
+                    user?.name ||
+                    user?.username ||
+                    t('mystery_hacker')}
+                </a>
+                <strong>{score}</strong>
+              </div>
               <TopUserAddress
                 email={user?.email}
                 github={parseJSON(user?.oAuth)?.html_url}
@@ -77,7 +82,9 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
                   {rank + 1}
                 </Badge>
               </td>
-              <td className={`mw-50 text-truncate ${styles.usernameBox}`}>
+              <td
+                className={`position-relative mw-50 text-truncate ${styles.usernameBox}`}
+              >
                 <div
                   className={`d-inline-block overflow-hidden align-middle rounded-circle ${styles.imgBox}`}
                 >
@@ -92,17 +99,18 @@ export const TopUserList = ({ value = [] }: TopUserListProps) => (
                     }
                   />
                 </div>
-                <span
-                  className="ms-2 d-inline-block align-middle"
+                <a
+                  className="ms-2 d-inline-block align-middle stretched-link"
                   style={{
                     color: `rgb(248, ${(rank - 2) * 15}, ${(rank - 2) * 35})`,
                   }}
+                  href={`/user/${userId}`}
                 >
                   {user?.nickname ||
                     user?.name ||
                     user?.username ||
                     t('mystery_hacker')}
-                </span>
+                </a>
               </td>
               <td className="align-middle">{score}</td>
               <td className="align-middle">

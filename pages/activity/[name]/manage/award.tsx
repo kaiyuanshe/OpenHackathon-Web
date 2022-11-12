@@ -7,6 +7,7 @@ import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
+import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
 import { withRoute } from '../../../api/core';
 
@@ -15,17 +16,18 @@ export const getServerSideProps = withRoute<{ name: string }>();
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  awardList = createRef<AwardList>();
+  store = activityStore.awardOf(this.props.route.params!.name);
+
   form = createRef<HTMLFormElement>();
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const { store } = this.awardList.current || {},
+    const { store } = this,
       form = this.form.current;
 
-    if (!store || !form) return;
+    if (!form) return;
 
     const data = formToJSON<NewData<Award>>(form);
 
@@ -45,7 +47,8 @@ class AwardPage extends PureComponent<
       description = '',
       quantity,
       target,
-    } = this.awardList.current?.store.currentOne || {};
+    } = this.store.currentOne;
+    const loading = this.store.uploading > 0;
 
     return (
       <Form
@@ -114,10 +117,14 @@ class AwardPage extends PureComponent<
           </Col>
         </Form.Group>
         <Col className="d-flex justify-content-around p-4">
-          <Button type="reset" variant="danger">
+          <Button type="reset" variant="danger" disabled={loading}>
             {t('clear_form')}
           </Button>
-          <Button type="submit" variant={id ? 'warning' : 'success'}>
+          <Button
+            type="submit"
+            variant={id ? 'warning' : 'success'}
+            disabled={loading}
+          >
             {id ? t('update') : t('add')}
             {t('award')}
           </Button>
@@ -128,11 +135,10 @@ class AwardPage extends PureComponent<
 
   render() {
     const { resolvedUrl, params } = this.props.route;
-    const activity = params!.name;
 
     return (
       <ActivityManageFrame
-        name={activity}
+        name={params!.name}
         path={resolvedUrl}
         title={t('prize_settings')}
       >
@@ -142,8 +148,7 @@ class AwardPage extends PureComponent<
           </Col>
           <Col className="flex-fill">
             <AwardList
-              ref={this.awardList}
-              activity={activity}
+              store={this.store}
               onEdit={this.handleReset}
               onDelete={this.handleReset}
             />

@@ -9,9 +9,25 @@ import {
 } from '../../models/Organization';
 import styles from '../../styles/Table.module.less';
 import { ScrollList, ScrollListProps } from '../ScrollList';
+import { OrganizationCard } from './OrganizationCard';
 
 export interface OrganizationListProps extends ScrollListProps<Organization> {
   store: OrganizationModel;
+}
+
+@observer
+export class OrganizationCardList extends ScrollList<OrganizationListProps> {
+  store = this.props.store;
+
+  static Layout = ({ value = [] }: OrganizationListProps) => (
+    <ul className="list-unstyled">
+      {value.map(item => (
+        <li key={item.id} className="p-2">
+          <OrganizationCard {...item} />
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 @observer

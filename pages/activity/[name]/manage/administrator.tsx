@@ -70,6 +70,7 @@ export default class AdministratorPage extends PureComponent<
   render() {
     const { resolvedUrl, params } = this.props.route,
       { store, show } = this;
+    const loading = store.uploading > 0;
 
     return (
       <ActivityManageFrame
@@ -86,12 +87,13 @@ export default class AdministratorPage extends PureComponent<
                 <Button
                   variant="success"
                   className="my-3"
+                  disabled={loading}
                   onClick={() => (this.show = true)}
                 >
                   <FontAwesomeIcon className="me-2" icon={faPlus} />
                   {t('add')}
                 </Button>
-                <Button variant="danger" type="submit" id="delete">
+                <Button variant="danger" type="submit" disabled={loading}>
                   <FontAwesomeIcon className="me-2" icon={faTrash} />
                   {t('delete')}
                 </Button>

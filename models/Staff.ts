@@ -74,18 +74,8 @@ export const menus: MenuItem[] = [
     list: [
       {
         title: t('cloud_resource'),
-        href: 'cloud',
-        icon: 'upload',
-      },
-      {
-        title: t('virtual_environment'),
-        href: 'virtualenv',
-        icon: 'th-large',
-      },
-      {
-        title: t('environmental_monitoring'),
-        href: 'monitorenv',
-        icon: 'desktop',
+        href: 'git',
+        icon: 'cloud',
       },
     ],
   },
@@ -148,7 +138,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   }
 
   addCount = (count = 0) =>
-    this.totalCount === Infinity
+    this.totalCount === undefined || this.totalCount === Infinity
       ? (this.totalCount = count)
       : (this.totalCount += count);
 

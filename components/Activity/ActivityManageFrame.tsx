@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faBullhorn,
+  faCloud,
   faDesktop,
   faEdit,
   faPeopleGroup,
@@ -8,7 +9,6 @@ import {
   faStar,
   faThLarge,
   faTrophy,
-  faUpload,
   faUser,
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
@@ -16,11 +16,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import Link from 'next/link';
 import { Fragment, PureComponent } from 'react';
 import { Nav } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
+import sessionStore from '../../models/Session';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import { findDeep } from '../../utils/data';
@@ -37,7 +37,7 @@ library.add(
   faStar,
   faSitemap,
   faBullhorn,
-  faUpload,
+  faCloud,
   faThLarge,
   faDesktop,
 );
@@ -51,8 +51,10 @@ export interface ActivityManageFrameProps {
 
 @observer
 export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
-  componentDidMount() {
-    activityStore.getOne(this.props.name);
+  async componentDidMount() {
+    await activityStore.getOne(this.props.name);
+
+    if (!activityStore.currentOne.roles) sessionStore.signOut();
   }
 
   get currentRoute() {
@@ -83,24 +85,28 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
               {title}
             </Nav.Link>
-            {list?.map(
-              ({ title, href, icon = 'home', roles }) =>
+            {list?.map(({ title, href, icon = 'home', roles }) => {
+              const path = `/activity/${name}/manage/${href}`;
+              const active = location.pathname === path;
+
+              return (
                 (role?.isAdmin || roles?.includes('judge')) && (
-                  <Link
+                  <Nav.Link
                     key={title}
-                    href={`/activity/${name}/manage/${href}`}
-                    passHref
+                    className="text-nowrap"
+                    href={path}
+                    active={active}
                   >
-                    <Nav.Link className="text-nowrap">
-                      <FontAwesomeIcon
-                        icon={icon}
-                        className="text-primary ms-3 me-3"
-                      />
-                      <span className="d-md-none d-lg-inline">{title}</span>
-                    </Nav.Link>
-                  </Link>
-                ),
-            )}
+                    <FontAwesomeIcon
+                      className="ms-3 me-3"
+                      icon={icon}
+                      color={active ? 'white' : 'primary'}
+                    />
+                    <span className="d-md-none d-lg-inline">{title}</span>
+                  </Nav.Link>
+                )
+              );
+            })}
           </Fragment>
         ))}
       </Nav>
@@ -125,7 +131,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
 
             <main className="h-100 flex-fill ms-3 overflow-auto">
               <MainBreadcrumb currentRoute={currentRoute} />
-              <div className="mt-3">{children}</div>
+              <div className="mt-3 py-3">{children}</div>
             </main>
           </>
         ) : (

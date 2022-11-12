@@ -46,7 +46,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
   };
 
   render() {
-    const { currentOne } = this.store;
+    const { uploading, currentOne } = this.store;
 
     return (
       <Container>
@@ -133,7 +133,12 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               </Col>
             </Form.Group>
           )}
-          <Button className="mb-3" variant="primary" type="submit">
+          <Button
+            className="mb-3"
+            variant="primary"
+            type="submit"
+            disabled={uploading > 0}
+          >
             {t('submit')}
           </Button>
         </Form>

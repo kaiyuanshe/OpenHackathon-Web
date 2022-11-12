@@ -54,7 +54,8 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
   };
 
   render() {
-    const { show, onHide } = this.props;
+    const { show, onHide, store } = this.props;
+    const loading = store.uploading > 0;
 
     return (
       <Modal show={show} onHide={onHide} centered>
@@ -112,10 +113,10 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
             />
           </Form.Group>
           <Modal.Footer>
-            <Button variant="secondary" type="reset">
+            <Button variant="secondary" type="reset" disabled={loading}>
               {t('cancel')}
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={loading}>
               {t('save')}
             </Button>
           </Modal.Footer>

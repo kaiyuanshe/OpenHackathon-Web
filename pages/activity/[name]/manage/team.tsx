@@ -2,7 +2,13 @@ import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Dropdown, DropdownButton, Form } from 'react-bootstrap';
+import {
+  Button,
+  Container,
+  Dropdown,
+  DropdownButton,
+  Form,
+} from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
@@ -38,20 +44,24 @@ export default class TeamManagePage extends PureComponent<
         name={params!.name}
         title={t('team_manage')}
       >
-        <header className="d-flex justify-content-between mb-3">
-          <Form className="d-flex" onSubmit={this.onSearch}>
-            <Form.Control type="search" name="search" />
+        <Container fluid>
+          <header className="d-flex justify-content-between mb-3">
+            <Form className="d-flex" onSubmit={this.onSearch}>
+              <Form.Control type="search" name="search" />
 
-            <Button type="submit" className="ms-3 text-nowrap">
-              {t('search')}
-            </Button>
-          </Form>
-          <DropdownButton variant="success" title={t('export')}>
-            <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
-            <Dropdown.Item href={workExportURL}>{t('all_works')}</Dropdown.Item>
-          </DropdownButton>
-        </header>
-        <TeamList store={this.store} />
+              <Button type="submit" className="ms-3 text-nowrap">
+                {t('search')}
+              </Button>
+            </Form>
+            <DropdownButton variant="success" title={t('export')}>
+              <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
+              <Dropdown.Item href={workExportURL}>
+                {t('all_works')}
+              </Dropdown.Item>
+            </DropdownButton>
+          </header>
+          <TeamList store={this.store} />
+        </Container>
       </ActivityManageFrame>
     );
   }

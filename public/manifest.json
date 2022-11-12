@@ -1,20 +1,20 @@
 {
-  "name": "Next-Bootstrap.ts scaffold",
-  "short_name": "Next.ts demo",
+  "name": "开放黑客松平台",
+  "short_name": "开放黑客松",
   "start_url": ".",
-  "description": "React project scaffold based on TypeScript, Next.js, Bootstrap & Workbox.",
+  "description": "Open-source Hackathon Platform with Git-based Cloud Development Environment",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "lang": "en-US",
+  "lang": "zh-CN",
   "dir": "ltr",
   "theme_color": "rgba(0,0,0,0.5)",
   "background_color": "transparent",
   "icons": [
     {
-      "src": "typescript.png",
-      "type": "image/png",
-      "sizes": "280x280"
+      "src": "https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg",
+      "type": "image/jpg",
+      "sizes": "71x71"
     }
   ]
 }
