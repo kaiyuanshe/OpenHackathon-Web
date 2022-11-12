@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -31,7 +32,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     const { type, description } =
       formToJSON<Pick<Staff, 'type' | 'description'>>(currentTarget);
 
-    if (!userId) return alert('请先搜索并选择一位用户');
+    if (!userId) return alert(t('search_an_user'));
 
     await store.updateOne({ type, description }, userId);
     onSave?.();
@@ -51,7 +52,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
     return (
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>增加管理员</Modal.Title>
+          <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <UserList
@@ -66,7 +67,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
             <Form.Group as={Row} className="mt-3 py-3 ps-2">
               <Col>
                 <Form.Check
-                  label="管理员"
+                  label={t('admin')}
                   id="staff-admin"
                   name="type"
                   type="radio"
@@ -76,7 +77,7 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
               </Col>
               <Col>
                 <Form.Check
-                  label="裁判"
+                  label={t('referee')}
                   id="staff-judge"
                   name="type"
                   type="radio"
@@ -87,17 +88,17 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
 
             <Form.Group as={Row} className="mb-3">
               <Col sm={8}>
-                <Form.Control name="description" placeholder="备注" />
+                <Form.Control name="description" placeholder={t('remark')} />
               </Col>
               <Form.Label column sm={4} htmlFor="description" />
             </Form.Group>
 
             <Modal.Footer>
               <Button variant="secondary" type="reset" disabled={loading}>
-                取消
+                {t('cancel')}
               </Button>
               <Button variant="primary" type="submit" disabled={loading}>
-                保存
+                {t('save')}
               </Button>
             </Modal.Footer>
           </Form>

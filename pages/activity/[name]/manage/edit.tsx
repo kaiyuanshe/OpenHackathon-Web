@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { InferGetServerSidePropsType } from 'next';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
@@ -9,7 +10,11 @@ export const getServerSideProps = withRoute<{ name: string }>();
 const ActivityEditPage = ({
   route: { resolvedUrl, params },
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
-  <ActivityManageFrame name={params!.name} path={resolvedUrl} title="编辑活动">
+  <ActivityManageFrame
+    name={params!.name}
+    path={resolvedUrl}
+    title={t('edit_activity')}
+  >
     <ActivityEditor name={params!.name} />
   </ActivityManageFrame>
 );

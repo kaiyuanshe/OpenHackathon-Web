@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -122,14 +123,14 @@ export default class TeamPage extends PureComponent<
   handleLeaveTeam = async () => {
     const operation =
       this.currentUserInThisTeam?.status === MembershipStatus.APPROVED
-        ? '退出团队'
-        : '取消申请';
+        ? t('leave_team')
+        : t('cancel_application');
 
-    if (!confirm(`请确定是否${operation}`)) return;
+    if (!confirm(`${t('please_make_sure')}${operation}`)) return;
 
     await this.store.leaveTeam();
 
-    alert(`${operation}成功`);
+    alert(`${operation}${t('success')}`);
   };
 
   async componentDidMount() {
@@ -202,7 +203,7 @@ export default class TeamPage extends PureComponent<
                     className="w-100"
                     onClick={() => (this.isShowJoinReqModal = true)}
                   >
-                    加入团队
+                    {t('join_team')}
                   </Button>
                 )}
                 {teamMemberRole === 'admin' && (
@@ -210,7 +211,7 @@ export default class TeamPage extends PureComponent<
                     className="w-100 mt-2"
                     href={`/activity/${hackathonName}/team/${id}/manage/participant`}
                   >
-                    管理团队
+                    {t('manage_team')}
                   </Button>
                 )}
                 {isShowLeaveTeamBtn && (
@@ -220,14 +221,14 @@ export default class TeamPage extends PureComponent<
                     onClick={this.handleLeaveTeam}
                   >
                     {currentUserInThisTeam?.status === MembershipStatus.APPROVED
-                      ? '退出团队'
-                      : '取消申请'}
+                      ? t('leave_team')
+                      : t('cancel_application')}
                   </Button>
                 )}
               </Card.Header>
               <Card.Body>
                 <h2 className="text-dark fw-bold h6 ">
-                  <Icon name="people-fill" /> 团队成员
+                  <Icon name="people-fill" /> {t('team_members')}
                 </h2>
                 <TeamMemberList
                   activity={hackathonName}
@@ -239,10 +240,10 @@ export default class TeamPage extends PureComponent<
           </Col>
           <Col xs={12} sm={8}>
             <Tabs defaultActiveKey="update" id="activity-detail-tabs">
-              <Tab className="pt-2" eventKey="update" title="最新动态">
-                <div className="h1 my-5 text-center">暂无消息</div>
+              <Tab className="pt-2" eventKey="update" title={t('latest_news')}>
+                <div className="h1 my-5 text-center">{t('no_news_yet')}</div>
               </Tab>
-              <Tab eventKey="teamWork" title="团队作品" className="pt-2">
+              <Tab eventKey="teamWork" title={t('team_works')} className="pt-2">
                 <TeamWorkList
                   activity={hackathonName}
                   team={id}

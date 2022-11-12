@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
@@ -59,7 +60,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
     return (
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>增加主办方信息</Modal.Title>
+          <Modal.Title>{t('add_sponsor_information')}</Modal.Title>
         </Modal.Header>
         <Modal.Body
           as="form"
@@ -68,27 +69,27 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           onReset={this.handleReset}
         >
           <Form.Group className="mt-2">
-            <Form.Label htmlFor="name">名称</Form.Label>
+            <Form.Label htmlFor="name">{t('name')}</Form.Label>
             <Form.Control
               id="name"
               name="name"
               type="text"
-              placeholder="请输入名称"
+              placeholder={t('please_enter_name')}
               required
             />
           </Form.Group>
           <Form.Group className="mt-2">
-            <Form.Label htmlFor="description">描述</Form.Label>
+            <Form.Label htmlFor="description">{t('description')}</Form.Label>
             <Form.Control
               id="description"
               name="description"
               type="text"
-              placeholder="请输入描述"
+              placeholder={t('please_enter_description')}
               required
             />
           </Form.Group>
           <Form.Group className="mt-2">
-            <Form.Label htmlFor="type">类型</Form.Label>
+            <Form.Label htmlFor="type">{t('type')}</Form.Label>
             <Form.Select
               id="type"
               name="type"
@@ -102,21 +103,21 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
             </Form.Select>
           </Form.Group>
           <Form.Group className="mt-2">
-            <Form.Label htmlFor="logo-uri">Logo URI</Form.Label>
+            <Form.Label htmlFor="logo-uri">{t('logo_url')}</Form.Label>
             <Form.Control
               id="logo-uri"
               name="logoURI"
               type="text"
-              placeholder="请输入 Logo URI"
+              placeholder={t('please_enter_logo_url')}
               required
             />
           </Form.Group>
           <Modal.Footer>
             <Button variant="secondary" type="reset" disabled={loading}>
-              取消
+              {t('cancel')}
             </Button>
             <Button variant="primary" type="submit" disabled={loading}>
-              保存
+              {t('save')}
             </Button>
           </Modal.Footer>
         </Modal.Body>

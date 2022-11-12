@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -45,12 +46,12 @@ export class UserList extends ScrollList<UserListProps> {
               name="keyword"
               required
               aria-label="search user"
-              placeholder="用户名 / 昵称 / 邮箱"
+              placeholder={`${t('user_name')}/${t('nickname')}/${t('mail')}`}
             />
           </Col>
           <Col xs sm={4}>
             <Button variant="info" type="submit">
-              搜索
+              {t('search')}
             </Button>
           </Col>
         </Form.Group>
@@ -61,9 +62,9 @@ export class UserList extends ScrollList<UserListProps> {
           <thead>
             <tr>
               <th>#</th>
-              <th>用户名</th>
-              <th>昵称</th>
-              <th>邮箱</th>
+              <th>{t('user_name')}</th>
+              <th>{t('nick_name')}</th>
+              <th>{t('mail')}</th>
             </tr>
           </thead>
           <tbody>

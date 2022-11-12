@@ -1,4 +1,5 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { t } from 'i18next';
 import { computed } from 'mobx';
 import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
@@ -17,57 +18,62 @@ export interface MenuItem {
 
 export const menus: MenuItem[] = [
   {
-    title: '基础设置',
+    title: t('basic_settings'),
     list: [
       {
-        title: '编辑活动',
+        title: t('edit_activity'),
         href: 'edit',
         icon: 'edit',
       },
       {
-        title: '报名用户',
+        title: t('sign_up_user'),
         href: 'participant',
         icon: 'user',
-        list: [{ title: '报名统计', href: 'participant/statistic' }],
+        list: [
+          {
+            title: t('registration_statistics'),
+            href: 'participant/statistic',
+          },
+        ],
       },
       {
-        title: '管理员',
+        title: t('admin'),
         href: 'administrator',
         icon: 'user-secret',
       },
       {
-        title: '奖项设置',
+        title: t('prize_settings'),
         href: 'award',
         icon: 'trophy',
       },
       {
-        title: '参赛团队',
+        title: t('join_activity_team'),
         href: 'team',
         icon: 'people-group',
         roles: ['judge'],
       },
       {
-        title: '作品评奖',
+        title: 'works_awards',
         href: 'evaluation',
         icon: 'star',
       },
       {
-        title: '主办方信息',
+        title: t('sponsor_information'),
         href: 'organization',
         icon: 'sitemap',
       },
       {
-        title: '公告',
+        title: t('announcement'),
         href: 'message',
         icon: 'bullhorn',
       },
     ],
   },
   {
-    title: '高级设置',
+    title: t('advance_settings'),
     list: [
       {
-        title: '云开发环境',
+        title: t('cloud_resource'),
         href: 'git',
         icon: 'cloud',
       },
@@ -77,7 +83,7 @@ export const menus: MenuItem[] = [
 
 export const activityTeamMenus: MenuItem[] = [
   {
-    title: '团队管理',
+    title: t('team_manage'),
     list: [
       // {
       //   title: '编辑信息',
@@ -86,19 +92,19 @@ export const activityTeamMenus: MenuItem[] = [
       //   roles: ['admin']
       // },
       {
-        title: '团队报名',
+        title: t('team_registration'),
         href: 'participant',
         icon: 'user',
         roles: ['admin'],
       },
       {
-        title: '角色管理',
+        title: t('role_management'),
         href: 'role',
         icon: 'user-secret',
         roles: ['admin'],
       },
       {
-        title: '云开发环境',
+        title: t('cloud_development_environment'),
         href: 'git',
         icon: 'cloud',
       },

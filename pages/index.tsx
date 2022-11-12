@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import type { InferGetServerSidePropsType } from 'next';
 import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
@@ -62,7 +63,7 @@ const HomePage = ({
         size="sm"
         href="/activity/"
       >
-        更多活动
+        {t('more_events')}
       </Button>
     </section>
 

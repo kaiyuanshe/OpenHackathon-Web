@@ -5,6 +5,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { t } from 'i18next';
 import Link from 'next/link';
 import { Card, Col, Row } from 'react-bootstrap';
 
@@ -62,7 +63,9 @@ export function ActivityCard({
       <Card.Footer>
         <Row as="small" className="text-muted g-4" xs={1} sm={2}>
           <Col></Col>
-          <Col className="text-end">{enrollment}人已报名</Col>
+          <Col className="text-end">
+            {enrollment} {t('people_registered')}
+          </Col>
         </Row>
 
         {controls ? (

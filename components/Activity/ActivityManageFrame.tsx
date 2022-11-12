@@ -13,6 +13,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
@@ -122,7 +123,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
-        <PageHead title={`${title} - ${name} 活动管理`} />
+        <PageHead title={`${title} - ${name} ${t('activity_manage')}`} />
 
         {authorized ? (
           <>
@@ -134,7 +135,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
             </main>
           </>
         ) : (
-          <div className="display-3">暂无权限</div>
+          <div className="display-3">{t('no_permission')}</div>
         )}
       </SessionBox>
     );

@@ -1,5 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -31,9 +32,9 @@ export default class OrganizationPage extends PureComponent<
 
     const { selectedIds } = this;
 
-    if (!selectedIds[0]) return alert('请至少选择一位主办方/合作伙伴!');
+    if (!selectedIds[0]) return alert(t('please_select_at_least_one_partner'));
 
-    if (!confirm('确认删除所选主办方/合作伙伴？')) return;
+    if (!confirm(t('confirm_to_delete_partner'))) return;
 
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
@@ -44,19 +45,19 @@ export default class OrganizationPage extends PureComponent<
     return (
       <ListGroup>
         <ListGroup.Item className="d-flex justify-content-between">
-          全部
+          {t('all')}
           <Badge className="ms-2" bg="secondary">
             {allItems.length}
           </Badge>
         </ListGroup.Item>
         <ListGroup.Item className="d-flex justify-content-between">
-          主办方
+          {t('organizer')}
           <Badge className="ms-2" bg="secondary">
             {typeCount.host || 0}
           </Badge>
         </ListGroup.Item>
         <ListGroup.Item className="d-flex justify-content-between">
-          合作伙伴
+          {t('partners')}
           <Badge className="ms-2" bg="secondary">
             {allItems.length - (typeCount.host || 0)}
           </Badge>
@@ -74,7 +75,7 @@ export default class OrganizationPage extends PureComponent<
       <ActivityManageFrame
         name={params!.name}
         path={resolvedUrl}
-        title="主办方管理"
+        title={t('organizer_manage')}
       >
         <Form onSubmit={this.handleSubmit}>
           <Row xs={1} sm={2}>
@@ -89,11 +90,11 @@ export default class OrganizationPage extends PureComponent<
                   onClick={() => (this.show = true)}
                 >
                   <FontAwesomeIcon className="me-2" icon={faPlus} />
-                  增加
+                  {t('add')}
                 </Button>
                 <Button variant="danger" type="submit" disabled={loading}>
                   <FontAwesomeIcon className="me-2" icon={faTrash} />
-                  删除
+                  {t('delete')}
                 </Button>
               </Col>
             </Col>

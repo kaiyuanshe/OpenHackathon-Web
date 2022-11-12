@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Container } from 'react-bootstrap';
 
 import { ActivityEditor } from '../../components/ActivityEditor';
@@ -6,10 +7,10 @@ import { SessionBox } from '../../components/User/SessionBox';
 
 const createActivity = () => (
   <SessionBox auto>
-    <PageHead title="创建活动" />
+    <PageHead title={t('create_activity')} />
 
     <Container className="my-4">
-      <h2 className="text-center mb-3">创建活动</h2>
+      <h2 className="text-center mb-3">{t('create_activity')}</h2>
 
       <ActivityEditor />
     </Container>

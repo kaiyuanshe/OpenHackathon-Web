@@ -1,5 +1,8 @@
 import '../styles/globals.less';
+//Translate
+import '../utils/i18n';
 
+import { t } from 'i18next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
@@ -31,11 +34,11 @@ export default function MyApp({
             target="_blank"
             rel="noopener noreferrer"
           >
-            由
+            {t('powerful_by')}
             <span className="mx-2">
               <Image src="/nextjs.png" alt="Next Logo" width={48} />
             </span>
-            idea2app 脚手架强力驱动
+            {t('powerful_driver')}
           </a>
         </footer>
       )}

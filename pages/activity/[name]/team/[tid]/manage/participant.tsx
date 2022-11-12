@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -32,7 +33,7 @@ export default class TeamParticipantPage extends PureComponent<
         name={name}
         tid={tid}
         path={resolvedUrl}
-        title="团队报名"
+        title={t('team_registration')}
       >
         <TeamParticipantTable store={store} />
       </TeamManageFrame>

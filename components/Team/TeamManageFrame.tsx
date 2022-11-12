@@ -6,6 +6,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -138,7 +139,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
             : 'vh-100 d-flex justify-content-center align-items-center'
         }
       >
-        <PageHead title={`${title} - ${tid} - ${name} 团队管理`} />
+        <PageHead title={`${title} - ${tid} - ${name} ${t('team_manage')}`} />
 
         {authorized ? (
           <>
@@ -150,7 +151,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
             </Col>
           </>
         ) : (
-          <div className="display-3">暂无权限</div>
+          <div className="display-3">{t('no_permission')}</div>
         )}
       </SessionBox>
     );

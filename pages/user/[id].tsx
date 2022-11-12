@@ -6,6 +6,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { t } from 'i18next';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -35,7 +36,7 @@ const UserDetailPage = ({
     }}
   >
     <Container>
-      <PageHead title="用户资料" />
+      <PageHead title={t('profile')} />
 
       <Row>
         <Col lg="auto">
@@ -83,7 +84,7 @@ const UserDetailPage = ({
               {sessionStore.user?.id === id && (
                 <Card.Body className="text-center border-top p-3">
                   <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-                    <Button variant="warning">编辑用户资料</Button>
+                    <Button variant="warning">{t('edit_profile')}</Button>
                   </Link>
                 </Card.Body>
               )}
@@ -96,13 +97,13 @@ const UserDetailPage = ({
               defaultActiveKey="enroll"
               className="w-100 mb-3 justify-content-center"
             >
-              <Tab eventKey="enroll" title="参与的活动">
+              <Tab eventKey="enroll" title={t('followed_hackathons')}>
                 <ActivityList type="enrolled" userId={id} />
               </Tab>
-              <Tab eventKey="created" title="创建的活动">
+              <Tab eventKey="created" title={t('owned_hackathons')}>
                 <ActivityList type="created" userId={id} />
               </Tab>
-              <Tab eventKey="admin" title="管理的活动">
+              <Tab eventKey="admin" title={t('joined_hackathons')}>
                 <ActivityList type="admin" userId={id} />
               </Tab>
             </Tabs>

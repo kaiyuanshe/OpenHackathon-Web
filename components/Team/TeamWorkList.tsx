@@ -1,5 +1,6 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import {
   Button,
@@ -29,7 +30,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
 
   extraProps: Partial<TeamWorkListProps> = {
     onDelete: id =>
-      id && confirm('确定删除该作品？') && this.store.deleteOne(id),
+      id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id),
   };
 
   static Layout = ({
@@ -47,7 +48,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
             variant="success"
             href={`/activity/${activity}/team/${team}/work/create`}
           >
-            提交作品
+            {t('submit_work')}
           </Button>
         </header>
       )}
@@ -90,7 +91,7 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                 </div>
                 <time
                   className="p-2 text-truncate"
-                  title="更新时间"
+                  title={t('update_time')}
                   dateTime={updatedAt}
                 >
                   <FontAwesomeIcon
@@ -107,14 +108,14 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
                     variant="warning"
                     href={`/activity/${activity}/team/${team}/work/${id}/edit`}
                   >
-                    编辑
+                    {t('edit')}
                   </Button>
                   <Button
                     className="flex-fill ms-3"
                     variant="danger"
                     onClick={() => onDelete?.(id)}
                   >
-                    删除
+                    {t('delete')}
                   </Button>
                 </Card.Footer>
               )}

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -30,15 +31,18 @@ export default class EnrollmentStatisticPage extends PureComponent<
       <ActivityManageFrame
         name={params!.name}
         path={resolvedUrl}
-        title="报名统计"
+        title={t('registration_statistics')}
       >
         {downloading > 0 && <Loading />}
 
         <header className="d-flex justify-content-between align-items-center mb-3 px-3">
-          <strong className="h4 m-0">总人数：{allItems.length}</strong>
+          <strong className="h4 m-0">
+            {t('total_people')}
+            {allItems.length}
+          </strong>
 
           <Button variant="success" href={exportURL}>
-            导出报名数据为 Excel
+            {t('export_excel')}
           </Button>
         </header>
         <EnrollmentStatisticCharts store={this.store} />

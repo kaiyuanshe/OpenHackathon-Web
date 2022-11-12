@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
@@ -41,7 +42,7 @@ export default class TeamManagePage extends PureComponent<
       <ActivityManageFrame
         path={resolvedUrl}
         name={params!.name}
-        title="团队管理"
+        title={t('team_manage')}
       >
         <Container fluid>
           <header className="d-flex justify-content-between mb-3">
@@ -49,12 +50,14 @@ export default class TeamManagePage extends PureComponent<
               <Form.Control type="search" name="search" />
 
               <Button type="submit" className="ms-3 text-nowrap">
-                搜索
+                {t('search')}
               </Button>
             </Form>
-            <DropdownButton variant="success" title="导出">
-              <Dropdown.Item href={exportURL}>所有团队</Dropdown.Item>
-              <Dropdown.Item href={workExportURL}>所有作品</Dropdown.Item>
+            <DropdownButton variant="success" title={t('export')}>
+              <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
+              <Dropdown.Item href={workExportURL}>
+                {t('all_works')}
+              </Dropdown.Item>
             </DropdownButton>
           </header>
           <TeamList store={this.store} />

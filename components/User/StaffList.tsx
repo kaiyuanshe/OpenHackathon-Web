@@ -1,5 +1,6 @@
 import 'array-unique-proposal';
 
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 
@@ -13,15 +14,15 @@ export interface StaffListProps extends ScrollListProps<Staff> {
 }
 
 const TableHeads = [
-  '所有',
-  '名称',
-  '邮箱',
-  '角色类型',
-  '状态',
-  '帐户来源',
-  '最后登录时间',
-  '创建时间',
-  '备注',
+  t('all'),
+  t('name'),
+  t('mail'),
+  t('role_type'),
+  t('status'),
+  t('role_source'),
+  t('last_login_time'),
+  t('create_time'),
+  t('remark'),
 ];
 
 @observer
@@ -84,8 +85,8 @@ export class StaffList extends ScrollList<StaffListProps> {
                 userId,
                 nickname,
                 email,
-                description ? '裁判' : '管理员',
-                createdAt ? '已通过' : '审核中',
+                description ? t('referee') : t('admin'),
+                createdAt ? t('approve') : t('status_pending'),
                 source.split(':')[1],
                 convertDatetime(lastLogin),
                 convertDatetime(createdAt),

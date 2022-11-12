@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 export interface Question {
   title: string;
   options?: string[];
@@ -12,25 +13,25 @@ export interface Extensions {
 }
 export const questions: Question[] = [
   {
-    title: '您的专业',
+    title: t('what_is_your_occupation'),
     options: [
-      '前端工程师',
-      '后端工程师',
-      '客户端工程师',
-      '游戏工程师',
-      '算法工程师',
-      '区块链工程师',
-      '运维工程师',
-      '测试工程师',
-      '架构师',
-      '项目/产品经理',
-      '在校生',
-      '其它',
+      t('front_end_engineer'),
+      t('back_end_engineer'),
+      t('client_engineer'),
+      t('game_developerment_engineer'),
+      t('algorithm_engineer'),
+      t('blockchain_engineer'),
+      t('operations'),
+      t('quality_assurance_engineer'),
+      t('architect'),
+      t('project_manager'),
+      t('student'),
+      t('others'),
     ],
     multiple: true,
   },
   {
-    title: '常用的编程语言',
+    title: t('what_are_your_commonly_used_programming_languages'),
     options: [
       'JavaScript/TypeScript',
       'Java/Scala/Groovy/Kotlin',
@@ -43,37 +44,40 @@ export const questions: Question[] = [
       'Rust',
       'Go',
       'C/C++',
-      '其它',
+      t('others'),
     ],
     multiple: true,
   },
   {
-    title: '领英/个人简历/个人博客',
+    title: t('linkein_or_cv'),
     type: 'url',
   },
   {
-    title: '社交媒体账号/推特/微博',
+    title: t('social_media_account_or_twitter_or_weibo'),
     type: 'url',
   },
   {
-    title: '本次比赛您感兴趣的赛题是什么？',
+    title: t(
+      'which_of_these_particular_areas_are_you_interested_in_going_into_this_event',
+    ),
     type: 'text',
   },
   {
-    title: '您希望从系列工作坊/讲座中听到哪方面内容',
+    title: t('what_do_you_hope_to_learn_from_the_workshops'),
     type: 'text',
   },
   {
-    title: '您是否愿意进行组队？',
-    options: ['是', '否，喜欢个人', '否，已有团队'],
+    title: t('do_you_plan__on_hacking_solo_or_with_a_team'),
+    options: [t('yes'), t('no_i_prefer_solo'), t('no_i_have_a_team')],
   },
   {
-    title: '您介意新手加入您的团队？',
-    options: ['是', '否'],
+    title: t('would_you_be_open_to_having_a_beginner_join_your_team'),
+    options: [t('yes'), t('no')],
   },
   {
-    title:
-      '关于队友，您还有什么其他需求吗? 我们会尽全力帮助您找到合适人选，助力您的黑客松之旅。',
+    title: t(
+      'anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate',
+    ),
     type: 'text',
   },
 ];

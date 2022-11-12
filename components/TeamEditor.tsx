@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
@@ -12,14 +13,15 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <Form.Group as={Row} className="mb-3" controlId="displayName">
       <Form.Label column sm={3}>
-        名称（必填）
+        {t('disaplay_name')}
+        {t('quote_required')}
       </Form.Label>
       <Col sm={9}>
         <Form.Control
           name="displayName"
           required
           maxLength={128}
-          placeholder="显示名称"
+          placeholder={t('disaplay_name')}
           defaultValue={team?.displayName}
         />
       </Col>
@@ -28,7 +30,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
     {/* todo editor */}
     <Form.Group as={Row} className="mb-3" controlId="description">
       <Form.Label column sm={3}>
-        团队简介
+        {t('team_introduction')}
       </Form.Label>
       <Col sm={9}>
         <Form.Control
@@ -36,7 +38,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           as="textarea"
           rows={3}
           maxLength={512}
-          placeholder="团队简介"
+          placeholder={t('team_introduction')}
           defaultValue={team?.description}
           required
         />
@@ -49,7 +51,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
       controlId="autoApprove"
     >
       <Form.Label column sm={3}>
-        自动同意
+        {t('auto_approve')}
       </Form.Label>
       <Col sm={9}>
         <Form.Check
@@ -57,7 +59,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           type="radio"
           id="autoApprove-true"
           name="autoApprove"
-          label="是"
+          label={t('yes')}
           defaultChecked={!!team?.autoApprove}
           value={1}
         />
@@ -66,7 +68,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
           type="radio"
           id="autoApprove-false"
           name="autoApprove"
-          label="否"
+          label={t('no')}
           defaultChecked={!team?.autoApprove}
           value={0}
         />
@@ -75,7 +77,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
 
     <footer className="text-center my-2">
       <Button className="px-5" type="submit" variant="success">
-        创建
+        {t('submit')}
       </Button>
     </footer>
   </Form>

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Container } from 'react-bootstrap';
 
@@ -9,7 +10,7 @@ import sessionStore from '../../models/Session';
 const AdminPage = observer(() => (
   <SessionBox auto>
     <Container fluid>
-      <PageHead title="平台管理" />
+      <PageHead title={t('platform_management')} />
 
       <ActivityList type="admin" size="lg" userId={sessionStore.user?.id} />
     </Container>
