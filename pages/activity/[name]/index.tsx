@@ -73,9 +73,6 @@ export default class ActivityPage extends PureComponent<
   @observable
   showCreateTeam = false;
 
-  @observable
-  hideMessageListNotNeed = true;
-
   @computed
   get loading() {
     return (
@@ -270,7 +267,7 @@ export default class ActivityPage extends PureComponent<
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
-                <MessageList store={myMessage} hideControls={true} />
+                <MessageList store={myMessage} hideControls />
               </Tab>
               <Tab eventKey="team" title={t('my_team')} className="pt-2">
                 <h3>{t('my_team')}</h3>
