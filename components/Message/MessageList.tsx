@@ -3,12 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
-import { Message, MessageModel } from '../../models/Message';
+import {
+  Message,
+  MessageModel,
+  MessageType,
+  MessageTypeName,
+} from '../../models/Message';
 import styles from '../../styles/participant.module.less';
 import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
+  hideControls: boolean;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
@@ -33,6 +39,7 @@ export class MessageList extends ScrollList<MessageListProps> {
   static Layout = ({
     value = [],
     selectedIds = [],
+    hideControls,
     onSelect,
     onEdit,
     onDelete,
@@ -40,7 +47,7 @@ export class MessageList extends ScrollList<MessageListProps> {
     <Table hover responsive="lg" className={styles.table}>
       <thead>
         <tr>
-          <th>
+          <th hidden={hideControls}>
             <Form.Check
               inline
               type="checkbox"
@@ -65,13 +72,13 @@ export class MessageList extends ScrollList<MessageListProps> {
           <th>公告名称</th>
           <th>链接</th>
           <th>类型</th>
-          <th>操作</th>
+          <th hidden={hideControls}>操作</th>
         </tr>
       </thead>
       <tbody>
-        {value.map(({ id, hackathonName, title, content }) => (
+        {value.map(({ id, title, content }) => (
           <tr key={id}>
-            <td>
+            <td hidden={hideControls}>
               <Form.Check
                 inline
                 type="checkbox"
@@ -92,17 +99,12 @@ export class MessageList extends ScrollList<MessageListProps> {
                 }
               />
             </td>
-            <td>{hackathonName}</td>
-            <td>{title}</td>
             <td>{content}</td>
-            <td>
-              <Button
-                className="me-2"
-                variant="primary"
-                size="sm"
-                onClick={() => onEdit?.(id!)}
-              >
-                <FontAwesomeIcon icon={faEdit} />
+            <td>{title}</td>
+            <td>{MessageTypeName[MessageType.Hackathon]}</td>
+            <td hidden={hideControls}>
+              <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
+                <FontAwesomeIcon icon={faEdit} className="me-2" />
               </Button>
               <Button
                 variant="danger"

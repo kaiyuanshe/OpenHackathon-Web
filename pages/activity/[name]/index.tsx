@@ -24,8 +24,8 @@ import {
 } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
-import { ActivityLogList } from '../../../components/Activity/ActivityLogList';
 import { CommentBox } from '../../../components/CommentBox';
+import { MessageList } from '../../../components/Message/MessageList';
 import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
@@ -68,6 +68,7 @@ export default class ActivityPage extends PureComponent<
   logStore = activityStore.logOf(this.props.activity.name);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
+  messageStore = activityStore.messageOf(this.props.activity.name);
 
   @observable
   showCreateTeam = false;
@@ -223,7 +224,8 @@ export default class ActivityPage extends PureComponent<
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
       { showCreateTeam, loading } = this,
-      myTeam = this.teamStore.sessionOne;
+      myTeam = this.teamStore.sessionOne,
+      myMessage = this.messageStore;
 
     return (
       <Container className="mt-3">
@@ -265,7 +267,7 @@ export default class ActivityPage extends PureComponent<
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
-                <ActivityLogList store={this.logStore} />
+                <MessageList store={myMessage} hideControls />
               </Tab>
               <Tab eventKey="team" title={t('my_team')} className="pt-2">
                 <h3>{t('my_team')}</h3>

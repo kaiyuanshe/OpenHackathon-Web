@@ -75,6 +75,7 @@ export default class MessageListPage extends PureComponent<
 
           <MessageList
             store={store}
+            hideControls={false}
             onSelect={list => (this.selectedIds = list)}
             onEdit={() => (this.show = true)}
             onDelete={this.handleReset}
