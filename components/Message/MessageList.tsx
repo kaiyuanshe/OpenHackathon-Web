@@ -1,18 +1,24 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { Message, MessageModel, MessageType, MessageTypeName } from '../../models/Message';
+import {
+  Message,
+  MessageModel,
+  MessageType,
+  MessageTypeName,
+} from '../../models/Message';
 import styles from '../../styles/participant.module.less';
 import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends ScrollListProps<Message> {
   store: MessageModel;
-  hide: boolean;
+  hideControls: boolean;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
+
 @observer
 export class MessageList extends ScrollList<MessageListProps> {
   store = this.props.store;
@@ -33,7 +39,7 @@ export class MessageList extends ScrollList<MessageListProps> {
   static Layout = ({
     value = [],
     selectedIds = [],
-    hide,
+    hideControls,
     onSelect,
     onEdit,
     onDelete,
@@ -41,7 +47,7 @@ export class MessageList extends ScrollList<MessageListProps> {
     <Table hover responsive="lg" className={styles.table}>
       <thead>
         <tr>
-          <th hidden={hide}>
+          <th hidden={hideControls}>
             <Form.Check
               inline
               type="checkbox"
@@ -66,13 +72,13 @@ export class MessageList extends ScrollList<MessageListProps> {
           <th>公告名称</th>
           <th>链接</th>
           <th>类型</th>
-          <th hidden={hide}>操作</th>
+          <th hidden={hideControls}>操作</th>
         </tr>
       </thead>
       <tbody>
         {value.map(({ id, title, content }) => (
           <tr key={id}>
-            <td hidden={hide}>
+            <td hidden={hideControls}>
               <Form.Check
                 inline
                 type="checkbox"
@@ -96,7 +102,7 @@ export class MessageList extends ScrollList<MessageListProps> {
             <td>{content}</td>
             <td>{title}</td>
             <td>{MessageTypeName[MessageType.Hackathon]}</td>
-            <td hidden={hide}>
+            <td hidden={hideControls}>
               <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
                 <FontAwesomeIcon icon={faEdit} className="me-2" />
               </Button>

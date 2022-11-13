@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { EdgePosition, Loading, ScrollBoundary } from 'idea-react';
 import { debounce } from 'lodash';
 import { observable } from 'mobx';
@@ -79,7 +80,7 @@ export abstract class ScrollList<
             }
           />
           <footer className="mt-4 text-center text-muted small">
-            {noMore || !allItems.length ? '没有更多' : '上拉加载更多……'}
+            {noMore || !allItems.length ? t('no_more') : t('load_more')}
           </footer>
         </div>
       </ScrollBoundary>

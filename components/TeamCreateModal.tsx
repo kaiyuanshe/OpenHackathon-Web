@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { NewData } from 'mobx-restful';
 import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
@@ -30,14 +31,14 @@ export const TeamCreateModal: FC<TeamCreateModalProps> = ({
       .updateOne({ ...data, autoApprove: !!autoApprove });
     await activityStore.currentTeam?.getSessionOne();
 
-    alert('团队创建成功！');
+    alert(t('create_team_success'));
     onClose();
   };
 
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>创建团队</Modal.Title>
+        <Modal.Title>{t('create_team')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <TeamEditor onSubmit={submitHandler} />

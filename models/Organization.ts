@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { computed } from 'mobx';
 import { IDType, ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { groupBy } from 'web-utility';
@@ -14,11 +15,11 @@ export enum OrganizationType {
 }
 
 export const OrganizationTypeName = {
-  [OrganizationType.Host]: '主办',
-  [OrganizationType.Organizer]: '承办',
-  [OrganizationType.Coorganizer]: '协办',
-  [OrganizationType.Sponsor]: '赞助',
-  [OrganizationType.TitleSponsor]: '冠名',
+  [OrganizationType.Host]: t('host'),
+  [OrganizationType.Organizer]: t('undertake'),
+  [OrganizationType.Coorganizer]: t('coorganizer'),
+  [OrganizationType.Sponsor]: t('sponsor'),
+  [OrganizationType.TitleSponsor]: t('titlesponsor'),
 };
 
 export interface Organization extends Base {

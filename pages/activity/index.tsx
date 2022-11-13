@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { InferGetServerSidePropsType } from 'next';
 import { Container } from 'react-bootstrap';
 
@@ -15,9 +16,9 @@ const ActivityListPage = ({
   firstScreenList,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <Container>
-    <PageHead title="热门活动" />
+    <PageHead title={t('top_hackathons')} />
 
-    <h2 className="text-center my-5">热门活动</h2>
+    <h2 className="text-center my-5">{t('top_hackathons')}</h2>
 
     <ActivityList value={firstScreenList} />
   </Container>

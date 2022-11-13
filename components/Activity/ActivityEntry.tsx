@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
@@ -35,20 +36,23 @@ export const getActivityStatusText = ({
     enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
 
   return !isOnline
-    ? '未上线，待审核'
+    ? t('pending_review')
     : now < +enrollmentStart
-    ? `${enrollmentDiff.distance} ${enrollmentDiff.unit}后开始报名`
+    ? t('register_after', {
+        distance: enrollmentDiff.distance,
+        unit: enrollmentDiff.unit,
+      })
     : now < +enrollmentEnd
-    ? '正在报名'
+    ? t('enrolling')
     : now < +eventStart
-    ? '报名截止'
+    ? t('registration_deadline')
     : now < +eventEnd
-    ? '比赛进行中'
+    ? t('in_progress')
     : now < +judgeStart
-    ? '作品提交截止'
+    ? t('submit_work_deadline')
     : now < +judgeEnd
-    ? '评委审核中'
-    : '比赛结束';
+    ? t('judges_review')
+    : t('competition_over');
 };
 export interface ActivityEntryProps extends ActivityStatusTextProps {
   href: string;

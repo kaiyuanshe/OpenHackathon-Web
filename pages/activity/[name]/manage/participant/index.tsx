@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -27,10 +28,14 @@ export default class ParticipantPage extends PureComponent<
     const activity = params!.name;
 
     return (
-      <ActivityManageFrame name={activity} path={resolvedUrl} title="报名用户">
+      <ActivityManageFrame
+        name={activity}
+        path={resolvedUrl}
+        title={t('sign_up_user')}
+      >
         <header className="d-flex justify-content-end mb-3 px-3">
           <Button variant="success" href={resolvedUrl + '/statistic'}>
-            查看统计
+            {t('view_statistics')}
           </Button>
         </header>
 
@@ -40,7 +45,7 @@ export default class ParticipantPage extends PureComponent<
         />
         <Modal show={!!extensions} onHide={() => (this.extensions = undefined)}>
           <Modal.Header closeButton>
-            <Modal.Title>参赛者问卷</Modal.Title>
+            <Modal.Title>{t('questionnaire')}</Modal.Title>
           </Modal.Header>
           <Modal.Body as="ul">
             {extensions?.map(({ name, value }) => (

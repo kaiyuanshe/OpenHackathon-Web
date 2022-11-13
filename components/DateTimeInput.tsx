@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { FC } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
@@ -25,7 +26,7 @@ export const DateTimeInput: FC<DateTimeInputProps> = ({
     </Form.Label>
     <Col sm={10}>
       <InputGroup className="mb-3">
-        <InputGroup.Text>时间范围</InputGroup.Text>
+        <InputGroup.Text>{t('time_range')}</InputGroup.Text>
         <Form.Control
           name={`${name}StartedAt`}
           type="datetime-local"

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { text2color } from 'idea-react';
 import { observer } from 'mobx-react';
 import { ReactNode } from 'react';
@@ -63,7 +64,7 @@ export class GitList extends ScrollList<GitListProps> {
               <Card.Footer className="d-flex justify-content-between align-items-center">
                 {homepage && (
                   <Button variant="success" target="_blank" href={homepage}>
-                    访问预览
+                    {t('access_preview')}
                   </Button>
                 )}
                 {renderController?.({
@@ -82,7 +83,7 @@ export class GitList extends ScrollList<GitListProps> {
                     id={full_name}
                     name="template"
                     value={full_name}
-                    label="选择"
+                    label={t('select')}
                   />
                 )}
               </Card.Footer>

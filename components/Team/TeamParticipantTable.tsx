@@ -1,5 +1,6 @@
 import 'array-unique-proposal';
 
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 
@@ -18,20 +19,20 @@ export interface TeamParticipantTableProps extends ScrollListProps<TeamMember> {
 }
 
 const StatusName: Record<TeamMember['status'], string> = {
-  approved: '通过',
-  pendingApproval: '审核中',
+  approved: t('status_approved'),
+  pendingApproval: t('status_pending'),
 };
 
 const TableHeads = [
   '#',
-  '昵称',
-  '邮箱',
-  '联系电话',
-  '联系地址',
-  '申请时间',
-  '申请角色',
-  '备注',
-  '状态',
+  t('nick_name'),
+  t('mail'),
+  t('phone_number'),
+  t('contact_address'),
+  t('apply_time'),
+  t('apply_role'),
+  t('remark'),
+  t('status'),
 ];
 
 @observer
@@ -72,7 +73,7 @@ export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> 
                 phone || '--',
                 address || '--',
                 convertDatetime(createdAt),
-                role === 'admin' ? '管理员' : '成员',
+                role === 'admin' ? t('admin') : t('member'),
                 description,
                 status,
               ].map((data, idx, { length }) =>

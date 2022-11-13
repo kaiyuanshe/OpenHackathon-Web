@@ -18,16 +18,12 @@ export const getServerSideProps = withRoute<{ name: string }>();
 export default class MessageListPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  messageList = createRef<MessageList>();
   store = activityStore.messageOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();
 
   @observable
   show = false;
-
-  @observable
-  hide = false;
 
   selectedIds: string[] = [];
 
@@ -79,7 +75,7 @@ export default class MessageListPage extends PureComponent<
 
           <MessageList
             store={store}
-            hide={this.hide}
+            hideControls={false}
             onSelect={list => (this.selectedIds = list)}
             onEdit={() => (this.show = true)}
             onDelete={this.handleReset}

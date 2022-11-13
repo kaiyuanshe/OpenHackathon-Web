@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
@@ -8,9 +9,9 @@ import activityStore from '../../models/Activity';
 import { FileUpload } from '../FileUpload';
 
 const workTypes = [
-  { title: '网站', value: 'website' },
-  { title: '图片', value: 'image' },
-  { title: '视频', value: 'video' },
+  { title: t('website'), value: 'website' },
+  { title: t('image'), value: 'image' },
+  { title: t('video'), value: 'video' },
   { title: 'Word', value: 'word' },
   { title: 'PowerPoint', value: 'powerpoint' },
   { title: 'PDF', value: 'pdf' },
@@ -49,18 +50,18 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
 
     return (
       <Container>
-        <h2 className="text-center">编辑作品</h2>
+        <h2 className="text-center">{t('edit_work')}</h2>
 
         <Form onSubmit={this.handleSubmit}>
           <Form.Group as={Row} className="mb-3" controlId="title">
             <Form.Label column sm={2}>
-              名称
+              {t('name')}
             </Form.Label>
             <Col sm={10}>
               <Form.Control
                 name="title"
                 type="text"
-                placeholder="请填写作品名称"
+                placeholder={t('please_enter_name')}
                 pattern="[a-zA-Z0-9]+"
                 required
                 defaultValue={currentOne?.title}
@@ -69,14 +70,14 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="description">
             <Form.Label column sm={2}>
-              描述
+              {t('introduction')}
             </Form.Label>
             <Col sm={10}>
               <Form.Control
                 name="description"
                 as="textarea"
                 rows={3}
-                placeholder="请填写作品描述"
+                placeholder={t('please_enter_description')}
                 required
                 defaultValue={currentOne?.description}
               />
@@ -84,7 +85,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="type">
             <Form.Label column sm={2}>
-              作品类型
+              {t('work_type')}
             </Form.Label>
             <Col sm={10}>
               {workTypes.map(({ value }) => (
@@ -104,14 +105,14 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
           {currentOne?.type === 'website' && (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
-                作品在线链接
+                {t('work_url')}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
                   name="url"
                   type="uri"
                   defaultValue={currentOne.url}
-                  placeholder="作品链接"
+                  placeholder={t('work_url')}
                 />
               </Col>
             </Form.Group>
@@ -119,7 +120,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
           {currentOne?.type !== 'website' && (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
-                上传作品
+                {t('upload_file')}
               </Form.Label>
               <Col sm={10}>
                 <FileUpload
@@ -138,7 +139,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
             type="submit"
             disabled={uploading > 0}
           >
-            提交
+            {t('submit')}
           </Button>
         </Form>
       </Container>

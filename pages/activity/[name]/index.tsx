@@ -6,6 +6,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { Loading, OpenMap } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -137,7 +138,7 @@ export default class ActivityPage extends PureComponent<
                 className="text-success me-2"
                 icon={faCalendarDay}
               />
-              报名时段
+              {t('registration_period')}
             </Col>
             <Col>
               {convertDatetime(enrollmentStartedAt)} ~{' '}
@@ -150,7 +151,7 @@ export default class ActivityPage extends PureComponent<
                 className="text-success me-2"
                 icon={faCalendarDay}
               />
-              活动时段
+              {t('activity_period')}
             </Col>
             <Col>
               {convertDatetime(eventStartedAt)} ~{' '}
@@ -163,21 +164,21 @@ export default class ActivityPage extends PureComponent<
                 className="text-success me-2"
                 icon={faLocationDot}
               />
-              活动地址
+              {t('activity_address')}
             </Col>
             <Col>{location}</Col>
           </Row>
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
               <FontAwesomeIcon className="text-success me-2" icon={faUsers} />
-              报名人数
+              {t('registration_count')}
             </Col>
             <Col>{enrollment}</Col>
           </Row>
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
               <FontAwesomeIcon className="text-success me-2" icon={faFlag} />
-              活动状态
+              {t('activity_status')}
             </Col>
             <Col>
               {getActivityStatusText({
@@ -192,7 +193,7 @@ export default class ActivityPage extends PureComponent<
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
-              报名状态
+              {t('registration_status')}
             </Col>
             <Col>{StatusName[status || 'none']}</Col>
           </Row>
@@ -202,18 +203,20 @@ export default class ActivityPage extends PureComponent<
             href={`/activity/${name}/register`}
             disabled={isDisableSignupBtn}
           >
-            立即报名
+            {t('register_now')}
           </Button>
         )}
         {isShowCreateTeamBtn && (
-          <Button onClick={() => (this.showCreateTeam = true)}>创建团队</Button>
+          <Button onClick={() => (this.showCreateTeam = true)}>
+            {t('create_team')}
+          </Button>
         )}
         {myTeam && (
           <Button
             variant="warning"
             href={`/activity/${name}/team/${myTeam.id}/manage/git`}
           >
-            云开发
+            {t('cloud_development')}
           </Button>
         )}
       </>
@@ -261,19 +264,16 @@ export default class ActivityPage extends PureComponent<
                 as="article"
                 className="pt-2"
                 eventKey="detail"
-                title="活动详情"
+                title={t('hackathon_detail')}
                 dangerouslySetInnerHTML={{ __html: detail }}
               >
                 {/*todo update no data*/}
               </Tab>
-              <Tab className="pt-2" eventKey="log" title="最新动态">
-                <MessageList
-                  store={myMessage}
-                  hide={this.hideMessageListNotNeed}
-                />
+              <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
+                <MessageList store={myMessage} hideControls={true} />
               </Tab>
-              <Tab eventKey="team" title="参赛团队" className="pt-2">
-                <h3>我的团队</h3>
+              <Tab eventKey="team" title={t('my_team')} className="pt-2">
+                <h3>{t('my_team')}</h3>
                 {myTeam ? (
                   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
                     <Col>
@@ -281,26 +281,26 @@ export default class ActivityPage extends PureComponent<
                     </Col>
                   </Row>
                 ) : (
-                  '暂未加入任何团队'
+                  t('no_team')
                 )}
                 <hr />
-                <h3>所有团队</h3>
+                <h3>{t('all_teams')}</h3>
                 <TeamList store={this.teamStore} />
               </Tab>
             </Tabs>
           </Col>
           <Col className="d-flex flex-column">
-            <h2>主办方信息</h2>
+            <h2>{t('sponsor_information')}</h2>
             <OrganizationCardList store={this.organizationStore} />
 
             {displayName && location && (
               <>
-                <h2 className="mt-3">比赛地点</h2>
+                <h2 className="mt-3">{t('competition_location')}</h2>
 
                 {!isServer() && (
                   <div style={{ minHeight: '10rem' }}>
                     <OpenMap zoom={10} title={displayName} address={location}>
-                      暂无地址导航
+                      {t('no_address_navigation')}
                     </OpenMap>
                   </div>
                 )}

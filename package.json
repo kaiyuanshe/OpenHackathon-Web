@@ -25,6 +25,7 @@
     "classnames": "^2.3.2",
     "echarts-jsx": "^0.4.0",
     "editorjs-html": "^3.4.2",
+    "i18next": "^21.10.0",
     "idea-react": "^0.27.7",
     "koajax": "^0.8.3",
     "lodash": "^4.17.21",
@@ -36,6 +37,7 @@
     "react-bootstrap": "^2.5.0",
     "react-dom": "^17.0.2",
     "react-editor-js": "^2.1.0",
+    "react-i18next": "^12.0.0",
     "web-utility": "^3.9.9"
   },
   "devDependencies": {

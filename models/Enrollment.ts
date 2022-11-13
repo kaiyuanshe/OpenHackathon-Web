@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { computed, observable } from 'mobx';
 import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
@@ -13,6 +14,12 @@ export interface Enrollment extends Base {
   status: 'none' | 'pendingApproval' | 'approved' | 'rejected';
   extensions: Record<'name' | 'value', string>[];
 }
+export const statusName: Record<Enrollment['status'], string> = {
+  approved: t('approve'),
+  rejected: t('status_rejected'),
+  none: t('status_none'),
+  pendingApproval: t('status_pending'),
+};
 
 export type EnrollmentFilter = Filter<Enrollment>;
 

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
@@ -45,10 +46,10 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     // @ts-ignore
     await activityStore.updateOne(data, name);
 
-    if (!name && confirm('活动创建成功，是否申请发布活动?')) {
+    if (!name && confirm(t('create_work_success'))) {
       await activityStore.publishOne(data.name);
 
-      alert('已申请发布活动，请等待审核……');
+      alert(t('has_published'));
     }
     location.pathname = `/`;
   };
@@ -98,13 +99,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="displayName">
           <Form.Label column sm={2}>
-            显示名称（必填）
+            {t('disaplay_name')}
+            {t('quote_required')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="displayName"
               type="text"
-              placeholder="显示名称"
+              placeholder={t('disaplay_name')}
               required
               defaultValue={displayName}
             />
@@ -113,13 +115,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="tags">
           <Form.Label column sm={2}>
-            标签
+            {t('tag')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="tagsString"
               type="text"
-              placeholder="标签，请以空格分隔"
+              placeholder={t('tag_placeholder')}
               defaultValue={tags.join(' ')}
             />
           </Col>
@@ -127,7 +129,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="image">
           <Form.Label column sm={2}>
-            头图（必填，最多10张）
+            {t('bannerUrls')}
           </Form.Label>
           <Col sm={10}>
             <FileUpload
@@ -143,34 +145,34 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="location">
           <Form.Label column sm={2}>
-            活动地址
+            {t('activity_address')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="location"
               type="text"
-              placeholder="活动地址"
+              placeholder={t('activity_address')}
               defaultValue={location}
             />
           </Col>
         </Form.Group>
 
         <DateTimeInput
-          label="报名时间（必填）"
+          label={t('enrollment') + t('quote_required')}
           name="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
           required
         />
         <DateTimeInput
-          label="活动时间（必填）"
+          label={t('activity_time') + t('quote_required')}
           name="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
           required
         />
         <DateTimeInput
-          label="评分时间（必填）"
+          label={t('judge_time') + t('quote_required')}
           name="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}
@@ -179,13 +181,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="slogan">
           <Form.Label column sm={2}>
-            广告语
+            {t('ribbon')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="ribbon"
               type="text"
-              placeholder="广告语"
+              placeholder={t('ribbon')}
               defaultValue={ribbon}
             />
           </Col>
@@ -193,7 +195,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="peopleLimit">
           <Form.Label column sm={2}>
-            报名人数限制
+            {t('max_enrollment')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
@@ -201,7 +203,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               type="number"
               min={0}
               max={100000}
-              placeholder="0 表示无限"
+              placeholder={t('max_enrollment_placeholder')}
               defaultValue={maxEnrollment || 0}
             />
           </Col>
@@ -209,13 +211,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="summary">
           <Form.Label column sm={2}>
-            活动简介
+            {t('activity_introduction')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="summary"
               type="text"
-              placeholder="活动简介"
+              placeholder={t('activity_introduction')}
               defaultValue={summary}
               required
             />
@@ -225,14 +227,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         {/* todo editor*/}
         <Form.Group as={Row} className="mb-3" controlId="briefInfo">
           <Form.Label column sm={2}>
-            活动详情
+            {t('hackathon_detail')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="detail"
               as="textarea"
               rows={3}
-              placeholder="活动详情"
+              placeholder={t('hackathon_detail')}
               defaultValue={detail}
               required
             />
@@ -241,7 +243,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <footer className="text-center">
           <Button type="submit" className="px-5">
-            提交
+            {t('submit')}
           </Button>
         </footer>
       </Form>

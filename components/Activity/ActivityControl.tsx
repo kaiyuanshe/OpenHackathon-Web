@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { Button } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
@@ -21,7 +22,7 @@ export function ActivityControl({
         variant="info"
         href={`/activity/${name}/manage/edit`}
       >
-        管理
+        {t('manage_this_hackathon')}
       </Button>
       {status !== 'online' ? (
         <Button
@@ -29,7 +30,7 @@ export function ActivityControl({
           variant="success"
           onClick={() => onPublish?.(name)}
         >
-          {status === 'planning' && '申请'}上线
+          {status === 'planning' ? t('apply_publish') : t('publish')}
         </Button>
       ) : (
         <Button
@@ -37,7 +38,7 @@ export function ActivityControl({
           variant="warning"
           onClick={() => onDelete?.(name)}
         >
-          下线
+          {t('offline')}
         </Button>
       )}
     </>

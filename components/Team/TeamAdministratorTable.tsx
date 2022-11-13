@@ -1,5 +1,6 @@
 import 'array-unique-proposal';
 
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 
@@ -23,18 +24,18 @@ export interface TeamAdministratorTableProps
 
 const TableHeads = [
   '#',
-  '昵称',
-  '邮箱',
-  '联系电话',
-  '联系地址',
-  '最后登录时间',
-  '备注',
-  '角色类型',
+  t('nick_name'),
+  t('mail'),
+  t('phone_number'),
+  t('contact_address'),
+  t('last_login_time'),
+  t('remark'),
+  t('role_type'),
 ];
 
 const RoleName = {
-  member: '成员',
-  admin: '管理员',
+  member: t('member'),
+  admin: t('admin'),
 };
 
 @observer
