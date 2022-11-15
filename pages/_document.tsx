@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import { useStaticRendering } from 'mobx-react';
 import { Head, Html, Main, NextScript } from 'next/document';
 
