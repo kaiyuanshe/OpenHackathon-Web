@@ -42,6 +42,6 @@ export class GitLogo extends PureComponent<GitLogoProps> {
   render() {
     const { path } = this;
 
-    return path && <Image fluid src={path} alt="#" />;
+    return path && <Image fluid src={path} alt={this.props.name} />;
   }
 }
