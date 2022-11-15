@@ -67,6 +67,11 @@ export const menus: MenuItem[] = [
         href: 'message',
         icon: 'bullhorn',
       },
+      {
+        title: t('log'),
+        href: 'log',
+        icon: 'message',
+      },
     ],
   },
   {
