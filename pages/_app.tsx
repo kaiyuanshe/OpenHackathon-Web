@@ -2,10 +2,10 @@ import '../styles/globals.less';
 //Translate
 import '../utils/i18n';
 
-import { t } from 'i18next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
 
@@ -14,6 +14,8 @@ export default function MyApp({
   Component,
   pageProps,
 }: AppProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Head>
