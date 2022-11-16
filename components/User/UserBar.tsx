@@ -1,13 +1,15 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button, Dropdown } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import sessionStore from '../../models/Session';
 import LanguageMenu from './LanguageMenu';
 import { SessionBox } from './SessionBox';
 
 const UserBar = observer(() => {
+  const { t } = useTranslation();
+
   const { user } = sessionStore;
   const showName = user ? user.nickname || user.email || user.phone : '';
 

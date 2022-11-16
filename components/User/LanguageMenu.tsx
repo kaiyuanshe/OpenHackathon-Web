@@ -10,7 +10,7 @@ class LanguageMenu extends PureComponent<WithTranslation> {
     const { i18n, t } = this.props;
 
     return (
-      <Dropdown className="mx-2 my-2 my-md-0">
+      <Dropdown className="ms-md-3 my-2 my-md-0">
         <Dropdown.Toggle>
           {t('language')}: {t(i18n.language)}
         </Dropdown.Toggle>

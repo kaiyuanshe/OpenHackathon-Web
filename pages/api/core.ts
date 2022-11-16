@@ -1,4 +1,5 @@
 import { HTTPError, Request, request as call } from 'koajax';
+import { DataObject } from 'mobx-restful';
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -30,7 +31,7 @@ export async function uploadBlob<T = void>(
   });
   const { headers: header, body: data } = await response;
 
-  if (!data || !('traceId' in data)) return data!;
+  if (!data || !('traceId' in (data as DataObject))) return data!;
 
   const { status, title, detail } = data as unknown as ErrorBaseData;
 

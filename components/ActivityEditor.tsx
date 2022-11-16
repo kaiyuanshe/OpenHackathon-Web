@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
+import dynamic from 'next/dynamic';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -8,6 +9,15 @@ import { formToJSON } from 'web-utility';
 import activityStore, { Activity } from '../models/Activity';
 import { DateTimeInput } from './DateTimeInput';
 import { FileUpload } from './FileUpload';
+
+const Editor = dynamic(
+  async () => {
+    const { Editor } = await import('react-bootstrap-editor');
+
+    return Editor;
+  },
+  { ssr: false },
+);
 
 interface ActivityFormData extends Activity {
   tagsString?: string;
@@ -20,10 +30,16 @@ export interface ActivityEditorProps {
 
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
-  componentDidMount() {
+  detailHTML = '';
+
+  async componentDidMount() {
     const { name } = this.props;
 
-    if (name) activityStore.getOne(name);
+    if (!name) return;
+
+    const { detail } = await activityStore.getOne(name);
+
+    this.detailHTML = detail;
   }
 
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
@@ -31,7 +47,11 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     event.stopPropagation();
 
     const { name } = this.props,
-      data = formToJSON<ActivityFormData>(event.currentTarget);
+      { detailHTML } = this;
+
+    if (!detailHTML.trim()) return;
+
+    const data = formToJSON<ActivityFormData>(event.currentTarget);
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
@@ -44,14 +64,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     });
     data.tags = data?.tagsString?.split(/\s+/) || [];
     // @ts-ignore
-    await activityStore.updateOne(data, name);
+    await activityStore.updateOne({ ...data, detail: detailHTML.trim() }, name);
 
     if (!name && confirm(t('create_work_success'))) {
       await activityStore.publishOne(data.name);
 
       alert(t('has_published'));
     }
-    location.pathname = `/`;
+    location.pathname = name ? `/activity/${name}` : `/`;
   };
 
   render() {
@@ -224,19 +244,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Col>
         </Form.Group>
 
-        {/* todo editor*/}
         <Form.Group as={Row} className="mb-3" controlId="briefInfo">
           <Form.Label column sm={2}>
             {t('hackathon_detail')}
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="detail"
-              as="textarea"
-              rows={3}
-              placeholder={t('hackathon_detail')}
-              defaultValue={detail}
-              required
+            <Editor
+              value={detail}
+              onChange={code => (this.detailHTML = code)}
             />
           </Col>
         </Form.Group>

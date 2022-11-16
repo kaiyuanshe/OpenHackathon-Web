@@ -53,7 +53,7 @@ export const menus: MenuItem[] = [
         roles: ['judge'],
       },
       {
-        title: 'works_awards',
+        title: t('works_awards'),
         href: 'evaluation',
         icon: 'star',
       },

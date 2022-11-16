@@ -16,7 +16,6 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 - Component engine: [Nextjs v12][3]
 - Component suite: [Bootstrap v5][4]
 - PWA framework: [Workbox v6][5]
-- Test framework: [Jest][9] + [Playwright][10]
 - CI / CD: GitHub [Actions][11] + [Vercel][12]
 
 ## Getting Started
@@ -53,32 +52,12 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform][12] f
 
 Check out our [Next.js deployment documentation][17] for more details.
 
-## End-to-End testing
-
-### NPM script
-
-```shell
-pnpm e2e
-```
-
-### VS Code
-
-press <key>F5</key>
-
-### Learn more
-
-1. Runner & Assert framework: [Jest][9]
-2. Browser Operation library: [Playwright][10] & [its community][18]
-
 [1]: https://reactjs.org/
 [2]: https://www.typescriptlang.org/
 [3]: https://nextjs.org/
 [4]: https://getbootstrap.com/
 [5]: https://developers.google.com/web/tools/workbox
-[6]: https://github.com/vercel/next.js/tree/canary/packages/create-next-app
 [8]: https://github.com/kaiyuanshe/OpenHackathon-Web/actions/workflows/main.yml
-[9]: https://jestjs.io/
-[10]: https://playwright.dev/
 [11]: https://github.com/features/actions
 [12]: https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme
 [13]: https://nextjs.org/docs/api-routes/introduction
@@ -86,4 +65,3 @@ press <key>F5</key>
 [15]: https://nextjs.org/learn
 [16]: https://github.com/vercel/next.js/
 [17]: https://nextjs.org/docs/deployment
-[18]: https://playwright.tech/
