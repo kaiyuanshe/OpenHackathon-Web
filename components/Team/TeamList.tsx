@@ -9,17 +9,23 @@ export interface TeamListProps extends ScrollListProps<Team> {
   store: TeamModel;
 }
 
+export const TeamListLayout = ({
+  value = [],
+}: Pick<TeamListProps, 'value'>) => (
+  <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
+    {value.map(item => (
+      <Col key={item.id}>
+        <TeamCard className="h-100" {...item} />
+      </Col>
+    ))}
+  </Row>
+);
+
 @observer
 export class TeamList extends ScrollList<TeamListProps> {
   store = this.props.store;
 
-  static Layout = ({ value = [] }: TeamListProps) => (
-    <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
-      {value.map(item => (
-        <Col key={item.id}>
-          <TeamCard className="h-100" {...item} />
-        </Col>
-      ))}
-    </Row>
-  );
+  renderList() {
+    return <TeamListLayout value={this.store.allItems} />;
+  }
 }

@@ -38,22 +38,11 @@ const RoleName = {
   admin: t('admin'),
 };
 
-@observer
-export class TeamAdministratorTable extends ScrollList<TeamAdministratorTableProps> {
-  store = this.props.store;
-
-  filter: TeamMemberFilter = {
-    status: MembershipStatus.APPROVED,
-  };
-
-  extraProps: Partial<TeamAdministratorTableProps> = {
-    onUpdateRole: (userId, role) => this.store.updateRole(userId, role),
-  };
-
-  static Layout = ({
+export const TeamAdministratorTableLayout = observer(
+  ({
     value = [],
     onUpdateRole,
-  }: TeamAdministratorTableProps) => {
+  }: Omit<TeamAdministratorTableProps, 'store'>) => {
     const { id: currentUserId } = sessionStore?.user || {};
 
     return (
@@ -117,5 +106,27 @@ export class TeamAdministratorTable extends ScrollList<TeamAdministratorTablePro
         </tbody>
       </Table>
     );
+  },
+);
+
+@observer
+export class TeamAdministratorTable extends ScrollList<TeamAdministratorTableProps> {
+  store = this.props.store;
+
+  filter: TeamMemberFilter = {
+    status: MembershipStatus.APPROVED,
   };
+
+  onUpdateRole: TeamAdministratorTableProps['onUpdateRole'] = (userId, role) =>
+    this.store.updateRole(userId, role);
+
+  renderList() {
+    return (
+      <TeamAdministratorTableLayout
+        {...this.props}
+        value={this.store.allItems}
+        onUpdateRole={this.onUpdateRole}
+      />
+    );
+  }
 }
