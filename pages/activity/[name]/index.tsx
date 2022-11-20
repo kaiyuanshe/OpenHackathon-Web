@@ -26,7 +26,7 @@ import {
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
 import { MessageList } from '../../../components/Message/MessageList';
-import { OrganizationCardList } from '../../../components/Organization/OrganizationList';
+import { OrganizationList } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -288,7 +288,7 @@ export default class ActivityPage extends PureComponent<
           </Col>
           <Col className="d-flex flex-column">
             <h2>{t('sponsor_information')}</h2>
-            <OrganizationCardList store={this.organizationStore} />
+            <OrganizationList store={this.organizationStore} />
 
             {displayName && location && (
               <>

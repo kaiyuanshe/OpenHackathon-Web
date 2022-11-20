@@ -2,18 +2,34 @@ import '../styles/globals.less';
 //Translate
 import '../utils/i18n';
 
-import { t } from 'i18next';
+import { HTTPError } from 'koajax';
+import { useStaticRendering } from 'mobx-react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
+import { ErrorBaseData, isServer } from '../models/Base';
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+useStaticRendering(isServer());
+
+globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
+  const { message, body } = (reason || {}) as HTTPError<ErrorBaseData>;
+
+  const tips = body?.detail || message;
+
+  if (tips) alert(tips);
+});
 
 export default function MyApp({
   router: { pathname },
   Component,
   pageProps,
 }: AppProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Head>

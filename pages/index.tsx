@@ -3,7 +3,7 @@ import type { InferGetServerSidePropsType } from 'next';
 import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
-import ActivityList from '../components/Activity/ActivityList';
+import { ActivityListLayout } from '../components/Activity/ActivityList';
 import PageHead from '../components/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
 import activityStore from '../models/Activity';
@@ -54,7 +54,7 @@ const HomePage = ({
 
     <section className="my-5 py-5 bg-light text-center">
       <Container className="text-start">
-        <ActivityList.Layout value={activities} />
+        <ActivityListLayout value={activities} />
       </Container>
 
       <Button

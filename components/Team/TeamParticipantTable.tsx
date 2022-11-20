@@ -35,76 +35,87 @@ const TableHeads = [
   t('status'),
 ];
 
+export const TeamParticipantTableLayout = ({
+  value = [],
+  onApprove,
+}: Omit<TeamParticipantTableProps, 'store'>) => (
+  <Table hover responsive="lg" className={styles.table}>
+    <thead>
+      <tr>
+        {TableHeads.map((data, idx) => (
+          <th key={idx + data}>{data}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {value.map(
+        (
+          {
+            createdAt,
+            description,
+            role,
+            status,
+            user: { address, email, nickname, phone, username },
+            userId,
+          },
+          index,
+        ) => (
+          <tr key={userId}>
+            {[
+              index + 1,
+              nickname || username || email || phone || '--',
+              email || '--',
+              phone || '--',
+              address || '--',
+              convertDatetime(createdAt),
+              role === 'admin' ? t('admin') : t('member'),
+              description,
+              status,
+            ].map((data, idx, { length }) =>
+              idx + 1 === length ? (
+                <td key={idx + userId}>
+                  <Form.Control
+                    as="select"
+                    className={styles.form}
+                    disabled={status === MembershipStatus.APPROVED}
+                    onChange={({ currentTarget: { value } }) =>
+                      onApprove?.(userId, value as MembershipStatus)
+                    }
+                    defaultValue={status}
+                  >
+                    {Object.entries(StatusName).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </td>
+              ) : (
+                <td key={idx + userId} title={data + ''}>
+                  {data}
+                </td>
+              ),
+            )}
+          </tr>
+        ),
+      )}
+    </tbody>
+  </Table>
+);
+
 @observer
 export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> {
   store = this.props.store;
 
-  extraProps: Partial<TeamParticipantTableProps> = {
-    onApprove: (userId, status) => this.store.approveOne(userId, status),
-  };
+  onApprove: TeamParticipantTableProps['onApprove'] = (userId, status) =>
+    this.store.approveOne(userId, status);
 
-  static Layout = ({ value = [], onApprove }: TeamParticipantTableProps) => (
-    <Table hover responsive="lg" className={styles.table}>
-      <thead>
-        <tr>
-          {TableHeads.map((data, idx) => (
-            <th key={idx + data}>{data}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {value.map(
-          (
-            {
-              createdAt,
-              description,
-              role,
-              status,
-              user: { address, email, nickname, phone, username },
-              userId,
-            },
-            index,
-          ) => (
-            <tr key={userId}>
-              {[
-                index + 1,
-                nickname || username || email || phone || '--',
-                email || '--',
-                phone || '--',
-                address || '--',
-                convertDatetime(createdAt),
-                role === 'admin' ? t('admin') : t('member'),
-                description,
-                status,
-              ].map((data, idx, { length }) =>
-                idx + 1 === length ? (
-                  <td key={idx + userId}>
-                    <Form.Control
-                      as="select"
-                      className={styles.form}
-                      disabled={status === MembershipStatus.APPROVED}
-                      onChange={({ currentTarget: { value } }) =>
-                        onApprove?.(userId, value as MembershipStatus)
-                      }
-                      defaultValue={status}
-                    >
-                      {Object.entries(StatusName).map(([key, value]) => (
-                        <option key={key} value={key}>
-                          {value}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </td>
-                ) : (
-                  <td key={idx + userId} title={data + ''}>
-                    {data}
-                  </td>
-                ),
-              )}
-            </tr>
-          ),
-        )}
-      </tbody>
-    </Table>
-  );
+  renderList() {
+    return (
+      <TeamParticipantTableLayout
+        value={this.store.allItems}
+        onApprove={this.onApprove}
+      />
+    );
+  }
 }

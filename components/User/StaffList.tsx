@@ -25,107 +25,115 @@ const TableHeads = [
   t('remark'),
 ];
 
+export const StaffListLayout = ({
+  value = [],
+  selectedIds = [],
+  onSelect,
+}: Omit<StaffListProps, 'store'>) => (
+  <Table hover responsive="lg" className={styles.table}>
+    <thead>
+      <tr>
+        {TableHeads.map((data, idx) =>
+          idx ? (
+            <th key={idx + data}>{data}</th>
+          ) : (
+            <th key={idx + data}>
+              <Form.Check
+                inline
+                type="checkbox"
+                name="selectAll"
+                aria-label="selectAll"
+                checked={selectedIds.length === value.length}
+                // https://github.com/facebook/react/issues/1798
+                ref={(input: HTMLInputElement | null) =>
+                  input &&
+                  (input.indeterminate =
+                    !!selectedIds.length && selectedIds.length < value.length)
+                }
+                onClick={() =>
+                  onSelect?.(
+                    selectedIds.length === value.length
+                      ? []
+                      : value.map(({ userId }) => userId),
+                  )
+                }
+              />
+            </th>
+          ),
+        )}
+      </tr>
+    </thead>
+    <tbody>
+      {value.map(
+        ({
+          createdAt,
+          userId,
+          user: {
+            email,
+            nickname,
+            lastLogin,
+            registerSource: [source],
+          },
+          description,
+        }) => (
+          <tr key={userId}>
+            {[
+              userId,
+              nickname,
+              email,
+              description ? t('referee') : t('admin'),
+              createdAt ? t('approve') : t('status_pending'),
+              source.split(':')[1],
+              convertDatetime(lastLogin),
+              convertDatetime(createdAt),
+              description,
+            ].map((data, idx) =>
+              idx ? (
+                <td key={idx + userId + createdAt}>{data}</td>
+              ) : (
+                <td key={idx + userId + createdAt}>
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    name="userId"
+                    value={data}
+                    aria-label={description ? `judge${data}` : `admin${data}`}
+                    checked={selectedIds.includes(userId)}
+                    onClick={
+                      onSelect &&
+                      (({ currentTarget: { checked } }) => {
+                        if (checked)
+                          return onSelect([...selectedIds, userId].uniqueBy());
+                        const index = selectedIds.indexOf(userId);
+
+                        onSelect([
+                          ...selectedIds.slice(0, index),
+                          ...selectedIds.slice(index + 1),
+                        ]);
+                      })
+                    }
+                  />
+                </td>
+              ),
+            )}
+          </tr>
+        ),
+      )}
+    </tbody>
+  </Table>
+);
+
 @observer
 export class StaffList extends ScrollList<StaffListProps> {
   store = this.props.store;
 
-  static Layout = ({
-    value = [],
-    selectedIds = [],
-    onSelect,
-  }: StaffListProps) => (
-    <Table hover responsive="lg" className={styles.table}>
-      <thead>
-        <tr>
-          {TableHeads.map((data, idx) =>
-            idx ? (
-              <th key={idx + data}>{data}</th>
-            ) : (
-              <th key={idx + data}>
-                <Form.Check
-                  inline
-                  type="checkbox"
-                  name="selectAll"
-                  aria-label="selectAll"
-                  checked={selectedIds.length === value.length}
-                  // https://github.com/facebook/react/issues/1798
-                  ref={(input: HTMLInputElement | null) =>
-                    input &&
-                    (input.indeterminate =
-                      !!selectedIds.length && selectedIds.length < value.length)
-                  }
-                  onClick={() =>
-                    onSelect?.(
-                      selectedIds.length === value.length
-                        ? []
-                        : value.map(({ userId }) => userId),
-                    )
-                  }
-                />
-              </th>
-            ),
-          )}
-        </tr>
-      </thead>
-      <tbody>
-        {value.map(
-          ({
-            createdAt,
-            userId,
-            user: {
-              email,
-              nickname,
-              lastLogin,
-              registerSource: [source],
-            },
-            description,
-          }) => (
-            <tr key={userId}>
-              {[
-                userId,
-                nickname,
-                email,
-                description ? t('referee') : t('admin'),
-                createdAt ? t('approve') : t('status_pending'),
-                source.split(':')[1],
-                convertDatetime(lastLogin),
-                convertDatetime(createdAt),
-                description,
-              ].map((data, idx) =>
-                idx ? (
-                  <td key={idx + userId + createdAt}>{data}</td>
-                ) : (
-                  <td key={idx + userId + createdAt}>
-                    <Form.Check
-                      inline
-                      type="checkbox"
-                      name="userId"
-                      value={data}
-                      aria-label={description ? `judge${data}` : `admin${data}`}
-                      checked={selectedIds.includes(userId)}
-                      onClick={
-                        onSelect &&
-                        (({ currentTarget: { checked } }) => {
-                          if (checked)
-                            return onSelect(
-                              [...selectedIds, userId].uniqueBy(),
-                            );
-                          const index = selectedIds.indexOf(userId);
-
-                          onSelect([
-                            ...selectedIds.slice(0, index),
-                            ...selectedIds.slice(index + 1),
-                          ]);
-                        })
-                      }
-                    />
-                  </td>
-                ),
-              )}
-            </tr>
-          ),
-        )}
-      </tbody>
-    </Table>
-  );
+  renderList() {
+    return (
+      <StaffListLayout
+        value={this.store.allItems}
+        selectedIds={this.selectedIds}
+        onSelect={this.onSelect}
+      />
+    );
+  }
 }

@@ -31,7 +31,7 @@
   "please_enter_description": "Please enter a description",
   "please_enter_logo_url": "Please enter a Logo URI",
   "logo_url": "Logo address",
-  "operate": "Operate",
+  "operation": "Operation",
   "user_name": "Username",
   "nick_name": "Nickname",
   "mail": "Mail",
@@ -233,5 +233,8 @@
   "approval_status": "Approval Status",
   "custom_questionnaire": "Custom questionnaire",
   "access_preview": "Access Preview",
-  "select": "Select"
+  "select": "Select",
+  "title": "Title",
+  "content": "Content",
+  "sure_delete_this_message": "Are you sure you want to delete this message?"
 }

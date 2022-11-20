@@ -18,73 +18,80 @@ export const AwardTargetName = {
   individual: t('personal'),
   team: t('team'),
 };
+
 const awardTableHead = [
   t('weights'),
   t('type'),
   t('photo'),
   t('name'),
   t('description'),
-  t('operate'),
+  t('operation'),
 ];
+
+export const AwardListLayout = ({
+  value = [],
+  onEdit,
+  onDelete,
+}: Omit<AwardListProps, 'store'>) => (
+  <Table hover responsive="lg" className={styles.table}>
+    <thead>
+      <tr>
+        {awardTableHead.map((data, idx) => (
+          <th key={idx}>{data}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {value.map(({ quantity, target, pictures, name, description, id }) => (
+        <tr key={id}>
+          <td>{quantity}</td>
+          <td>{AwardTargetName[target]}</td>
+          <td>
+            {pictures! && (
+              <Image src={pictures?.[0].uri} alt={pictures?.[0].description} />
+            )}
+          </td>
+          <td>
+            <Button variant="link" onClick={() => onEdit?.(id!)}>
+              {name}
+            </Button>
+          </td>
+          <td>{description}</td>
+          <td>
+            <Button variant="danger" size="sm" onClick={() => onDelete?.(id!)}>
+              <FontAwesomeIcon icon={faTrash} className="me-2" />
+              {t('delete')}
+            </Button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </Table>
+);
 
 @observer
 export class AwardList extends ScrollList<AwardListProps> {
   store = this.props.store;
 
-  extraProps: Partial<AwardListProps> = {
-    onEdit: id => {
-      this.props.onEdit?.(id);
-      this.store.getOne(id);
-    },
-    onDelete: id => {
-      if (!confirm(t('sure_delete_this_work'))) return;
-
-      this.props.onDelete?.(id);
-      this.store.deleteOne(id);
-    },
+  onEdit = (id: string) => {
+    this.props.onEdit?.(id);
+    this.store.getOne(id);
   };
 
-  static Layout = ({ value = [], onEdit, onDelete }: AwardListProps) => (
-    <Table hover responsive="lg" className={styles.table}>
-      <thead>
-        <tr>
-          {awardTableHead.map((data, idx) => (
-            <th key={idx}>{data}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {value.map(({ quantity, target, pictures, name, description, id }) => (
-          <tr key={id}>
-            <td>{quantity}</td>
-            <td>{AwardTargetName[target]}</td>
-            <td>
-              {pictures! && (
-                <Image
-                  src={pictures?.[0].uri}
-                  alt={pictures?.[0].description}
-                />
-              )}
-            </td>
-            <td>
-              <Button variant="link" onClick={() => onEdit?.(id!)}>
-                {name}
-              </Button>
-            </td>
-            <td>{description}</td>
-            <td>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => onDelete?.(id!)}
-              >
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
-                {t('delete')}
-              </Button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
+  onDelete = (id: string) => {
+    if (!confirm(t('sure_delete_this_work'))) return;
+
+    this.props.onDelete?.(id);
+    this.store.deleteOne(id);
+  };
+
+  renderList() {
+    return (
+      <AwardListLayout
+        value={this.store.allItems}
+        onEdit={this.onEdit}
+        onDelete={this.onDelete}
+      />
+    );
+  }
 }

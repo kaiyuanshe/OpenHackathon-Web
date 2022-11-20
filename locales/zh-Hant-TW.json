@@ -177,5 +177,8 @@
   "mystery_hacker": "**wait for translate",
   "status": "**wait for translate",
   "role_type": "**wait for translate",
-  "send": "**wait for translate"
+  "send": "**wait for translate",
+  "title": "標題",
+  "content": "內容",
+  "sure_delete_this_message": "確定刪除該公告？"
 }
