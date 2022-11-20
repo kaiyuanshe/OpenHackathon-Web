@@ -86,11 +86,11 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} className="mb-3">
+            <Form.Group as={Row} className="mb-3" controlId="description">
               <Col sm={8}>
                 <Form.Control name="description" placeholder={t('remark')} />
               </Col>
-              <Form.Label column sm={4} htmlFor="description" />
+              <Form.Label column sm={4} />
             </Form.Group>
 
             <Modal.Footer>

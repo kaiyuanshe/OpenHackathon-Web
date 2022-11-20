@@ -75,11 +75,11 @@ class RegisterPage extends PureComponent<
         </Row>
       </Form.Group>
     ) : (
-      <Form.Group as="li" className="mb-3 " key={title}>
+      <Form.Group as="li" className="mb-3 " key={title} controlId={title}>
         {title}
         <Row className="mt-2">
-          <Form.Label htmlFor={title}></Form.Label>
-          <Form.Control name={title} id={title} {...props} />
+          <Form.Label></Form.Label>
+          <Form.Control name={title} {...props} />
         </Row>
       </Form.Group>
     );

@@ -25,7 +25,7 @@ const awardTableHead = [
   t('photo'),
   t('name'),
   t('description'),
-  t('operate'),
+  t('operation'),
 ];
 
 export const AwardListLayout = ({

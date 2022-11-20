@@ -1,5 +1,6 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
@@ -52,10 +53,10 @@ export const MessageListLayout = ({
             }
           />
         </th>
-        <th>公告名称</th>
-        <th>链接</th>
-        <th>类型</th>
-        <th hidden={hideControls}>操作</th>
+        <th>{t('title')}</th>
+        <th>{t('content')}</th>
+        <th>{t('type')}</th>
+        <th hidden={hideControls}>{t('operation')}</th>
       </tr>
     </thead>
     <tbody>
@@ -82,12 +83,17 @@ export const MessageListLayout = ({
               }
             />
           </td>
-          <td>{content}</td>
           <td>{title}</td>
+          <td>{content}</td>
           <td>{MessageTypeName[MessageType.Hackathon]}</td>
           <td hidden={hideControls}>
-            <Button variant="primary" size="sm" onClick={() => onEdit?.(id!)}>
-              <FontAwesomeIcon icon={faEdit} className="me-2" />
+            <Button
+              className="me-2"
+              variant="primary"
+              size="sm"
+              onClick={() => onEdit?.(id!)}
+            >
+              <FontAwesomeIcon icon={faEdit} />
             </Button>
             <Button variant="danger" size="sm" onClick={() => onDelete?.(id!)}>
               <FontAwesomeIcon icon={faTrash} />
@@ -109,7 +115,7 @@ export class MessageList extends ScrollList<MessageListProps> {
   };
 
   onDelete = (id: string) => {
-    if (!confirm('确定删除该公告？')) return;
+    if (!confirm(t('sure_delete_this_message'))) return;
 
     this.props.onDelete?.(id);
     this.store.deleteOne(id);

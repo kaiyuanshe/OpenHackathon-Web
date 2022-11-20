@@ -31,7 +31,7 @@
   "please_enter_description": "请输入描述",
   "please_enter_logo_url": "请输入 Logo URI",
   "logo_url": "Logo 地址",
-  "operate": "操作",
+  "operation": "操作",
   "user_name": "用户名",
   "nick_name": "昵称",
   "mail": "邮箱",
@@ -232,5 +232,8 @@
   "approval_status": "审核状态",
   "custom_questionnaire": "自定义问卷",
   "access_preview": "访问预览",
-  "select": "选择"
+  "select": "选择",
+  "title": "标题",
+  "content": "内容",
+  "sure_delete_this_message": "确定删除该公告？"
 }

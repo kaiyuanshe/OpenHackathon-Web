@@ -176,13 +176,17 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
   }
 
   @toggle('uploading')
-  joinTeam(body: JoinTeamReqBody) {
-    return this.client.put<TeamMember>(this.baseURI, body);
+  async joinTeam(data: JoinTeamReqBody) {
+    const { body } = await this.client.put<TeamMember>(this.baseURI, data);
+
+    return (this.currentOne = body!);
   }
 
   @toggle('uploading')
-  leaveTeam() {
-    return this.client.delete(this.baseURI);
+  async leaveTeam() {
+    await this.client.delete(this.baseURI);
+
+    this.currentOne = {} as TeamMember;
   }
 
   @toggle('uploading')

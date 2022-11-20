@@ -7,8 +7,8 @@ import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { MessageModal } from '../../../../components/Message/ActivityMessageModal';
 import { MessageList } from '../../../../components/Message/MessageList';
+import { MessageModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 
