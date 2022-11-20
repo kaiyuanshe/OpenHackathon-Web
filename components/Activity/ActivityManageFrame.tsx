@@ -4,6 +4,7 @@ import {
   faCloud,
   faDesktop,
   faEdit,
+  faMessage,
   faPeopleGroup,
   faSitemap,
   faStar,
@@ -29,17 +30,18 @@ import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 
 library.add(
-  faEdit,
-  faUser,
-  faUserSecret,
-  faPeopleGroup,
-  faTrophy,
-  faStar,
-  faSitemap,
   faBullhorn,
   faCloud,
-  faThLarge,
   faDesktop,
+  faEdit,
+  faMessage,
+  faPeopleGroup,
+  faSitemap,
+  faStar,
+  faThLarge,
+  faTrophy,
+  faUser,
+  faUserSecret,
 );
 
 export interface ActivityManageFrameProps {
