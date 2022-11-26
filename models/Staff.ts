@@ -117,6 +117,26 @@ export const activityTeamMenus: MenuItem[] = [
   },
 ];
 
+export const adminMenus: MenuItem[] = [
+  {
+    title: '平台管理',
+    list: [
+      {
+        title: '活动管理',
+        href: '/',
+        icon: 'user',
+        roles: ['admin'],
+      },
+      {
+        title: '管理员管理',
+        href: 'role',
+        icon: 'user-secret',
+        roles: ['admin'],
+      },
+    ],
+  },
+];
+
 export interface Staff extends Base {
   type: 'admin' | 'judge' | 'member';
   hackathonName: string;
