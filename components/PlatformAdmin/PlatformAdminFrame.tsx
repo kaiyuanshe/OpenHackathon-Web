@@ -70,22 +70,29 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
       <Nav className="h-100 flex-column px-2 border-end" variant="pills">
         {menu.map(({ title, list }) => (
           <Fragment key={title}>
-            <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
+            <Nav.Link className="text-muted d-none d-lg-inline" disabled>
               {title}
             </Nav.Link>
-            {list?.map(({ title, href, icon = 'home' }) => (
-              <Nav.Link
-                key={title}
-                className="text-nowrap"
-                href={`/admin/${href}`}
-              >
-                <FontAwesomeIcon
-                  icon={icon}
-                  className="text-primary ms-3 me-3"
-                />
-                <span className="d-md-none d-lg-inline">{title}</span>
-              </Nav.Link>
-            ))}
+            {list?.map(({ title, href, icon = 'home' }) => {
+              const path = `/admin/${href === '/' ? '' : href}`;
+              const active = globalThis.location?.pathname === path;
+
+              return (
+                <Nav.Link
+                  key={title}
+                  className="text-nowrap"
+                  href={path}
+                  active={active}
+                >
+                  <FontAwesomeIcon
+                    className="ms-3 me-3"
+                    icon={icon}
+                    color={active ? 'white' : 'primary'}
+                  />
+                  <span className="d-none d-lg-inline">{title}</span>
+                </Nav.Link>
+              );
+            })}
           </Fragment>
         ))}
       </Nav>
@@ -109,7 +116,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
             <main className="h-100 flex-fill ms-3 overflow-auto">
               <MainBreadcrumb currentRoute={currentRoute} />
-              <Container className="mt-3 w-100">{children}</Container>
+              <Container className="mt-3 py-3">{children}</Container>
             </main>
           </>
         ) : (
