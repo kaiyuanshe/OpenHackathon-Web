@@ -1,17 +1,17 @@
+import { observable } from 'mobx';
 import { ListModel, Stream } from 'mobx-restful';
 
 import { Base, createListStream, Filter } from './Base';
 import sessionStore from './Session';
 import { AuthingSession } from './User';
 
-export interface PlatformAdmin extends Base {
-  hackathonName: string;
-  description: string;
-  userId: string;
+export interface PlatformAdmin
+  extends Base,
+    Record<'hackathonName' | 'description' | 'userId', string> {
   user?: AuthingSession;
 }
 
-export interface PlatformAdminFilter extends Filter<PlatformAdmin> {}
+export type PlatformAdminFilter = Filter<PlatformAdmin>;
 
 export class PlatformAdminModel extends Stream<
   PlatformAdmin,
@@ -19,6 +19,9 @@ export class PlatformAdminModel extends Stream<
 >(ListModel) {
   client = sessionStore.client;
   baseURI = 'platform/admin';
+
+  @observable
+  isPlatformAdmin = false;
 
   openStream() {
     return createListStream<PlatformAdmin>(

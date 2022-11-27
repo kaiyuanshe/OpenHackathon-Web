@@ -14,7 +14,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
-import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
@@ -49,15 +48,12 @@ export interface PlatformAdminFrameProps {
 
 @observer
 export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
-  @observable
-  isPlatformAdmin = false;
-
   async componentDidMount() {
     try {
       await platformAdminStore.getList();
-      this.isPlatformAdmin = true;
+      platformAdminStore.isPlatformAdmin = true;
     } catch (error: any) {
-      this.isPlatformAdmin = false;
+      platformAdminStore.isPlatformAdmin = false;
     }
   }
 
@@ -69,11 +65,6 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
       'list',
       ({ href }) => !!href && path.endsWith(href),
     );
-  }
-
-  @computed
-  get authorized() {
-    return this.isPlatformAdmin;
   }
 
   renderNav() {
@@ -113,8 +104,9 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
   }
 
   render() {
-    const { authorized, currentRoute } = this,
-      { children, title } = this.props;
+    const { currentRoute } = this,
+      { children, title } = this.props,
+      { isPlatformAdmin } = platformAdminStore;
 
     return (
       <SessionBox
@@ -123,7 +115,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
         <PageHead title={`${title} - ${t('platform_management')}`} />
-        {authorized ? (
+        {isPlatformAdmin ? (
           <>
             {this.renderNav()}
 
