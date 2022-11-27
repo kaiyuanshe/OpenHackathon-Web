@@ -119,16 +119,16 @@ export const activityTeamMenus: MenuItem[] = [
 
 export const adminMenus: MenuItem[] = [
   {
-    title: '平台管理',
+    title: t('platform_management'),
     list: [
       {
-        title: '活动管理',
+        title: t('activity_manage'),
         href: '/',
         icon: 'user',
         roles: ['admin'],
       },
       {
-        title: '管理员管理',
+        title: t('admin_management'),
         href: 'role',
         icon: 'user-secret',
         roles: ['admin'],

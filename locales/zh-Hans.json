@@ -236,5 +236,6 @@
   "select": "选择",
   "title": "标题",
   "content": "内容",
-  "sure_delete_this_message": "确定删除该公告？"
+  "sure_delete_this_message": "确定删除该公告？",
+  "admin_management": "管理员管理"
 }

@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 
 import ActivityList from '../../components/Activity/ActivityList';
@@ -5,7 +6,7 @@ import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdmin
 import sessionStore from '../../models/Session';
 
 const AdminPage = observer(() => (
-  <PlatformAdminFrame title="活动管理" path="/">
+  <PlatformAdminFrame title={t('activity_manage')} path="/">
     <ActivityList type="admin" size="lg" userId={sessionStore.user?.id} />
   </PlatformAdminFrame>
 ));
