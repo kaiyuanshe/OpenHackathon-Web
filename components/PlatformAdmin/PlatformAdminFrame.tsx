@@ -14,11 +14,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
+import platformAdminStore from '../../models/PlatformAdmin';
 import { adminMenus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import { findDeep } from '../../utils/data';
@@ -48,6 +49,18 @@ export interface PlatformAdminFrameProps {
 
 @observer
 export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
+  @observable
+  isPlatformAdmin = false;
+
+  async componentDidMount() {
+    try {
+      await platformAdminStore.getList();
+      this.isPlatformAdmin = true;
+    } catch (error: any) {
+      this.isPlatformAdmin = false;
+    }
+  }
+
   get currentRoute() {
     const { path = '' } = this.props;
 
@@ -60,7 +73,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
   @computed
   get authorized() {
-    return true;
+    return this.isPlatformAdmin;
   }
 
   renderNav() {
