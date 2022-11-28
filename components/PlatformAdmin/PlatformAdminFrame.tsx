@@ -14,6 +14,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
+import { Loading } from 'idea-react';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
@@ -48,13 +50,13 @@ export interface PlatformAdminFrameProps {
 
 @observer
 export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
+  @observable
+  loading = false;
+
   async componentDidMount() {
-    try {
-      await platformAdminStore.getList();
-      platformAdminStore.isPlatformAdmin = true;
-    } catch (error: any) {
-      platformAdminStore.isPlatformAdmin = false;
-    }
+    this.loading = true;
+    await platformAdminStore.getIsPlatformAdmin();
+    this.loading = false;
   }
 
   get currentRoute() {
@@ -104,7 +106,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
   }
 
   render() {
-    const { currentRoute } = this,
+    const { currentRoute, loading } = this,
       { children, title } = this.props,
       { isPlatformAdmin } = platformAdminStore;
 
@@ -115,7 +117,9 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
         <PageHead title={`${title} - ${t('platform_management')}`} />
-        {isPlatformAdmin ? (
+        {loading ? (
+          <Loading />
+        ) : isPlatformAdmin ? (
           <>
             {this.renderNav()}
 

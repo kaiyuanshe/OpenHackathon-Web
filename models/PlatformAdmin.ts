@@ -23,6 +23,15 @@ export class PlatformAdminModel extends Stream<
   @observable
   isPlatformAdmin = false;
 
+  async getIsPlatformAdmin() {
+    try {
+      await this.getList();
+      return (this.isPlatformAdmin = true);
+    } catch (error: any) {
+      return (this.isPlatformAdmin = false);
+    }
+  }
+
   openStream() {
     return createListStream<PlatformAdmin>(
       `${this.baseURI}s`,
