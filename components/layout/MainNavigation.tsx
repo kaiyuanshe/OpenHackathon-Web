@@ -6,7 +6,7 @@ import { Container, Image, Nav, Navbar } from 'react-bootstrap';
 const UserBar = dynamic(() => import('../User/UserBar'), { ssr: false });
 
 export const MainNavigation = () => (
-  <Navbar bg="dark" variant="dark" fixed="top" expand="md">
+  <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
     <Container>
       <Navbar.Brand href="/">
         <Image

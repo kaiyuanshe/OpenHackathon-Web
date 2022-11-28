@@ -5,13 +5,13 @@ import { buildURLData } from 'web-utility';
 import { AwardModel } from './Award';
 import { Base, createListStream, Filter, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
-import { TeamModel } from './Team';
 import { GitModel } from './Git';
 import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
+import { TeamModel } from './Team';
 
 export interface Activity extends Base {
   name: string;

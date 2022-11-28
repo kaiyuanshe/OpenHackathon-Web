@@ -236,5 +236,6 @@
   "select": "Select",
   "title": "Title",
   "content": "Content",
-  "sure_delete_this_message": "Are you sure you want to delete this message?"
+  "sure_delete_this_message": "Are you sure you want to delete this message?",
+  "admin_management": "Admin management"
 }
