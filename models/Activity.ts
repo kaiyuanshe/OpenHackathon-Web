@@ -58,6 +58,7 @@ export interface NameAvailability {
 export interface ActivityFilter extends Filter<Activity> {
   userId?: string;
   listType?: ActivityListType;
+  orderby?: 'createdAt' | 'updatedAt' | 'hot';
 }
 
 export interface ActivityLogsFilter extends Filter<Activity> {

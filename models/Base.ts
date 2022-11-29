@@ -24,7 +24,6 @@ export interface ErrorData extends ErrorBaseData {
 }
 
 export type Filter<T extends Base = Base> = NewData<T> & {
-  orderby?: keyof T;
   top?: number;
 };
 
