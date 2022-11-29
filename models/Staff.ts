@@ -4,9 +4,9 @@ import { computed } from 'mobx';
 import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
 
-import { Base, createListStream } from './Base';
+import { createListStream } from './Base';
+import { HackathonAdmin } from './HackathonAdmin';
 import sessionStore from './Session';
-import { User } from './User';
 
 export interface MenuItem {
   title: string;
@@ -125,24 +125,18 @@ export const adminMenus: MenuItem[] = [
         title: t('activity_manage'),
         href: '/',
         icon: 'user',
-        roles: ['admin'],
       },
       {
         title: t('admin_management'),
-        href: 'role',
+        href: 'platform-admin',
         icon: 'user-secret',
-        roles: ['admin'],
       },
     ],
   },
 ];
 
-export interface Staff extends Base {
+export interface Staff extends HackathonAdmin {
   type: 'admin' | 'judge' | 'member';
-  hackathonName: string;
-  userId: string;
-  user: User;
-  description?: string;
 }
 
 export class StaffModel extends Stream<Staff>(ListModel) {

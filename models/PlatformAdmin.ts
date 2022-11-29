@@ -1,15 +1,11 @@
 import { observable } from 'mobx';
-import { ListModel, Stream } from 'mobx-restful';
+import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream, Filter } from './Base';
+import { createListStream, Filter } from './Base';
+import { HackathonAdmin } from './HackathonAdmin';
 import sessionStore from './Session';
-import { AuthingSession } from './User';
 
-export interface PlatformAdmin
-  extends Base,
-    Record<'hackathonName' | 'description' | 'userId', string> {
-  user?: AuthingSession;
-}
+export type PlatformAdmin = HackathonAdmin;
 
 export type PlatformAdminFilter = Filter<PlatformAdmin>;
 
@@ -19,6 +15,7 @@ export class PlatformAdminModel extends Stream<
 >(ListModel) {
   client = sessionStore.client;
   baseURI = 'platform/admin';
+  indexKey = 'userId' as const;
 
   @observable
   isPlatformAdmin = false;
@@ -38,6 +35,20 @@ export class PlatformAdminModel extends Stream<
       this.client,
       count => (this.totalCount = count),
     );
+  }
+
+  @toggle('uploading')
+  async addOnePlatformAdmin(id: IDType) {
+    const { body } = await this.client.put<PlatformAdmin>(
+      `${this.baseURI}/${id}`,
+    );
+    return (this.currentOne = body!);
+  }
+
+  @toggle('uploading')
+  async deleteOne(userId: string) {
+    await this.client.delete(`${this.baseURI}/${userId}`);
+    await this.removeOne(userId);
   }
 }
 
