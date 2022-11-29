@@ -1,10 +1,11 @@
 import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
+import userStore from '../../models/User';
 import { UserList } from '../User/UserList';
 
 export interface PlatformAdminModalProps
@@ -15,9 +16,6 @@ export interface PlatformAdminModalProps
 
 @observer
 export class PlatformAdminModal extends PureComponent<PlatformAdminModalProps> {
-  private userList = createRef<UserList>();
-  private form = createRef<HTMLFormElement>();
-
   @observable
   userId = '';
 
@@ -36,30 +34,25 @@ export class PlatformAdminModal extends PureComponent<PlatformAdminModalProps> {
   };
 
   handleReset = () => {
-    this.form.current?.reset();
-    this.userList.current?.store.clear();
+    userStore.clear();
     this.props.onHide?.();
   };
 
   render() {
-    const { show, onHide, store } = this.props;
+    const { show, store } = this.props;
     const loading = store.uploading > 0;
 
     return (
-      <Modal show={show} onHide={onHide} centered>
+      <Modal show={show} onHide={this.handleReset} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <UserList
-            ref={this.userList}
+            store={userStore}
             onSelect={([userId]) => (this.userId = userId)}
           />
-          <Form
-            ref={this.form}
-            onSubmit={this.increaseId}
-            onReset={this.handleReset}
-          >
+          <Form onSubmit={this.increaseId} onReset={this.handleReset}>
             <Modal.Footer>
               <Button variant="secondary" type="reset" disabled={loading}>
                 {t('cancel')}

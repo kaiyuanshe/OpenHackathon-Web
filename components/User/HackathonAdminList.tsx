@@ -99,6 +99,7 @@ export const HackathonAdminList = ({
                       (({ currentTarget: { checked } }) => {
                         if (checked)
                           return onSelect([...selectedIds, userId].uniqueBy());
+
                         const index = selectedIds.indexOf(userId);
 
                         onSelect([

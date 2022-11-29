@@ -3,11 +3,12 @@ import { observer } from 'mobx-react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import userStore, { User } from '../../models/User';
+import { User, UserModel } from '../../models/User';
 import { ScrollList, ScrollListProps } from '../ScrollList';
 
 export interface UserListProps extends ScrollListProps<User> {
   onSearch?: (keyword: string) => any;
+  store: UserModel;
 }
 
 export const UserListLayout = ({
@@ -67,7 +68,7 @@ export const UserListLayout = ({
                   value={id}
                   aria-label={id}
                   checked={selectedIds?.includes(id!)}
-                  onClick={({ currentTarget: { form } }) =>
+                  onChange={({ currentTarget: { form } }) =>
                     onSelect?.([formToJSON<{ userId: string }>(form!).userId])
                   }
                 />
@@ -85,7 +86,7 @@ export const UserListLayout = ({
 
 @observer
 export class UserList extends ScrollList<UserListProps> {
-  store = userStore;
+  store = this.props.store;
 
   onSearch = async (keyword: string) => {
     this.store.clear();
@@ -96,6 +97,7 @@ export class UserList extends ScrollList<UserListProps> {
   renderList() {
     return (
       <UserListLayout
+        store={this.store}
         value={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}

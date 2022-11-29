@@ -34,8 +34,7 @@ export default class PlatformAdminPage extends PureComponent<{}> {
   };
 
   render() {
-    const //{ resolvedUrl, params } = this.props.route,
-      { store, show } = this;
+    const { store, show } = this;
     const loading = store.uploading > 0;
 
     return (

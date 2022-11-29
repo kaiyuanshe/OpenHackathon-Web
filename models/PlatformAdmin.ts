@@ -15,6 +15,7 @@ export class PlatformAdminModel extends Stream<
 >(ListModel) {
   client = sessionStore.client;
   baseURI = 'platform/admin';
+  indexKey = 'userId' as const;
 
   @observable
   isPlatformAdmin = false;
