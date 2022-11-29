@@ -20,7 +20,7 @@ export const AwardTargetName = {
 };
 
 const awardTableHead = [
-  t('weights'),
+  t('quantity'),
   t('type'),
   t('photo'),
   t('name'),

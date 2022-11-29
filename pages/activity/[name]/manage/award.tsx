@@ -1,18 +1,16 @@
 import { t } from 'i18next';
+import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
-import { observer } from 'mobx-react';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
-import { Award } from '../../../../models/Award';
 import activityStore from '../../../../models/Activity';
+import { Award } from '../../../../models/Award';
 import { withRoute } from '../../../api/core';
-
-export const getServerSideProps = withRoute<{ name: string }>();
 
 export const getServerSideProps = withRoute<{ name: string }>();
 
@@ -20,8 +18,6 @@ export const getServerSideProps = withRoute<{ name: string }>();
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  store = activityStore.awardOf(this.props.route.params!.name);
-
   form = createRef<HTMLFormElement>();
   store = activityStore.awardOf(this.props.route.params!.name);
 
@@ -36,7 +32,7 @@ class AwardPage extends PureComponent<
 
     const data = formToJSON<NewData<Award>>(form);
 
-    await store.updateOne(data, store.currentOne.id);
+    await store.updateOne(data);
     await store.refreshList();
 
     store.clearCurrent();
@@ -64,6 +60,7 @@ class AwardPage extends PureComponent<
       <Form
         className="text-nowrap"
         ref={this.form}
+        onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >
         <Form.Group as={Row} className="p-2">
@@ -96,7 +93,7 @@ class AwardPage extends PureComponent<
         </Form.Group>
         <Form.Group as={Row} className="p-2">
           <Form.Label column sm="2">
-            {t('weights')}
+            {t('quantity')}
           </Form.Label>
           <Col sm="10">
             <Form.Control
@@ -160,7 +157,6 @@ class AwardPage extends PureComponent<
           <Col className="flex-fill">
             <AwardList
               store={store}
-              activity={params!.name}
               onDelete={this.handleReset}
               onEdit={this.handleReset}
             />

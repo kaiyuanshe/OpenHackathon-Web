@@ -1,23 +1,23 @@
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { NewData } from 'mobx-restful';
+import { InferGetServerSidePropsType } from 'next';
 import { createRef, FormEvent, PureComponent } from 'react';
 import {
-  Row,
+  Badge,
+  Button,
+  Card,
   Col,
   Form,
   InputGroup,
-  Button,
   ListGroup,
-  Badge,
-  Card,
+  Row,
 } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
-import { Award } from '../../../../models/Award';
+import { Award, AwardAssignment } from '../../../../models/Award';
 import { Team } from '../../../../models/Team';
 import { withRoute } from '../../../api/core';
 
@@ -35,12 +35,52 @@ class EvaluationPage extends PureComponent<
 > {
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
-
   form = createRef<HTMLFormElement>();
 
   componentDidMount() {
     this.awardStore.getAll();
   }
+
+  handleAssign = () => {};
+  handleReset = () => {
+    const { store } = this,
+      form = this.form.current;
+    form?.reset();
+    store.clearCurrent();
+  };
+
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { awardStore, store } = this,
+      form = this.form.current;
+
+    if (!store || !form) return;
+
+    const data = formToJSON<NewData<AwardAssignment>>(form);
+
+    await awardStore.getOne(data.awardId!);
+
+    const assignmentStore = awardStore.assignmentOf(data.awardId!),
+      assigneeId = store.currentOne.id;
+
+    await assignmentStore.updateOne({ assigneeId });
+    await store.refreshList();
+
+    store.clearCurrent();
+    form.reset();
+  };
+
+  onSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { search } = formToJSON<{ search: string }>(event.currentTarget);
+
+    this.store.clear();
+    return this.store.getList({ search });
+  };
 
   renderForm = () => {
     const { allItems } = this.awardStore,
@@ -63,6 +103,8 @@ class EvaluationPage extends PureComponent<
                 className="mx-2 my-3"
                 key={id}
                 label={name}
+                name="awardId"
+                value={id}
               />
             ) : (
               <li key={id} className="list-unstyled mx-2 my-3">
@@ -82,42 +124,6 @@ class EvaluationPage extends PureComponent<
         )}
       </Form>
     );
-  };
-
-  handleAssign = () => {};
-  handleReset = () => {
-    const { store } = this,
-      form = this.form.current;
-    form?.reset();
-    store.clearCurrent();
-  };
-
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { store } = this,
-      form = this.form.current;
-
-    if (!store || !form) return;
-
-    // const data = formToJSON<NewData<Award>>(form);
-
-    // await store.updateOne(data, store.currentOne.id);
-    // await store.refreshList();
-
-    store.clearCurrent();
-    form.reset();
-  };
-
-  onSearch = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { search } = formToJSON<{ search: string }>(event.currentTarget);
-
-    this.store.clear();
-    return this.store.getList({ search });
   };
 
   render() {

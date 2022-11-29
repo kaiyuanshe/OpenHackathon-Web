@@ -1,11 +1,10 @@
 import { faAward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { Option, Select } from 'idea-react';
-import { HTMLAttributes, PureComponent } from 'react';
 import { Accordion, Button, Image } from 'react-bootstrap';
 
 import { Team } from '../../models/Team';
+import { TeamAwardAssignmentList } from './TeamAwardAssignment';
 import { TeamMemberList } from './TeamMemberList';
 import { TeamWorkLi } from './TeamWork';
 
@@ -20,7 +19,7 @@ export interface TeamAwardCardProps
     | 'id'
   > {
   className?: string;
-  onAssign: () => any;
+  onAssign: (id: string) => any;
   onDelete?: (id: string) => any;
 }
 
@@ -76,11 +75,17 @@ export const TeamAwardCard = ({
       </Accordion.Item>
       <Accordion.Item eventKey="award">
         <Accordion.Header>奖项列表</Accordion.Header>
-        <Accordion.Body></Accordion.Body>
+        <Accordion.Body>
+          <TeamAwardAssignmentList team={id} activity={hackathonName} />
+        </Accordion.Body>
       </Accordion.Item>
     </Accordion>
 
-    <Button className="my-2 ms-3" variant="success" onClick={onAssign}>
+    <Button
+      className="my-2 ms-3"
+      variant="success"
+      onClick={() => onAssign(id!)}
+    >
       <FontAwesomeIcon icon={faAward} className="text-light me-2" />
       奖项分配
     </Button>

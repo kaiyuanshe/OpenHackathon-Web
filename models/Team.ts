@@ -3,6 +3,7 @@ import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { NameAvailability } from './Activity';
+import { AwardAssignment } from './Award';
 import { Base, createListStream, Filter, integrateError } from './Base';
 import { WorkspaceModel } from './Git';
 import sessionStore from './Session';
@@ -65,6 +66,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
   currentWorkspace?: WorkspaceModel;
+  currentAssignment?: TeamAssignmentModel;
 
   @observable
   sessionOne?: Team;
@@ -94,6 +96,12 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
 
   workspaceOf(tid = this.currentOne.id) {
     return (this.currentWorkspace = new WorkspaceModel(
+      `${this.baseURI}/${tid}`,
+    ));
+  }
+
+  assignmentOf(tid = this.currentOne.id) {
+    return (this.currentAssignment = new TeamAssignmentModel(
       `${this.baseURI}/${tid}`,
     ));
   }
@@ -228,5 +236,22 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
       : this.client.put<TeamWork>(this.baseURI, data));
 
     return (this.currentOne = body!);
+  }
+}
+
+export class TeamAssignmentModel extends Stream<AwardAssignment>(ListModel) {
+  client = sessionStore.client;
+
+  constructor(baseURI: string) {
+    super();
+    this.baseURI = `${baseURI}/assignment`;
+  }
+
+  openStream() {
+    return createListStream<AwardAssignment>(
+      `${this.baseURI}s`,
+      this.client,
+      count => (this.totalCount = count),
+    );
   }
 }
