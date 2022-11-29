@@ -250,7 +250,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Form.Label>
           <Col sm={10}>
             <Editor
-              value={detail}
+              defaultValue={detail}
               onChange={code => (this.detailHTML = code)}
             />
           </Col>
