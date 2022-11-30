@@ -41,7 +41,7 @@
   "apply_time": "申请时间",
   "remark": "备注",
   "remark_placeholder": "可输入备注信息，以便团队管理员更快通过审核。",
-  "weights": "权重",
+  "quantity": "数量",
   "type": "类型",
   "photo": "照片",
   "clear_form": "清空表单",
