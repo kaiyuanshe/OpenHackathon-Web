@@ -2,7 +2,7 @@ import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -18,7 +18,6 @@ export const getServerSideProps = withRoute<{ name: string }>();
 class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  form = createRef<HTMLFormElement>();
   store = activityStore.awardOf(this.props.route.params!.name);
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -26,11 +25,8 @@ class AwardPage extends PureComponent<
     event.stopPropagation();
 
     const { store } = this,
-      form = this.form.current;
-
-    if (!form) return;
-
-    const data = formToJSON<NewData<Award>>(form);
+      form = event.currentTarget,
+      data = formToJSON<NewData<Award>>(form);
 
     await store.updateOne(data);
     await store.refreshList();
@@ -54,7 +50,6 @@ class AwardPage extends PureComponent<
     return (
       <Form
         className="text-nowrap"
-        ref={this.form}
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >

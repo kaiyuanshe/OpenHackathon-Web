@@ -1,18 +1,8 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
-import { createRef, FormEvent, PureComponent } from 'react';
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Form,
-  InputGroup,
-  ListGroup,
-  Row,
-} from 'react-bootstrap';
+import { FormEvent, PureComponent } from 'react';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
@@ -35,7 +25,6 @@ class EvaluationPage extends PureComponent<
 > {
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
-  form = createRef<HTMLFormElement>();
 
   componentDidMount() {
     this.awardStore.getAll();
@@ -80,30 +69,31 @@ class EvaluationPage extends PureComponent<
     return (
       <Form
         className="p-3 text-nowrap border"
-        ref={this.form}
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >
         <h2>{awardTeamId ? `授予 ${awardTeamName}` : '全部奖项'}</h2>
-        {allItems.map(
-          ({ id, name, quantity, target }) =>
-            target === 'team' && (
-              <li key={id} className="d-flex mx-2 my-3">
-                {awardTeamId ? (
-                  <Form.Check
-                    type="radio"
-                    key={id}
-                    label={name}
-                    name="awardId"
-                    value={id}
-                    required
-                  />
-                ) : (
-                  name
-                )}
-              </li>
-            ),
-        )}
+        <ul className="list-unstyled">
+          {allItems.map(
+            ({ id, name, quantity, target }) =>
+              target === 'team' && (
+                <li key={id} className="d-flex mx-2 my-3">
+                  {awardTeamId ? (
+                    <Form.Check
+                      type="radio"
+                      key={id}
+                      label={name}
+                      name="awardId"
+                      value={id}
+                      required
+                    />
+                  ) : (
+                    name
+                  )}
+                </li>
+              ),
+          )}
+        </ul>
         {awardTeamId && (
           <div className="d-flex justify-content-around my-4">
             <Button type="submit" variant="primary">
