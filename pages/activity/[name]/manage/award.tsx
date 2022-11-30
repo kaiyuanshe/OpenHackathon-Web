@@ -39,12 +39,7 @@ class AwardPage extends PureComponent<
     form.reset();
   };
 
-  handleReset = () => {
-    const { store } = this,
-      form = this.form.current;
-    form?.reset();
-    store.clearCurrent();
-  };
+  handleReset = () => this.store.clearCurrent();
 
   renderForm = () => {
     const {

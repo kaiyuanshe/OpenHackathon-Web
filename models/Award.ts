@@ -5,10 +5,9 @@ import { Base, createListStream, Media } from './Base';
 import sessionStore from './Session';
 import { Team } from './Team';
 
-export interface Award extends Base {
-  hackathonName: string;
-  name: string;
-  description: string;
+export interface Award
+  extends Record<'hackathonName' | 'name' | 'description', string>,
+    Base {
   quantity: number;
   target: 'team' | 'individual';
   pictures: Media[];
@@ -16,12 +15,10 @@ export interface Award extends Base {
 
 export interface AwardAssignment
   extends Omit<Base, 'id'>,
-    Omit<Award, 'name' | 'quantity' | 'target' | 'pictures'> {
-  assignmentId: string;
-  assigneeId: string;
+    Omit<Award, 'name' | 'quantity' | 'target' | 'pictures'>,
+    Record<'assignmentId' | 'assigneeId' | 'awardId', string> {
   user?: User;
   team?: Team;
-  awardId: string;
 }
 
 export class AwardModel extends Stream<Award>(ListModel) {
