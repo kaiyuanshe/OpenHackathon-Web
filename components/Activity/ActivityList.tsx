@@ -34,7 +34,7 @@ export const ActivityListLayout = ({
     {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
   >
     {value.map(item => (
-      <Col key={item.name}>
+      <Col key={item.name + item.id}>
         <ActivityCard
           className="h-100"
           controls={

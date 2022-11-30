@@ -26,7 +26,7 @@ const UserBar = observer(() => {
               {t('create_hackathons')}
             </Button>
           </Link>
-          <Dropdown className="my-2 my-md-0">
+          <Dropdown className="my-2 my-md-0 me-3">
             <Dropdown.Toggle>{showName}</Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item href={`/user/${user.id}`}>

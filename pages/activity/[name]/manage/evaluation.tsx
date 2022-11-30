@@ -107,7 +107,7 @@ class EvaluationPage extends PureComponent<
         {awardTeamId && (
           <div className="d-flex justify-content-around my-4">
             <Button type="submit" variant="primary">
-              {t('confirm')}
+              确认
             </Button>
             <Button type="reset" variant="danger">
               取消

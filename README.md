@@ -8,13 +8,16 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 
 - [Task kanban](https://github.com/orgs/kaiyuanshe/projects/4?fullscreen=true)
 - [UI design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
-- [RESTful API](https://hackathon-api.kaiyuanshe.cn/swagger/)
+- RESTful API
+  - testing: https://hackathon-api-test.kaiyuanshe.cn/swagger/
+  - production: https://hackathon-api.kaiyuanshe.cn/swagger/
 
 ## Technology stack
 
 - Language: [TypeScript v4][2]
 - Component engine: [Nextjs v12][3]
 - Component suite: [Bootstrap v5][4]
+- State management: [MobX][6]
 - PWA framework: [Workbox v6][5]
 - CI / CD: GitHub [Actions][11] + [Vercel][12]
 
@@ -57,6 +60,7 @@ Check out our [Next.js deployment documentation][17] for more details.
 [3]: https://nextjs.org/
 [4]: https://getbootstrap.com/
 [5]: https://developers.google.com/web/tools/workbox
+[6]: https://github.com/mobxjs/mobx/tree/mobx4and5/docs
 [8]: https://github.com/kaiyuanshe/OpenHackathon-Web/actions/workflows/main.yml
 [11]: https://github.com/features/actions
 [12]: https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme
