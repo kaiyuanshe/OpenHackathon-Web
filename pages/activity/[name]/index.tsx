@@ -224,6 +224,7 @@ export default class ActivityPage extends PureComponent<
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
       { showCreateTeam, loading } = this,
+      { organizationList } = this.props,
       myTeam = this.teamStore.sessionOne,
       myMessage = this.messageStore;
 
@@ -287,11 +288,11 @@ export default class ActivityPage extends PureComponent<
             </Tabs>
           </Col>
           <Col className="d-flex flex-column">
-            {this.props.organizationList.length > 0 && (
+            {organizationList.length > 0 && (
               <>
                 <h2>{t('sponsor_information')}</h2>
                 <ul className="list-unstyled">
-                  {this.props.organizationList.map(item => (
+                  {organizationList.map(item => (
                     <li key={item.id}>
                       <OrganizationCard {...item} />
                     </li>
