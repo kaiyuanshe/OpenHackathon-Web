@@ -51,7 +51,7 @@ export default class OrganizationPage extends PureComponent<
       <Container as="main" className="mt-4">
         <PageHead />
 
-        <MainBreadcrumb currentRoute={currentRoute} />
+        <MainBreadcrumb currentRoute={this.currentRoute} />
       </Container>
     );
   }
