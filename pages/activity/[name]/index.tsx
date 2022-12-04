@@ -26,7 +26,7 @@ import {
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
 import { MessageList } from '../../../components/Message/MessageList';
-import { OrganizationCard } from '../../../components/Organization/OrganizationCard';
+import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -291,13 +291,7 @@ export default class ActivityPage extends PureComponent<
             {organizationList.length > 0 && (
               <>
                 <h2>{t('sponsor_information')}</h2>
-                <ul className="list-unstyled">
-                  {organizationList.map(item => (
-                    <li key={item.id}>
-                      <OrganizationCard {...item} />
-                    </li>
-                  ))}
-                </ul>
+                <OrganizationListLayout value={organizationList} />
               </>
             )}
 
