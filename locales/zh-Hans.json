@@ -30,7 +30,7 @@
   "description": "描述",
   "please_enter_description": "请输入描述",
   "please_enter_logo_url": "请输入 Logo URI",
-  "please_enter_url": "请输入 URI",
+  "please_enter_url": "请输入 URL",
   "logo_url": "Logo 地址",
   "url": "URL",
   "operation": "操作",
