@@ -287,8 +287,12 @@ export default class ActivityPage extends PureComponent<
             </Tabs>
           </Col>
           <Col className="d-flex flex-column">
-            <h2>{t('sponsor_information')}</h2>
-            <OrganizationCardList store={this.organizationStore} />
+            {this.organizationStore && (
+              <>
+                <h2>{t('sponsor_information')}</h2>
+                <OrganizationCardList store={this.organizationStore} />
+              </>
+            )}
 
             {displayName && location && (
               <>
