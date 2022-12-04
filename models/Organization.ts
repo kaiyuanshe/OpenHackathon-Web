@@ -63,5 +63,3 @@ export class OrganizationModel extends Stream<Organization>(ListModel) {
     return body!;
   }
 }
-
-export default new OrganizationModel('');

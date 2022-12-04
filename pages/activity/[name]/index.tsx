@@ -34,7 +34,7 @@ import { TeamCreateModal } from '../../../components/TeamCreateModal';
 import activityStore, { Activity } from '../../../models/Activity';
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
-import { Organization, OrganizationModel } from '../../../models/Organization';
+import { Organization } from '../../../models/Organization';
 import { convertDatetime } from '../../../utils/time';
 
 export async function getServerSideProps({
@@ -42,9 +42,7 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext<{ name?: string }>) {
   try {
     const activity = await activityStore.getOne(name);
-    const organizationList = await new OrganizationModel(
-      `hackathon/${name}`,
-    ).getList();
+    const organizationList = await activityStore.organizationOf(name).getList();
 
     return { props: { activity, organizationList } };
   } catch (error) {
