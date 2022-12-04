@@ -68,33 +68,25 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           onSubmit={this.handleSubmit}
           onReset={this.handleReset}
         >
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="name">{t('name')}</Form.Label>
+          <Form.Group className="mt-2" controlId="name">
+            <Form.Label>{t('name')}</Form.Label>
             <Form.Control
-              id="name"
               name="name"
-              type="text"
               placeholder={t('please_enter_name')}
               required
             />
           </Form.Group>
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="description">{t('description')}</Form.Label>
+          <Form.Group className="mt-2" controlId="description">
+            <Form.Label>{t('description')}</Form.Label>
             <Form.Control
-              id="description"
               name="description"
-              type="text"
               placeholder={t('please_enter_description')}
               required
             />
           </Form.Group>
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="type">{t('type')}</Form.Label>
-            <Form.Select
-              id="type"
-              name="type"
-              aria-label="Default select example"
-            >
+          <Form.Group className="mt-2" controlId="type">
+            <Form.Label>{t('type')}</Form.Label>
+            <Form.Select name="type">
               {Object.entries(OrganizationTypeName).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
@@ -102,12 +94,10 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
               ))}
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="logo-uri">{t('logo_url')}</Form.Label>
+          <Form.Group className="mt-2" controlId="logo-uri">
+            <Form.Label>{t('logo_url')}</Form.Label>
             <Form.Control
-              id="logo-uri"
               name="logoURI"
-              type="text"
               placeholder={t('please_enter_logo_url')}
               required
             />

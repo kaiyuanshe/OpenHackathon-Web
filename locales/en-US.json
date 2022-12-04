@@ -31,7 +31,7 @@
   "please_enter_description": "Please enter a description",
   "please_enter_logo_url": "Please enter a Logo URI",
   "logo_url": "Logo address",
-  "operate": "Operate",
+  "operation": "Operation",
   "user_name": "Username",
   "nick_name": "Nickname",
   "mail": "Mail",
@@ -41,7 +41,7 @@
   "apply_time": "Application time",
   "remark": "Remark",
   "remark_placeholder": "Remarks can be entered for faster approval by team admins.",
-  "weights": "Weights",
+  "quantity": "Quantity",
   "type": "Type",
   "photo": "Photo",
   "clear_form": "Clear Form",
@@ -188,6 +188,7 @@
   "cloud_resource": "Cloud resources",
   "virtual_environment": "Virtual Environment",
   "environmental_monitoring": "Environmental Monitoring",
+  "log": "Log",
   "website": "Website",
   "image": "Image",
   "video": "Video",
@@ -232,5 +233,10 @@
   "approval_status": "Approval Status",
   "custom_questionnaire": "Custom questionnaire",
   "access_preview": "Access Preview",
-  "select": "Select"
+  "select": "Select",
+  "title": "Title",
+  "content": "Content",
+  "sure_delete_this_message": "Are you sure you want to delete this message?",
+  "admin_management": "Admin management",
+  "confirm_to_delete_platform_admin": "Confirm to delete the selected platform admin?"
 }

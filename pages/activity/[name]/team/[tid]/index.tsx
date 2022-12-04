@@ -153,7 +153,7 @@ export default class TeamPage extends PureComponent<
 
       if (status !== 404) this.teamMemberRole = '';
     }
-
+    // @ts-ignore
     if (status === 'approved')
       try {
         await activityStore.teamOf(name).getSessionOne();

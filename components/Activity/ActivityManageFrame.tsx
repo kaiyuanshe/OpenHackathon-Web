@@ -4,6 +4,7 @@ import {
   faCloud,
   faDesktop,
   faEdit,
+  faMessage,
   faPeopleGroup,
   faSitemap,
   faStar,
@@ -17,7 +18,7 @@ import { t } from 'i18next';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
-import { Nav } from 'react-bootstrap';
+import { Container, Nav } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
 import sessionStore from '../../models/Session';
@@ -29,17 +30,18 @@ import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 
 library.add(
-  faEdit,
-  faUser,
-  faUserSecret,
-  faPeopleGroup,
-  faTrophy,
-  faStar,
-  faSitemap,
   faBullhorn,
   faCloud,
-  faThLarge,
   faDesktop,
+  faEdit,
+  faMessage,
+  faPeopleGroup,
+  faSitemap,
+  faStar,
+  faThLarge,
+  faTrophy,
+  faUser,
+  faUserSecret,
 );
 
 export interface ActivityManageFrameProps {
@@ -131,7 +133,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
 
             <main className="h-100 flex-fill ms-3 overflow-auto">
               <MainBreadcrumb currentRoute={currentRoute} />
-              <div className="mt-3 py-3">{children}</div>
+              <Container className="mt-3 py-3">{children}</Container>
             </main>
           </>
         ) : (

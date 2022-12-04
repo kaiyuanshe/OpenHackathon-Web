@@ -3,7 +3,7 @@ import { EdgePosition, Loading, ScrollBoundary } from 'idea-react';
 import { debounce } from 'lodash';
 import { observable } from 'mobx';
 import { ListModel, Stream } from 'mobx-restful';
-import { Component } from 'react';
+import { Component, ReactNode } from 'react';
 
 import { Base, Filter } from '../models/Base';
 
@@ -13,9 +13,6 @@ export interface ScrollListProps<T extends Base = Base> {
   onSelect?: (selectedIds: string[]) => any;
 }
 
-interface ScrollListClass<P = any> {
-  Layout: (props: P) => JSX.Element;
-}
 type DataType<P> = P extends ScrollListProps<infer D> ? D : never;
 
 export abstract class ScrollList<
@@ -25,12 +22,11 @@ export abstract class ScrollList<
 
   filter: Filter<DataType<P>> = {};
 
-  extraProps?: Partial<P>;
-
   @observable
   selectedIds: string[] = [];
 
-  static Layout: ScrollListClass['Layout'] = () => <></>;
+  onSelect = (list: string[]) =>
+    (this.selectedIds = list) && this.props.onSelect?.(list);
 
   async componentDidMount() {
     const BaseStream = Stream<Base>;
@@ -59,26 +55,18 @@ export abstract class ScrollList<
       store.getList(this.filter);
   });
 
+  abstract renderList(): ReactNode;
+
   render() {
-    const { Layout } = this.constructor as unknown as ScrollListClass,
-      { value, onSelect, ...props } = this.props,
-      { extraProps, selectedIds } = this,
-      { downloading, uploading, noMore, allItems } = this.store;
+    const { downloading, uploading, noMore, allItems } = this.store;
 
     return (
       <ScrollBoundary onTouch={this.loadMore}>
         <div>
           {(downloading > 0 || uploading > 0) && <Loading />}
 
-          <Layout
-            {...props}
-            {...extraProps}
-            value={allItems}
-            selectedIds={selectedIds}
-            onSelect={(list: string[]) =>
-              (this.selectedIds = list) && onSelect?.(list)
-            }
-          />
+          {this.renderList()}
+
           <footer className="mt-4 text-center text-muted small">
             {noMore || !allItems.length ? t('no_more') : t('load_more')}
           </footer>

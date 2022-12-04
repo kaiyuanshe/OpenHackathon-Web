@@ -20,6 +20,36 @@ export interface ActivityListProps
   userId?: string;
 }
 
+export const ActivityListLayout = ({
+  size,
+  type = 'online',
+  value = [],
+  userId,
+  ...props
+}: ActivityListProps) => (
+  <Row
+    className="g-4"
+    xs={1}
+    sm={2}
+    {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
+  >
+    {value.map(item => (
+      <Col key={item.name + item.id}>
+        <ActivityCard
+          className="h-100"
+          controls={
+            !!userId &&
+            userId === sessionStore.user?.id &&
+            (type === 'admin' || type === 'created')
+          }
+          {...item}
+          {...props}
+        />
+      </Col>
+    ))}
+  </Row>
+);
+
 @observer
 export default class ActivityList extends ScrollList<ActivityListProps> {
   store = new ActivityModel();
@@ -29,50 +59,30 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
     listType: this.props.type,
   };
 
-  extraProps: Partial<ActivityListProps> = {
-    onPublish: async name => {
-      if (!confirm(t('sure_publish', { name }))) return;
+  onPublish = async (name: string) => {
+    if (!confirm(t('sure_publish', { name }))) return;
 
-      const { type, onPublish } = this.props;
+    const { type, onPublish } = this.props;
 
-      await this.store.publishOne(name, type !== 'admin');
-      onPublish?.(name);
-    },
-    onDelete: async name => {
-      if (!confirm(t('sure_offline', { name }))) return;
-
-      await this.store.deleteOne(name);
-      this.props.onDelete?.(name);
-    },
+    await this.store.publishOne(name, type !== 'admin');
+    onPublish?.(name);
   };
 
-  static Layout = ({
-    size,
-    type = 'online',
-    value = [],
-    userId,
-    ...props
-  }: ActivityListProps) => (
-    <Row
-      className="g-4"
-      xs={1}
-      sm={2}
-      {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
-    >
-      {value.map(item => (
-        <Col key={item.name}>
-          <ActivityCard
-            className="h-100"
-            controls={
-              !!userId &&
-              userId === sessionStore.user?.id &&
-              (type === 'admin' || type === 'created')
-            }
-            {...item}
-            {...props}
-          />
-        </Col>
-      ))}
-    </Row>
-  );
+  onDelete = async (name: string) => {
+    if (!confirm(t('sure_offline', { name }))) return;
+
+    await this.store.deleteOne(name);
+    this.props.onDelete?.(name);
+  };
+
+  renderList() {
+    return (
+      <ActivityListLayout
+        {...this.props}
+        value={this.store.allItems}
+        onPublish={this.onPublish}
+        onDelete={this.onDelete}
+      />
+    );
+  }
 }

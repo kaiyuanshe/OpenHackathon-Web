@@ -9,7 +9,7 @@ import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
-import { OrganizationList } from '../../../../components/Organization/OrganizationList';
+import { OrganizationTable } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 
@@ -99,7 +99,7 @@ export default class OrganizationPage extends PureComponent<
               </Col>
             </Col>
             <Col className="flex-fill">
-              <OrganizationList
+              <OrganizationTable
                 store={store}
                 onSelect={list => (this.selectedIds = list)}
               />

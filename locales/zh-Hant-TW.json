@@ -166,6 +166,7 @@
   "cloud_resource": "**wait for translate",
   "virtual_environment": "**wait for translate",
   "environmental_monitoring": "**wait for translate",
+  "log": "日誌",
   "website": "**wait for translate",
   "image": "**wait for translate",
   "video": "**wait for translate",
@@ -176,5 +177,10 @@
   "mystery_hacker": "**wait for translate",
   "status": "**wait for translate",
   "role_type": "**wait for translate",
-  "send": "**wait for translate"
+  "send": "**wait for translate",
+  "title": "標題",
+  "content": "內容",
+  "sure_delete_this_message": "確定刪除該公告？",
+  "admin_management": "管理管理員",
+  "confirm_to_delete_platform_admin": "確定刪除所选平台管理員？"
 }

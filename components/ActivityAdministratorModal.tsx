@@ -1,11 +1,12 @@
 import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Staff, StaffModel } from '../models/Staff';
+import userStore from '../models/User';
 import { UserList } from './User/UserList';
 
 export interface AdministratorModalProps
@@ -16,9 +17,6 @@ export interface AdministratorModalProps
 
 @observer
 export class AdministratorModal extends PureComponent<AdministratorModalProps> {
-  private userList = createRef<UserList>();
-  private form = createRef<HTMLFormElement>();
-
   @observable
   userId = '';
 
@@ -40,30 +38,25 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
   };
 
   handleReset = () => {
-    this.form.current?.reset();
-    this.userList.current?.store.clear();
+    userStore.clear();
     this.props.onHide?.();
   };
 
   render() {
-    const { show, onHide, store } = this.props;
+    const { show, store } = this.props;
     const loading = store.uploading > 0;
 
     return (
-      <Modal show={show} onHide={onHide} centered>
+      <Modal show={show} onHide={this.handleReset} centered>
         <Modal.Header closeButton>
           <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <UserList
-            ref={this.userList}
+            store={userStore}
             onSelect={([userId]) => (this.userId = userId)}
           />
-          <Form
-            ref={this.form}
-            onSubmit={this.increaseId}
-            onReset={this.handleReset}
-          >
+          <Form onSubmit={this.increaseId} onReset={this.handleReset}>
             <Form.Group as={Row} className="mt-3 py-3 ps-2">
               <Col>
                 <Form.Check
@@ -86,11 +79,11 @@ export class AdministratorModal extends PureComponent<AdministratorModalProps> {
               </Col>
             </Form.Group>
 
-            <Form.Group as={Row} className="mb-3">
+            <Form.Group as={Row} className="mb-3" controlId="description">
               <Col sm={8}>
                 <Form.Control name="description" placeholder={t('remark')} />
               </Col>
-              <Form.Label column sm={4} htmlFor="description" />
+              <Form.Label column sm={4} />
             </Form.Group>
 
             <Modal.Footer>

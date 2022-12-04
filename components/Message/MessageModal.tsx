@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -54,35 +55,17 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           onSubmit={this.handleSubmit}
           onReset={this.handleReset}
         >
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="content">公告内容</Form.Label>
-            <Form.Control
-              id="content"
-              name="content"
-              type="text"
-              placeholder="公告内容"
-              defaultValue={content}
-              required
-            />
+          <Form.Group className="mt-2" controlId="title">
+            <Form.Label>{t('title')}</Form.Label>
+            <Form.Control name="title" defaultValue={title} required />
           </Form.Group>
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="title">链接地址</Form.Label>
-            <Form.Control
-              id="title"
-              name="title"
-              type="text"
-              placeholder="链接地址"
-              defaultValue={title}
-              required
-            />
+          <Form.Group className="mt-2" controlId="content">
+            <Form.Label>{t('content')}</Form.Label>
+            <Form.Control name="content" defaultValue={content} required />
           </Form.Group>
-          <Form.Group className="mt-2">
-            <Form.Label htmlFor="type">类型</Form.Label>
-            <Form.Select
-              id="type"
-              name="type"
-              aria-label="Default select example"
-            >
+          <Form.Group className="mt-2" controlId="type">
+            <Form.Label>{t('type')}</Form.Label>
+            <Form.Select name="type">
               {Object.entries(MessageTypeName).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
@@ -92,10 +75,10 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           </Form.Group>
           <Modal.Footer>
             <Button variant="secondary" type="reset" disabled={loading}>
-              取消
+              {t('cancel')}
             </Button>
             <Button variant="primary" type="submit" disabled={loading}>
-              保存
+              {t('save')}
             </Button>
           </Modal.Footer>
         </Modal.Body>
