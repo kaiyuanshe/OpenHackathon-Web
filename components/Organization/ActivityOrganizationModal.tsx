@@ -101,6 +101,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           <Form.Group className="mt-2" controlId="logo-uri">
             <Form.Label>{t('logo_url')}</Form.Label>
             <Form.Control
+              type="url"
               name="logoURI"
               placeholder={t('please_enter_logo_url')}
               required
@@ -109,6 +110,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           <Form.Group className="mt-2" controlId="url">
             <Form.Label>{t('url')}</Form.Label>
             <Form.Control
+              type="url"
               name="url"
               placeholder={t('please_enter_url')}
               required
