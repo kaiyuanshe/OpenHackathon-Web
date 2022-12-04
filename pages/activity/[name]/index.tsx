@@ -26,7 +26,7 @@ import {
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
 import { MessageList } from '../../../components/Message/MessageList';
-import { OrganizationList } from '../../../components/Organization/OrganizationList';
+import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
 import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
@@ -34,6 +34,7 @@ import { TeamCreateModal } from '../../../components/TeamCreateModal';
 import activityStore, { Activity } from '../../../models/Activity';
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
+import { Organization } from '../../../models/Organization';
 import { convertDatetime } from '../../../utils/time';
 
 export async function getServerSideProps({
@@ -41,14 +42,15 @@ export async function getServerSideProps({
 }: GetServerSidePropsContext<{ name?: string }>) {
   try {
     const activity = await activityStore.getOne(name);
+    const organizationList = await activityStore.organizationOf(name).getList();
 
-    return { props: { activity } };
+    return { props: { activity, organizationList } };
   } catch (error) {
     console.error(error);
 
     return {
       notFound: true,
-      props: {} as { activity: Activity },
+      props: {} as { activity: Activity; organizationList: Organization[] },
     };
   }
 }
@@ -64,7 +66,6 @@ const StatusName: Record<Enrollment['status'], string> = {
 export default class ActivityPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  organizationStore = activityStore.organizationOf(this.props.activity.name);
   logStore = activityStore.logOf(this.props.activity.name);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
@@ -76,8 +77,7 @@ export default class ActivityPage extends PureComponent<
   @computed
   get loading() {
     return (
-      (this.organizationStore.downloading ||
-        this.logStore.downloading ||
+      (this.logStore.downloading ||
         this.enrollmentStore.downloading ||
         this.teamStore.downloading) > 0
     );
@@ -224,6 +224,7 @@ export default class ActivityPage extends PureComponent<
     const { name, displayName, tags, banners, location, detail } =
         this.props.activity,
       { showCreateTeam, loading } = this,
+      { organizationList } = this.props,
       myTeam = this.teamStore.sessionOne,
       myMessage = this.messageStore;
 
@@ -287,8 +288,12 @@ export default class ActivityPage extends PureComponent<
             </Tabs>
           </Col>
           <Col className="d-flex flex-column">
-            <h2>{t('sponsor_information')}</h2>
-            <OrganizationList store={this.organizationStore} />
+            {organizationList.length > 0 && (
+              <>
+                <h2>{t('sponsor_information')}</h2>
+                <OrganizationListLayout value={organizationList} />
+              </>
+            )}
 
             {displayName && location && (
               <>

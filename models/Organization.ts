@@ -27,6 +27,7 @@ export interface Organization extends Base {
   description?: string;
   type: OrganizationType;
   logo?: Media;
+  url?: string;
 }
 
 export class OrganizationModel extends Stream<Organization>(ListModel) {

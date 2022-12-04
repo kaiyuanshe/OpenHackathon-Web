@@ -20,7 +20,7 @@ export const OrganizationListLayout = ({
 }: Pick<OrganizationListProps, 'value'>) => (
   <ul className="list-unstyled">
     {value.map(item => (
-      <li key={item.id} className="p-2">
+      <li className="mb-2" key={item.id}>
         <OrganizationCard {...item} />
       </li>
     ))}
