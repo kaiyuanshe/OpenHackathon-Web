@@ -30,8 +30,11 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
 
     const { store, onSave } = this.props;
 
-    const { name, description, type, logoURI } = formToJSON<
-      Pick<OrganizationForm, 'name' | 'description' | 'type' | 'logoURI'>
+    const { name, description, type, logoURI, url } = formToJSON<
+      Pick<
+        OrganizationForm,
+        'name' | 'description' | 'type' | 'logoURI' | 'url'
+      >
     >(event.currentTarget);
 
     await store.updateOne({
@@ -43,6 +46,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
         description: description!,
         uri: logoURI,
       },
+      url: url,
     });
     onSave?.();
     this.handleReset();
@@ -99,6 +103,14 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
             <Form.Control
               name="logoURI"
               placeholder={t('please_enter_logo_url')}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mt-2" controlId="url">
+            <Form.Label>{t('url')}</Form.Label>
+            <Form.Control
+              name="url"
+              placeholder={t('please_enter_url')}
               required
             />
           </Form.Group>
