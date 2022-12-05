@@ -5,7 +5,7 @@ import { buildURLData } from 'web-utility';
 
 import { uploadBlob } from '../pages/api/core';
 import { UploadUrl } from './Base';
-import { AuthingUserBase, User } from './User';
+import { AuthingIdentity, AuthingUserBase, User } from './User';
 
 const { localStorage } = globalThis;
 
@@ -20,6 +20,15 @@ export class SessionModel extends BaseModel {
     return oAuth && JSON.parse(oAuth);
   }
 
+  @computed
+  get metaOAuth() {
+    const { identities = [] } = this.user || {};
+
+    return Object.fromEntries(
+      identities.map(identity => [identity.provider, identity]),
+    ) as Record<AuthingIdentity['provider'], AuthingIdentity>;
+  }
+
   client = new HTTPClient({
     baseURI: process.env.NEXT_PUBLIC_API_HOST,
     responseType: 'json',
@@ -31,6 +40,13 @@ export class SessionModel extends BaseModel {
 
     return next();
   });
+
+  constructor() {
+    super();
+
+    if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
+      this.signOut();
+  }
 
   @toggle('uploading')
   async signIn(profile: AuthingUserBase) {

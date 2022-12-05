@@ -40,6 +40,11 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
+      - name: Inject Environment variables
+        run: |
+          cat > .env <<EOF
+          ${{ secrets.ENV_FILE }}
+          EOF
       - name: Build and Push image
         uses: docker/build-push-action@v3
         with:

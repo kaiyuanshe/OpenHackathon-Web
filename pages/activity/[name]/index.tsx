@@ -35,6 +35,7 @@ import activityStore, { Activity } from '../../../models/Activity';
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
+import sessionStore from '../../../models/Session';
 import { convertDatetime } from '../../../utils/time';
 
 export async function getServerSideProps({
@@ -97,7 +98,8 @@ export default class ActivityPage extends PureComponent<
   }
 
   renderMeta() {
-    const { status } = this.enrollmentStore.sessionOne || {},
+    const { github } = sessionStore.metaOAuth,
+      { status } = this.enrollmentStore.sessionOne || {},
       { sessionOne: myTeam } = this.teamStore || {},
       {
         name,
@@ -212,8 +214,10 @@ export default class ActivityPage extends PureComponent<
           <Button
             variant="warning"
             href={`/activity/${name}/team/${myTeam.id}/manage/git`}
+            disabled={!github}
           >
             {t('cloud_development')}
+            {github ? '' : '（请用 GitHub 账号登录后使用）'}
           </Button>
         )}
       </>
