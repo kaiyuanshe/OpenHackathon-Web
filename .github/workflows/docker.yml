@@ -42,7 +42,7 @@ jobs:
 
       - name: Inject Environment variables
         run: |
-          cat > .env <<EOF
+          cat > .env.local <<EOF
           ${{ secrets.ENV_FILE }}
           EOF
       - name: Build and Push image

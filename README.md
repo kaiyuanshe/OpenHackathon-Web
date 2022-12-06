@@ -8,6 +8,9 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 
 - [Task kanban](https://github.com/orgs/kaiyuanshe/projects/4?fullscreen=true)
 - [UI design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
+- Web entry
+  - testing: https://open-hackathon.vercel.app/
+  - production: https://hackathon.kaiyuanshe.cn/
 - RESTful API
   - testing: https://hackathon-api-test.kaiyuanshe.cn/swagger/
   - production: https://hackathon-api.kaiyuanshe.cn/swagger/
