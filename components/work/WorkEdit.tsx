@@ -62,7 +62,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                 name="title"
                 type="text"
                 placeholder={t('please_enter_name')}
-                pattern="[a-zA-Z0-9]+"
+                maxLength={64}
                 required
                 defaultValue={currentOne?.title}
               />
@@ -78,6 +78,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                 as="textarea"
                 rows={3}
                 placeholder={t('please_enter_description')}
+                maxLength={512}
                 required
                 defaultValue={currentOne?.description}
               />
@@ -112,6 +113,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                   name="url"
                   type="uri"
                   defaultValue={currentOne.url}
+                  maxLength={256}
                   placeholder={t('work_url')}
                 />
               </Col>
