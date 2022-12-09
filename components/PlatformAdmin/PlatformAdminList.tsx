@@ -12,6 +12,12 @@ export interface PlatformAdminListProps extends ScrollListProps<PlatformAdmin> {
 export class PlatformAdminList extends ScrollList<PlatformAdminListProps> {
   store = this.props.store;
 
+  constructor(props: PlatformAdminListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return (
       <HackathonAdminList

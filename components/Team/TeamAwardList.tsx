@@ -33,6 +33,12 @@ const TeamAwardListLayout = ({
 export class TeamAwardList extends ScrollList<TeamAwardListProps> {
   store = this.props.store;
 
+  constructor(props: TeamAwardListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onAssign = (id: string) => {
     this.props.onAssign?.(id);
     this.store.getOne(id);

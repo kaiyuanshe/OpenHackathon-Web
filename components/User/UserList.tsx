@@ -88,6 +88,12 @@ export const UserListLayout = ({
 export class UserList extends ScrollList<UserListProps> {
   store = this.props.store;
 
+  constructor(props: UserListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onSearch = async (keyword: string) => {
     this.store.clear();
     await this.store.getList({ keyword });

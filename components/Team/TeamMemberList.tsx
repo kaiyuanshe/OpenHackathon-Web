@@ -33,6 +33,12 @@ export const TeamMemberListLayout = ({
 export class TeamMemberList extends ScrollList<TeamMemberListProps> {
   store = activityStore.teamOf(this.props.activity).memberOf(this.props.team);
 
+  constructor(props: TeamMemberListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return <TeamMemberListLayout value={this.store.allItems} />;
   }

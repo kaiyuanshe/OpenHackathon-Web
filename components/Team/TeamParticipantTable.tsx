@@ -107,6 +107,12 @@ export const TeamParticipantTableLayout = ({
 export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> {
   store = this.props.store;
 
+  constructor(props: TeamParticipantTableProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onApprove: TeamParticipantTableProps['onApprove'] = (userId, status) =>
     this.store.approveOne(userId, status);
 

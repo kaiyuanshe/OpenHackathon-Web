@@ -59,6 +59,12 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
     listType: this.props.type,
   };
 
+  constructor(props: ActivityListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onPublish = async (name: string) => {
     if (!confirm(t('sure_publish', { name }))) return;
 

@@ -70,6 +70,12 @@ export const EnrollmentListLayout = ({
 export class EnrollmentList extends ScrollList<EnrollmentListProps> {
   store = activityStore.enrollmentOf(this.props.activity);
 
+  constructor(props: EnrollmentListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onVerify: EnrollmentListProps['onVerify'] = async (userId, status) => {
     await this.store.verifyOne(userId, status);
 

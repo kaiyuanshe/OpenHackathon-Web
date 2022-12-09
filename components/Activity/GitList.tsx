@@ -97,6 +97,12 @@ export const GitListLayout = ({
 export class GitList extends ScrollList<GitListProps> {
   store = this.props.store;
 
+  constructor(props: GitListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return (
       <GitListLayout
