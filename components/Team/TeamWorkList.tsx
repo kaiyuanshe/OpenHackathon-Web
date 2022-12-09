@@ -117,6 +117,12 @@ export const TeamWorkListLayout = ({
 export class TeamWorkList extends ScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
+  constructor(props: TeamWorkListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onDelete = (id?: string) =>
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 

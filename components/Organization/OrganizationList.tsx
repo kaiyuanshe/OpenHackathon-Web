@@ -31,6 +31,12 @@ export const OrganizationListLayout = ({
 export class OrganizationList extends ScrollList<OrganizationListProps> {
   store = this.props.store;
 
+  constructor(props: OrganizationListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return <OrganizationListLayout value={this.store.allItems} />;
   }
@@ -118,6 +124,12 @@ export const OrganizationTableLayout = ({
 @observer
 export class OrganizationTable extends ScrollList<OrganizationListProps> {
   store = this.props.store;
+
+  constructor(props: OrganizationListProps) {
+    super(props);
+
+    this.boot();
+  }
 
   renderList() {
     return (

@@ -35,6 +35,12 @@ const TeamWorkLiLayout = ({ value = [] }: TeamWorkProps) => (
 export class TeamWorkLi extends ScrollList<TeamWorkProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
+  constructor(props: TeamWorkProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return <TeamWorkLiLayout {...this.props} value={this.store.allItems} />;
   }

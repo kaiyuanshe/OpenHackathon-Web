@@ -117,6 +117,12 @@ export class TeamAdministratorTable extends ScrollList<TeamAdministratorTablePro
     status: MembershipStatus.APPROVED,
   };
 
+  constructor(props: TeamAdministratorTableProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onUpdateRole: TeamAdministratorTableProps['onUpdateRole'] = (userId, role) =>
     this.store.updateRole(userId, role);
 

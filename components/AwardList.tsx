@@ -73,6 +73,12 @@ export const AwardListLayout = ({
 export class AwardList extends ScrollList<AwardListProps> {
   store = this.props.store;
 
+  constructor(props: AwardListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onEdit = (id: string) => {
     this.props.onEdit?.(id);
     this.store.getOne(id);

@@ -29,6 +29,12 @@ export const ActivityLogListLayout = ({
 export class ActivityLogList extends ScrollList<ActivityLogListProps> {
   store = this.props.store;
 
+  constructor(props: ActivityLogListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return <ActivityLogListLayout value={this.store.allItems} />;
   }

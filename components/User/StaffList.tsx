@@ -12,6 +12,12 @@ export interface StaffListProps extends ScrollListProps<Staff> {
 export class StaffList extends ScrollList<StaffListProps> {
   store = this.props.store;
 
+  constructor(props: StaffListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return (
       <HackathonAdminList

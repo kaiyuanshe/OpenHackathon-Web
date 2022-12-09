@@ -28,7 +28,7 @@ export abstract class ScrollList<
   onSelect = (list: string[]) =>
     (this.selectedIds = list) && this.props.onSelect?.(list);
 
-  async componentDidMount() {
+  async boot() {
     const BaseStream = Stream<Base>;
 
     const store = this.store as unknown as InstanceType<

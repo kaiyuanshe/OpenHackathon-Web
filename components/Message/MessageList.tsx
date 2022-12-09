@@ -109,6 +109,12 @@ export const MessageListLayout = ({
 export class MessageList extends ScrollList<MessageListProps> {
   store = this.props.store;
 
+  constructor(props: MessageListProps) {
+    super(props);
+
+    this.boot();
+  }
+
   onEdit = (id: string) => {
     this.props.onEdit?.(id);
     this.store.getOne(id);

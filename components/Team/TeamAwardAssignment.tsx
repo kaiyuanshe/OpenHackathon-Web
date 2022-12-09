@@ -29,6 +29,12 @@ export class TeamAwardAssignmentList extends ScrollList<AwardAssignmentProps> {
     .teamOf(this.props.activity)
     .assignmentOf(this.props.team);
 
+  constructor(props: AwardAssignmentProps) {
+    super(props);
+
+    this.boot();
+  }
+
   renderList() {
     return (
       <TeamAwardAssignmentLayout {...this.props} value={this.store.allItems} />
