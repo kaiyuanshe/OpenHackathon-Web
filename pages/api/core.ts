@@ -53,11 +53,25 @@ export function safeAPI(handler: NextAPI): NextAPI {
     try {
       return await handler(req, res);
     } catch (error) {
-      if (error instanceof HTTPError) {
-        res.status(error.status);
-        res.statusMessage = error.message;
-        res.send(error.body);
+      if (!(error instanceof HTTPError)) {
+        console.error(error);
+        return res.end(error);
       }
+      let { message, status, body } = error;
+
+      res.status(status);
+      res.statusMessage = message;
+
+      if (body instanceof ArrayBuffer)
+        try {
+          body = new TextDecoder().decode(new Uint8Array(body));
+          console.error(body);
+
+          body = JSON.parse(body);
+          console.error(body);
+        } catch {}
+
+      res.send(body);
     }
   };
 }

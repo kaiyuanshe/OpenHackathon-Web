@@ -10,14 +10,9 @@ import activityStore, { Activity } from '../models/Activity';
 import { DateTimeInput } from './DateTimeInput';
 import { FileUpload } from './FileUpload';
 
-const Editor = dynamic(
-  async () => {
-    const { Editor } = await import('react-bootstrap-editor');
-
-    return Editor;
-  },
-  { ssr: false },
-);
+const HTMLEditor = dynamic(() => import('../components/HTMLEditor'), {
+  ssr: false,
+});
 
 interface ActivityFormData extends Activity {
   tagsString?: string;
@@ -249,7 +244,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('hackathon_detail')}
           </Form.Label>
           <Col sm={10}>
-            <Editor
+            <HTMLEditor
               defaultValue={detail}
               onChange={code => (this.detailHTML = code)}
             />
