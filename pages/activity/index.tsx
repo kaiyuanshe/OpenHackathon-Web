@@ -20,7 +20,7 @@ const ActivityListPage = ({
 
     <h2 className="text-center my-5">{t('top_hackathons')}</h2>
 
-    <ActivityList value={firstScreenList} />
+    <ActivityList defaultData={firstScreenList} />
   </Container>
 );
 

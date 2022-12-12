@@ -2,19 +2,21 @@ import { observer } from 'mobx-react';
 
 import activityStore from '../../models/Activity';
 import { AwardAssignment } from '../../models/Award';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-interface AwardAssignmentProps extends ScrollListProps<AwardAssignment> {
+interface AwardAssignmentProps extends XScrollListProps<AwardAssignment> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
   onDelete?: (id: AwardAssignment['id']) => any;
 }
 
-const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
+const TeamAwardAssignmentLayout = ({
+  defaultData = [],
+}: AwardAssignmentProps) => (
   <>
     <ol>
-      {value.map(({ updatedAt, id, description, awardId }) => (
+      {defaultData.map(({ updatedAt, id, description, awardId }) => (
         <li key={id} className="list-unstyled">
           {awardId || description}
         </li>
@@ -24,7 +26,7 @@ const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
 );
 
 @observer
-export class TeamAwardAssignmentList extends ScrollList<AwardAssignmentProps> {
+export class TeamAwardAssignmentList extends XScrollList<AwardAssignmentProps> {
   store = activityStore
     .teamOf(this.props.activity)
     .assignmentOf(this.props.team);
@@ -37,7 +39,10 @@ export class TeamAwardAssignmentList extends ScrollList<AwardAssignmentProps> {
 
   renderList() {
     return (
-      <TeamAwardAssignmentLayout {...this.props} value={this.store.allItems} />
+      <TeamAwardAssignmentLayout
+        {...this.props}
+        defaultData={this.store.allItems}
+      />
     );
   }
 }

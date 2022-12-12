@@ -6,7 +6,7 @@ import { Form, Table } from 'react-bootstrap';
 import { HackathonAdmin } from '../../models/HackathonAdmin';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { ScrollListProps } from '../ScrollList';
+import { XScrollListProps } from '../ScrollList';
 
 const TableHeads = [
   t('all'),
@@ -21,10 +21,10 @@ const TableHeads = [
 ];
 
 export const HackathonAdminList = ({
-  value = [],
+  defaultData = [],
   selectedIds = [],
   onSelect,
-}: ScrollListProps<HackathonAdmin>) => (
+}: XScrollListProps<HackathonAdmin>) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
@@ -38,18 +38,19 @@ export const HackathonAdminList = ({
                 type="checkbox"
                 name="selectAll"
                 aria-label="selectAll"
-                checked={selectedIds.length === value.length}
+                checked={selectedIds.length === defaultData.length}
                 // https://github.com/facebook/react/issues/1798
                 ref={(input: HTMLInputElement | null) =>
                   input &&
                   (input.indeterminate =
-                    !!selectedIds.length && selectedIds.length < value.length)
+                    !!selectedIds.length &&
+                    selectedIds.length < defaultData.length)
                 }
                 onChange={() =>
                   onSelect?.(
-                    selectedIds.length === value.length
+                    selectedIds.length === defaultData.length
                       ? []
-                      : value.map(({ userId }) => userId),
+                      : defaultData.map(({ userId }) => userId),
                   )
                 }
               />
@@ -59,7 +60,7 @@ export const HackathonAdminList = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(
+      {defaultData.map(
         ({
           createdAt,
           userId,

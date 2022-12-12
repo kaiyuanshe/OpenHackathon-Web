@@ -14,9 +14,9 @@ import {
 
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
+export interface TeamWorkListProps extends XScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
@@ -25,7 +25,7 @@ export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
 }
 
 export const TeamWorkListLayout = ({
-  value = [],
+  defaultData = [],
   size,
   controls,
   onDelete,
@@ -49,7 +49,7 @@ export const TeamWorkListLayout = ({
       sm={2}
       {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
     >
-      {value.map(({ id, updatedAt, type, url, title, description }) => (
+      {defaultData.map(({ id, updatedAt, type, url, title, description }) => (
         <Col key={id}>
           <Card className="border-success">
             <Card.Body>
@@ -114,7 +114,7 @@ export const TeamWorkListLayout = ({
 );
 
 @observer
-export class TeamWorkList extends ScrollList<TeamWorkListProps> {
+export class TeamWorkList extends XScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
   constructor(props: TeamWorkListProps) {
@@ -127,6 +127,8 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 
   renderList() {
-    return <TeamWorkListLayout {...this.props} value={this.store.allItems} />;
+    return (
+      <TeamWorkListLayout {...this.props} defaultData={this.store.allItems} />
+    );
   }
 }

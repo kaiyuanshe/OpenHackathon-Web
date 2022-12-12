@@ -7,10 +7,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { t } from 'i18next';
-import { Loading, OpenMap } from 'idea-react';
+import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
 import { PureComponent } from 'react';
 import {
   Button,
@@ -37,6 +38,10 @@ import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
 import { convertDatetime } from '../../../utils/time';
+
+const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
+  ssr: false,
+});
 
 export async function getServerSideProps({
   params: { name = '' } = {},
@@ -295,7 +300,7 @@ export default class ActivityPage extends PureComponent<
             {organizationList.length > 0 && (
               <>
                 <h2>{t('sponsor_information')}</h2>
-                <OrganizationListLayout value={organizationList} />
+                <OrganizationListLayout defaultData={organizationList} />
               </>
             )}
 
@@ -305,9 +310,9 @@ export default class ActivityPage extends PureComponent<
 
                 {!isServer() && (
                   <div style={{ minHeight: '10rem' }}>
-                    <OpenMap zoom={10} title={displayName} address={location}>
+                    <ChinaMap zoom={10} title={displayName} address={location}>
                       {t('no_address_navigation')}
-                    </OpenMap>
+                    </ChinaMap>
                   </div>
                 )}
               </>

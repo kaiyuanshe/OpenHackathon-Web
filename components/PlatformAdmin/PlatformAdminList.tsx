@@ -1,15 +1,16 @@
 import { observer } from 'mobx-react';
 
 import { PlatformAdmin, PlatformAdminModel } from '../../models/PlatformAdmin';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { HackathonAdminList } from '../User/HackathonAdminList';
 
-export interface PlatformAdminListProps extends ScrollListProps<PlatformAdmin> {
+export interface PlatformAdminListProps
+  extends XScrollListProps<PlatformAdmin> {
   store: PlatformAdminModel;
 }
 
 @observer
-export class PlatformAdminList extends ScrollList<PlatformAdminListProps> {
+export class PlatformAdminList extends XScrollList<PlatformAdminListProps> {
   store = this.props.store;
 
   constructor(props: PlatformAdminListProps) {
@@ -21,7 +22,7 @@ export class PlatformAdminList extends ScrollList<PlatformAdminListProps> {
   renderList() {
     return (
       <HackathonAdminList
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}
       />

@@ -1,4 +1,5 @@
 import { HTTPError, Request, request as call } from 'koajax';
+import { parseLanguageHeader } from 'mobx-i18n';
 import { DataObject } from 'mobx-restful';
 import {
   GetServerSideProps,
@@ -11,6 +12,7 @@ import {
 import { ParsedUrlQuery } from 'querystring';
 
 import { ErrorBaseData } from '../../models/Base';
+import { i18n } from '../../models/Translation';
 
 /**
  * 上传blob文件
@@ -104,6 +106,28 @@ export function withRoute<
         ),
       },
     } as GetServerSidePropsResult<
+      RouteProps<R> & InferGetServerSidePropsType<O>
+    >;
+  };
+}
+
+export function withTranslation<
+  R extends Record<string, any>,
+  P extends Record<string, any> = {},
+  O extends GetServerSideProps<P, R> = GetServerSideProps<P, R>,
+>(
+  origin?: O,
+): GetServerSideProps<RouteProps<R> & InferGetServerSidePropsType<O>, R> {
+  return async context => {
+    const options =
+      (await origin?.(context)) || ({} as GetServerSidePropsResult<{}>);
+
+    const languages = parseLanguageHeader(
+      context.req.headers['accept-language'] || '',
+    );
+    await i18n.loadLanguages(languages);
+
+    return options as GetServerSidePropsResult<
       RouteProps<R> & InferGetServerSidePropsType<O>
     >;
   };

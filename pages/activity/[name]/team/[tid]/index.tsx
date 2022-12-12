@@ -233,7 +233,7 @@ export default class TeamPage extends PureComponent<
                 <TeamMemberList
                   activity={hackathonName}
                   team={id}
-                  value={teamMemberList}
+                  defaultData={teamMemberList}
                 />
               </Card.Body>
             </Card>
@@ -247,7 +247,7 @@ export default class TeamPage extends PureComponent<
                 <TeamWorkList
                   activity={hackathonName}
                   team={id}
-                  value={teamWorkList}
+                  defaultData={teamWorkList}
                   controls={!!currentUserInThisTeam}
                 />
               </Tab>

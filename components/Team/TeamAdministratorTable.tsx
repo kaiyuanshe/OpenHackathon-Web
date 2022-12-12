@@ -13,10 +13,10 @@ import {
 } from '../../models/Team';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
 export interface TeamAdministratorTableProps
-  extends ScrollListProps<TeamMember> {
+  extends XScrollListProps<TeamMember> {
   store: TeamMemberModel;
   onUpdateRole?: (userId: string, role: 'admin' | 'member') => any;
   onPopUpUpdateRoleModal?: (userId: string) => any;
@@ -40,7 +40,7 @@ const RoleName = {
 
 export const TeamAdministratorTableLayout = observer(
   ({
-    value = [],
+    defaultData = [],
     onUpdateRole,
   }: Omit<TeamAdministratorTableProps, 'store'>) => {
     const { id: currentUserId } = sessionStore?.user || {};
@@ -55,7 +55,7 @@ export const TeamAdministratorTableLayout = observer(
           </tr>
         </thead>
         <tbody>
-          {value.map(
+          {defaultData.map(
             (
               {
                 userId,
@@ -110,7 +110,7 @@ export const TeamAdministratorTableLayout = observer(
 );
 
 @observer
-export class TeamAdministratorTable extends ScrollList<TeamAdministratorTableProps> {
+export class TeamAdministratorTable extends XScrollList<TeamAdministratorTableProps> {
   store = this.props.store;
 
   filter: TeamMemberFilter = {
@@ -130,7 +130,7 @@ export class TeamAdministratorTable extends ScrollList<TeamAdministratorTablePro
     return (
       <TeamAdministratorTableLayout
         {...this.props}
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         onUpdateRole={this.onUpdateRole}
       />
     );

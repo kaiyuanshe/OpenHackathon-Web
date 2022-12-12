@@ -3,7 +3,7 @@ import { PureComponent } from 'react';
 import { Button, Container } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { GitList } from '../../../../components/Activity/GitList';
+import { GitList } from '../../../../components/Git';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
 

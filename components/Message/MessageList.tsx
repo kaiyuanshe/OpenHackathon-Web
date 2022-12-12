@@ -11,9 +11,9 @@ import {
   MessageTypeName,
 } from '../../models/Message';
 import styles from '../../styles/participant.module.less';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface MessageListProps extends ScrollListProps<Message> {
+export interface MessageListProps extends XScrollListProps<Message> {
   store: MessageModel;
   hideControls: boolean;
   onEdit?: (id: string) => any;
@@ -21,7 +21,7 @@ export interface MessageListProps extends ScrollListProps<Message> {
 }
 
 export const MessageListLayout = ({
-  value = [],
+  defaultData = [],
   selectedIds = [],
   hideControls,
   onSelect,
@@ -37,18 +37,20 @@ export const MessageListLayout = ({
             type="checkbox"
             name="announcementId"
             checked={
-              selectedIds?.length > 0 && selectedIds?.length === value?.length
+              selectedIds?.length > 0 &&
+              selectedIds?.length === defaultData?.length
             }
             ref={(input: HTMLInputElement | null) =>
               input &&
               (input.indeterminate =
-                !!selectedIds?.length && selectedIds.length < value.length)
+                !!selectedIds?.length &&
+                selectedIds.length < defaultData.length)
             }
             onChange={() =>
               onSelect?.(
-                selectedIds.length === value.length
+                selectedIds.length === defaultData.length
                   ? []
-                  : value.map(({ id }) => id + ''),
+                  : defaultData.map(({ id }) => id + ''),
               )
             }
           />
@@ -60,7 +62,7 @@ export const MessageListLayout = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(({ id, title, content }) => (
+      {defaultData.map(({ id, title, content }) => (
         <tr key={id}>
           <td hidden={hideControls}>
             <Form.Check
@@ -106,7 +108,7 @@ export const MessageListLayout = ({
 );
 
 @observer
-export class MessageList extends ScrollList<MessageListProps> {
+export class MessageList extends XScrollList<MessageListProps> {
   store = this.props.store;
 
   constructor(props: MessageListProps) {
@@ -131,7 +133,7 @@ export class MessageList extends ScrollList<MessageListProps> {
     return (
       <MessageListLayout
         {...this.props}
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}
         onEdit={this.onEdit}

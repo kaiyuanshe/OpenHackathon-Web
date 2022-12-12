@@ -2,22 +2,21 @@ import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';
 
-export interface TeamAwardListProps extends ScrollListProps<Team> {
+export interface TeamAwardListProps extends XScrollListProps<Team> {
   store: TeamModel;
   onAssign?: (id: Team['id']) => any;
   onDelete?: (id: Team['id']) => any;
 }
 
 const TeamAwardListLayout = ({
-  value = [],
+  defaultData = [],
   onAssign,
-  onDelete,
 }: Omit<TeamAwardListProps, 'store'>) => (
   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
-    {value.map(item => (
+    {defaultData.map(item => (
       <Col key={item.id}>
         <TeamAwardCard
           className="h-100"
@@ -30,7 +29,7 @@ const TeamAwardListLayout = ({
 );
 
 @observer
-export class TeamAwardList extends ScrollList<TeamAwardListProps> {
+export class TeamAwardList extends XScrollList<TeamAwardListProps> {
   store = this.props.store;
 
   constructor(props: TeamAwardListProps) {
@@ -54,9 +53,9 @@ export class TeamAwardList extends ScrollList<TeamAwardListProps> {
   renderList() {
     return (
       <TeamAwardListLayout
+        defaultData={this.store.allItems}
         onAssign={this.onAssign}
         onDelete={this.onDelete}
-        value={this.store.allItems}
       />
     );
   }

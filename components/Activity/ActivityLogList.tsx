@@ -2,17 +2,17 @@ import { observer } from 'mobx-react';
 import { Badge, ListGroup } from 'react-bootstrap';
 
 import { Log, LogModel } from '../../models/Log';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface ActivityLogListProps extends ScrollListProps<Log> {
+export interface ActivityLogListProps extends XScrollListProps<Log> {
   store: LogModel;
 }
 
 export const ActivityLogListLayout = ({
-  value = [],
-}: Pick<ActivityLogListProps, 'value'>) => (
+  defaultData = [],
+}: Pick<ActivityLogListProps, 'defaultData'>) => (
   <ListGroup as="ol" numbered>
-    {value.map(({ id, message, activityLogType }) => (
+    {defaultData.map(({ id, message, activityLogType }) => (
       <ListGroup.Item
         key={id}
         as="li"
@@ -26,7 +26,7 @@ export const ActivityLogListLayout = ({
 );
 
 @observer
-export class ActivityLogList extends ScrollList<ActivityLogListProps> {
+export class ActivityLogList extends XScrollList<ActivityLogListProps> {
   store = this.props.store;
 
   constructor(props: ActivityLogListProps) {
@@ -36,6 +36,6 @@ export class ActivityLogList extends ScrollList<ActivityLogListProps> {
   }
 
   renderList() {
-    return <ActivityLogListLayout value={this.store.allItems} />;
+    return <ActivityLogListLayout defaultData={this.store.allItems} />;
   }
 }

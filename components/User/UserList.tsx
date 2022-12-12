@@ -4,15 +4,15 @@ import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { User, UserModel } from '../../models/User';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface UserListProps extends ScrollListProps<User> {
-  onSearch?: (keyword: string) => any;
+export interface UserListProps extends XScrollListProps<User> {
   store: UserModel;
+  onSearch?: (keyword: string) => any;
 }
 
 export const UserListLayout = ({
-  value = [],
+  defaultData = [],
   selectedIds,
   onSelect,
   onSearch,
@@ -57,7 +57,7 @@ export const UserListLayout = ({
           </tr>
         </thead>
         <tbody>
-          {value.map(({ username, nickname, email, id }) => (
+          {defaultData.map(({ username, nickname, email, id }) => (
             <tr key={id}>
               <td>
                 <Form.Check
@@ -85,7 +85,7 @@ export const UserListLayout = ({
 );
 
 @observer
-export class UserList extends ScrollList<UserListProps> {
+export class UserList extends XScrollList<UserListProps> {
   store = this.props.store;
 
   constructor(props: UserListProps) {
@@ -96,7 +96,9 @@ export class UserList extends ScrollList<UserListProps> {
 
   onSearch = async (keyword: string) => {
     this.store.clear();
+
     await this.store.getList({ keyword });
+
     this.props.onSearch?.(keyword);
   };
 
@@ -104,7 +106,7 @@ export class UserList extends ScrollList<UserListProps> {
     return (
       <UserListLayout
         store={this.store}
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}
         onSearch={this.onSearch}

@@ -5,19 +5,19 @@ import { Button, Form, Table } from 'react-bootstrap';
 import activityStore from '../models/Activity';
 import { Enrollment, statusName } from '../models/Enrollment';
 import styles from '../styles/participant.module.less';
-import { ScrollList, ScrollListProps } from './ScrollList';
+import { XScrollList, XScrollListProps } from './ScrollList';
 
-export interface EnrollmentListProps extends ScrollListProps<Enrollment> {
+export interface EnrollmentListProps extends XScrollListProps<Enrollment> {
   activity: string;
   onPopUp?: (extensions: Enrollment['extensions']) => any;
   onVerify?: (userId: string, status: Enrollment['status']) => any;
 }
 
 export const EnrollmentListLayout = ({
-  value = [],
+  defaultData = [],
   onPopUp,
   onVerify,
-}: Pick<EnrollmentListProps, 'value' | 'onPopUp' | 'onVerify'>) => (
+}: Pick<EnrollmentListProps, 'defaultData' | 'onPopUp' | 'onVerify'>) => (
   <Table className={styles['container-table']}>
     <thead>
       <tr>
@@ -32,7 +32,7 @@ export const EnrollmentListLayout = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(({ user, status, extensions, createdAt }, index) => (
+      {defaultData.map(({ user, status, extensions, createdAt }, index) => (
         <tr key={user.id}>
           <td>{index + 1}</td>
           <td>
@@ -67,7 +67,7 @@ export const EnrollmentListLayout = ({
 );
 
 @observer
-export class EnrollmentList extends ScrollList<EnrollmentListProps> {
+export class EnrollmentList extends XScrollList<EnrollmentListProps> {
   store = activityStore.enrollmentOf(this.props.activity);
 
   constructor(props: EnrollmentListProps) {
@@ -85,7 +85,7 @@ export class EnrollmentList extends ScrollList<EnrollmentListProps> {
   renderList() {
     return (
       <EnrollmentListLayout
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         onPopUp={this.props.onPopUp}
         onVerify={this.onVerify}
       />

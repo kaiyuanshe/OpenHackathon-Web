@@ -13,10 +13,7 @@ import {
 } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
-import {
-  GitList,
-  GitListProps,
-} from '../../../../../../components/Activity/GitList';
+import { GitList, GitListProps } from '../../../../../../components/Git';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
