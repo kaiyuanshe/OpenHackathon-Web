@@ -127,6 +127,12 @@ export class TeamWorkList extends ScrollList<TeamWorkListProps> {
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 
   renderList() {
-    return <TeamWorkListLayout {...this.props} value={this.store.allItems} />;
+    return (
+      <TeamWorkListLayout
+        {...this.props}
+        value={this.store.allItems}
+        onDelete={this.onDelete}
+      />
+    );
   }
 }

@@ -14,9 +14,9 @@ interface AwardAssignmentProps extends ScrollListProps<AwardAssignment> {
 const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
   <>
     <ol>
-      {value.map(({ updatedAt, id, description, awardId }) => (
+      {value.map(({ updatedAt, id, description, award: { name } }) => (
         <li key={id} className="list-unstyled">
-          {awardId || description}
+          {name}
         </li>
       ))}
     </ol>
