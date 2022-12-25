@@ -19,6 +19,7 @@ export interface AwardAssignment
     Record<'assignmentId' | 'assigneeId' | 'awardId', string> {
   user?: User;
   team?: Team;
+  award: Award;
 }
 
 export class AwardModel extends Stream<Award>(ListModel) {

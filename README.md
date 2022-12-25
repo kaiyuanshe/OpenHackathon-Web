@@ -58,6 +58,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform][12] f
 
 Check out our [Next.js deployment documentation][17] for more details.
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web?ref=badge_large)
+
 [1]: https://reactjs.org/
 [2]: https://www.typescriptlang.org/
 [3]: https://nextjs.org/
