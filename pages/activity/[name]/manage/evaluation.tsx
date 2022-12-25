@@ -68,7 +68,7 @@ class EvaluationPage extends PureComponent<
 
     return (
       <Form
-        className="p-3 text-nowrap border position-sticky top-0"
+        className="p-3 text-nowrap border sticky-top"
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >
