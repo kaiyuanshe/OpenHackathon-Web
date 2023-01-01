@@ -8,12 +8,14 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTable } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
+import { i18n } from '../../../../../../models/Translation';
 import { withRoute } from '../../../../../api/core';
-import { i18n } from '../models/Translation';
 
 export interface TeamParticipantPageProps extends TeamManageBaseRouterProps {}
 
 export const getServerSideProps = withRoute<TeamParticipantPageProps>();
+
+const { t } = i18n;
 
 @observer
 export default class TeamParticipantPage extends PureComponent<

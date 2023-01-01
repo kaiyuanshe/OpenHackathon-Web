@@ -24,7 +24,9 @@ import {
   TeamMember,
   TeamWork,
 } from '../../../../../models/Team';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../../../../models/Translation';
+
+const { t } = i18n;
 
 interface TeamPageProps {
   activity: Activity;
