@@ -8,10 +8,12 @@ import { ActivityManageFrame } from '../../../../../components/Activity/Activity
 import { EnrollmentList } from '../../../../../components/EnrollmentList';
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
+import { i18n } from '../../../../../models/Translation';
 import { withRoute } from '../../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class ParticipantPage extends PureComponent<
