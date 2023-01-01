@@ -14,8 +14,10 @@ import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
 import sessionStore from '../../models/Session';
+import { i18n } from '../../models/Translation';
 import userStore, { User } from '../../models/User';
-import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 const ActivityList = dynamic(
   () => import('../../components/Activity/ActivityList'),
