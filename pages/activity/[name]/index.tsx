@@ -36,8 +36,10 @@ import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
+import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
-import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,

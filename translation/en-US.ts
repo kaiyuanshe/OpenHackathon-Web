@@ -187,6 +187,7 @@ export default {
   role_management: 'Role Manage',
   submit_work: 'Submit work',
   upload_work: 'Upload work',
+  upload_file: 'Upload file',
   work_type: 'Work type',
   edit_work: 'Edit Work',
   work_url: 'Work online link',

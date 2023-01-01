@@ -178,6 +178,7 @@ export default {
   role_management: '角色管理',
   submit_work: '提交作品',
   upload_work: '上傳作品',
+  upload_file: '上傳文件',
   work_type: '作品類型',
   edit_work: '編輯作品',
   work_url: '作品在線鏈接',
