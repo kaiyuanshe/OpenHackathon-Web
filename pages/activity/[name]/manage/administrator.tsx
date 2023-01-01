@@ -1,6 +1,5 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -12,6 +11,7 @@ import { AdministratorModal } from '../../../../components/ActivityAdministrator
 import { StaffList } from '../../../../components/User/StaffList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
+import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

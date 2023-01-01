@@ -6,7 +6,6 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -21,6 +20,7 @@ import { activityTeamMenus, Staff } from '../../models/Staff';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../MainBreadcrumb';
+import { i18n } from '../models/Translation';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 

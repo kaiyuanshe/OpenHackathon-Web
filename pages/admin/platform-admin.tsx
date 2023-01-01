@@ -1,6 +1,5 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
@@ -10,6 +9,7 @@ import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdmin
 import { PlatformAdminList } from '../../components/PlatformAdmin/PlatformAdminList';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
+import { i18n } from '../models/Translation';
 
 @observer
 export default class PlatformAdminPage extends PureComponent<{}> {

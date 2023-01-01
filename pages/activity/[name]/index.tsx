@@ -6,7 +6,6 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -38,6 +37,7 @@ import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
 import { convertDatetime } from '../../../utils/time';
+import { i18n } from '../models/Translation';
 
 const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,

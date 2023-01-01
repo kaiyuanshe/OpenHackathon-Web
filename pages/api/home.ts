@@ -1,4 +1,6 @@
-import { t } from 'i18next';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface Organization {
   name: string;

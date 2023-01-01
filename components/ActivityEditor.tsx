@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
@@ -7,8 +6,11 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore, { Activity } from '../models/Activity';
+import { i18n } from '../models/Translation';
 import { DateTimeInput } from './DateTimeInput';
 import { FileUpload } from './FileUpload';
+
+const { t } = i18n;
 
 const HTMLEditor = dynamic(() => import('../components/HTMLEditor'), {
   ssr: false,
@@ -90,6 +92,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       { downloading, uploading } = activityStore;
 
     const loading = downloading > 0 || uploading > 0;
+    const { t } = i18n;
 
     return (
       <Form className="container-fluid" onSubmit={this.submitHandler}>

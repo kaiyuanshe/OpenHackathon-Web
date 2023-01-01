@@ -1,8 +1,10 @@
-import { t } from 'i18next';
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import { Team } from '../models/Team';
+import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 export interface TeamEditorProps {
   team?: Team;

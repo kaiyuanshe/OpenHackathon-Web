@@ -1,4 +1,4 @@
-import { t } from 'i18next';
+import { i18n } from '../models/Translation';
 export interface Question {
   title: string;
   options?: string[];

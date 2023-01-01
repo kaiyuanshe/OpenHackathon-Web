@@ -13,7 +13,6 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -25,6 +24,7 @@ import { adminMenus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
+import { i18n } from '../models/Translation';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 

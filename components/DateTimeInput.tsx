@@ -1,7 +1,10 @@
-import { t } from 'i18next';
 import { FC } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
+
+import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 export interface DateTimeInputProps {
   id?: string;

@@ -1,11 +1,11 @@
 import 'array-unique-proposal';
 
-import { t } from 'i18next';
 import { Form, Table } from 'react-bootstrap';
 
 import { HackathonAdmin } from '../../models/HackathonAdmin';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
+import { i18n } from '../models/Translation';
 import { XScrollListProps } from '../ScrollList';
 
 const TableHeads = [

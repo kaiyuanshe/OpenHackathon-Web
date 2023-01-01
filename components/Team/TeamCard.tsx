@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import { t } from 'i18next';
 import { HTMLAttributes } from 'react';
 import { Image } from 'react-bootstrap';
 
 import { Team } from '../../models/Team';
+import { i18n } from '../models/Translation';
 
 export type TeamCardProps = HTMLAttributes<HTMLDivElement> &
   Pick<

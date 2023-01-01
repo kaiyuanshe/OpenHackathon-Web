@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import type { InferGetServerSidePropsType } from 'next';
 import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
@@ -7,8 +6,11 @@ import { ActivityListLayout } from '../components/Activity/ActivityList';
 import PageHead from '../components/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
 import activityStore from '../models/Activity';
+import { i18n } from '../models/Translation';
 import userStore from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
+
+const { t } = i18n;
 
 export async function getServerSideProps() {
   const activities = await activityStore.getList({}, 1, 6);

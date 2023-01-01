@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -11,6 +10,7 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import { withRoute } from '../../../../../api/core';
+import { i18n } from '../models/Translation';
 
 export interface TeamAdministratorPageProps extends TeamManageBaseRouterProps {}
 

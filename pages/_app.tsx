@@ -1,6 +1,4 @@
 import '../styles/globals.less';
-//Translate
-import '../utils/i18n';
 
 import { HTTPError } from 'koajax';
 import { useStaticRendering } from 'mobx-react';
@@ -11,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
 import { ErrorBaseData, isServer } from '../models/Base';
+//Translate
+import { i18n } from '../models/Translation';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 useStaticRendering(isServer());

@@ -9,7 +9,7 @@ export default {
   powerful_by: '由',
   powerful_driver: 'idea2app 脚手架强力驱动',
   zh_TW: '中文繁體',
-  zh_Hans: '中文简体',
+  zh_CN: '中文简体',
   en_US: 'English',
   registration_period: '报名时段',
   activity_period: '活动时段',

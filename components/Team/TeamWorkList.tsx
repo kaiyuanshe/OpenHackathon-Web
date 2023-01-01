@@ -1,6 +1,5 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import {
   Button,
@@ -14,6 +13,7 @@ import {
 
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
+import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 
 export interface TeamWorkListProps extends XScrollListProps<TeamWork> {

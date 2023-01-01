@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -10,6 +9,7 @@ import {
 import { TeamParticipantTable } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
 import { withRoute } from '../../../../../api/core';
+import { i18n } from '../models/Translation';
 
 export interface TeamParticipantPageProps extends TeamManageBaseRouterProps {}
 

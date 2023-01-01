@@ -1,12 +1,14 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
 import { Award, AwardModel } from '../models/Award';
+import { i18n } from '../models/Translation';
 import styles from '../styles/Table.module.less';
 import { XScrollList, XScrollListProps } from './ScrollList';
+
+const { t } = i18n;
 
 export interface AwardListProps extends XScrollListProps<Award> {
   store: AwardModel;
@@ -94,6 +96,8 @@ export class AwardList extends XScrollList<AwardListProps> {
   };
 
   onDelete = (id: string) => {
+    const { t } = i18n;
+
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);

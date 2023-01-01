@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
@@ -15,6 +14,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamList } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
+import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

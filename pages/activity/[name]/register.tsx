@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
@@ -9,6 +8,7 @@ import PageHead from '../../../components/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore from '../../../models/Activity';
 import { Extensions, Question, questions } from '../../../models/Question';
+import { i18n } from '../models/Translation';
 
 export async function getServerSideProps({
   params,

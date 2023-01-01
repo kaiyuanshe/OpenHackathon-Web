@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -10,6 +9,7 @@ import { EnrollmentList } from '../../../../../components/EnrollmentList';
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
 import { withRoute } from '../../../../api/core';
+import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

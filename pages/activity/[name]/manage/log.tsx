@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -7,6 +6,7 @@ import { ActivityLogList } from '../../../../components/Activity/ActivityLogList
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../models/Activity';
 import { withRoute } from '../../../api/core';
+import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
@@ -6,6 +5,7 @@ import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
 import userStore from '../../models/User';
+import { i18n } from '../models/Translation';
 import { UserList } from '../User/UserList';
 
 export interface PlatformAdminModalProps

@@ -5,14 +5,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { t } from 'i18next';
 import Link from 'next/link';
 import { Card, Col, Row } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
+import { i18n } from '../../models/Translation';
 import { convertDatetime } from '../../utils/time';
 import { ActivityControl, ActivityControlProps } from './ActivityControl';
 import { ActivityEntry } from './ActivityEntry';
+
+const { t } = i18n;
 
 export interface ActivityCardProps extends Activity, ActivityControlProps {
   className?: string;

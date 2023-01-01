@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
@@ -9,8 +8,11 @@ import {
   ActivityModel,
 } from '../../models/Activity';
 import sessionStore from '../../models/Session';
+import { i18n } from '../../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
+
+const { t } = i18n;
 
 export interface ActivityListProps
   extends XScrollListProps<Activity>,

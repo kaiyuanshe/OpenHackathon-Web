@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -25,6 +24,7 @@ import {
   TeamMember,
   TeamWork,
 } from '../../../../../models/Team';
+import { i18n } from '../models/Translation';
 
 interface TeamPageProps {
   activity: Activity;

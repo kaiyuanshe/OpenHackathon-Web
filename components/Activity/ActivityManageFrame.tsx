@@ -14,7 +14,6 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
@@ -24,10 +23,13 @@ import activityStore from '../../models/Activity';
 import sessionStore from '../../models/Session';
 import { menus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
+import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
+
+const { t } = i18n;
 
 library.add(
   faBullhorn,

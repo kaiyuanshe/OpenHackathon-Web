@@ -1,10 +1,12 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { User, UserModel } from '../../models/User';
+import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
+
+const { t } = i18n;
 
 export interface UserListProps extends XScrollListProps<User> {
   store: UserModel;

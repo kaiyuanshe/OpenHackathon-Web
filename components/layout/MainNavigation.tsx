@@ -1,7 +1,10 @@
-import { t } from 'i18next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Container, Image, Nav, Navbar } from 'react-bootstrap';
+
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 const UserBar = dynamic(() => import('../User/UserBar'), { ssr: false });
 

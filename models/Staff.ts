@@ -1,12 +1,14 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { t } from 'i18next';
 import { computed } from 'mobx';
 import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
 
+import { i18n } from '../models/Translation';
 import { createListStream } from './Base';
 import { HackathonAdmin } from './HackathonAdmin';
 import sessionStore from './Session';
+
+const { t } = i18n;
 
 export interface MenuItem {
   title: string;

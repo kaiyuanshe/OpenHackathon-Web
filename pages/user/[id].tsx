@@ -6,7 +6,6 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { t } from 'i18next';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -16,6 +15,7 @@ import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import PageHead from '../../components/PageHead';
 import sessionStore from '../../models/Session';
 import userStore, { User } from '../../models/User';
+import { i18n } from '../models/Translation';
 
 const ActivityList = dynamic(
   () => import('../../components/Activity/ActivityList'),

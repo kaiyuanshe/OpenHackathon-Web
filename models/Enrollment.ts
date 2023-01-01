@@ -1,11 +1,13 @@
-import { t } from 'i18next';
 import { computed, observable } from 'mobx';
 import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
+import { i18n } from '../models/Translation';
 import { Base, createListStream, Filter } from './Base';
 import sessionStore from './Session';
 import { User } from './User';
+
+const { t } = i18n;
 
 export interface Enrollment extends Base {
   hackathonName: string;

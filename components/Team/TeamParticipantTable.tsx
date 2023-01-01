@@ -1,6 +1,5 @@
 import 'array-unique-proposal';
 
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 
@@ -11,6 +10,7 @@ import {
 } from '../../models/Team';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
+import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 
 export interface TeamParticipantTableProps

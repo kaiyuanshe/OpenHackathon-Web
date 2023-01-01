@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Image, Table } from 'react-bootstrap';
 
@@ -8,6 +7,7 @@ import {
   OrganizationTypeName,
 } from '../../models/Organization';
 import styles from '../../styles/Table.module.less';
+import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 import { OrganizationCard } from './OrganizationCard';
 

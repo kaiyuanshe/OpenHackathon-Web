@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Container } from 'react-bootstrap';
@@ -7,6 +6,7 @@ import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import { FileUpload } from '../FileUpload';
+import { i18n } from '../models/Translation';
 
 const workTypes = [
   { title: t('website'), value: 'website' },

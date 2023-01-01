@@ -1,9 +1,9 @@
-import { t } from 'i18next';
 import { InferGetServerSidePropsType } from 'next';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { ActivityEditor } from '../../../../components/ActivityEditor';
 import { withRoute } from '../../../api/core';
+import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
 

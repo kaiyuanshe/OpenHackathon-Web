@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -6,6 +5,7 @@ import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Message, MessageModel, MessageTypeName } from '../../models/Message';
+import { i18n } from '../models/Translation';
 
 export interface MessageModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: MessageModel;

@@ -1,6 +1,5 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
@@ -11,6 +10,7 @@ import {
   MessageTypeName,
 } from '../../models/Message';
 import styles from '../../styles/participant.module.less';
+import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 
 export interface MessageListProps extends XScrollListProps<Message> {

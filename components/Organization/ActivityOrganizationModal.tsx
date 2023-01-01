@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
@@ -9,6 +8,7 @@ import {
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
+import { i18n } from '../models/Translation';
 
 export interface OrganizationModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
