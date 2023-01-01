@@ -8,10 +8,12 @@ import {
   TeamMember,
   TeamMemberModel,
 } from '../../models/Team';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
+
+const { t } = i18n;
 
 export interface TeamParticipantTableProps
   extends XScrollListProps<TeamMember> {
