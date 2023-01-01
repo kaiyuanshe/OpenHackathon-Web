@@ -10,10 +10,12 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
 import { StaffList } from '../../../../components/User/StaffList';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class AdministratorPage extends PureComponent<
