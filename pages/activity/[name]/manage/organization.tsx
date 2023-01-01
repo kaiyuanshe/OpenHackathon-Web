@@ -10,10 +10,12 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTable } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class OrganizationPage extends PureComponent<
