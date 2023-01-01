@@ -249,4 +249,5 @@ export default {
   sure_delete_this_message: '確定刪除該公告？',
   admin_management: '管理管理員',
   confirm_to_delete_platform_admin: '確定刪除所选平台管理員？',
+  profile: '個人資料',
 } as const;

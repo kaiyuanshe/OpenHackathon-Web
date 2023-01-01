@@ -261,4 +261,5 @@ export default {
   admin_management: 'Admin management',
   confirm_to_delete_platform_admin:
     'Confirm to delete the selected platform admin',
+  profile: 'profile',
 } as const;

@@ -249,4 +249,5 @@ export default {
   sure_delete_this_message: '确定删除该公告？',
   admin_management: '管理员管理',
   confirm_to_delete_platform_admin: '确认删除所选平台管理员',
+  profile: '个人资料',
 } as const;
