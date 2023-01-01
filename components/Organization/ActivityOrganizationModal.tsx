@@ -8,7 +8,9 @@ import {
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface OrganizationModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

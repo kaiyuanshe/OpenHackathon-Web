@@ -22,11 +22,13 @@ import { Container, Nav } from 'react-bootstrap';
 import platformAdminStore from '../../models/PlatformAdmin';
 import { adminMenus } from '../../models/Staff';
 import { MenuItem } from '../../models/Staff';
+import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
-import { i18n } from '../models/Translation';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
+
+const { t } = i18n;
 
 library.add(
   faEdit,
