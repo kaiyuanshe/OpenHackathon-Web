@@ -9,7 +9,9 @@ import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdmin
 import { PlatformAdminList } from '../../components/PlatformAdmin/PlatformAdminList';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 @observer
 export default class PlatformAdminPage extends PureComponent<{}> {

@@ -6,10 +6,12 @@ import {
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
-import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 import { OrganizationCard } from './OrganizationCard';
+
+const { t } = i18n;
 
 export interface OrganizationListProps extends XScrollListProps<Organization> {
   store: OrganizationModel;

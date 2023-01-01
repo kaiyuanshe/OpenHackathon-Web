@@ -13,8 +13,10 @@ import {
 
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
+
+const { t } = i18n;
 
 export interface TeamWorkListProps extends XScrollListProps<TeamWork> {
   activity: string;

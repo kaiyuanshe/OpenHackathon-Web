@@ -5,7 +5,9 @@ import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Message, MessageModel, MessageTypeName } from '../../models/Message';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface MessageModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: MessageModel;

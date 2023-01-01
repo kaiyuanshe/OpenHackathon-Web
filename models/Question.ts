@@ -1,4 +1,6 @@
 import { i18n } from '../models/Translation';
+const { t } = i18n;
+
 export interface Question {
   title: string;
   options?: string[];

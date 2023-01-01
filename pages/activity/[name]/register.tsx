@@ -8,7 +8,9 @@ import PageHead from '../../../components/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore from '../../../models/Activity';
 import { Extensions, Question, questions } from '../../../models/Question';
-import { i18n } from '../models/Translation';
+import { i18n } from '../../../models/Translation';
+
+const { t } = i18n;
 
 export async function getServerSideProps({
   params,

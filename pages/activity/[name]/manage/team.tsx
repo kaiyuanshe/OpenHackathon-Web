@@ -13,10 +13,12 @@ import { formToJSON } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamList } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class TeamManagePage extends PureComponent<

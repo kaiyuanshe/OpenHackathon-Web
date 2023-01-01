@@ -9,10 +9,12 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { AwardList, AwardTargetName } from '../../../../components/AwardList';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 class AwardPage extends PureComponent<

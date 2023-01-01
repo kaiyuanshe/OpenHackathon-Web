@@ -2,8 +2,10 @@ import type { InferGetServerSidePropsType } from 'next';
 
 import PageHead from '../../../../../../../components/PageHead';
 import { WorkEdit } from '../../../../../../../components/work/WorkEdit';
+import { i18n } from '../../../../../../../models/Translation';
 import { withRoute } from '../../../../../../api/core';
-import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 export const getServerSideProps =
   withRoute<Record<'name' | 'tid' | 'wid', string>>();

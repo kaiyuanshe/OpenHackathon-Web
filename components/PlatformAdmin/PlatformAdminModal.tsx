@@ -4,9 +4,11 @@ import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
+import { i18n } from '../../models/Translation';
 import userStore from '../../models/User';
-import { i18n } from '../models/Translation';
 import { UserList } from '../User/UserList';
+
+const { t } = i18n;
 
 export interface PlatformAdminModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

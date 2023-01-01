@@ -9,9 +9,11 @@ import {
   MessageType,
   MessageTypeName,
 } from '../../models/Message';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/participant.module.less';
-import { i18n } from '../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
+
+const { t } = i18n;
 
 export interface MessageListProps extends XScrollListProps<Message> {
   store: MessageModel;

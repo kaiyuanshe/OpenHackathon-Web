@@ -15,6 +15,8 @@ import { i18n } from '../models/Translation';
 // eslint-disable-next-line react-hooks/rules-of-hooks
 useStaticRendering(isServer());
 
+const { t } = i18n;
+
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
   const { message, body } = (reason || {}) as HTTPError<ErrorBaseData>;
 

@@ -17,10 +17,12 @@ import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFra
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
+import { i18n } from '../../../../../../models/Translation';
 import { withRoute } from '../../../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string; tid: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class GitPage extends PureComponent<

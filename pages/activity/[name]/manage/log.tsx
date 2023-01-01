@@ -5,10 +5,12 @@ import { PureComponent } from 'react';
 import { ActivityLogList } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
-import { i18n } from '../models/Translation';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class LogPage extends PureComponent<

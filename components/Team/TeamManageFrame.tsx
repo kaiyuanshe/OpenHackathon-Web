@@ -17,12 +17,14 @@ import activityStore from '../../models/Activity';
 import { ErrorBaseData } from '../../models/Base';
 import sessionStore from '../../models/Session';
 import { activityTeamMenus, Staff } from '../../models/Staff';
+import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../MainBreadcrumb';
-import { i18n } from '../models/Translation';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
+
+const { t } = i18n;
 
 library.add(faTrophy, faUser, faUserSecret, faCloud);
 
