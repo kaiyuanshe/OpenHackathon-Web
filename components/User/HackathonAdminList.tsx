@@ -1,12 +1,12 @@
-import 'array-unique-proposal';
-
 import { Form, Table } from 'react-bootstrap';
 
 import { HackathonAdmin } from '../../models/HackathonAdmin';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { i18n } from '../models/Translation';
 import { XScrollListProps } from '../ScrollList';
+
+const { t } = i18n;
 
 const TableHeads = [
   t('all'),
