@@ -118,7 +118,7 @@ export default {
   view_statistics: '查看統計',
   registration_statistics: '報名統計',
   total_people: '總人數：',
-  export_excel: '到處 Excel',
+  export_excel: '導出 Excel',
   sign_up_user: '報名用戶',
   please_complete_all_mandatory_fields_before_you_proceed: '建議您先完善或更新',
   personal_profile: '個人資料',
@@ -210,7 +210,6 @@ export default {
   status: '狀態',
   role_type: '角色類型',
   send: '發送',
-
   search_an_user: '請先搜索並選擇一位用戶',
   add_manager: '增加管理員',
   create_work_success: '活動創建成功，是否申請發布活動',
@@ -244,7 +243,6 @@ export default {
   approval_status: '審核狀態',
   custom_questionnaire: '自定義問卷',
   access_preview: '訪問預覽',
-
   title: '標題',
   content: '內容',
   sure_delete_this_message: '確定刪除該公告？',
