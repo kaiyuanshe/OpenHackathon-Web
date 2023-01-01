@@ -37,7 +37,7 @@ export const UserListLayout = ({
             name="keyword"
             required
             aria-label="search user"
-            placeholder={`${t('user_name')}/${t('nickname')}/${t('mail')}`}
+            placeholder={`${t('user_name')}/${t('nick_name')}/${t('mail')}`}
           />
         </Col>
         <Col xs sm={4}>

@@ -5,8 +5,10 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
+import { i18n } from '../../models/Translation';
 import { FileUpload } from '../FileUpload';
-import { i18n } from '../models/Translation';
+
+const { t } = i18n;
 
 const workTypes = [
   { title: t('website'), value: 'website' },
