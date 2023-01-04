@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { PureComponent } from 'react';
 import {
@@ -31,13 +31,17 @@ import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
-import activityStore, { Activity } from '../../../models/Activity';
+import activityStore, {
+  Activity,
+  ActivityModel,
+} from '../../../models/Activity';
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
 import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
+import { withErrorLog } from '../../api/core';
 
 const { t } = i18n;
 
@@ -45,23 +49,18 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
 });
 
-export async function getServerSideProps({
-  params: { name = '' } = {},
-}: GetServerSidePropsContext<{ name?: string }>) {
-  try {
-    const activity = await activityStore.getOne(name);
-    const organizationList = await activityStore.organizationOf(name).getList();
+export const getServerSideProps = withErrorLog<
+  { name?: string },
+  { activity: Activity; organizationList: Organization[] }
+>(async ({ params: { name = '' } = {} }) => {
+  const activityStore = new ActivityModel();
 
-    return { props: { activity, organizationList } };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      notFound: true,
-      props: {} as { activity: Activity; organizationList: Organization[] },
-    };
-  }
-}
+  const [activity, organizationList] = await Promise.all([
+    activityStore.getOne(name),
+    activityStore.organizationOf(name).getList(),
+  ]);
+  return { props: { activity, organizationList } };
+});
 
 const StatusName: Record<Enrollment['status'], string> = {
   approved: '已报名成功',
@@ -281,7 +280,7 @@ export default class ActivityPage extends PureComponent<
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
                 <MessageList store={myMessage} hideControls />
               </Tab>
-              <Tab eventKey="team" title={t('my_team')} className="pt-2">
+              <Tab eventKey="team" title={t('all_teams')} className="pt-2">
                 <h3>{t('my_team')}</h3>
                 {myTeam ? (
                   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>

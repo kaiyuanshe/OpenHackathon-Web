@@ -5,17 +5,18 @@ import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 import { ActivityListLayout } from '../components/Activity/ActivityList';
 import PageHead from '../components/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
-import activityStore from '../models/Activity';
+import { ActivityModel } from '../models/Activity';
 import { i18n } from '../models/Translation';
-import userStore from '../models/User';
+import { UserModel } from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 const { t } = i18n;
 
 export async function getServerSideProps() {
-  const activities = await activityStore.getList({}, 1, 6);
-  const topUsers = await userStore.getUserTopList();
-
+  const [activities, topUsers] = await Promise.all([
+    new ActivityModel().getList({}, 1, 6),
+    new UserModel().getUserTopList(),
+  ]);
   return { props: { activities, topUsers } };
 }
 
@@ -85,7 +86,7 @@ const HomePage = ({
       {Object.entries(partner).map(([type, list]) => (
         <Fragment key={type}>
           <h3 className="my-5">
-            {OrganizationTypeName[+type as OrganizationType]}
+            {OrganizationTypeName()[+type as OrganizationType]}
           </h3>
           <Row
             as="ul"

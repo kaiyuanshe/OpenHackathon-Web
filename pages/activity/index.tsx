@@ -3,13 +3,13 @@ import { Container } from 'react-bootstrap';
 
 import ActivityList from '../../components/Activity/ActivityList';
 import PageHead from '../../components/PageHead';
-import activityStore from '../../models/Activity';
+import { ActivityModel } from '../../models/Activity';
 import { i18n } from '../../models/Translation';
 
 const { t } = i18n;
 
 export async function getServerSideProps() {
-  const firstScreenList = await activityStore.getList({}, 1, 12);
+  const firstScreenList = await new ActivityModel().getList({}, 1, 12);
 
   return { props: { firstScreenList } };
 }

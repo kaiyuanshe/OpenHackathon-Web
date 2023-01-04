@@ -13,10 +13,10 @@ export enum OrganizationType {
   host,
 }
 
-export const OrganizationTypeName = {
+export const OrganizationTypeName = () => ({
   [OrganizationType.sponsor]: t('sponsors'),
   [OrganizationType.host]: t('partners'),
-};
+});
 
 export const partner: Record<OrganizationType, Organization[]> = {
   [OrganizationType.sponsor]: [

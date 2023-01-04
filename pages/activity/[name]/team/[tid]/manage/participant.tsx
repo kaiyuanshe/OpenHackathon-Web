@@ -11,9 +11,7 @@ import activityStore from '../../../../../../models/Activity';
 import { i18n } from '../../../../../../models/Translation';
 import { withRoute } from '../../../../../api/core';
 
-export interface TeamParticipantPageProps extends TeamManageBaseRouterProps {}
-
-export const getServerSideProps = withRoute<TeamParticipantPageProps>();
+export const getServerSideProps = withRoute<TeamManageBaseRouterProps>();
 
 const { t } = i18n;
 

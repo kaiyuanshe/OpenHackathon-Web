@@ -21,7 +21,7 @@ export async function uploadBlob<T = void>(
   fullPath: string,
   method: Request['method'] = 'PUT',
   body?: any,
-  headers: Record<string, any> = {},
+  headers: DataObject = {},
 ) {
   headers['x-ms-blob-type'] = 'BlockBlob';
 
@@ -78,6 +78,26 @@ export function safeAPI(handler: NextAPI): NextAPI {
   };
 }
 
+export function withErrorLog<
+  I extends DataObject,
+  O extends DataObject = {},
+  F extends GetServerSideProps<O, I> = GetServerSideProps<O, I>,
+>(origin: F) {
+  return (async context => {
+    try {
+      return await origin(context);
+    } catch (error) {
+      console.error(error);
+
+      const { status } = error as HTTPError;
+
+      if (status === 404) return { notFound: true, props: {} };
+
+      throw error;
+    }
+  }) as F;
+}
+
 interface RouteProps<T extends ParsedUrlQuery> {
   route: Pick<
     GetServerSidePropsContext<T>,
@@ -86,12 +106,12 @@ interface RouteProps<T extends ParsedUrlQuery> {
 }
 
 export function withRoute<
-  R extends Record<string, any>,
-  P extends Record<string, any> = {},
-  O extends GetServerSideProps<P, R> = GetServerSideProps<P, R>,
+  I extends DataObject,
+  O extends DataObject = {},
+  F extends GetServerSideProps<O, I> = GetServerSideProps<O, I>,
 >(
-  origin?: O,
-): GetServerSideProps<RouteProps<R> & InferGetServerSidePropsType<O>, R> {
+  origin?: F,
+): GetServerSideProps<RouteProps<I> & InferGetServerSidePropsType<F>, I> {
   return async context => {
     const options =
         (await origin?.(context)) || ({} as GetServerSidePropsResult<{}>),
@@ -106,29 +126,29 @@ export function withRoute<
         ),
       },
     } as GetServerSidePropsResult<
-      RouteProps<R> & InferGetServerSidePropsType<O>
+      RouteProps<I> & InferGetServerSidePropsType<F>
     >;
   };
 }
 
 export function withTranslation<
-  R extends Record<string, any>,
-  P extends Record<string, any> = {},
-  O extends GetServerSideProps<P, R> = GetServerSideProps<P, R>,
+  I extends DataObject,
+  O extends DataObject = {},
+  F extends GetServerSideProps<O, I> = GetServerSideProps<O, I>,
 >(
-  origin?: O,
-): GetServerSideProps<RouteProps<R> & InferGetServerSidePropsType<O>, R> {
+  origin?: F,
+): GetServerSideProps<RouteProps<I> & InferGetServerSidePropsType<F>, I> {
   return async context => {
-    const options =
-      (await origin?.(context)) || ({} as GetServerSidePropsResult<{}>);
+    const { language = '' } = context.req.cookies,
+      languages = parseLanguageHeader(
+        context.req.headers['accept-language'] || '',
+      );
+    await i18n.loadLanguages([language, ...languages].filter(Boolean));
 
-    const languages = parseLanguageHeader(
-      context.req.headers['accept-language'] || '',
-    );
-    await i18n.loadLanguages(languages);
-
-    return options as GetServerSidePropsResult<
-      RouteProps<R> & InferGetServerSidePropsType<O>
+    return ((await origin?.(context)) || {
+      props: {},
+    }) as GetServerSidePropsResult<
+      RouteProps<I> & InferGetServerSidePropsType<F>
     >;
   };
 }

@@ -20,7 +20,7 @@ import { TeamWorkType } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
 import { withRoute } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string; tid: string }>();
+export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>();
 
 const { t } = i18n;
 
