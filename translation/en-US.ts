@@ -1,3 +1,5 @@
+import { textJoin } from 'mobx-i18n';
+
 export default {
   home_page: 'Home page',
   load_more: 'Load more...',
@@ -13,7 +15,8 @@ export default {
   en_US: 'English',
   registration_period: 'Registration Period',
   activity_period: 'Ativity Period',
-  register_after: 'Registration after {{distance}} {{unit}}',
+  register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
+    textJoin('Registration after', distance, unit),
   enrolling: 'Enrolling',
   competition_over: 'Activity finished',
   my_team: 'My Team',
@@ -245,8 +248,10 @@ export default {
   apply_publish: 'Apply online',
   publish: 'Publish',
   offline: 'Offline',
-  sure_publish: 'Are you sure you want to publish {{name}}?',
-  sure_offline: 'do you want to go offline {{name}}',
+  sure_publish: ({ name }: Record<'name', string>) =>
+    textJoin('Are you sure you want to publish', name, '?'),
+  sure_offline: ({ name }: Record<'name', string>) =>
+    textJoin('do you want to go offline', name, '?'),
   activity_manage: 'Manage Activity',
   no_permission: 'No permission yet',
   sign_up_trends: 'Sign up trends',

@@ -8,17 +8,18 @@ import { TopUserList } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
 import { i18n } from '../models/Translation';
 import { UserModel } from '../models/User';
+import { withTranslation } from './api/core';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 const { t } = i18n;
 
-export async function getServerSideProps() {
-  const [activities, topUsers] = await Promise.all([
+export const getServerSideProps = withTranslation(() => {
+  const [activities, topUsers] = [
     new ActivityModel().getList({}, 1, 6),
     new UserModel().getUserTopList(),
-  ]);
+  ];
   return { props: { activities, topUsers } };
-}
+});
 
 const HomePage = ({
   activities,

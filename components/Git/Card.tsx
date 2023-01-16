@@ -7,6 +7,8 @@ import { GitRepository } from '../../models/Git';
 import { i18n } from '../../models/Translation';
 import { GitLogo } from './Logo';
 
+const { t } = i18n;
+
 export interface GitCardProps extends GitRepository {
   className?: string;
   renderController?: (item: GitRepository) => ReactNode;
@@ -58,7 +60,7 @@ export const GitCard: FC<GitCardProps> = observer(
       <Card.Footer className="d-flex justify-content-between align-items-center">
         {homepage && (
           <Button variant="success" target="_blank" href={homepage}>
-            {i18n.t('home_page')}
+            {t('home_page')}
           </Button>
         )}
         {renderController?.({
@@ -77,7 +79,7 @@ export const GitCard: FC<GitCardProps> = observer(
             id={full_name}
             name="template"
             value={full_name}
-            label={i18n.t('select')}
+            label={t('select')}
           />
         )}
       </Card.Footer>

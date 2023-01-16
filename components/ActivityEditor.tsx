@@ -92,7 +92,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       { downloading, uploading } = activityStore;
 
     const loading = downloading > 0 || uploading > 0;
-    const { t } = i18n;
 
     return (
       <Form className="container-fluid" onSubmit={this.submitHandler}>

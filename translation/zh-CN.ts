@@ -1,3 +1,5 @@
+import { textJoin } from 'mobx-i18n';
+
 export default {
   home_page: '主页',
   load_more: '加载更多……',
@@ -13,7 +15,8 @@ export default {
   en_US: 'English',
   registration_period: '报名时段',
   activity_period: '活动时段',
-  register_after: '{{distance}} {{unit}}后开始报名',
+  register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
+    textJoin(distance, unit, '后开始报名'),
   enrolling: '正在报名',
   competition_over: '比赛结束',
   my_team: '我的团队',
@@ -234,8 +237,10 @@ export default {
   apply_publish: '申请上线',
   publish: '上线',
   offline: '下线',
-  sure_publish: '确定让 {{name}} 上线？',
-  sure_offline: '确定让 {{name}} 上线？',
+  sure_publish: ({ name }: Record<'name', string>) =>
+    textJoin('确认让', name, '上线？'),
+  sure_offline: ({ name }: Record<'name', string>) =>
+    textJoin('确认让', name, '下线？'),
   activity_manage: '活动管理',
   no_permission: '暂无权限',
   sign_up_trends: '报名趋势',

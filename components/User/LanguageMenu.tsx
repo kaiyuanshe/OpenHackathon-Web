@@ -1,10 +1,12 @@
 import { Option, Select } from 'idea-react';
+import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { i18n, LanguageName } from '../../models/Translation';
+import { withTranslation } from '../../pages/api/core';
 
-class LanguageMenu extends PureComponent<WithTranslation> {
+@observer
+class LanguageMenu extends PureComponent {
   render() {
     const { currentLanguage, t } = i18n;
 

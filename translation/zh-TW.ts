@@ -1,3 +1,5 @@
+import { textJoin } from 'mobx-i18n';
+
 export default {
   home_page: '主頁',
   load_more: '加載更多……',
@@ -13,7 +15,8 @@ export default {
   en_US: 'English',
   registration_period: '報名時段',
   activity_period: '活動時段',
-  register_after: '{{distance}} {{unit}}後開始報名',
+  register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
+    textJoin(distance, unit, '後開始報名'),
   enrolling: '正在報名',
   competition_over: '比賽結束',
   my_team: '我的團隊',
@@ -234,8 +237,10 @@ export default {
   apply_publish: '申請上線',
   publish: '上線',
   offline: '下線',
-  sure_publish: '確定讓 {{name}} 上線？',
-  sure_offline: '確定讓 {{name}} 上線？',
+  sure_publish: ({ name }: Record<'name', string>) =>
+    textJoin('確定讓', name, '上線？'),
+  sure_offline: ({ name }: Record<'name', string>) =>
+    textJoin('確定讓', name, '下線？'),
   activity_manage: '活動管理',
   no_permission: '暫無權限',
   sign_up_trends: '報名趨勢',
