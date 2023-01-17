@@ -7,6 +7,7 @@ import { XScrollList, XScrollListProps } from '../ScrollList';
 interface AwardAssignmentProps extends XScrollListProps<AwardAssignment> {
   activity: string;
   team: string;
+  value?: [];
   size?: 'sm' | 'lg';
   onDelete?: (id: AwardAssignment['id']) => any;
 }

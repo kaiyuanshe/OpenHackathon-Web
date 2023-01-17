@@ -22,6 +22,7 @@ export interface TeamWorkListProps extends XScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
+  value?: TeamWork[];
   controls?: boolean;
   onDelete?: (id: TeamWork['id']) => any;
 }
