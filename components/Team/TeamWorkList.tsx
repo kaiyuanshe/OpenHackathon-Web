@@ -130,7 +130,11 @@ export class TeamWorkList extends XScrollList<TeamWorkListProps> {
 
   renderList() {
     return (
-      <TeamWorkListLayout {...this.props} defaultData={this.store.allItems} />
+      <TeamWorkListLayout
+        {...this.props}
+        value={this.store.allItems}
+        onDelete={this.onDelete}
+      />
     );
   }
 }

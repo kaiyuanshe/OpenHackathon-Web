@@ -16,9 +16,9 @@ const TeamAwardAssignmentLayout = ({
 }: AwardAssignmentProps) => (
   <>
     <ol>
-      {defaultData.map(({ updatedAt, id, description, awardId }) => (
+      {value.map(({ updatedAt, id, description, award: { name } }) => (
         <li key={id} className="list-unstyled">
-          {awardId || description}
+          {name}
         </li>
       ))}
     </ol>
