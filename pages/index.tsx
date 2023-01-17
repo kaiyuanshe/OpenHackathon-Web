@@ -13,11 +13,11 @@ import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 const { t } = i18n;
 
-export const getServerSideProps = withTranslation(() => {
-  const [activities, topUsers] = [
+export const getServerSideProps = withTranslation(async () => {
+  const [activities, topUsers] = await Promise.all([
     new ActivityModel().getList({}, 1, 6),
     new UserModel().getUserTopList(),
-  ];
+  ]);
   return { props: { activities, topUsers } };
 });
 

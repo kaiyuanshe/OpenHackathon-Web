@@ -237,9 +237,9 @@ export default {
   apply_publish: '申請上線',
   publish: '上線',
   offline: '下線',
-  sure_publish: ({ name }: Record<'name', string>) =>
+  sure_publish: ({ name }: { name: string }) =>
     textJoin('確定讓', name, '上線？'),
-  sure_offline: ({ name }: Record<'name', string>) =>
+  sure_offline: ({ name }: { name: string }) =>
     textJoin('確定讓', name, '下線？'),
   activity_manage: '活動管理',
   no_permission: '暫無權限',

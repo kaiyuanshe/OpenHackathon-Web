@@ -237,9 +237,9 @@ export default {
   apply_publish: '申请上线',
   publish: '上线',
   offline: '下线',
-  sure_publish: ({ name }: Record<'name', string>) =>
+  sure_publish: ({ name }: { name: string }) =>
     textJoin('确认让', name, '上线？'),
-  sure_offline: ({ name }: Record<'name', string>) =>
+  sure_offline: ({ name }: { name: string }) =>
     textJoin('确认让', name, '下线？'),
   activity_manage: '活动管理',
   no_permission: '暂无权限',

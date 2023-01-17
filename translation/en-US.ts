@@ -248,9 +248,9 @@ export default {
   apply_publish: 'Apply online',
   publish: 'Publish',
   offline: 'Offline',
-  sure_publish: ({ name }: Record<'name', string>) =>
+  sure_publish: ({ name }: { name: string }) =>
     textJoin('Are you sure you want to publish', name, '?'),
-  sure_offline: ({ name }: Record<'name', string>) =>
+  sure_offline: ({ name }: { name: string }) =>
     textJoin('do you want to go offline', name, '?'),
   activity_manage: 'Manage Activity',
   no_permission: 'No permission yet',
