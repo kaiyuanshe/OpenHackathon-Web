@@ -11,9 +11,7 @@ interface AwardAssignmentProps extends XScrollListProps<AwardAssignment> {
   onDelete?: (id: AwardAssignment['id']) => any;
 }
 
-const TeamAwardAssignmentLayout = ({
-  defaultData = [],
-}: AwardAssignmentProps) => (
+const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
   <>
     <ol>
       {value.map(({ updatedAt, id, description, award: { name } }) => (
