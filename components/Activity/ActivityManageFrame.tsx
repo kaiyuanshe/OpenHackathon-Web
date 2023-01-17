@@ -19,14 +19,14 @@ import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
+import { menus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
 import sessionStore from '../../models/Session';
-import { menus } from '../../models/Staff';
-import { MenuItem } from '../../models/Staff';
 import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
 import PageHead from '../PageHead';
+import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
 import { SessionBox } from '../User/SessionBox';
 
 const { t } = i18n;
@@ -46,11 +46,8 @@ library.add(
   faUserSecret,
 );
 
-export interface ActivityManageFrameProps {
-  title: string;
+export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
   name: string;
-  path?: string;
-  menu?: MenuItem[];
 }
 
 @observer
@@ -64,7 +61,11 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
   get currentRoute() {
     const { path = '' } = this.props;
 
-    return findDeep(menus, 'list', ({ href }) => !!href && path.endsWith(href));
+    return findDeep(
+      menus(),
+      'list',
+      ({ href }) => !!href && path.endsWith(href),
+    );
   }
 
   @computed
@@ -79,12 +80,12 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
   }
 
   renderNav() {
-    const { name, menu = menus } = this.props,
+    const { name } = this.props,
       { roles: role } = activityStore.currentOne;
 
     return (
       <Nav className="h-100 flex-column px-2 border-end" variant="pills">
-        {menu.map(({ title, list }) => (
+        {menus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
               {title}

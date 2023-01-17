@@ -19,9 +19,8 @@ import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
+import { adminMenus } from '../../configuration/menu';
 import platformAdminStore from '../../models/PlatformAdmin';
-import { adminMenus } from '../../models/Staff';
-import { MenuItem } from '../../models/Staff';
 import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
@@ -47,7 +46,6 @@ library.add(
 export interface PlatformAdminFrameProps {
   title: string;
   path?: string;
-  menu?: MenuItem[];
 }
 
 @observer
@@ -65,18 +63,16 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
     const { path = '' } = this.props;
 
     return findDeep(
-      adminMenus,
+      adminMenus(),
       'list',
       ({ href }) => !!href && path.endsWith(href),
     );
   }
 
   renderNav() {
-    const { menu = adminMenus } = this.props;
-
     return (
       <Nav className="h-100 flex-column px-2 border-end" variant="pills">
-        {menu.map(({ title, list }) => (
+        {adminMenus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-none d-lg-inline" disabled>
               {title}

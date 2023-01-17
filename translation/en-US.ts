@@ -10,9 +10,6 @@ export default {
   edit_activity: 'Edit Activity',
   powerful_by: 'Power by',
   powerful_driver: 'idea2app Scaffolding power drive',
-  zh_TW: '中文繁體',
-  zh_CN: '中文简体',
-  en_US: 'English',
   registration_period: 'Registration Period',
   activity_period: 'Ativity Period',
   register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>

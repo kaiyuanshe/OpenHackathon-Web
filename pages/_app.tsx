@@ -1,15 +1,13 @@
 import '../styles/globals.less';
 
 import { HTTPError } from 'koajax';
-import { useStaticRendering } from 'mobx-react';
+import { observer, useStaticRendering } from 'mobx-react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Image } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
 import { ErrorBaseData, isServer } from '../models/Base';
-//Translate
 import { i18n } from '../models/Translation';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -25,14 +23,8 @@ globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
   if (tips) alert(tips);
 });
 
-export default function MyApp({
-  router: { pathname },
-  Component,
-  pageProps,
-}: AppProps) {
-  const { t } = useTranslation();
-
-  return (
+const MyApp = observer(
+  ({ router: { pathname }, Component, pageProps }: AppProps) => (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,5 +53,6 @@ export default function MyApp({
         </footer>
       )}
     </>
-  );
-}
+  ),
+);
+export default MyApp;

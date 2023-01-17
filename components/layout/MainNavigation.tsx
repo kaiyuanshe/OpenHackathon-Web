@@ -22,7 +22,10 @@ export const MainNavigation = () => (
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbar-inner" />
 
-      <Navbar.Collapse id="navbar-inner">
+      <Navbar.Collapse
+        id="navbar-inner"
+        className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3"
+      >
         <Nav className="me-auto">
           <Link href="/activity/" passHref>
             <Nav.Link>{t('all_activity')}</Nav.Link>

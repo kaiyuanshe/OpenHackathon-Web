@@ -43,11 +43,8 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
       name,
       description,
       type,
-      logo: {
-        name,
-        description: description!,
-        uri: logoURI,
-      },
+      // @ts-ignore
+      logo: { name, description, uri: logoURI },
       url: url,
     });
     onSave?.();

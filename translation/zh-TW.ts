@@ -10,9 +10,6 @@ export default {
   edit_activity: '編輯活動',
   powerful_by: '由',
   powerful_driver: 'idea2app 腳手架強力驅動',
-  zh_TW: '中文繁體',
-  zh_CN: '中文简体',
-  en_US: 'English',
   registration_period: '報名時段',
   activity_period: '活動時段',
   register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
