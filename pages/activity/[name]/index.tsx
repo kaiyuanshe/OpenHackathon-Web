@@ -64,11 +64,11 @@ export const getServerSideProps = withErrorLog<
   }),
 );
 
-const StatusName: Record<Enrollment['status'], string> = {
-  approved: t('sign_up_successfully'),
-  rejected: t('rejected'),
-  none: t('not_sign_up'),
-  pendingApproval: t('already_registered_waiting_for_approval'),
+const StatusName = () => {
+  approved: t('sign_up_successfully');
+  rejected: t('rejected');
+  none: t('not_sign_up');
+  pendingApproval: t('already_registered_waiting_for_approval');
 };
 
 @observer
