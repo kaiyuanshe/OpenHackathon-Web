@@ -41,7 +41,7 @@ import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
 import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
-import { withErrorLog } from '../../api/core';
+import { withErrorLog, withTranslation } from '../../api/core';
 
 const { t } = i18n;
 
@@ -49,18 +49,20 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
 });
 
-export const getServerSideProps = withErrorLog<
-  { name?: string },
-  { activity: Activity; organizationList: Organization[] }
->(async ({ params: { name = '' } = {} }) => {
-  const activityStore = new ActivityModel();
+export const getServerSideProps = withTranslation(
+  withErrorLog<
+    { name?: string },
+    { activity: Activity; organizationList: Organization[] }
+  >(async ({ params: { name = '' } = {} }) => {
+    const activityStore = new ActivityModel();
 
-  const [activity, organizationList] = await Promise.all([
-    activityStore.getOne(name),
-    activityStore.organizationOf(name).getList(),
-  ]);
-  return { props: { activity, organizationList } };
-});
+    const [activity, organizationList] = await Promise.all([
+      activityStore.getOne(name),
+      activityStore.organizationOf(name).getList(),
+    ]);
+    return { props: { activity, organizationList } };
+  }),
+);
 
 const StatusName: Record<Enrollment['status'], string> = {
   approved: '已报名成功',

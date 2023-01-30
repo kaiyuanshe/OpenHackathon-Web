@@ -25,7 +25,7 @@ import {
   TeamWork,
 } from '../../../../../models/Team';
 import { i18n } from '../../../../../models/Translation';
-import { withErrorLog } from '../../../../api/core';
+import { withErrorLog, withTranslation } from '../../../../api/core';
 
 const { t } = i18n;
 
@@ -36,23 +36,24 @@ interface TeamPageProps {
   teamWorkList: TeamWork[];
 }
 
-export const getServerSideProps = withErrorLog<
-  Partial<Record<'name' | 'tid', string>>,
-  TeamPageProps
->(async ({ params: { name = '', tid = '' } = {} }) => {
-  const activityStore = new ActivityModel();
-  const { currentTeam } = activityStore;
+export const getServerSideProps = withTranslation(
+  withErrorLog<Partial<Record<'name' | 'tid', string>>, TeamPageProps>(
+    async ({ params: { name = '', tid = '' } = {} }) => {
+      const activityStore = new ActivityModel();
+      const { currentTeam } = activityStore;
 
-  const activity = await activityStore.getOne(name),
-    team = await currentTeam!.getOne(tid);
+      const activity = await activityStore.getOne(name),
+        team = await currentTeam!.getOne(tid);
 
-  const teamMemberList = await currentTeam!.currentMember!.getList(),
-    teamWorkList = await currentTeam!.currentWork!.getList();
+      const teamMemberList = await currentTeam!.currentMember!.getList(),
+        teamWorkList = await currentTeam!.currentWork!.getList();
 
-  return {
-    props: { activity, team, teamMemberList, teamWorkList },
-  };
-});
+      return {
+        props: { activity, team, teamMemberList, teamWorkList },
+      };
+    },
+  ),
+);
 
 @observer
 export default class TeamPage extends PureComponent<

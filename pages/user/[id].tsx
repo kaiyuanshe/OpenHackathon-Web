@@ -15,7 +15,7 @@ import PageHead from '../../components/PageHead';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import userStore, { User } from '../../models/User';
-import { withErrorLog } from '../api/core';
+import { withErrorLog, withTranslation } from '../api/core';
 
 const ActivityList = dynamic(
     () => import('../../components/Activity/ActivityList'),
@@ -23,10 +23,10 @@ const ActivityList = dynamic(
   ),
   { t } = i18n;
 
-export const getServerSideProps = withErrorLog<{ id?: string }, User>(
-  async ({ params: { id = '' } = {} }) => ({
+export const getServerSideProps = withTranslation(
+  withErrorLog<{ id?: string }, User>(async ({ params: { id = '' } = {} }) => ({
     props: await userStore.getOne(id),
-  }),
+  })),
 );
 
 const UserDetailPage = ({

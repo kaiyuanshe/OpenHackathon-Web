@@ -10,7 +10,7 @@ import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Extensions, Question, questions } from '../../../models/Question';
 import { i18n } from '../../../models/Translation';
-import { withErrorLog } from '../../api/core';
+import { withErrorLog, withTranslation } from '../../api/core';
 
 const { t } = i18n;
 
