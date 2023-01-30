@@ -264,4 +264,18 @@ export default {
   confirm_to_delete_platform_admin:
     'Confirm to delete the selected platform admin',
   profile: 'profile',
+  add_template_repository: 'Add template repository',
+  stay_tuned: 'Stay tuned',
+  confirm_to_delete_announcement:
+    'Confirm to delete the selected announcement?',
+  please_select_at_least_one_announcement:
+    'Please select at least one announcement',
+  announcement_manage: 'Announcement manage',
+  publish_announcement: 'Publish announcement',
+  sign_up_successfully: 'Sign up successfully',
+  rejected: 'rejected',
+  already_registered_waiting_for_approval:
+    'Already registered, waiting for approval',
+  not_sign_up: 'Not sign up',
+  please_use_github_login: 'Please use Github login',
 } as const;
