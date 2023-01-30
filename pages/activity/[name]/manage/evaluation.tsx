@@ -9,7 +9,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
 import { Award, AwardAssignment } from '../../../../models/Award';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
 interface EvaluationPageProps {
   activity: string;
@@ -17,7 +17,9 @@ interface EvaluationPageProps {
   awardList: Award[];
 }
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 @observer
 class EvaluationPage extends PureComponent<

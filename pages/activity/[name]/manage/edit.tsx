@@ -3,11 +3,13 @@ import { InferGetServerSidePropsType } from 'next';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { ActivityEditor } from '../../../../components/ActivityEditor';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 const ActivityEditPage = ({
   route: { resolvedUrl, params },

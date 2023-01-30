@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../../models/Activity';
 import { i18n } from '../../../../../models/Translation';
-import { withRoute } from '../../../../api/core';
+import { withRoute, withTranslation } from '../../../../api/core';
 
 const { t } = i18n;
 
@@ -17,7 +17,9 @@ const EnrollmentStatisticCharts = dynamic(
   { ssr: false },
 );
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 @observer
 export default class EnrollmentStatisticPage extends PureComponent<

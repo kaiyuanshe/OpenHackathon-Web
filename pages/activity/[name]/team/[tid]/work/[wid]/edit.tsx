@@ -3,12 +3,13 @@ import type { InferGetServerSidePropsType } from 'next';
 import PageHead from '../../../../../../../components/PageHead';
 import { WorkEdit } from '../../../../../../../components/work/WorkEdit';
 import { i18n } from '../../../../../../../models/Translation';
-import { withRoute } from '../../../../../../api/core';
+import { withRoute, withTranslation } from '../../../../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps =
-  withRoute<Record<'name' | 'tid' | 'wid', string>>();
+export const getServerSideProps = withRoute<
+  Record<'name' | 'tid' | 'wid', string>
+>(withTranslation());
 
 export default function WorkCreatePage({
   route: { params },

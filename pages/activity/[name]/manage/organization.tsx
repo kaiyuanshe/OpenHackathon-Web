@@ -11,9 +11,11 @@ import { OrganizationModal } from '../../../../components/Organization/ActivityO
 import { OrganizationTable } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 const { t } = i18n;
 

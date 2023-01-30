@@ -5,9 +5,11 @@ import { Button, Container } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { GitList } from '../../../../components/Git';
 import activityStore from '../../../../models/Activity';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 export default class ActivityManageGitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

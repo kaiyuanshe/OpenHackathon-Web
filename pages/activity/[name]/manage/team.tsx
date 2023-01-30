@@ -14,9 +14,11 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamList } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 const { t } = i18n;
 

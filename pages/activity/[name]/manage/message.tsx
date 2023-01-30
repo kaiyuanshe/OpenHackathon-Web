@@ -10,9 +10,11 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { MessageList } from '../../../../components/Message/MessageList';
 import { MessageModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
-import { withRoute } from '../../../api/core';
+import { withRoute, withTranslation } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 @observer
 export default class MessageListPage extends PureComponent<

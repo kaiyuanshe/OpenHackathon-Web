@@ -13,7 +13,9 @@ import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
 import { withRoute, withTranslation } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = withRoute<{ name: string }>(
+  withTranslation(),
+);
 
 const { t } = i18n;
 

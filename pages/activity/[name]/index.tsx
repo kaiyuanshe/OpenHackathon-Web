@@ -49,11 +49,11 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
 });
 
-export const getServerSideProps = withTranslation(
-  withErrorLog<
-    { name?: string },
-    { activity: Activity; organizationList: Organization[] }
-  >(async ({ params: { name = '' } = {} }) => {
+export const getServerSideProps = withErrorLog<
+  { name?: string },
+  { activity: Activity; organizationList: Organization[] }
+>(
+  withTranslation(async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
     const [activity, organizationList] = await Promise.all([

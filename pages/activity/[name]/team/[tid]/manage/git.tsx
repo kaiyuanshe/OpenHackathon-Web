@@ -18,9 +18,11 @@ import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
-import { withRoute } from '../../../../../api/core';
+import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>();
+export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>(
+  withTranslation(),
+);
 
 const { t } = i18n;
 

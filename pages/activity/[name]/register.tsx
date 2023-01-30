@@ -17,14 +17,16 @@ const { t } = i18n;
 export const getServerSideProps = withErrorLog<
   { name: string },
   { activity: string }
->(async ({ params: { name } = {} }) => {
-  const { status } = await new ActivityModel().getOne(name!);
+>(
+  withTranslation(async ({ params: { name } = {} }) => {
+    const { status } = await new ActivityModel().getOne(name!);
 
-  return {
-    notFound: status !== 'online',
-    props: { activity: name! },
-  };
-});
+    return {
+      notFound: status !== 'online',
+      props: { activity: name! },
+    };
+  }),
+);
 
 class RegisterPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

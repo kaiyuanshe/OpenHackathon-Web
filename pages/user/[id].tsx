@@ -23,8 +23,8 @@ const ActivityList = dynamic(
   ),
   { t } = i18n;
 
-export const getServerSideProps = withTranslation(
-  withErrorLog<{ id?: string }, User>(async ({ params: { id = '' } = {} }) => ({
+export const getServerSideProps = withErrorLog<{ id?: string }, User>(
+  withTranslation(async ({ params: { id = '' } = {} }) => ({
     props: await userStore.getOne(id),
   })),
 );
