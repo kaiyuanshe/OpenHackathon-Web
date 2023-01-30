@@ -10,11 +10,9 @@ import { AwardList, AwardTargetName } from '../../../../components/AwardList';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
 import { i18n } from '../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../api/core';
+import { withRoute } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>(
-  withTranslation(),
-);
+export const getServerSideProps = withRoute<{ name: string }>();
 
 const { t } = i18n;
 

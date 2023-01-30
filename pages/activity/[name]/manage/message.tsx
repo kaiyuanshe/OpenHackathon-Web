@@ -11,13 +11,11 @@ import { MessageList } from '../../../../components/Message/MessageList';
 import { MessageModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../api/core';
+import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withRoute<{ name: string }>(
-  withTranslation(),
-);
+export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
 export default class MessageListPage extends PureComponent<

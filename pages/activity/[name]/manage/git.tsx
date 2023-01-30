@@ -6,13 +6,11 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { GitList } from '../../../../components/Git';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../api/core';
+import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withRoute<{ name: string }>(
-  withTranslation(),
-);
+export const getServerSideProps = withRoute<{ name: string }>();
 
 export default class ActivityManageGitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

@@ -9,11 +9,9 @@ import { EnrollmentList } from '../../../../../components/EnrollmentList';
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
 import { i18n } from '../../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../../api/core';
+import { withRoute } from '../../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>(
-  withTranslation(),
-);
+export const getServerSideProps = withRoute<{ name: string }>();
 
 const { t } = i18n;
 
