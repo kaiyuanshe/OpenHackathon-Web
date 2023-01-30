@@ -64,12 +64,12 @@ export const getServerSideProps = withErrorLog<
   }),
 );
 
-const StatusName = () => {
-  approved: t('sign_up_successfully');
-  rejected: t('rejected');
-  none: t('not_sign_up');
-  pendingApproval: t('already_registered_waiting_for_approval');
-};
+const StatusName: () => Record<Enrollment['status'], string> = () => ({
+  approved: t('sign_up_successfully'),
+  rejected: t('rejected'),
+  none: t('not_sign_up'),
+  pendingApproval: t('already_registered_waiting_for_approval'),
+});
 
 @observer
 export default class ActivityPage extends PureComponent<
@@ -202,7 +202,7 @@ export default class ActivityPage extends PureComponent<
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
               {t('registration_status')}
             </Col>
-            <Col>{StatusName[status || 'none']}</Col>
+            <Col>{StatusName()[status || 'none']}</Col>
           </Row>
         </ul>
         {isShowSignupBtn && (
