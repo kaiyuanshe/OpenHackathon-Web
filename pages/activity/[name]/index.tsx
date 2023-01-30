@@ -65,10 +65,10 @@ export const getServerSideProps = withErrorLog<
 );
 
 const StatusName: Record<Enrollment['status'], string> = {
-  approved: '已报名成功',
-  rejected: '已拒绝',
-  none: '未报名',
-  pendingApproval: '已报名，等待通过',
+  approved: t('sign_up_successfully'),
+  rejected: t('rejected'),
+  none: t('not_sign_up'),
+  pendingApproval: t('already_registered_waiting_for_approval'),
 };
 
 @observer
@@ -225,7 +225,7 @@ export default class ActivityPage extends PureComponent<
             disabled={!github}
           >
             {t('cloud_development')}
-            {github ? '' : '（请用 GitHub 账号登录后使用）'}
+            {github ? '' : t('please_use_github_login')}
           </Button>
         )}
       </>

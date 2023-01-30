@@ -10,7 +10,10 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { MessageList } from '../../../../components/Message/MessageList';
 import { MessageModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute, withTranslation } from '../../../api/core';
+
+const { t } = i18n;
 
 export const getServerSideProps = withRoute<{ name: string }>(
   withTranslation(),
@@ -37,9 +40,10 @@ export default class MessageListPage extends PureComponent<
 
     const { selectedIds } = this;
 
-    if (!selectedIds[0]) return alert('请至少选择一条公告!');
+    if (!selectedIds[0])
+      return alert(t('please_select_at_least_one_announcement'));
 
-    if (!confirm('确认删除所选公告？')) return;
+    if (!confirm(t('confirm_to_delete_announcement'))) return;
 
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
@@ -53,7 +57,7 @@ export default class MessageListPage extends PureComponent<
       <ActivityManageFrame
         name={params!.name}
         path={resolvedUrl}
-        title="公告管理"
+        title={t('announcement_manage')}
       >
         <Container fluid>
           <Form
@@ -67,11 +71,11 @@ export default class MessageListPage extends PureComponent<
               onClick={() => (this.show = true)}
             >
               <FontAwesomeIcon className="me-2" icon={faPlus} />
-              发布新公告
+              {t('publish_announcement')}
             </Button>
             <Button variant="danger" type="submit" disabled={loading}>
               <FontAwesomeIcon className="me-2" icon={faTrash} />
-              删除
+              {t('delete')}
             </Button>
           </Form>
 
