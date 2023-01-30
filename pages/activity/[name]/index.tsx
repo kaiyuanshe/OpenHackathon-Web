@@ -64,7 +64,7 @@ export const getServerSideProps = withErrorLog<
   }),
 );
 
-const StatusName = () => {
+const StatusName: any = () => {
   approved: t('sign_up_successfully');
   rejected: t('rejected');
   none: t('not_sign_up');
