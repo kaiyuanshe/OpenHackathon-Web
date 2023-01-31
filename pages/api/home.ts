@@ -1,4 +1,6 @@
-import { t } from 'i18next';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface Organization {
   name: string;
@@ -11,69 +13,69 @@ export enum OrganizationType {
   host,
 }
 
-export const OrganizationTypeName = {
+export const OrganizationTypeName = () => ({
   [OrganizationType.sponsor]: t('sponsors'),
   [OrganizationType.host]: t('partners'),
-};
+});
 
-export const partner: Record<OrganizationType, Organization[]> = {
+export const partner: () => Record<OrganizationType, Organization[]> = () => ({
   [OrganizationType.sponsor]: [
     {
-      name: '华为云',
+      name: t('huaweicloud'),
       url: 'https://www.huaweicloud.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/huawei.png',
     },
     {
-      name: '微软',
+      name: t('microsoft'),
       url: 'https://www.microsoft.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/microsoft.png',
     },
     {
-      name: 'Authing',
+      name: t('authing'),
       url: 'https://authing.cn/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/authing.png',
     },
   ],
   [OrganizationType.host]: [
     {
-      name: '微软',
+      name: t('microsoft'),
       url: 'https://www.microsoft.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/microsoft.png',
     },
     {
-      name: 'Gitcafe',
+      name: t('gitcafe'),
       url: 'https://gitcafe.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/gitcafe-small.png',
     },
     {
-      name: '优麒麟',
+      name: t('ubuntukylin'),
       url: 'https://www.ubuntukylin.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/UbuntuKylinnew.png',
     },
     {
-      name: '灵雀云',
+      name: t('alauda'),
       url: 'http://www.alauda.cn/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/alauda-small.png',
     },
     {
-      name: '极客学院',
+      name: t('jikexueyuan'),
       url: 'http://www.jikexueyuan.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/jikexueyuan.png',
     },
     {
-      name: 'JStorm',
+      name: t('jstorm'),
       url: 'https://github.com/alibaba/jstorm/wiki',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/jstorm-small.png',
     },
     {
-      name: '微创科技',
+      name: t('wicresoft'),
       url: 'https://www.wicresoft.com/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/wicresoft-small.png',
     },
     {
-      name: '聚合数据',
+      name: t('juhe'),
       url: 'https://www.juhe.cn/',
       logo: 'https://hackathon-api.static.kaiyuanshe.cn/static/juhe.png',
     },
   ],
-};
+});

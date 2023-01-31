@@ -1,7 +1,9 @@
-import { t } from 'i18next';
 import { Button } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface ActivityControlProps
   extends Pick<Activity, 'name' | 'status'> {

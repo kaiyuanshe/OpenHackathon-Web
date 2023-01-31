@@ -1,6 +1,5 @@
 import 'array-unique-proposal';
 
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 
@@ -9,11 +8,15 @@ import {
   TeamMember,
   TeamMemberModel,
 } from '../../models/Team';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface TeamParticipantTableProps extends ScrollListProps<TeamMember> {
+const { t } = i18n;
+
+export interface TeamParticipantTableProps
+  extends XScrollListProps<TeamMember> {
   store: TeamMemberModel;
   onApprove?: (userId: string, status: MembershipStatus) => any;
 }
@@ -36,7 +39,7 @@ const TableHeads = [
 ];
 
 export const TeamParticipantTableLayout = ({
-  value = [],
+  defaultData = [],
   onApprove,
 }: Omit<TeamParticipantTableProps, 'store'>) => (
   <Table hover responsive="lg" className={styles.table}>
@@ -48,7 +51,7 @@ export const TeamParticipantTableLayout = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(
+      {defaultData.map(
         (
           {
             createdAt,
@@ -104,7 +107,7 @@ export const TeamParticipantTableLayout = ({
 );
 
 @observer
-export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> {
+export class TeamParticipantTable extends XScrollList<TeamParticipantTableProps> {
   store = this.props.store;
 
   constructor(props: TeamParticipantTableProps) {
@@ -119,7 +122,7 @@ export class TeamParticipantTable extends ScrollList<TeamParticipantTableProps> 
   renderList() {
     return (
       <TeamParticipantTableLayout
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         onApprove={this.onApprove}
       />
     );

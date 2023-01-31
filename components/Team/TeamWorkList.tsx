@@ -1,6 +1,5 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import {
   Button,
@@ -14,18 +13,22 @@ import {
 
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { i18n } from '../../models/Translation';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface TeamWorkListProps extends ScrollListProps<TeamWork> {
+const { t } = i18n;
+
+export interface TeamWorkListProps extends XScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
+  value?: TeamWork[];
   controls?: boolean;
   onDelete?: (id: TeamWork['id']) => any;
 }
 
 export const TeamWorkListLayout = ({
-  value = [],
+  defaultData = [],
   size,
   controls,
   onDelete,
@@ -49,7 +52,7 @@ export const TeamWorkListLayout = ({
       sm={2}
       {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
     >
-      {value.map(({ id, updatedAt, type, url, title, description }) => (
+      {defaultData.map(({ id, updatedAt, type, url, title, description }) => (
         <Col key={id}>
           <Card className="border-success">
             <Card.Body>
@@ -114,7 +117,7 @@ export const TeamWorkListLayout = ({
 );
 
 @observer
-export class TeamWorkList extends ScrollList<TeamWorkListProps> {
+export class TeamWorkList extends XScrollList<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
   constructor(props: TeamWorkListProps) {

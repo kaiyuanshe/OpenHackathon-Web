@@ -3,9 +3,12 @@ import { PureComponent } from 'react';
 import { Button, Container } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { GitList } from '../../../../components/Activity/GitList';
+import { GitList } from '../../../../components/Git';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
+
+const { t } = i18n;
 
 export const getServerSideProps = withRoute<{ name: string }>();
 
@@ -19,12 +22,12 @@ export default class ActivityManageGitPage extends PureComponent<
       <ActivityManageFrame
         path={resolvedUrl}
         name={params!.name}
-        title="云开发环境"
+        title={t('cloud_development_environment')}
       >
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
-            <Button variant="success" title="（敬请期待）">
-              添加模板仓库
+            <Button variant="success" title={t('stay_tuned')}>
+              {t('add_template_repository')}
             </Button>
           </header>
           <GitList store={activityStore.currentGit} />

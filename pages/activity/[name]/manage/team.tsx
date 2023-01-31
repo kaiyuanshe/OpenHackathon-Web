@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
@@ -14,9 +13,12 @@ import { formToJSON } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamList } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class TeamManagePage extends PureComponent<

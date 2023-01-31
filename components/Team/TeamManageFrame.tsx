@@ -6,7 +6,6 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -14,23 +13,23 @@ import Link from 'next/link';
 import { Fragment, PureComponent } from 'react';
 import { Col, Nav } from 'react-bootstrap';
 
+import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
 import { ErrorBaseData } from '../../models/Base';
 import sessionStore from '../../models/Session';
-import { activityTeamMenus, Staff } from '../../models/Staff';
+import { Staff } from '../../models/Staff';
+import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../MainBreadcrumb';
 import PageHead from '../PageHead';
 import { SessionBox } from '../User/SessionBox';
 
+const { t } = i18n;
+
 library.add(faTrophy, faUser, faUserSecret, faCloud);
 
-export interface TeamManageBaseRouterProps {
-  path: string;
-  name: string;
-  tid: string;
-}
+export type TeamManageBaseRouterProps = Record<'path' | 'name' | 'tid', string>;
 
 export interface TeamManageFrameProps extends ActivityManageFrameProps {
   tid: string;
@@ -67,12 +66,12 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
   }
 
   renderNav() {
-    const { name, menu = activityTeamMenus, tid } = this.props,
+    const { name, tid } = this.props,
       { teamMemberRole } = this;
 
     return (
       <Nav className="flex-column px-2 border-end" variant="pills">
-        {menu.map(({ title, list }) => (
+        {activityTeamMenus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
               {title}
@@ -107,7 +106,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
     const { path = '' } = this.props;
 
     return findDeep(
-      activityTeamMenus,
+      activityTeamMenus(),
       'list',
       ({ href }) => !!href && path.includes(href),
     );

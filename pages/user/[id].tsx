@@ -6,20 +6,27 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { t } from 'i18next';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import React from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import PageHead from '../../components/PageHead';
 import sessionStore from '../../models/Session';
+import { i18n } from '../../models/Translation';
 import userStore, { User } from '../../models/User';
+import { withErrorLog, withTranslation } from '../api/core';
 
 const ActivityList = dynamic(
-  () => import('../../components/Activity/ActivityList'),
-  { ssr: false },
+    () => import('../../components/Activity/ActivityList'),
+    { ssr: false },
+  ),
+  { t } = i18n;
+
+export const getServerSideProps = withErrorLog<{ id?: string }, User>(
+  withTranslation(async ({ params: { id = '' } = {} }) => ({
+    props: await userStore.getOne(id),
+  })),
 );
 
 const UserDetailPage = ({
@@ -113,22 +120,5 @@ const UserDetailPage = ({
     </Container>
   </div>
 );
-
-export async function getServerSideProps({
-  params: { id = '' } = {},
-}: GetServerSidePropsContext<{ id?: string }>) {
-  try {
-    return {
-      props: await userStore.getOne(id),
-    };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      notFound: true,
-      props: {} as User,
-    };
-  }
-}
 
 export default UserDetailPage;

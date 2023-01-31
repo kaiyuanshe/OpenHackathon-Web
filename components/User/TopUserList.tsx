@@ -1,10 +1,12 @@
-import { t } from 'i18next';
 import { Badge, Col, Image, Row, Table } from 'react-bootstrap';
 import { parseJSON } from 'web-utility';
 
+import { i18n } from '../../models/Translation';
 import { TopUser } from '../../models/User';
 import styles from '../../styles/TopUserList.module.less';
 import { TopUserAddress } from './TopUserAddress';
+
+const { t } = i18n;
 
 export interface TopUserListProps {
   value: TopUser[];

@@ -1,11 +1,14 @@
-import { t } from 'i18next';
+import { observer } from 'mobx-react';
 import { Container } from 'react-bootstrap';
 
 import { ActivityEditor } from '../../components/ActivityEditor';
 import PageHead from '../../components/PageHead';
 import { SessionBox } from '../../components/User/SessionBox';
+import { i18n } from '../../models/Translation';
 
-const createActivity = () => (
+const { t } = i18n;
+
+const createActivity = observer(() => (
   <SessionBox auto>
     <PageHead title={t('create_activity')} />
 
@@ -15,6 +18,6 @@ const createActivity = () => (
       <ActivityEditor />
     </Container>
   </SessionBox>
-);
+));
 
 export default createActivity;

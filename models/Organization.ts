@@ -1,10 +1,12 @@
-import { t } from 'i18next';
 import { computed } from 'mobx';
 import { IDType, ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { groupBy } from 'web-utility';
 
+import { i18n } from '../models/Translation';
 import { Base, createListStream, Media } from './Base';
 import sessionStore from './Session';
+
+const { t } = i18n;
 
 export enum OrganizationType {
   Host = 'host',

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import type { InferGetServerSidePropsType } from 'next';
 import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
@@ -6,16 +5,21 @@ import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 import { ActivityListLayout } from '../components/Activity/ActivityList';
 import PageHead from '../components/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
-import activityStore from '../models/Activity';
-import userStore from '../models/User';
+import { ActivityModel } from '../models/Activity';
+import { i18n } from '../models/Translation';
+import { UserModel } from '../models/User';
+import { withTranslation } from './api/core';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
-export async function getServerSideProps() {
-  const activities = await activityStore.getList({}, 1, 6);
-  const topUsers = await userStore.getUserTopList();
+const { t } = i18n;
 
+export const getServerSideProps = withTranslation(async () => {
+  const [activities, topUsers] = await Promise.all([
+    new ActivityModel().getList({}, 1, 6),
+    new UserModel().getUserTopList(),
+  ]);
   return { props: { activities, topUsers } };
-}
+});
 
 const HomePage = ({
   activities,
@@ -54,7 +58,7 @@ const HomePage = ({
 
     <section className="my-5 py-5 bg-light text-center">
       <Container className="text-start">
-        <ActivityListLayout value={activities} />
+        <ActivityListLayout defaultData={activities} />
       </Container>
 
       <Button
@@ -80,10 +84,10 @@ const HomePage = ({
     </div>
 
     <Container className="text-center">
-      {Object.entries(partner).map(([type, list]) => (
+      {Object.entries(partner()).map(([type, list]) => (
         <Fragment key={type}>
           <h3 className="my-5">
-            {OrganizationTypeName[+type as OrganizationType]}
+            {OrganizationTypeName()[+type as OrganizationType]}
           </h3>
           <Row
             as="ul"

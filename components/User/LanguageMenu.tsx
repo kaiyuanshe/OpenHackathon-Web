@@ -1,32 +1,22 @@
-import { PureComponent } from 'react';
-import { Dropdown } from 'react-bootstrap';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { Option, Select } from 'idea-react';
+import { observer } from 'mobx-react';
 
-class LanguageMenu extends PureComponent<WithTranslation> {
-  changeLanguage = (language: string) => () =>
-    this.props.i18n.changeLanguage((localStorage.language = language));
+import { i18n, LanguageName } from '../../models/Translation';
 
-  render() {
-    const { i18n, t } = this.props;
+const LanguageMenu = observer(() => {
+  const { currentLanguage } = i18n;
 
-    return (
-      <Dropdown className="my-2 my-md-0">
-        <Dropdown.Toggle>
-          {t('language')}: {t(i18n.language)}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={this.changeLanguage('en-US')}>
-            English
-          </Dropdown.Item>
-          <Dropdown.Item onClick={this.changeLanguage('zh-Hans')}>
-            简体中文
-          </Dropdown.Item>
-          <Dropdown.Item onClick={this.changeLanguage('zh-Hant-TW')}>
-            中文繁體-臺灣
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    );
-  }
-}
-export default withTranslation()(LanguageMenu);
+  return (
+    <Select
+      value={currentLanguage}
+      onChange={code => i18n.changeLanguage(code as typeof currentLanguage)}
+    >
+      {Object.entries(LanguageName).map(([code, name]) => (
+        <Option key={code} value={code}>
+          {name}
+        </Option>
+      ))}
+    </Select>
+  );
+});
+export default LanguageMenu;

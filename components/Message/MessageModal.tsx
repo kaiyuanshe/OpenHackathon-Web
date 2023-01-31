@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { createRef, FormEvent, PureComponent } from 'react';
@@ -6,6 +5,9 @@ import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Message, MessageModel, MessageTypeName } from '../../models/Message';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface MessageModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: MessageModel;
@@ -47,7 +49,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
     return (
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>发布公告</Modal.Title>
+          <Modal.Title>{t('publish_announcement')}</Modal.Title>
         </Modal.Header>
         <Modal.Body
           as="form"
@@ -66,7 +68,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
             <Form.Select name="type">
-              {Object.entries(MessageTypeName).map(([key, value]) => (
+              {Object.entries(MessageTypeName()).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>

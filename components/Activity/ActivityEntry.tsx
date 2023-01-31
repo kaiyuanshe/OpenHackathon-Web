@@ -1,9 +1,11 @@
-import { t } from 'i18next';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
 import { Activity } from '../../models/Activity';
+import { i18n } from '../../models/Translation';
 import { TimeUnit } from '../../utils/time';
+
+const { t } = i18n;
 
 export type ActivityStatusTextProps = Pick<
   Activity,
@@ -33,7 +35,7 @@ export const getActivityStatusText = ({
     eventEnd = new Date(eventEndedAt),
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt),
-    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
+    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit());
 
   return !isOnline
     ? t('pending_review')

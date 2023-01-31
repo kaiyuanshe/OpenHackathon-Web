@@ -1,33 +1,32 @@
-import { t } from 'i18next';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { textJoin } from 'mobx-i18n';
+import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
-import { formToJSON, textJoin } from 'web-utility';
+import { formToJSON } from 'web-utility';
 
 import PageHead from '../../../components/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
-import activityStore from '../../../models/Activity';
+import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Extensions, Question, questions } from '../../../models/Question';
+import { i18n } from '../../../models/Translation';
+import { withErrorLog, withTranslation } from '../../api/core';
 
-export async function getServerSideProps({
-  params,
-  res,
-}: GetServerSidePropsContext<{ name: string }>) {
-  const { name } = params!;
+const { t } = i18n;
 
-  const { status } = await activityStore.getOne(name);
+export const getServerSideProps = withErrorLog<
+  { name: string },
+  { activity: string }
+>(
+  withTranslation(async ({ params: { name } = {} }) => {
+    const { status } = await new ActivityModel().getOne(name!);
 
-  if (status !== 'online') {
-    res.statusCode = 403;
-    res.end();
-  }
-  return {
-    props: {
-      activity: params!.name,
-    },
-  };
-}
+    return {
+      notFound: status !== 'online',
+      props: { activity: name! },
+    };
+  }),
+);
 
 class RegisterPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>

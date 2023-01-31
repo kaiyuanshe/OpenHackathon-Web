@@ -1,6 +1,5 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -11,9 +10,12 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTable } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
 
 export const getServerSideProps = withRoute<{ name: string }>();
+
+const { t } = i18n;
 
 @observer
 export default class OrganizationPage extends PureComponent<

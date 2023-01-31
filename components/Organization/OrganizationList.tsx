@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Form, Image, Table } from 'react-bootstrap';
 
@@ -7,19 +6,22 @@ import {
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
+import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { OrganizationCard } from './OrganizationCard';
 
-export interface OrganizationListProps extends ScrollListProps<Organization> {
+const { t } = i18n;
+
+export interface OrganizationListProps extends XScrollListProps<Organization> {
   store: OrganizationModel;
 }
 
 export const OrganizationListLayout = ({
-  value = [],
-}: Pick<OrganizationListProps, 'value'>) => (
+  defaultData = [],
+}: Pick<OrganizationListProps, 'defaultData'>) => (
   <ul className="list-unstyled">
-    {value.map(item => (
+    {defaultData.map(item => (
       <li className="mb-2" key={item.id}>
         <OrganizationCard {...item} />
       </li>
@@ -28,7 +30,7 @@ export const OrganizationListLayout = ({
 );
 
 @observer
-export class OrganizationList extends ScrollList<OrganizationListProps> {
+export class OrganizationList extends XScrollList<OrganizationListProps> {
   store = this.props.store;
 
   constructor(props: OrganizationListProps) {
@@ -38,12 +40,12 @@ export class OrganizationList extends ScrollList<OrganizationListProps> {
   }
 
   renderList() {
-    return <OrganizationListLayout value={this.store.allItems} />;
+    return <OrganizationListLayout defaultData={this.store.allItems} />;
   }
 }
 
 export const OrganizationTableLayout = ({
-  value = [],
+  defaultData = [],
   selectedIds = [],
   onSelect,
 }: Omit<OrganizationListProps, 'store'>) => (
@@ -56,18 +58,20 @@ export const OrganizationTableLayout = ({
             type="checkbox"
             name="organizationId"
             checked={
-              selectedIds?.length > 0 && selectedIds?.length === value?.length
+              selectedIds?.length > 0 &&
+              selectedIds?.length === defaultData?.length
             }
             ref={(input: HTMLInputElement | null) =>
               input &&
               (input.indeterminate =
-                !!selectedIds?.length && selectedIds.length < value.length)
+                !!selectedIds?.length &&
+                selectedIds.length < defaultData.length)
             }
             onChange={() =>
               onSelect?.(
-                selectedIds.length === value.length
+                selectedIds.length === defaultData.length
                   ? []
-                  : value.map(({ id }) => String(id)),
+                  : defaultData.map(({ id }) => String(id)),
               )
             }
           />
@@ -79,7 +83,7 @@ export const OrganizationTableLayout = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(({ id, name, description, type, logo }) => (
+      {defaultData.map(({ id, name, description, type, logo }) => (
         <tr key={id}>
           <td>
             <Form.Check
@@ -122,7 +126,7 @@ export const OrganizationTableLayout = ({
 );
 
 @observer
-export class OrganizationTable extends ScrollList<OrganizationListProps> {
+export class OrganizationTable extends XScrollList<OrganizationListProps> {
   store = this.props.store;
 
   constructor(props: OrganizationListProps) {
@@ -135,7 +139,7 @@ export class OrganizationTable extends ScrollList<OrganizationListProps> {
     return (
       <OrganizationTableLayout
         {...this.props}
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}
       />

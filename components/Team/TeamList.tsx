@@ -2,18 +2,18 @@ import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { TeamCard } from './TeamCard';
 
-export interface TeamListProps extends ScrollListProps<Team> {
+export interface TeamListProps extends XScrollListProps<Team> {
   store: TeamModel;
 }
 
 export const TeamListLayout = ({
-  value = [],
-}: Pick<TeamListProps, 'value'>) => (
+  defaultData = [],
+}: Pick<TeamListProps, 'defaultData'>) => (
   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
-    {value.map(item => (
+    {defaultData.map(item => (
       <Col key={item.id}>
         <TeamCard className="h-100" {...item} />
       </Col>
@@ -22,7 +22,7 @@ export const TeamListLayout = ({
 );
 
 @observer
-export class TeamList extends ScrollList<TeamListProps> {
+export class TeamList extends XScrollList<TeamListProps> {
   store = this.props.store;
 
   constructor(props: TeamListProps) {
@@ -32,6 +32,6 @@ export class TeamList extends ScrollList<TeamListProps> {
   }
 
   renderList() {
-    return <TeamListLayout value={this.store.allItems} />;
+    return <TeamListLayout defaultData={this.store.allItems} />;
   }
 }

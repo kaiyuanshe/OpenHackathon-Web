@@ -1,26 +1,20 @@
-import { t } from 'i18next';
-import { EdgePosition, Loading, ScrollBoundary } from 'idea-react';
-import { debounce } from 'lodash';
+import { Loading } from 'idea-react';
 import { observable } from 'mobx';
-import { ListModel, Stream } from 'mobx-restful';
-import { Component, ReactNode } from 'react';
+import { DataObject } from 'mobx-restful';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 
-import { Base, Filter } from '../models/Base';
+import { i18n } from '../models/Translation';
 
-export interface ScrollListProps<T extends Base = Base> {
-  value?: T[];
+export interface XScrollListProps<T extends DataObject = DataObject>
+  extends ScrollListProps<T> {
   selectedIds?: string[];
   onSelect?: (selectedIds: string[]) => any;
 }
 
-type DataType<P> = P extends ScrollListProps<infer D> ? D : never;
-
-export abstract class ScrollList<
-  P extends ScrollListProps,
-> extends Component<P> {
-  abstract store: ListModel<DataType<P>>;
-
-  filter: Filter<DataType<P>> = {};
+export abstract class XScrollList<
+  P extends XScrollListProps,
+> extends ScrollList<P> {
+  translater = i18n;
 
   @observable
   selectedIds: string[] = [];
@@ -28,50 +22,15 @@ export abstract class ScrollList<
   onSelect = (list: string[]) =>
     (this.selectedIds = list) && this.props.onSelect?.(list);
 
-  async boot() {
-    const BaseStream = Stream<Base>;
-
-    const store = this.store as unknown as InstanceType<
-        ReturnType<typeof BaseStream>
-      >,
-      { value } = this.props,
-      filter = this.filter as Filter<Base>;
-
-    store.clear();
-
-    if (value) await store.restoreList({ allItems: value, filter });
-
-    await store.getList(filter, store.pageList.length + 1);
-  }
-
-  componentWillUnmount() {
-    this.store.clear();
-  }
-
-  loadMore = debounce((edge: EdgePosition) => {
-    const { store } = this;
-
-    if (edge === 'bottom' && store.downloading < 1 && !store.noMore)
-      store.getList(this.filter);
-  });
-
-  abstract renderList(): ReactNode;
-
   render() {
-    const { downloading, uploading, noMore, allItems } = this.store;
+    const { downloading, uploading } = this.store;
 
     return (
-      <ScrollBoundary onTouch={this.loadMore}>
-        <div>
-          {(downloading > 0 || uploading > 0) && <Loading />}
+      <>
+        {(downloading > 0 || uploading > 0) && <Loading />}
 
-          {this.renderList()}
-
-          <footer className="mt-4 text-center text-muted small">
-            {noMore || !allItems.length ? t('no_more') : t('load_more')}
-          </footer>
-        </div>
-      </ScrollBoundary>
+        {super.render()}
+      </>
     );
   }
 }

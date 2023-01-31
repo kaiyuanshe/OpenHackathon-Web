@@ -6,13 +6,15 @@ import {
   XAxis,
   YAxis,
 } from 'echarts-jsx';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { PureComponent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { isEmpty } from 'web-utility';
 
 import { EnrollmentModel } from '../../models/Enrollment';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface EnrollmentStatisticChartsProps {
   store: EnrollmentModel;

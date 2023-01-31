@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react';
 
 import { Staff, StaffModel } from '../../models/Staff';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { HackathonAdminList } from './HackathonAdminList';
 
-export interface StaffListProps extends ScrollListProps<Staff> {
+export interface StaffListProps extends XScrollListProps<Staff> {
   store: StaffModel;
 }
 
 @observer
-export class StaffList extends ScrollList<StaffListProps> {
+export class StaffList extends XScrollList<StaffListProps> {
   store = this.props.store;
 
   constructor(props: StaffListProps) {
@@ -21,7 +21,7 @@ export class StaffList extends ScrollList<StaffListProps> {
   renderList() {
     return (
       <HackathonAdminList
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         selectedIds={this.selectedIds}
         onSelect={this.onSelect}
       />

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { NewData } from 'mobx-restful';
 import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
@@ -6,7 +5,10 @@ import { formToJSON } from 'web-utility';
 
 import activityStore from '../models/Activity';
 import { Team } from '../models/Team';
+import { i18n } from '../models/Translation';
 import { TeamEditor } from './TeamEditor';
+
+const { t } = i18n;
 
 export interface TeamCreateModalProps {
   hackathonName: string;

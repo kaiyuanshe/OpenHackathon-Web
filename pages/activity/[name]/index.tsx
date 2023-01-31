@@ -6,11 +6,11 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
-import { Loading, OpenMap } from 'idea-react';
+import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType } from 'next';
+import dynamic from 'next/dynamic';
 import { PureComponent } from 'react';
 import {
   Button,
@@ -31,37 +31,45 @@ import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamList } from '../../../components/Team/TeamList';
 import { TeamCreateModal } from '../../../components/TeamCreateModal';
-import activityStore, { Activity } from '../../../models/Activity';
+import activityStore, {
+  Activity,
+  ActivityModel,
+} from '../../../models/Activity';
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
+import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
+import { withErrorLog, withTranslation } from '../../api/core';
 
-export async function getServerSideProps({
-  params: { name = '' } = {},
-}: GetServerSidePropsContext<{ name?: string }>) {
-  try {
-    const activity = await activityStore.getOne(name);
-    const organizationList = await activityStore.organizationOf(name).getList();
+const { t } = i18n;
 
+const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
+  ssr: false,
+});
+
+export const getServerSideProps = withErrorLog<
+  { name?: string },
+  { activity: Activity; organizationList: Organization[] }
+>(
+  withTranslation(async ({ params: { name = '' } = {} }) => {
+    const activityStore = new ActivityModel();
+
+    const [activity, organizationList] = await Promise.all([
+      activityStore.getOne(name),
+      activityStore.organizationOf(name).getList(),
+    ]);
     return { props: { activity, organizationList } };
-  } catch (error) {
-    console.error(error);
+  }),
+);
 
-    return {
-      notFound: true,
-      props: {} as { activity: Activity; organizationList: Organization[] },
-    };
-  }
-}
-
-const StatusName: Record<Enrollment['status'], string> = {
-  approved: '已报名成功',
-  rejected: '已拒绝',
-  none: '未报名',
-  pendingApproval: '已报名，等待通过',
-};
+const StatusName: () => Record<Enrollment['status'], string> = () => ({
+  approved: t('sign_up_successfully'),
+  rejected: t('rejected'),
+  none: t('not_sign_up'),
+  pendingApproval: t('already_registered_waiting_for_approval'),
+});
 
 @observer
 export default class ActivityPage extends PureComponent<
@@ -194,7 +202,7 @@ export default class ActivityPage extends PureComponent<
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
               {t('registration_status')}
             </Col>
-            <Col>{StatusName[status || 'none']}</Col>
+            <Col>{StatusName()[status || 'none']}</Col>
           </Row>
         </ul>
         {isShowSignupBtn && (
@@ -217,7 +225,7 @@ export default class ActivityPage extends PureComponent<
             disabled={!github}
           >
             {t('cloud_development')}
-            {github ? '' : '（请用 GitHub 账号登录后使用）'}
+            {github ? '' : t('please_use_github_login')}
           </Button>
         )}
       </>
@@ -274,7 +282,7 @@ export default class ActivityPage extends PureComponent<
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
                 <MessageList store={myMessage} hideControls />
               </Tab>
-              <Tab eventKey="team" title={t('my_team')} className="pt-2">
+              <Tab eventKey="team" title={t('all_teams')} className="pt-2">
                 <h3>{t('my_team')}</h3>
                 {myTeam ? (
                   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
@@ -295,7 +303,7 @@ export default class ActivityPage extends PureComponent<
             {organizationList.length > 0 && (
               <>
                 <h2>{t('sponsor_information')}</h2>
-                <OrganizationListLayout value={organizationList} />
+                <OrganizationListLayout defaultData={organizationList} />
               </>
             )}
 
@@ -305,9 +313,9 @@ export default class ActivityPage extends PureComponent<
 
                 {!isServer() && (
                   <div style={{ minHeight: '10rem' }}>
-                    <OpenMap zoom={10} title={displayName} address={location}>
+                    <ChinaMap zoom={10} title={displayName} address={location}>
                       {t('no_address_navigation')}
-                    </OpenMap>
+                    </ChinaMap>
                   </div>
                 )}
               </>

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
@@ -9,11 +8,14 @@ import {
   ActivityModel,
 } from '../../models/Activity';
 import sessionStore from '../../models/Session';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { i18n } from '../../models/Translation';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
 
+const { t } = i18n;
+
 export interface ActivityListProps
-  extends ScrollListProps<Activity>,
+  extends XScrollListProps<Activity>,
     Pick<ActivityCardProps, 'onPublish' | 'onDelete'> {
   type?: ActivityListType;
   size?: 'sm' | 'lg';
@@ -23,7 +25,7 @@ export interface ActivityListProps
 export const ActivityListLayout = ({
   size,
   type = 'online',
-  value = [],
+  defaultData = [],
   userId,
   ...props
 }: ActivityListProps) => (
@@ -33,7 +35,7 @@ export const ActivityListLayout = ({
     sm={2}
     {...(size === 'sm' ? {} : !size ? { lg: 3, xxl: 4 } : { lg: 4, xxl: 6 })}
   >
-    {value.map(item => (
+    {defaultData.map(item => (
       <Col key={item.name + item.id}>
         <ActivityCard
           className="h-100"
@@ -51,7 +53,7 @@ export const ActivityListLayout = ({
 );
 
 @observer
-export default class ActivityList extends ScrollList<ActivityListProps> {
+export default class ActivityList extends XScrollList<ActivityListProps> {
   store = new ActivityModel();
 
   filter: ActivityFilter = {
@@ -82,10 +84,12 @@ export default class ActivityList extends ScrollList<ActivityListProps> {
   };
 
   renderList() {
+    const { allItems } = this.store;
+
     return (
       <ActivityListLayout
         {...this.props}
-        value={this.store.allItems}
+        defaultData={allItems}
         onPublish={this.onPublish}
         onDelete={this.onDelete}
       />

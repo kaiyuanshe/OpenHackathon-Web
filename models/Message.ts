@@ -1,16 +1,19 @@
 import { IDType, ListModel, NewData, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
+import { i18n } from '../models/Translation';
 import { Base, createListStream, Filter } from './Base';
 import sessionStore from './Session';
+
+const { t } = i18n;
 
 export enum MessageType {
   Hackathon = 'hackathon',
 }
 
-export const MessageTypeName = {
-  [MessageType.Hackathon]: '黑客松平台消息',
-};
+export const MessageTypeName = () => ({
+  [MessageType.Hackathon]: t('hackathon_message'),
+});
 
 export interface Message extends Base {
   title: string;

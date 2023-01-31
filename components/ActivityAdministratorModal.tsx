@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
@@ -6,8 +5,11 @@ import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { Staff, StaffModel } from '../models/Staff';
+import { i18n } from '../models/Translation';
 import userStore from '../models/User';
 import { UserList } from './User/UserList';
+
+const { t } = i18n;
 
 export interface AdministratorModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
@@ -7,8 +6,11 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore, { Activity } from '../models/Activity';
+import { i18n } from '../models/Translation';
 import { DateTimeInput } from './DateTimeInput';
 import { FileUpload } from './FileUpload';
+
+const { t } = i18n;
 
 const HTMLEditor = dynamic(() => import('../components/HTMLEditor'), {
   ssr: false,
@@ -97,13 +99,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
-            名称（必填）
+            {t('name')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="name"
               type="text"
-              placeholder="名称，仅限字母和数字"
+              placeholder={t('name_placeholder')}
               pattern="[a-zA-Z0-9]+"
               required
               defaultValue={name}

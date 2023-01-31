@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
@@ -9,11 +8,14 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTable } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
-import { withRoute } from '../../../../../api/core';
+import { i18n } from '../../../../../../models/Translation';
+import { withRoute, withTranslation } from '../../../../../api/core';
 
-export interface TeamParticipantPageProps extends TeamManageBaseRouterProps {}
+export const getServerSideProps = withRoute<TeamManageBaseRouterProps>(
+  withTranslation(),
+);
 
-export const getServerSideProps = withRoute<TeamParticipantPageProps>();
+const { t } = i18n;
 
 @observer
 export default class TeamParticipantPage extends PureComponent<

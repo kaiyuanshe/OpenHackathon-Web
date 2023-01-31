@@ -1,6 +1,9 @@
-import { t } from 'i18next';
 import { FormEventHandler } from 'react';
 import { Button, Col, Form, Modal, ModalProps } from 'react-bootstrap';
+
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface JoinTeamModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

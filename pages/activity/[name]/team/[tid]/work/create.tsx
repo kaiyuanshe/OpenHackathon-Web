@@ -1,11 +1,15 @@
-import { t } from 'i18next';
 import type { InferGetServerSidePropsType } from 'next';
 
 import PageHead from '../../../../../../components/PageHead';
 import { WorkEdit } from '../../../../../../components/work/WorkEdit';
-import { withRoute } from '../../../../../api/core';
+import { i18n } from '../../../../../../models/Translation';
+import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>();
+export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>(
+  withTranslation(),
+);
+
+const { t } = i18n;
 
 export default function WorkCreatePage({
   route: { params },

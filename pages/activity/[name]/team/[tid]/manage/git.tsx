@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -13,17 +12,19 @@ import {
 } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
-import {
-  GitList,
-  GitListProps,
-} from '../../../../../../components/Activity/GitList';
+import { GitList, GitListProps } from '../../../../../../components/Git';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
-import { withRoute } from '../../../../../api/core';
+import { i18n } from '../../../../../../models/Translation';
+import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string; tid: string }>();
+export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>(
+  withTranslation(),
+);
+
+const { t } = i18n;
 
 @observer
 export default class GitPage extends PureComponent<

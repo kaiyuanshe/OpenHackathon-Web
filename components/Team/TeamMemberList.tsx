@@ -3,18 +3,18 @@ import { Image } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
 import { TeamMember } from '../../models/Team';
-import { ScrollList, ScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../ScrollList';
 
-export interface TeamMemberListProps extends ScrollListProps<TeamMember> {
+export interface TeamMemberListProps extends XScrollListProps<TeamMember> {
   activity: string;
   team: string;
 }
 
 export const TeamMemberListLayout = ({
-  value = [],
-}: Pick<TeamMemberListProps, 'value'>) => (
+  defaultData = [],
+}: Pick<TeamMemberListProps, 'defaultData'>) => (
   <ul className="list-unstyled">
-    {value.map(({ userId, user: { photo, nickname } }) => (
+    {defaultData.map(({ userId, user: { photo, nickname } }) => (
       <li key={userId} className="my-3">
         <Image
           src={photo}
@@ -30,7 +30,7 @@ export const TeamMemberListLayout = ({
 );
 
 @observer
-export class TeamMemberList extends ScrollList<TeamMemberListProps> {
+export class TeamMemberList extends XScrollList<TeamMemberListProps> {
   store = activityStore.teamOf(this.props.activity).memberOf(this.props.team);
 
   constructor(props: TeamMemberListProps) {
@@ -40,6 +40,6 @@ export class TeamMemberList extends ScrollList<TeamMemberListProps> {
   }
 
   renderList() {
-    return <TeamMemberListLayout value={this.store.allItems} />;
+    return <TeamMemberListLayout defaultData={this.store.allItems} />;
   }
 }

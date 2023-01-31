@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react';
 import Link from 'next/link';
 import { Button, Dropdown } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 
 import sessionStore from '../../models/Session';
+import { i18n } from '../../models/Translation';
 import LanguageMenu from './LanguageMenu';
 import { SessionBox } from './SessionBox';
 
 const UserBar = observer(() => {
-  const { t } = useTranslation();
-
+  const { t } = i18n;
   const { user } = sessionStore;
+
   const showName = user ? user.nickname || user.email || user.phone : '';
 
   return (
@@ -22,11 +22,9 @@ const UserBar = observer(() => {
       ) : (
         <>
           <Link href="/activity/create" passHref>
-            <Button variant="success" className="my-2 my-md-0 me-3">
-              {t('create_hackathons')}
-            </Button>
+            <Button variant="success">{t('create_hackathons')}</Button>
           </Link>
-          <Dropdown className="my-2 my-md-0 me-3">
+          <Dropdown>
             <Dropdown.Toggle>{showName}</Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item href={`/user/${user.id}`}>

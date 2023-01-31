@@ -1,14 +1,19 @@
 import { Day, Hour, Minute, Month, Second, Week, Year } from 'web-utility';
 
-export const TimeUnit = new Map([
-  ['秒', Second],
-  ['分', Minute],
-  ['时', Hour],
-  ['天', Day],
-  ['周', Week],
-  ['月', Month],
-  ['年', Year],
-]);
+import { i18n } from '../models/Translation';
+
+const { t } = i18n;
+
+export const TimeUnit = () =>
+  new Map([
+    [t('Second'), Second],
+    [t('Minute'), Minute],
+    [t('Hour'), Hour],
+    [t('Day'), Day],
+    [t('Week'), Week],
+    [t('Month'), Month],
+    [t('Year'), Year],
+  ]);
 
 export const convertDatetime = (datetime = '') =>
   datetime && new Date(datetime).toLocaleString();

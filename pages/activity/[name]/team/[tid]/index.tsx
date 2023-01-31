@@ -1,11 +1,7 @@
-import { t } from 'i18next';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from 'next';
+import type { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -16,7 +12,10 @@ import PageHead from '../../../../../components/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
-import activityStore, { Activity } from '../../../../../models/Activity';
+import activityStore, {
+  Activity,
+  ActivityModel,
+} from '../../../../../models/Activity';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import sessionStore from '../../../../../models/Session';
 import {
@@ -25,6 +24,10 @@ import {
   TeamMember,
   TeamWork,
 } from '../../../../../models/Team';
+import { i18n } from '../../../../../models/Translation';
+import { withErrorLog, withTranslation } from '../../../../api/core';
+
+const { t } = i18n;
 
 interface TeamPageProps {
   activity: Activity;
@@ -33,32 +36,25 @@ interface TeamPageProps {
   teamWorkList: TeamWork[];
 }
 
-export async function getServerSideProps({
-  params: { name = '', tid = '' } = {},
-}: GetServerSidePropsContext<{ name?: string; tid?: string }>) {
-  try {
-    const activity = await activityStore.getOne(name);
+export const getServerSideProps = withErrorLog<
+  Partial<Record<'name' | 'tid', string>>,
+  TeamPageProps
+>(
+  withTranslation(async ({ params: { name = '', tid = '' } = {} }) => {
+    const activityStore = new ActivityModel();
+    const { currentTeam } = activityStore;
 
-    const team = await activityStore.currentTeam!.getOne(tid);
+    const activity = await activityStore.getOne(name),
+      team = await currentTeam!.getOne(tid);
 
-    const teamMemberList =
-      await activityStore.currentTeam!.currentMember!.getList();
-
-    const teamWorkList =
-      await activityStore.currentTeam!.currentWork!.getList();
+    const teamMemberList = await currentTeam!.currentMember!.getList(),
+      teamWorkList = await currentTeam!.currentWork!.getList();
 
     return {
       props: { activity, team, teamMemberList, teamWorkList },
     };
-  } catch (error) {
-    console.error(error);
-
-    return {
-      notFound: true,
-      props: {} as TeamPageProps,
-    };
-  }
-}
+  }),
+);
 
 @observer
 export default class TeamPage extends PureComponent<
@@ -233,7 +229,7 @@ export default class TeamPage extends PureComponent<
                 <TeamMemberList
                   activity={hackathonName}
                   team={id}
-                  value={teamMemberList}
+                  defaultData={teamMemberList}
                 />
               </Card.Body>
             </Card>
@@ -247,7 +243,7 @@ export default class TeamPage extends PureComponent<
                 <TeamWorkList
                   activity={hackathonName}
                   team={id}
-                  value={teamWorkList}
+                  defaultData={teamWorkList}
                   controls={!!currentUserInThisTeam}
                 />
               </Tab>

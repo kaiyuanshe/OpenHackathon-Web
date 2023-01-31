@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
@@ -9,6 +8,9 @@ import {
   OrganizationModel,
   OrganizationTypeName,
 } from '../../models/Organization';
+import { i18n } from '../../models/Translation';
+
+const { t } = i18n;
 
 export interface OrganizationModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
@@ -41,11 +43,8 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
       name,
       description,
       type,
-      logo: {
-        name,
-        description: description!,
-        uri: logoURI,
-      },
+      // @ts-ignore
+      logo: { name, description, uri: logoURI },
       url: url,
     });
     onSave?.();

@@ -1,14 +1,16 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { t } from 'i18next';
 import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
 import { Award, AwardModel } from '../models/Award';
+import { i18n } from '../models/Translation';
 import styles from '../styles/Table.module.less';
-import { ScrollList, ScrollListProps } from './ScrollList';
+import { XScrollList, XScrollListProps } from './ScrollList';
 
-export interface AwardListProps extends ScrollListProps<Award> {
+const { t } = i18n;
+
+export interface AwardListProps extends XScrollListProps<Award> {
   store: AwardModel;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
@@ -29,7 +31,7 @@ const awardTableHead = [
 ];
 
 export const AwardListLayout = ({
-  value = [],
+  defaultData = [],
   onEdit,
   onDelete,
 }: Omit<AwardListProps, 'store'>) => (
@@ -42,35 +44,44 @@ export const AwardListLayout = ({
       </tr>
     </thead>
     <tbody>
-      {value.map(({ quantity, target, pictures, name, description, id }) => (
-        <tr key={id}>
-          <td>{quantity}</td>
-          <td>{AwardTargetName[target]}</td>
-          <td>
-            {pictures! && (
-              <Image src={pictures?.[0].uri} alt={pictures?.[0].description} />
-            )}
-          </td>
-          <td>
-            <Button variant="link" onClick={() => onEdit?.(id!)}>
-              {name}
-            </Button>
-          </td>
-          <td>{description}</td>
-          <td>
-            <Button variant="danger" size="sm" onClick={() => onDelete?.(id!)}>
-              <FontAwesomeIcon icon={faTrash} className="me-2" />
-              {t('delete')}
-            </Button>
-          </td>
-        </tr>
-      ))}
+      {defaultData.map(
+        ({ quantity, target, pictures, name, description, id }) => (
+          <tr key={id}>
+            <td>{quantity}</td>
+            <td>{AwardTargetName[target]}</td>
+            <td>
+              {pictures! && (
+                <Image
+                  src={pictures?.[0].uri}
+                  alt={pictures?.[0].description}
+                />
+              )}
+            </td>
+            <td>
+              <Button variant="link" onClick={() => onEdit?.(id!)}>
+                {name}
+              </Button>
+            </td>
+            <td>{description}</td>
+            <td>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => onDelete?.(id!)}
+              >
+                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                {t('delete')}
+              </Button>
+            </td>
+          </tr>
+        ),
+      )}
     </tbody>
   </Table>
 );
 
 @observer
-export class AwardList extends ScrollList<AwardListProps> {
+export class AwardList extends XScrollList<AwardListProps> {
   store = this.props.store;
 
   constructor(props: AwardListProps) {
@@ -85,6 +96,8 @@ export class AwardList extends ScrollList<AwardListProps> {
   };
 
   onDelete = (id: string) => {
+    const { t } = i18n;
+
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);
@@ -94,7 +107,7 @@ export class AwardList extends ScrollList<AwardListProps> {
   renderList() {
     return (
       <AwardListLayout
-        value={this.store.allItems}
+        defaultData={this.store.allItems}
         onEdit={this.onEdit}
         onDelete={this.onDelete}
       />

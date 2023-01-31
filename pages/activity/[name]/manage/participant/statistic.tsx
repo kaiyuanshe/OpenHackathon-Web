@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
@@ -8,7 +7,10 @@ import { Button } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../../models/Activity';
+import { i18n } from '../../../../../models/Translation';
 import { withRoute } from '../../../../api/core';
+
+const { t } = i18n;
 
 const EnrollmentStatisticCharts = dynamic(
   () => import('../../../../../components/Activity/EnrollmentStatistic'),
