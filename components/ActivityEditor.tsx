@@ -99,13 +99,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
-            名称（必填）
+            {t('name')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="name"
               type="text"
-              placeholder="名称，仅限字母和数字"
+              placeholder={t('name_placeholder')}
               pattern="[a-zA-Z0-9]+"
               required
               defaultValue={name}

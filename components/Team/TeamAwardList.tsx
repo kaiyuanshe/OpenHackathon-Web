@@ -2,8 +2,11 @@ import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
+import { i18n } from '../../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';
+
+const { t } = i18n;
 
 export interface TeamAwardListProps extends XScrollListProps<Team> {
   store: TeamModel;
@@ -44,7 +47,7 @@ export class TeamAwardList extends XScrollList<TeamAwardListProps> {
   };
 
   onDelete = (id: string) => {
-    if (!confirm('确定删除该奖项？')) return;
+    if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);
     this.store.deleteOne(id);

@@ -87,12 +87,6 @@ export const activityTeamMenus: () => MenuItem[] = () => [
   {
     title: t('team_manage'),
     list: [
-      // {
-      //   title: '编辑信息',
-      //   href: 'edit',
-      //   icon: 'trophy',
-      //   roles: ['admin']
-      // },
       {
         title: t('team_registration'),
         href: 'participant',

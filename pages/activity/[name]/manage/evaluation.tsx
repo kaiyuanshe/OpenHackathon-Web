@@ -9,7 +9,10 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
 import { Award, AwardAssignment } from '../../../../models/Award';
+import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
+
+const { t } = i18n;
 
 interface EvaluationPageProps {
   activity: string;
@@ -72,7 +75,9 @@ class EvaluationPage extends PureComponent<
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >
-        <h2>{awardTeamId ? `授予 ${awardTeamName}` : '全部奖项'}</h2>
+        <h2>
+          {awardTeamId ? `${t('grant')} ${awardTeamName}` : t('all_prize')}
+        </h2>
         <ul className="list-unstyled">
           {allItems.map(
             ({ id, name, quantity, target }) =>
@@ -97,10 +102,10 @@ class EvaluationPage extends PureComponent<
         {awardTeamId && (
           <div className="d-flex justify-content-around my-4">
             <Button type="submit" variant="primary">
-              确认
+              {t('confirm')}
             </Button>
             <Button type="reset" variant="danger">
-              取消
+              {t('cancel')}
             </Button>
           </div>
         )}
@@ -115,7 +120,7 @@ class EvaluationPage extends PureComponent<
       <ActivityManageFrame
         path={resolvedUrl}
         name={params!.name}
-        title={`${params!.name}活动管理 作品评奖`}
+        title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
       >
         <Row xs={1} md={2}>
           <Col md={8} className="ms-2 p-2">
@@ -127,9 +132,9 @@ class EvaluationPage extends PureComponent<
                   name="teamSearch"
                   required
                   aria-label="search team"
-                  placeholder="团队名称"
+                  placeholder={t('team_name')}
                 />
-                <Button type="submit">搜索</Button>
+                <Button type="submit">{t('search')}</Button>
               </InputGroup>
             </Form>
             <div className="my-3">

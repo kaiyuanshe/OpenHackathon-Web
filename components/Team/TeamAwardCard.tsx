@@ -4,9 +4,12 @@ import classNames from 'classnames';
 import { Accordion, Button, Image } from 'react-bootstrap';
 
 import { Team } from '../../models/Team';
+import { i18n } from '../../models/Translation';
 import { TeamAwardAssignmentList } from './TeamAwardAssignment';
 import { TeamMemberList } from './TeamMemberList';
 import { TeamWorkLi } from './TeamWork';
+
+const { t } = i18n;
 
 export interface TeamAwardCardProps
   extends Pick<
@@ -42,7 +45,7 @@ export const TeamAwardCard = ({
       {displayName}
     </a>
     <a className="d-flex my-3" href={`/user/${creatorId}`}>
-      <span className="pe-2">队长：</span>
+      <span className="pe-2">{t('team_leader')}</span>
 
       <span className="text-primary">
         <Image
@@ -57,24 +60,26 @@ export const TeamAwardCard = ({
     <Accordion className="my-3" flush>
       <Accordion.Item eventKey="member">
         <Accordion.Header>
-          队员共<span className="text-success mx-2">{membersCount}</span>人
+          {t('member')}&nbsp;{t('a_total_of')}
+          <span className="text-success mx-2">{membersCount}</span>
+          {t('people')}
         </Accordion.Header>
         <Accordion.Body>
           <TeamMemberList team={id} activity={hackathonName} />
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="rating">
-        <Accordion.Header>成绩</Accordion.Header>
+        <Accordion.Header>{t('score')}</Accordion.Header>
         <Accordion.Body></Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="work">
-        <Accordion.Header>作品列表</Accordion.Header>
+        <Accordion.Header>{t('work_list')}</Accordion.Header>
         <Accordion.Body>
           <TeamWorkLi team={id} activity={hackathonName} size="sm" />
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="award">
-        <Accordion.Header>奖项列表</Accordion.Header>
+        <Accordion.Header>{t('prize_list')}</Accordion.Header>
         <Accordion.Body>
           <TeamAwardAssignmentList team={id} activity={hackathonName} />
         </Accordion.Body>
@@ -87,7 +92,7 @@ export const TeamAwardCard = ({
       onClick={() => onAssign(id!)}
     >
       <FontAwesomeIcon icon={faAward} className="text-light me-2" />
-      奖项分配
+      {t('prize_distribution')}
     </Button>
   </div>
 );

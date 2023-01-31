@@ -35,7 +35,7 @@ export const getActivityStatusText = ({
     eventEnd = new Date(eventEndedAt),
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt),
-    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit);
+    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit());
 
   return !isOnline
     ? t('pending_review')

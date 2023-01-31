@@ -49,7 +49,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
     return (
       <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-          <Modal.Title>发布公告</Modal.Title>
+          <Modal.Title>{t('publish_announcement')}</Modal.Title>
         </Modal.Header>
         <Modal.Body
           as="form"
@@ -68,7 +68,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
             <Form.Select name="type">
-              {Object.entries(MessageTypeName).map(([key, value]) => (
+              {Object.entries(MessageTypeName()).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>

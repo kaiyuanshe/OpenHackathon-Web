@@ -89,7 +89,7 @@ export const MessageListLayout = ({
           </td>
           <td>{title}</td>
           <td>{content}</td>
-          <td>{MessageTypeName[MessageType.Hackathon]}</td>
+          <td>{MessageTypeName()[MessageType.Hackathon]}</td>
           <td hidden={hideControls}>
             <Button
               className="me-2"
