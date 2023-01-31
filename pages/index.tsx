@@ -84,7 +84,7 @@ const HomePage = ({
     </div>
 
     <Container className="text-center">
-      {Object.entries(partner).map(([type, list]) => (
+      {Object.entries(partner()).map(([type, list]) => (
         <Fragment key={type}>
           <h3 className="my-5">
             {OrganizationTypeName()[+type as OrganizationType]}
