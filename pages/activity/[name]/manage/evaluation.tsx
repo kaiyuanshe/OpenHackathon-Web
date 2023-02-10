@@ -14,12 +14,6 @@ import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
 
-interface EvaluationPageProps {
-  activity: string;
-  path: string;
-  awardList: Award[];
-}
-
 export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer

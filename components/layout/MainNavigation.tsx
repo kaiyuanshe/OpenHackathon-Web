@@ -22,29 +22,28 @@ export const MainNavigation = () => (
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="navbar-inner" />
 
-      <Navbar.Collapse
-        id="navbar-inner"
-        className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3"
-      >
-        <Nav className="me-auto">
-          <Link href="/activity/" passHref>
-            <Nav.Link>{t('all_activity')}</Nav.Link>
-          </Link>
-          <Nav.Link
-            target="_blank"
-            href="https://kaiyuanshe.feishu.cn/wiki/wikcnR3wHyfVDrYW2TteaUzAnlh"
-          >
-            {t('get_started')}
-          </Nav.Link>
-          <Nav.Link
-            target="_blank"
-            href="https://github.com/kaiyuanshe/OpenHackathon-Web"
-          >
-            {t('open_source_code')}
-          </Nav.Link>
-        </Nav>
+      <Navbar.Collapse id="navbar-inner">
+        <div className="w-100 d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3">
+          <Nav className="me-auto">
+            <Link href="/activity/" passHref>
+              <Nav.Link>{t('all_activity')}</Nav.Link>
+            </Link>
+            <Nav.Link
+              target="_blank"
+              href="https://kaiyuanshe.feishu.cn/wiki/wikcnR3wHyfVDrYW2TteaUzAnlh"
+            >
+              {t('get_started')}
+            </Nav.Link>
+            <Nav.Link
+              target="_blank"
+              href="https://github.com/kaiyuanshe/OpenHackathon-Web"
+            >
+              {t('open_source_code')}
+            </Nav.Link>
+          </Nav>
 
-        <UserBar />
+          <UserBar />
+        </div>
       </Navbar.Collapse>
     </Container>
   </Navbar>

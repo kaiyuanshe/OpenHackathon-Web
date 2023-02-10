@@ -56,11 +56,11 @@ class AwardPage extends PureComponent<
         onSubmit={this.handleSubmit}
       >
         <Form.Group as={Row} className="p-2">
-          <Form.Label column sm="2">
+          <Form.Label column sm="3">
             {t('name')}
           </Form.Label>
 
-          <Col sm="10">
+          <Col sm="9">
             <Form.Control
               name="name"
               maxLength={64}
@@ -70,10 +70,10 @@ class AwardPage extends PureComponent<
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="p-2">
-          <Form.Label column sm="2">
+          <Form.Label column sm="3">
             {t('introduction')}
           </Form.Label>
-          <Col sm="10">
+          <Col sm="9">
             <Form.Control
               name="description"
               aria-label={t('introduction')}
@@ -84,10 +84,10 @@ class AwardPage extends PureComponent<
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="p-2">
-          <Form.Label column sm="2">
+          <Form.Label column sm="3">
             {t('quantity')}
           </Form.Label>
-          <Col sm="10">
+          <Col sm="9">
             <Form.Control
               type="number"
               name="quantity"
@@ -98,10 +98,10 @@ class AwardPage extends PureComponent<
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="p-2">
-          <Form.Label column sm="2">
+          <Form.Label column sm="3">
             {t('type')}
           </Form.Label>
-          <Col sm="10">
+          <Col sm="9">
             <Form.Select name="target">
               {Object.entries(AwardTargetName).map(([value, name]) => (
                 <option
