@@ -1,8 +1,8 @@
-import { IDType, ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { i18n } from '../models/Translation';
-import { Base, createListStream, Filter } from './Base';
+import { Base, createListStream, Filter, InputData } from './Base';
 import sessionStore from './Session';
 
 const { t } = i18n;
@@ -39,7 +39,7 @@ export class MessageModel extends Stream<Message, MessageFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<Message>, id?: IDType) {
+  async updateOne(data: InputData<Message>, id?: IDType) {
     const { body } = await (id
       ? this.client.patch<Message>(`${this.baseURI}/${id}`, data)
       : this.client.put<Message>(this.baseURI, data));

@@ -1,9 +1,9 @@
 import { computed } from 'mobx';
-import { IDType, ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy } from 'web-utility';
 
 import { i18n } from '../models/Translation';
-import { Base, createListStream, Media } from './Base';
+import { Base, createListStream, InputData, Media } from './Base';
 import sessionStore from './Session';
 
 const { t } = i18n;
@@ -58,7 +58,7 @@ export class OrganizationModel extends Stream<Organization>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<Organization>, id?: IDType) {
+  async updateOne(data: InputData<Organization>, id?: IDType) {
     const { body } = await (id
       ? this.client.patch<Organization>(`${this.baseURI}/${id}`, data)
       : this.client.put<Organization>(this.baseURI, data));

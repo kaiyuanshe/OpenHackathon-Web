@@ -1,7 +1,7 @@
 import { User } from '@authing/native-js-ui-components';
-import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream, Media } from './Base';
+import { Base, createListStream, InputData, Media } from './Base';
 import sessionStore from './Session';
 import { Team } from './Team';
 
@@ -46,7 +46,7 @@ export class AwardModel extends Stream<Award>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<Award>, id?: string) {
+  async updateOne(data: InputData<Award>, id?: string) {
     const { body } = await (id
       ? this.client.patch<Award>(`${this.baseURI}/${id}`, data)
       : this.client.put<Award>(this.baseURI, data));
@@ -72,7 +72,7 @@ export class AwardAssignmentModel extends Stream<AwardAssignment>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<AwardAssignment>, id?: string) {
+  async updateOne(data: InputData<AwardAssignment>, id?: string) {
     const { body } = await (id
       ? this.client.patch<AwardAssignment>(`${this.baseURI}/${id}`, data)
       : this.client.put<AwardAssignment>(this.baseURI, data));

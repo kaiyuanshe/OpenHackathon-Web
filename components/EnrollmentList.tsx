@@ -34,36 +34,54 @@ export const EnrollmentListLayout = ({
       </tr>
     </thead>
     <tbody>
-      {defaultData.map(({ user, status, extensions, createdAt }, index) => (
-        <tr key={user.id}>
-          <td>{index + 1}</td>
-          <td>
-            <Button variant="link" onClick={() => onPopUp?.(extensions)}>
-              {user.nickname || user.phone}
-            </Button>
-          </td>
-          <td>{user.email}</td>
-          <td>{user.registerSource[0].split(':')[1]}</td>
-          <td>{user.phone}</td>
-          <td>{user.address}</td>
-          <td>{createdAt.split('T')[0]}</td>
-          <td>
-            <Form.Control
-              as="select"
-              className={styles.form}
-              onChange={({ currentTarget: { value } }) =>
-                onVerify?.(user.id!, value as Enrollment['status'])
-              }
-            >
-              {Object.entries(statusName).map(([key, value]) => (
-                <option key={key} value={key} selected={key === status}>
-                  {value}
-                </option>
-              ))}
-            </Form.Control>
-          </td>
-        </tr>
-      ))}
+      {defaultData.map(
+        (
+          {
+            user: {
+              id,
+              address,
+              email,
+              nickname,
+              phone,
+              username,
+              registerSource,
+            },
+            status,
+            extensions,
+            createdAt,
+          },
+          index,
+        ) => (
+          <tr key={id}>
+            <td>{index + 1}</td>
+            <td>
+              <Button variant="link" onClick={() => onPopUp?.(extensions)}>
+                {nickname || username || email || phone}
+              </Button>
+            </td>
+            <td>{email}</td>
+            <td>{registerSource[0].split(':')[1]}</td>
+            <td>{phone}</td>
+            <td>{address}</td>
+            <td>{createdAt.split('T')[0]}</td>
+            <td>
+              <Form.Control
+                as="select"
+                className={styles.form}
+                onChange={({ currentTarget: { value } }) =>
+                  onVerify?.(id!, value as Enrollment['status'])
+                }
+              >
+                {Object.entries(statusName).map(([key, value]) => (
+                  <option key={key} value={key} selected={key === status}>
+                    {value}
+                  </option>
+                ))}
+              </Form.Control>
+            </td>
+          </tr>
+        ),
+      )}
     </tbody>
   </Table>
 );

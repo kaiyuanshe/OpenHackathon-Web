@@ -1,9 +1,9 @@
 import { action, observable } from 'mobx';
-import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { AwardModel } from './Award';
-import { Base, createListStream, Filter, Media } from './Base';
+import { Base, createListStream, Filter, InputData, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { GitModel } from './Git';
 import { LogModel } from './Log';
@@ -125,7 +125,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<Activity>, name?: string) {
+  async updateOne(data: InputData<Activity>, name?: string) {
     if (!name) {
       const { body } = await this.client.post<NameAvailability>(
         `${this.baseURI}/checkNameAvailability`,

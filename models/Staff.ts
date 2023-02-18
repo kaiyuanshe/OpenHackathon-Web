@@ -1,8 +1,8 @@
 import { computed } from 'mobx';
-import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
 
-import { createListStream } from './Base';
+import { createListStream, InputData } from './Base';
 import { HackathonAdmin } from './HackathonAdmin';
 import sessionStore from './Session';
 
@@ -54,7 +54,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne({ type, ...data }: NewData<Staff>, userId: string) {
+  async updateOne({ type, ...data }: InputData<Staff>, userId: string) {
     const { body } = await this.client.put<Staff>(
       `${this.baseURI}/${type}/${userId}`,
       data,

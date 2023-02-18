@@ -14,13 +14,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
+import { observable, reaction } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { adminMenus } from '../../configuration/menu';
 import platformAdminStore from '../../models/PlatformAdmin';
+import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../MainBreadcrumb';
@@ -53,10 +54,19 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
   @observable
   loading = false;
 
+  sessionDisposer = reaction(
+    () => sessionStore.user,
+    user => user && this.componentDidMount(),
+  );
+
   async componentDidMount() {
     this.loading = true;
     await platformAdminStore.getIsPlatformAdmin();
     this.loading = false;
+  }
+
+  componentWillUnmount() {
+    this.sessionDisposer();
   }
 
   get currentRoute() {

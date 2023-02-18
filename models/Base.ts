@@ -1,5 +1,5 @@
 import { HTTPError } from 'koajax';
-import { NewData, RESTClient } from 'mobx-restful';
+import { Filter as BaseFilter, RESTClient } from 'mobx-restful';
 
 export interface Base {
   id?: string;
@@ -23,7 +23,9 @@ export interface ErrorData extends ErrorBaseData {
   errors: Record<string, string[]>;
 }
 
-export type Filter<T extends Base = Base> = NewData<T> & {
+export type InputData<T extends Base = Base> = BaseFilter<T>;
+
+export type Filter<T extends Base = Base> = InputData<T> & {
   top?: number;
 };
 

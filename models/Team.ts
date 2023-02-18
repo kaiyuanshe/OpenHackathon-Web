@@ -1,10 +1,16 @@
 import { action, computed, observable } from 'mobx';
-import { ListModel, NewData, Stream, toggle } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { NameAvailability } from './Activity';
 import { AwardAssignment } from './Award';
-import { Base, createListStream, Filter, integrateError } from './Base';
+import {
+  Base,
+  createListStream,
+  Filter,
+  InputData,
+  integrateError,
+} from './Base';
 import { WorkspaceModel } from './Git';
 import sessionStore from './Session';
 import { User } from './User';
@@ -133,7 +139,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<Team>, id?: string) {
+  async updateOne(data: InputData<Team>, id?: string) {
     if (!id) {
       try {
         var { body: checkNameAvailabilityBody } =
@@ -230,7 +236,7 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: NewData<TeamWork>, id?: string) {
+  async updateOne(data: InputData<TeamWork>, id?: string) {
     const { body } = await (id
       ? this.client.patch<TeamWork>(`${this.baseURI}/${id}`, data)
       : this.client.put<TeamWork>(this.baseURI, data));

@@ -14,7 +14,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { computed } from 'mobx';
+import { computed, reaction } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
@@ -52,10 +52,19 @@ export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
 
 @observer
 export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
+  sessionDisposer = reaction(
+    () => sessionStore.user,
+    user => user && this.componentDidMount(),
+  );
+
   async componentDidMount() {
     await activityStore.getOne(this.props.name);
 
     if (!activityStore.currentOne.roles) sessionStore.signOut();
+  }
+
+  componentWillUnmount() {
+    this.sessionDisposer();
   }
 
   get currentRoute() {
