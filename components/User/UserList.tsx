@@ -56,10 +56,11 @@ export const UserListLayout = ({
             <th>{t('user_name')}</th>
             <th>{t('nick_name')}</th>
             <th>{t('mail')}</th>
+            <th>{t('phone_number')}</th>
           </tr>
         </thead>
         <tbody>
-          {defaultData.map(({ username, nickname, email, id }) => (
+          {defaultData.map(({ username, nickname, email, phone, id }) => (
             <tr key={id}>
               <td>
                 <Form.Check
@@ -78,6 +79,7 @@ export const UserListLayout = ({
               <td>{username}</td>
               <td>{nickname}</td>
               <td>{email}</td>
+              <td>{phone}</td>
             </tr>
           ))}
         </tbody>

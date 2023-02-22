@@ -12,6 +12,7 @@ const TableHeads = [
   t('all'),
   t('name'),
   t('mail'),
+  t('phone_number'),
   t('role_type'),
   t('status'),
   t('role_source'),
@@ -66,6 +67,7 @@ export const HackathonAdminList = ({
           userId,
           user: {
             email,
+            phone,
             nickname,
             lastLogin,
             registerSource: [source],
@@ -77,6 +79,7 @@ export const HackathonAdminList = ({
               userId,
               nickname,
               email,
+              phone,
               description ? t('referee') : t('admin'),
               createdAt ? t('approve') : t('status_pending'),
               source.split(':')[1],
