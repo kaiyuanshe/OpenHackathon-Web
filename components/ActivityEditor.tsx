@@ -99,7 +99,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
-            {t('name')}
+            {t('activity_id')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
@@ -116,14 +116,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="displayName">
           <Form.Label column sm={2}>
-            {t('disaplay_name')}
+            {t('activity_name')}
             {t('quote_required')}
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="displayName"
               type="text"
-              placeholder={t('disaplay_name')}
+              placeholder={t('activity_name')}
               required
               defaultValue={displayName}
             />
