@@ -70,7 +70,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
       { teamMemberRole } = this;
 
     return (
-      <Nav className="flex-column px-2 border-end" variant="pills">
+      <Nav className="flex-column px-2 border-end flex-nowrap" variant="pills">
         {activityTeamMenus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>

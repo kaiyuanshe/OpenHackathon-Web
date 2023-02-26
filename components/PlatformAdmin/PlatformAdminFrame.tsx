@@ -81,7 +81,10 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
   renderNav() {
     return (
-      <Nav className="h-100 flex-column px-2 border-end" variant="pills">
+      <Nav
+        className="h-100 flex-column px-2 border-end flex-nowrap"
+        variant="pills"
+      >
         {adminMenus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-none d-lg-inline" disabled>
