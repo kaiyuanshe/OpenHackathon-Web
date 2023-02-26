@@ -68,12 +68,15 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
   }
 
   get currentRoute() {
-    const { path = '' } = this.props;
-
-    return findDeep(
+    const { path = '', name } = this.props;
+    const breadcrumbRoute = findDeep(
       menus(),
       'list',
       ({ href }) => !!href && path.endsWith(href),
+    );
+
+    return breadcrumbRoute.map(v =>
+      v.href ? { ...v, href: `/activity/${name}/manage/${v.href}` } : v,
     );
   }
 
@@ -93,7 +96,10 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
       { roles: role } = activityStore.currentOne;
 
     return (
-      <Nav className="h-100 flex-column px-2 border-end" variant="pills">
+      <Nav
+        className="h-100 flex-column px-2 border-end flex-nowrap"
+        variant="pills"
+      >
         {menus().map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
