@@ -1,4 +1,6 @@
 import { Loading } from 'idea-react';
+import { observable } from 'mobx';
+import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
 import { FormEvent, PureComponent } from 'react';
@@ -27,7 +29,11 @@ export interface ActivityEditorProps {
 
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
+  @observable
   detailHTML = '';
+
+  @observable
+  validated = false;
 
   async componentDidMount() {
     const { name } = this.props;
@@ -40,15 +46,17 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   }
 
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+      return (this.validated = true);
+    }
 
     const { name } = this.props,
-      { detailHTML } = this;
-
-    if (!detailHTML.trim()) return;
-
-    const data = formToJSON<ActivityFormData>(event.currentTarget);
+      { detailHTML } = this,
+      data = formToJSON<ActivityFormData>(form);
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
@@ -94,7 +102,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     const loading = downloading > 0 || uploading > 0;
 
     return (
-      <Form className="container-fluid" onSubmit={this.submitHandler}>
+      <Form
+        noValidate
+        className="container-fluid"
+        validated={this.validated}
+        onSubmit={this.submitHandler}
+      >
         {loading && <Loading />}
 
         <Form.Group as={Row} className="mb-3" controlId="name">
@@ -111,6 +124,9 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               defaultValue={name}
               readOnly={!!name}
             />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('activity_id'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -127,6 +143,9 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               required
               defaultValue={displayName}
             />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('activity_name'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -139,8 +158,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               name="tagsString"
               type="text"
               placeholder={t('tag_placeholder')}
+              required
               defaultValue={tags.join(' ')}
             />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('tag'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -169,8 +192,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               name="location"
               type="text"
               placeholder={t('activity_address')}
+              required
               defaultValue={location}
             />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('activity_address'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -238,6 +265,9 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               defaultValue={summary}
               required
             />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('activity_introduction'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -250,6 +280,16 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               defaultValue={detail}
               onChange={code => (this.detailHTML = code)}
             />
+            <Form.Control
+              className="d-none"
+              name="detail"
+              isInvalid={!this.detailHTML.trim() && this.validated}
+              type="text"
+              defaultValue={detail}
+            />
+            <Form.Control.Feedback type="invalid">
+              {textJoin(t('please_enter'), t('activity_detail'))}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
