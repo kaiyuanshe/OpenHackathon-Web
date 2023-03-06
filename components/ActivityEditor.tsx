@@ -158,12 +158,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               name="tagsString"
               type="text"
               placeholder={t('tag_placeholder')}
-              required
               defaultValue={tags.join(' ')}
             />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('tag'))}
-            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -277,14 +273,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Form.Label>
           <Col sm={10}>
             <HTMLEditor
-              defaultValue={detail}
+              defaultValue={this.detailHTML}
               onChange={code => (this.detailHTML = code)}
             />
             <Form.Control
               className="d-none"
               name="detail"
               isInvalid={!this.detailHTML.trim() && this.validated}
-              type="text"
               defaultValue={detail}
             />
             <Form.Control.Feedback type="invalid">
