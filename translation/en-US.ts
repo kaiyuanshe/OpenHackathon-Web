@@ -308,4 +308,5 @@ export default {
   Week: 'Week',
   Month: 'Month',
   Year: 'Year',
+  unlimited: 'Unlimited',
 } as const;

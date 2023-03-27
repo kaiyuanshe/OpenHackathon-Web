@@ -30,6 +30,7 @@ export function ActivityCard({
   location,
   tags,
   enrollment,
+  maxEnrollment,
   status,
   onPublish,
   onDelete,
@@ -63,10 +64,11 @@ export function ActivityCard({
         </Card.Text>
       </Card.Body>
       <Card.Footer>
-        <Row as="small" className="text-muted g-4" xs={1} sm={2}>
+        <Row as="small" className="text-muted g-4" xs={1}>
           <Col></Col>
           <Col className="text-end">
-            {enrollment} {t('people_registered')}
+            {enrollment} {t('people_registered')} / {t('total_people')}
+            {maxEnrollment || t('unlimited')}
           </Col>
         </Row>
 

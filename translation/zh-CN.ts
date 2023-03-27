@@ -293,4 +293,5 @@ export default {
   Week: '周',
   Month: '月',
   Year: '年',
+  unlimited: '无限制',
 } as const;
