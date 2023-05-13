@@ -44,11 +44,11 @@ const MyApp = observer(
             target="_blank"
             rel="noopener noreferrer"
           >
-            {t('powerful_by')}
+            {t('powered_by')}
             <span className="mx-2">
               <Image src="/nextjs.png" alt="Next Logo" width={48} />
             </span>
-            {t('powerful_driver')}
+            {t('idea2app_scaffolding')}
           </a>
         </footer>
       )}
