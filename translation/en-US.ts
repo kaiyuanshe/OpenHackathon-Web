@@ -8,8 +8,8 @@ export default {
   open_hackathon_platform: 'Open Hackathon',
   create_activity: 'Create Activity',
   edit_activity: 'Edit Activity',
-  powerful_by: 'Power by',
-  powerful_driver: 'idea2app Scaffolding power drive',
+  powerful_by: 'Powered by',
+  powerful_driver: 'idea2app Scaffolding',
   registration_period: 'Registration Period',
   activity_period: 'Ativity Period',
   register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
