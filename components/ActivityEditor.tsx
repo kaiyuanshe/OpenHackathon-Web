@@ -1,5 +1,5 @@
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
@@ -35,6 +35,34 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   @observable
   validated = false;
 
+  @observable
+  isInvalidEnrollmentDateTime = false;
+
+  @observable
+  isInvalidEventDateTime = false;
+
+  @observable
+  isInvalidJudgeDateTime = false;
+
+  @action
+  handleDateTimeInputChange = (
+    name: string,
+
+    isInvalid: boolean,
+  ) => {
+    if (name === 'enrollment') {
+      this.isInvalidEnrollmentDateTime = isInvalid;
+    }
+    if (name === 'event') {
+      this.isInvalidEventDateTime = isInvalid;
+    }
+    if (name === 'judge') {
+      this.isInvalidJudgeDateTime = isInvalid;
+    }
+
+    // 其他日期时间输入框的处理逻辑
+  };
+
   async componentDidMount() {
     const { name } = this.props;
 
@@ -48,15 +76,17 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
 
+    const { name } = this.props,
+      { detailHTML } = this,
+      data = formToJSON<ActivityFormData>(form);
+
+    console.log(data);
+
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       return (this.validated = true);
     }
-
-    const { name } = this.props,
-      { detailHTML } = this,
-      data = formToJSON<ActivityFormData>(form);
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
@@ -100,6 +130,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       { downloading, uploading } = activityStore;
 
     const loading = downloading > 0 || uploading > 0;
+
+    console.log(eventStartedAt, eventEndedAt);
 
     return (
       <Form
@@ -200,23 +232,32 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <DateTimeInput
           label={t('enrollment') + t('quote_required')}
           name="enrollment"
+          key="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
           required
+          isInvalid={this.isInvalidEnrollmentDateTime}
+          onChange={this.handleDateTimeInputChange}
         />
         <DateTimeInput
           label={t('activity_time') + t('quote_required')}
           name="event"
+          key="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
           required
+          isInvalid={this.isInvalidEventDateTime}
+          onChange={this.handleDateTimeInputChange}
         />
         <DateTimeInput
           label={t('judge_time') + t('quote_required')}
           name="judge"
+          key="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}
           required
+          isInvalid={this.isInvalidJudgeDateTime}
+          onChange={this.handleDateTimeInputChange}
         />
 
         <Form.Group as={Row} className="mb-3" controlId="slogan">
