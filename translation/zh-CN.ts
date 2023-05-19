@@ -8,8 +8,8 @@ export default {
   open_hackathon_platform: '开放黑客松',
   create_activity: '创建活动',
   edit_activity: '编辑活动',
-  powerful_by: '由',
-  powerful_driver: 'idea2app 脚手架强力驱动',
+  powered_by: '由',
+  idea2app_scaffolding: 'idea2app 脚手架强力驱动',
   registration_period: '报名时段',
   activity_period: '活动时段',
   register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
