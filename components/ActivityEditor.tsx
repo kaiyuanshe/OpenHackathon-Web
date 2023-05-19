@@ -45,22 +45,18 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   isInvalidJudgeDateTime = false;
 
   @action
-  handleDateTimeInputChange = (
-    name: string,
-
-    isInvalid: boolean,
-  ) => {
-    if (name === 'enrollment') {
-      this.isInvalidEnrollmentDateTime = isInvalid;
+  handleDateTimeInputChange = (name: string, isInvalid: boolean) => {
+    switch (name) {
+      case 'enrollment':
+        this.isInvalidEnrollmentDateTime = isInvalid;
+        break;
+      case 'event':
+        this.isInvalidEventDateTime = isInvalid;
+        break;
+      case 'judge':
+        this.isInvalidJudgeDateTime = isInvalid;
+        break;
     }
-    if (name === 'event') {
-      this.isInvalidEventDateTime = isInvalid;
-    }
-    if (name === 'judge') {
-      this.isInvalidJudgeDateTime = isInvalid;
-    }
-
-    // 其他日期时间输入框的处理逻辑
   };
 
   async componentDidMount() {
@@ -130,8 +126,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       { downloading, uploading } = activityStore;
 
     const loading = downloading > 0 || uploading > 0;
-
-    console.log(eventStartedAt, eventEndedAt);
 
     return (
       <Form
@@ -231,7 +225,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <DateTimeInput
           label={t('enrollment') + t('quote_required')}
-          name="enrollment"
+          dateName="enrollment"
           key="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
@@ -241,7 +235,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         />
         <DateTimeInput
           label={t('activity_time') + t('quote_required')}
-          name="event"
+          dateName="event"
           key="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
@@ -251,7 +245,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         />
         <DateTimeInput
           label={t('judge_time') + t('quote_required')}
-          name="judge"
+          dateName="judge"
           key="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}

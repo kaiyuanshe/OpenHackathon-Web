@@ -10,7 +10,7 @@ const { t } = i18n;
 export interface DateTimeInputProps {
   id?: string;
   label: string;
-  name: string;
+  dateName: string;
   required?: boolean;
   startAt?: string;
   endAt?: string;
@@ -31,45 +31,32 @@ class DateTimeInputStore {
   }
 }
 
+const dateTimeInputStore = new DateTimeInputStore();
+
 export const DateTimeInput: FC<DateTimeInputProps> = ({
   id,
   label,
-  name,
+  dateName,
   required,
   startAt,
   endAt,
   isInvalid,
   onChange,
 }) => {
-  const dateTimeInputStore = new DateTimeInputStore();
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
 
-  console.log(dateTimeInputStore.start, dateTimeInputStore.end);
+    if (name === `${dateName}StartedAt`) {
+      dateTimeInputStore.setStart(value);
+    } else {
+      dateTimeInputStore.setEnd(value);
+    }
 
-  const handleStartAtInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const { value } = event.target;
-    console.log(value);
-    dateTimeInputStore.setStart(value);
     const isInvalid = isInvalidDateTime(
       dateTimeInputStore.start,
       dateTimeInputStore.end,
     );
-
-    onChange(name, isInvalid);
-  };
-
-  const handleEndAtInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const { value } = event.target;
-
-    dateTimeInputStore.setEnd(value);
-    const isInvalid = isInvalidDateTime(
-      dateTimeInputStore.start,
-      dateTimeInputStore.end,
-    );
-    onChange(name, isInvalid);
+    onChange(dateName, isInvalid);
   };
 
   const isInvalidDateTime = (startAt: string, endAt: string) => {
@@ -90,23 +77,23 @@ export const DateTimeInput: FC<DateTimeInputProps> = ({
         <InputGroup className="mb-3">
           <InputGroup.Text>{t('time_range')}</InputGroup.Text>
           <Form.Control
-            name={`${name}StartedAt`}
+            name={`${dateName}StartedAt`}
             type="datetime-local"
             required={required}
             defaultValue={startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')}
             isInvalid={isInvalid}
-            onChange={handleStartAtInputChange}
+            onChange={handleInputChange}
           />
           <Form.Control
-            name={`${name}EndedAt`}
+            name={`${dateName}EndedAt`}
             type="datetime-local"
             required={required}
             defaultValue={endAt && formatDate(endAt, 'YYYY-MM-DDTHH:mm:ss')}
             isInvalid={isInvalid}
-            onChange={handleEndAtInputChange}
+            onChange={handleInputChange}
           />
           <Form.Control.Feedback type="invalid">
-            开始时间必须小于结束时间
+            <span>{t('start_time_earlier_end_time')}</span>
           </Form.Control.Feedback>
         </InputGroup>
       </Col>
