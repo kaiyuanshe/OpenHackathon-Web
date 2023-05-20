@@ -35,30 +35,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   @observable
   validated = false;
 
-  @observable
-  isInvalidEnrollmentDateTime = false;
-
-  @observable
-  isInvalidEventDateTime = false;
-
-  @observable
-  isInvalidJudgeDateTime = false;
-
-  @action
-  handleDateTimeInputChange = (name: string, isInvalid: boolean) => {
-    switch (name) {
-      case 'enrollment':
-        this.isInvalidEnrollmentDateTime = isInvalid;
-        break;
-      case 'event':
-        this.isInvalidEventDateTime = isInvalid;
-        break;
-      case 'judge':
-        this.isInvalidJudgeDateTime = isInvalid;
-        break;
-    }
-  };
-
   async componentDidMount() {
     const { name } = this.props;
 
@@ -72,17 +48,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
 
-    const { name } = this.props,
-      { detailHTML } = this,
-      data = formToJSON<ActivityFormData>(form);
-
-    console.log(data);
-
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       return (this.validated = true);
     }
+    const { name } = this.props,
+      { detailHTML } = this,
+      data = formToJSON<ActivityFormData>(form);
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
@@ -225,33 +198,27 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <DateTimeInput
           label={t('enrollment') + t('quote_required')}
-          dateName="enrollment"
+          name="enrollment"
           key="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
           required
-          isInvalid={this.isInvalidEnrollmentDateTime}
-          onChange={this.handleDateTimeInputChange}
         />
         <DateTimeInput
           label={t('activity_time') + t('quote_required')}
-          dateName="event"
+          name="event"
           key="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
           required
-          isInvalid={this.isInvalidEventDateTime}
-          onChange={this.handleDateTimeInputChange}
         />
         <DateTimeInput
           label={t('judge_time') + t('quote_required')}
-          dateName="judge"
+          name="judge"
           key="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}
           required
-          isInvalid={this.isInvalidJudgeDateTime}
-          onChange={this.handleDateTimeInputChange}
         />
 
         <Form.Group as={Row} className="mb-3" controlId="slogan">
