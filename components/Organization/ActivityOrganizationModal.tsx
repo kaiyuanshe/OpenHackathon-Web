@@ -98,7 +98,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
             </Form.Select>
           </Form.Group>
           <Form.Group className="mt-2" controlId="logo-uri">
-            <Form.Label>{t('logo_url')}</Form.Label>
+            <Form.Label>{t('logo_URL')}</Form.Label>
             <Form.Control
               type="url"
               name="logoURI"
