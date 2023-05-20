@@ -294,4 +294,5 @@ export default {
   Month: '月',
   Year: '年',
   unlimited: '無限制',
+  start_time_earlier_end_time: '開始時間必須在結束時間之前',
 } as const;

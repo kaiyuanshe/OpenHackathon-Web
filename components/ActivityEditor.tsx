@@ -1,5 +1,5 @@
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
@@ -53,7 +53,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       event.stopPropagation();
       return (this.validated = true);
     }
-
     const { name } = this.props,
       { detailHTML } = this,
       data = formToJSON<ActivityFormData>(form);
@@ -200,6 +199,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <DateTimeInput
           label={t('enrollment') + t('quote_required')}
           name="enrollment"
+          key="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
           required
@@ -207,6 +207,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <DateTimeInput
           label={t('activity_time') + t('quote_required')}
           name="event"
+          key="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
           required
@@ -214,6 +215,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <DateTimeInput
           label={t('judge_time') + t('quote_required')}
           name="judge"
+          key="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}
           required

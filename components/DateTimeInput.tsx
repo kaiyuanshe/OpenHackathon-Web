@@ -1,4 +1,6 @@
-import { FC } from 'react';
+import { computed, observable } from 'mobx';
+import { observer } from 'mobx-react';
+import { ChangeEvent, PureComponent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
@@ -15,34 +17,62 @@ export interface DateTimeInputProps {
   endAt?: string;
 }
 
-export const DateTimeInput: FC<DateTimeInputProps> = ({
-  id,
-  label,
-  name,
-  required,
-  startAt,
-  endAt,
-}) => (
-  <Form.Group as={Row} className="mb-3" controlId={id}>
-    <Form.Label column sm={2}>
-      {label}
-    </Form.Label>
-    <Col sm={10}>
-      <InputGroup className="mb-3">
-        <InputGroup.Text>{t('time_range')}</InputGroup.Text>
-        <Form.Control
-          name={`${name}StartedAt`}
-          type="datetime-local"
-          required={required}
-          defaultValue={startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')}
-        />
-        <Form.Control
-          name={`${name}EndedAt`}
-          type="datetime-local"
-          required={required}
-          defaultValue={endAt && formatDate(endAt, 'YYYY-MM-DDTHH:mm:ss')}
-        />
-      </InputGroup>
-    </Col>
-  </Form.Group>
-);
+@observer
+export class DateTimeInput extends PureComponent<DateTimeInputProps> {
+  @observable
+  start = '';
+
+  @observable
+  end = '';
+
+  @computed
+  get isInvalid() {
+    return +new Date(this.start) > +new Date(this.end);
+  }
+
+  handleInputChange = ({
+    currentTarget: { name, value },
+  }: ChangeEvent<HTMLInputElement>) => {
+    if (/StartedAt/.test(name)) {
+      this.start = value;
+    } else {
+      this.end = value;
+    }
+  };
+
+  render() {
+    const { id, label, name, required, startAt, endAt } = this.props,
+      { isInvalid } = this;
+    return (
+      <Form.Group as={Row} className="mb-3" controlId={id}>
+        <Form.Label column sm={2}>
+          {label}
+        </Form.Label>
+        <Col sm={10}>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>{t('time_range')}</InputGroup.Text>
+            <Form.Control
+              name={`${name}StartedAt`}
+              type="datetime-local"
+              defaultValue={
+                startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')
+              }
+              {...{ required, isInvalid }}
+              onChange={this.handleInputChange}
+            />
+            <Form.Control
+              name={`${name}EndedAt`}
+              type="datetime-local"
+              defaultValue={endAt && formatDate(endAt, 'YYYY-MM-DDTHH:mm:ss')}
+              {...{ required, isInvalid }}
+              onChange={this.handleInputChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              <span>{t('start_time_earlier_end_time')}</span>
+            </Form.Control.Feedback>
+          </InputGroup>
+        </Col>
+      </Form.Group>
+    );
+  }
+}

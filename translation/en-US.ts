@@ -306,4 +306,5 @@ export default {
   Month: 'Month',
   Year: 'Year',
   unlimited: 'Unlimited',
+  start_time_earlier_end_time: 'Start time must be earlier than end time',
 } as const;
