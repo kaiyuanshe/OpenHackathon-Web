@@ -45,7 +45,7 @@ export const getActivityStatusText = ({
         unit: enrollmentDiff.unit,
       })
     : now < +enrollmentEnd
-    ? t('enrolling')
+    ? t('accepting_applications')
     : now < +eventStart
     ? t('registration_deadline')
     : now < +eventEnd
@@ -54,7 +54,7 @@ export const getActivityStatusText = ({
     ? t('submit_work_deadline')
     : now < +judgeEnd
     ? t('judges_review')
-    : t('competition_over');
+    : t('activity_ended');
 };
 export interface ActivityEntryProps extends ActivityStatusTextProps {
   href: string;
