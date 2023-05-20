@@ -1,7 +1,6 @@
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, PureComponent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
@@ -42,7 +41,8 @@ export class DateTimeInput extends PureComponent<DateTimeInputProps> {
   };
 
   render() {
-    const { id, label, name, required, startAt, endAt } = this.props;
+    const { id, label, name, required, startAt, endAt } = this.props,
+      { isInvalid } = this;
     return (
       <Form.Group as={Row} className="mb-3" controlId={id}>
         <Form.Label column sm={2}>
@@ -54,19 +54,17 @@ export class DateTimeInput extends PureComponent<DateTimeInputProps> {
             <Form.Control
               name={`${name}StartedAt`}
               type="datetime-local"
-              required={required}
               defaultValue={
                 startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')
               }
-              isInvalid={this.isInvalid}
+              {...{ required, isInvalid }}
               onChange={this.handleInputChange}
             />
             <Form.Control
               name={`${name}EndedAt`}
               type="datetime-local"
-              required={required}
               defaultValue={endAt && formatDate(endAt, 'YYYY-MM-DDTHH:mm:ss')}
-              isInvalid={this.isInvalid}
+              {...{ required, isInvalid }}
               onChange={this.handleInputChange}
             />
             <Form.Control.Feedback type="invalid">
