@@ -40,10 +40,7 @@ export const getActivityStatusText = ({
   return !isOnline
     ? t('pending_review')
     : now < +enrollmentStart
-    ? t('register_after', {
-        distance: enrollmentDiff.distance,
-        unit: enrollmentDiff.unit,
-      })
+    ? t('register_after', enrollmentDiff)
     : now < +enrollmentEnd
     ? t('accepting_applications')
     : now < +eventStart

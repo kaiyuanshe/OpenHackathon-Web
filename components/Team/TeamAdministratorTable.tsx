@@ -1,5 +1,3 @@
-import 'array-unique-proposal';
-
 import { observer } from 'mobx-react';
 import { Form, Table } from 'react-bootstrap';
 

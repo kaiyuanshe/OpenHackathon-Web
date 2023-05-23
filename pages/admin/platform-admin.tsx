@@ -13,8 +13,16 @@ import { i18n } from '../../models/Translation';
 
 const { t } = i18n;
 
+export default function PlatformAdminPage() {
+  return (
+    <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
+      <PlatformAdmin />
+    </PlatformAdminFrame>
+  );
+}
+
 @observer
-export default class PlatformAdminPage extends PureComponent<{}> {
+class PlatformAdmin extends PureComponent {
   store = new PlatformAdminModel();
 
   selectedIds: string[] = [];
@@ -40,7 +48,7 @@ export default class PlatformAdminPage extends PureComponent<{}> {
     const loading = store.uploading > 0;
 
     return (
-      <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
+      <>
         <Form onSubmit={this.handleSubmit}>
           <Button
             variant="success"
@@ -67,7 +75,7 @@ export default class PlatformAdminPage extends PureComponent<{}> {
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || this.store.refreshList()}
         />
-      </PlatformAdminFrame>
+      </>
     );
   }
 }

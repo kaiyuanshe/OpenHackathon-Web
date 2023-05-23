@@ -14,7 +14,7 @@ export interface XScrollListProps<T extends DataObject = DataObject>
 export abstract class XScrollList<
   P extends XScrollListProps,
 > extends ScrollList<P> {
-  translater = i18n;
+  translator = i18n;
 
   @observable
   selectedIds: string[] = [];

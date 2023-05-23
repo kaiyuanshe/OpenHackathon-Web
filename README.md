@@ -29,9 +29,11 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 First, run the development server:
 
 ```bash
+npm i
 npm run dev
 # or
 npm i pnpm -g
+pnpm i
 pnpm dev
 ```
 

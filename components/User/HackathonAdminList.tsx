@@ -1,3 +1,5 @@
+import 'array-unique-proposal';
+
 import { Form, Table } from 'react-bootstrap';
 
 import { HackathonAdmin } from '../../models/HackathonAdmin';
