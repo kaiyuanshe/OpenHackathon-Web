@@ -70,9 +70,16 @@ export class SessionModel extends BaseModel {
     const { body } = await this.client.post<UploadUrl>(`user/generateFileUrl`, {
       filename: name,
     });
-    await uploadBlob(body!.uploadUrl, 'PUT', file, { 'Content-Type': type });
+    const parts = body!.uploadUrl.split('/');
 
-    return body!.url;
+    const path = parts.slice(0, -1).join('/'),
+      [fileName, data] = parts.at(-1)!.split('?');
+
+    const URI = `${path}/${encodeURIComponent(fileName)}?${data}`;
+
+    await uploadBlob(URI, 'PUT', file, { 'Content-Type': type });
+
+    return URI;
   }
 
   exportURLOf(

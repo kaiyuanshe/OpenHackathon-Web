@@ -46,13 +46,13 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   }
 
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     const form = event.currentTarget;
 
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-      return (this.validated = true);
-    }
+    if (form.checkValidity() === false) return (this.validated = true);
+
     const { name } = this.props,
       { detailHTML } = this,
       data = formToJSON<ActivityFormData>(form);
