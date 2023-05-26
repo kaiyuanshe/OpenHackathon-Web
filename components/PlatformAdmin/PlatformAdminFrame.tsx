@@ -61,7 +61,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
   async componentDidMount() {
     this.loading = true;
-    await platformAdminStore.getIsPlatformAdmin();
+    await platformAdminStore.checkAuthorization();
     this.loading = false;
   }
 

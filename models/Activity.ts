@@ -9,6 +9,7 @@ import { GitModel } from './Git';
 import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
+import platformAdmin from './PlatformAdmin';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
@@ -164,9 +165,11 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async publishOne(name: string, request = true) {
+  async publishOne(name: string) {
+    const isPlatformAdmin = await platformAdmin.checkAuthorization();
+
     await this.client.post(
-      `hackathon/${name}/${request ? 'requestPublish' : 'publish'}`,
+      `hackathon/${name}/${isPlatformAdmin ? 'publish' : 'requestPublish'}`,
     );
     this.changeOne({ status: 'online' }, name, true);
   }

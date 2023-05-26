@@ -65,7 +65,7 @@ export function ActivityCard({
       </Card.Body>
       <Card.Footer>
         <Row as="small" className="text-muted g-4" xs={1}>
-          <Col></Col>
+          <Col />
           <Col className="text-end">
             {enrollment} {t('people_registered')} / {t('total_people')}
             {maxEnrollment || t('unlimited')}

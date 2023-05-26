@@ -20,7 +20,7 @@ export class PlatformAdminModel extends Stream<
   @observable
   isPlatformAdmin = false;
 
-  async getIsPlatformAdmin() {
+  async checkAuthorization() {
     try {
       await this.getList();
       return (this.isPlatformAdmin = true);

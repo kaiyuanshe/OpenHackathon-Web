@@ -1,6 +1,9 @@
+import { observer } from 'mobx-react';
+import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
+import platformAdmin from '../../models/PlatformAdmin';
 import { i18n } from '../../models/Translation';
 
 const { t } = i18n;
@@ -11,13 +14,8 @@ export interface ActivityControlProps
   onDelete?: (name: string) => any;
 }
 
-export function ActivityControl({
-  name,
-  status,
-  onPublish,
-  onDelete,
-}: ActivityControlProps) {
-  return (
+export const ActivityControl: FC<ActivityControlProps> = observer(
+  ({ name, status, onPublish, onDelete }) => (
     <>
       <Button
         className="w-100 mt-2"
@@ -32,7 +30,7 @@ export function ActivityControl({
           variant="success"
           onClick={() => onPublish?.(name)}
         >
-          {status === 'planning' ? t('apply_publish') : t('publish')}
+          {platformAdmin.isPlatformAdmin ? t('publish') : t('apply_publish')}
         </Button>
       ) : (
         <Button
@@ -44,5 +42,5 @@ export function ActivityControl({
         </Button>
       )}
     </>
-  );
-}
+  ),
+);

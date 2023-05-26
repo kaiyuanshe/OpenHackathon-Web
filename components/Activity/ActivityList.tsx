@@ -7,6 +7,7 @@ import {
   ActivityListType,
   ActivityModel,
 } from '../../models/Activity';
+import platformAdmin from '../../models/PlatformAdmin';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import { XScrollList, XScrollListProps } from '../ScrollList';
@@ -65,15 +66,17 @@ export default class ActivityList extends XScrollList<ActivityListProps> {
     super(props);
 
     this.boot();
+
+    if (props.type === 'admin' && !platformAdmin.isPlatformAdmin)
+      platformAdmin.checkAuthorization();
   }
 
   onPublish = async (name: string) => {
     if (!confirm(t('sure_publish', { name }))) return;
 
-    const { type, onPublish } = this.props;
+    await this.store.publishOne(name);
 
-    await this.store.publishOne(name, type !== 'admin');
-    onPublish?.(name);
+    this.props.onPublish?.(name);
   };
 
   onDelete = async (name: string) => {
