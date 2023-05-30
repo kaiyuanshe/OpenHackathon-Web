@@ -26,7 +26,11 @@ export default class ActivityManageGitPage extends PureComponent<
       >
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
-            <Button variant="success" title={t('stay_tuned')}>
+            <Button
+              variant="success"
+              title={t('stay_tuned')}
+              onClick={() => console.log('clicked!')}
+            >
               {t('add_template_repository')}
             </Button>
           </header>
