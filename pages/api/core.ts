@@ -1,4 +1,4 @@
-import { HTTPError, Request, request as call } from 'koajax';
+import { HTTPError } from 'koajax';
 import { parseLanguageHeader } from 'mobx-i18n';
 import { DataObject } from 'mobx-restful';
 import {
@@ -11,39 +11,7 @@ import {
 } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 
-import { ErrorBaseData } from '../../models/Base';
 import { i18n } from '../../models/Translation';
-
-/**
- * 上传blob文件
- */
-export async function uploadBlob<T = void>(
-  fullPath: string,
-  method: Request['method'] = 'PUT',
-  body?: any,
-  headers: DataObject = {},
-) {
-  headers['x-ms-blob-type'] = 'BlockBlob';
-
-  const { response } = call<T>({
-    path: fullPath,
-    method,
-    body,
-    headers,
-  });
-  const { headers: header, body: data } = await response;
-
-  if (!data || !('traceId' in (data as DataObject))) return data!;
-
-  const { status, title, detail } = data as unknown as ErrorBaseData;
-
-  throw new HTTPError(detail || title, {
-    status,
-    statusText: title,
-    headers: header,
-    body: data,
-  });
-}
 
 export type NextAPI = (
   req: NextApiRequest,

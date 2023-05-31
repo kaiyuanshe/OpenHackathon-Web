@@ -18,10 +18,6 @@ export default function Document() {
         />
         <link
           rel="stylesheet"
-          href="https://unpkg.com/idea-react@0.27.11/dist/index.css"
-        />
-        <link
-          rel="stylesheet"
           href="https://unpkg.com/bootstrap-icons@1.10.4/font/bootstrap-icons.css"
         />
         <link
