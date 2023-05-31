@@ -1,16 +1,17 @@
 import { Loading } from 'idea-react';
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
+import { FileUploader } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore, { Activity } from '../models/Activity';
+import fileStore from '../models/File';
 import { i18n } from '../models/Translation';
 import { DateTimeInput } from './DateTimeInput';
-import { FileUpload } from './FileUpload';
 
 const { t } = i18n;
 
@@ -167,7 +168,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('bannerUrls')}
           </Form.Label>
           <Col sm={10}>
-            <FileUpload
+            <FileUploader
+              store={fileStore}
               accept="image/*"
               name="bannerUrls"
               max={10}
