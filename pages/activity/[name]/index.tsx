@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
+import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
@@ -38,6 +39,7 @@ import activityStore, {
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
+import { Extensions, Question } from '../../../models/Question';
 import sessionStore from '../../../models/Session';
 import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
@@ -60,6 +62,7 @@ export const getServerSideProps = withErrorLog<
       activityStore.getOne(name),
       activityStore.organizationOf(name).getList(),
     ]);
+
     return { props: { activity, organizationList } };
   }),
 );
@@ -136,6 +139,25 @@ export default class ActivityPage extends PureComponent<
       status === 'approved' &&
       !myTeam;
 
+    const registerNow = async () => {
+      await activityStore.signOne(name, []);
+      self.alert(
+        textJoin(t('hackathons'), name, t('registration_needs_review')),
+      );
+      window.location.href = `/activity/${name}`;
+    };
+
+    const checkQuestionnaire = async () => {
+      // 校验问卷是否存在
+      try {
+        await activityStore.getQuestionnaire(name);
+        window.location.href = `/activity/${name}/register`;
+      } catch (err) {
+        // 直接报名
+        registerNow();
+      }
+    };
+
     return (
       <>
         <ul className="list-unstyled">
@@ -207,7 +229,7 @@ export default class ActivityPage extends PureComponent<
         </ul>
         {isShowSignupBtn && (
           <Button
-            href={`/activity/${name}/register`}
+            onClick={() => checkQuestionnaire()}
             disabled={isDisableSignupBtn}
           >
             {t('register_now')}

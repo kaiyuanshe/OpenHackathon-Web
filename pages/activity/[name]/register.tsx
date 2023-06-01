@@ -8,7 +8,7 @@ import { formToJSON } from 'web-utility';
 import PageHead from '../../../components/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { Extensions, Question, questions } from '../../../models/Question';
+import { Extensions, Question } from '../../../models/Question';
 import { i18n } from '../../../models/Translation';
 import { withErrorLog, withTranslation } from '../../api/core';
 
@@ -16,14 +16,17 @@ const { t } = i18n;
 
 export const getServerSideProps = withErrorLog<
   { name: string },
-  { activity: string }
+  { activity: string; questionnaire: Question[] }
 >(
   withTranslation(async ({ params: { name } = {} }) => {
     const { status } = await new ActivityModel().getOne(name!);
-
+    const { body } = await activityStore.getQuestionnaire(name!);
+    const questionnaire = body!.extensions.map(
+      v => JSON.parse(v.value) as Question,
+    );
     return {
       notFound: status !== 'online',
-      props: { activity: name! },
+      props: { activity: name!, questionnaire },
     };
   }),
 );
@@ -84,7 +87,7 @@ class RegisterPage extends PureComponent<
     );
 
   render() {
-    const { activity } = this.props,
+    const { activity, questionnaire } = this.props,
       { uploading } = activityStore;
 
     return (
@@ -99,7 +102,7 @@ class RegisterPage extends PureComponent<
               <a className="text-primary ms-2"> {t('personal_profile')}</a>
             </Link>
           </small>
-          <ol className="my-3">{questions.map(this.renderField)}</ol>
+          <ol className="my-3">{questionnaire.map(this.renderField)}</ol>
 
           <footer className="text-center my-2">
             <Button

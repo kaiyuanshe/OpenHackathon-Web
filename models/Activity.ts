@@ -10,6 +10,7 @@ import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import platformAdmin from './PlatformAdmin';
+import { Extensions } from './Question';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
@@ -64,6 +65,13 @@ export interface ActivityFilter extends Filter<Activity> {
 
 export interface ActivityLogsFilter extends Filter<Activity> {
   name: string;
+}
+
+export interface Questionnaire {
+  createdAt: string;
+  extensions: Extensions[];
+  hackathonName: string;
+  updatedAt: string;
 }
 
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
@@ -162,6 +170,26 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
         .replace(/\\+t/g, ' ')
         .replace(/\\+"/g, '"'),
     });
+  }
+
+  @toggle('downloading')
+  getQuestionnaire(name: string) {
+    const res = this.client.get<Questionnaire>(
+      `${this.baseURI}/${name}/questionnaire`,
+    );
+    return res;
+  }
+
+  @toggle('uploading')
+  createQuestionnaire(name: string, extensions: Extensions[]) {
+    return this.client.put(`${this.baseURI}/${name}/questionnaire`, {
+      extensions,
+    });
+  }
+
+  @toggle('uploading')
+  deleteQuestionnaire(name: string) {
+    return this.client.delete(`${this.baseURI}/${name}/questionnaire`);
   }
 
   @toggle('uploading')
