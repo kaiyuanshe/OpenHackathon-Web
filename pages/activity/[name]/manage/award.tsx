@@ -6,7 +6,10 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { AwardList, AwardTargetName } from '../../../../components/AwardList';
+import {
+  AwardList,
+  AwardTargetName,
+} from '../../../../components/Activity/AwardList';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
 import { i18n } from '../../../../models/Translation';

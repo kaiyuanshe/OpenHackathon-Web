@@ -6,7 +6,7 @@ import { HackathonAdmin } from '../../models/HackathonAdmin';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { XScrollListProps } from '../ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 

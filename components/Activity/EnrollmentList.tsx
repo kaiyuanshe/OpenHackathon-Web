@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import { Button, Form, Table } from 'react-bootstrap';
 
-import activityStore from '../models/Activity';
-import { Enrollment, statusName } from '../models/Enrollment';
-import { i18n } from '../models/Translation';
-import styles from '../styles/participant.module.less';
-import { XScrollList, XScrollListProps } from './ScrollList';
+import activityStore from '../../models/Activity';
+import { Enrollment, statusName } from '../../models/Enrollment';
+import { i18n } from '../../models/Translation';
+import styles from '../../styles/participant.module.less';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 

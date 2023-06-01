@@ -1,7 +1,8 @@
+import { SpinnerButton } from 'idea-react';
 import { observer } from 'mobx-react';
 import { FileUploader } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Col, Container, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
@@ -49,6 +50,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
 
   render() {
     const { uploading, currentOne } = this.store;
+    const loading = uploading > 0 || fileStore.uploading > 0;
 
     return (
       <Container>
@@ -138,14 +140,14 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               </Col>
             </Form.Group>
           )}
-          <Button
+          <SpinnerButton
             className="mb-3"
             variant="primary"
             type="submit"
-            disabled={uploading > 0}
+            loading={loading}
           >
             {t('submit')}
-          </Button>
+          </SpinnerButton>
         </Form>
       </Container>
     );

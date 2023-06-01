@@ -1,6 +1,6 @@
 import classNames from 'classnames';
+import { Avatar } from 'idea-react';
 import { HTMLAttributes } from 'react';
-import { Image } from 'react-bootstrap';
 
 import { Team } from '../../models/Team';
 import { i18n } from '../../models/Translation';
@@ -38,12 +38,7 @@ export const TeamCard = ({
       <span className="pe-2">{t('team_leader')}</span>
 
       <span className="text-primary">
-        <Image
-          className="h-auto me-3"
-          style={{ maxWidth: '1.5rem' }}
-          alt="team-creator-photo"
-          src={creator.photo}
-        />
+        <Avatar className="me-3" size={1.5} src={creator.photo} />
         {creator.nickname}
       </span>
     </a>
