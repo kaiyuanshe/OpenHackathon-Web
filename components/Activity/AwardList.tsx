@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
-import { Award, AwardModel } from '../models/Award';
-import { i18n } from '../models/Translation';
-import styles from '../styles/Table.module.less';
-import { XScrollList, XScrollListProps } from './ScrollList';
+import { Award, AwardModel } from '../../models/Award';
+import { i18n } from '../../models/Translation';
+import styles from '../../styles/Table.module.less';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 

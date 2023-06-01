@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
-import PageHead from '../../components/PageHead';
+import PageHead from '../../components/layout/PageHead';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import userStore, { User } from '../../models/User';

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 
 import { PlatformAdmin, PlatformAdminModel } from '../../models/PlatformAdmin';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { HackathonAdminList } from '../User/HackathonAdminList';
 
 export interface PlatformAdminListProps

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 
 import { Staff, StaffModel } from '../../models/Staff';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { HackathonAdminList } from './HackathonAdminList';
 
 export interface StaffListProps extends XScrollListProps<Staff> {

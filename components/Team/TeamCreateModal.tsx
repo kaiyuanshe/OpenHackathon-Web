@@ -3,9 +3,9 @@ import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import activityStore from '../models/Activity';
-import { Team } from '../models/Team';
-import { i18n } from '../models/Translation';
+import activityStore from '../../models/Activity';
+import { Team } from '../../models/Team';
+import { i18n } from '../../models/Translation';
 import { TeamEditor } from './TeamEditor';
 
 const { t } = i18n;

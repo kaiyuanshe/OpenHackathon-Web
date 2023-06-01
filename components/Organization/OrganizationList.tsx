@@ -8,7 +8,7 @@ import {
 } from '../../models/Organization';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { OrganizationCard } from './OrganizationCard';
 
 const { t } = i18n;

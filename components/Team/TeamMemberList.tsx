@@ -1,9 +1,9 @@
+import { Avatar } from 'idea-react';
 import { observer } from 'mobx-react';
-import { Image } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
 import { TeamMember } from '../../models/Team';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 export interface TeamMemberListProps extends XScrollListProps<TeamMember> {
   activity: string;
@@ -16,11 +16,8 @@ export const TeamMemberListLayout = ({
   <ul className="list-unstyled">
     {defaultData.map(({ userId, user: { photo, nickname } }) => (
       <li key={userId} className="my-3">
-        <Image
-          src={photo}
-          style={{ width: '1rem', height: '1rem' }}
-          alt={nickname}
-        />
+        <Avatar className="me-3" size={1} src={photo} />
+
         <a href={`/user/${userId}`} className="ms-2 text-primary">
           {nickname}
         </a>

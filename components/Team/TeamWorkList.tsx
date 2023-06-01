@@ -14,7 +14,7 @@ import {
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 
-import { MenuItem } from '../configuration/menu';
+import { MenuItem } from '../../configuration/menu';
 
 export interface MainBreadcrumbProps {
   currentRoute: MenuItem[];

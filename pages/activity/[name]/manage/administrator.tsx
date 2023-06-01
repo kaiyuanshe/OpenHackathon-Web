@@ -7,7 +7,7 @@ import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { AdministratorModal } from '../../../../components/ActivityAdministratorModal';
+import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { StaffList } from '../../../../components/User/StaffList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';

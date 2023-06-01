@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { TeamCard } from './TeamCard';
 
 export interface TeamListProps extends XScrollListProps<Team> {
