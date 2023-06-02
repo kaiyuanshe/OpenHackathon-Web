@@ -232,7 +232,7 @@ export default {
   activity_name: 'Activity Name',
   disaplay_name: 'Display Name',
   tag: 'Tag',
-  tag_placeholder: 'tags, separated by spaces',
+  tag_placeholder: 'press Enter key to add a tag',
   bannerUrls: 'Head picture (required, up to 10)',
   enrollment: 'Registration Time',
   activity_time: 'Activity time',

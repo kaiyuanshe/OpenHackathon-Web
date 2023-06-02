@@ -21,8 +21,8 @@ import { Staff } from '../../models/Staff';
 import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
-import { MainBreadcrumb } from '../MainBreadcrumb';
-import PageHead from '../PageHead';
+import { MainBreadcrumb } from '../layout/MainBreadcrumb';
+import PageHead from '../layout/PageHead';
 import { SessionBox } from '../User/SessionBox';
 
 const { t } = i18n;

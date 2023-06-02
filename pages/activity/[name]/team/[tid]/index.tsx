@@ -7,8 +7,8 @@ import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { CommentBox } from '../../../../../components/CommentBox';
-import { MainBreadcrumb } from '../../../../../components/MainBreadcrumb';
-import PageHead from '../../../../../components/PageHead';
+import { MainBreadcrumb } from '../../../../../components/layout/MainBreadcrumb';
+import PageHead from '../../../../../components/layout/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';

@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import { Container } from 'react-bootstrap';
 
-import { ActivityEditor } from '../../components/ActivityEditor';
-import PageHead from '../../components/PageHead';
+import { ActivityEditor } from '../../components/Activity/ActivityEditor';
+import PageHead from '../../components/layout/PageHead';
 import { SessionBox } from '../../components/User/SessionBox';
 import { i18n } from '../../models/Translation';
 

@@ -224,7 +224,7 @@ export default {
   activity_name: '活动名称',
   disaplay_name: '显示名称',
   tag: '标签',
-  tag_placeholder: '标签，请以空格分隔',
+  tag_placeholder: '按回车键以添加一个标签',
   bannerUrls: '头图（必填，最多10张）',
   enrollment: '报名时间',
   activity_time: '活动时间',

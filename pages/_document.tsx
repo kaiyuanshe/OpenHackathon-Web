@@ -14,11 +14,7 @@ export default function Document() {
 
         <link
           rel="stylesheet"
-          href="https://unpkg.com/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/idea-react@0.27.11/dist/index.css"
+          href="https://unpkg.com/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         />
         <link
           rel="stylesheet"

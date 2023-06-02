@@ -1,7 +1,7 @@
 import { InferGetServerSidePropsType } from 'next';
 
+import { ActivityEditor } from '../../../../components/Activity/ActivityEditor';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { ActivityEditor } from '../../../../components/ActivityEditor';
 import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
 

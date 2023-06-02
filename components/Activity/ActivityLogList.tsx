@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Badge, ListGroup } from 'react-bootstrap';
 
 import { Log, LogModel } from '../../models/Log';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 export interface ActivityLogListProps extends XScrollListProps<Log> {
   store: LogModel;

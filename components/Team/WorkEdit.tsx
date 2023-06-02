@@ -1,12 +1,13 @@
+import { SpinnerButton } from 'idea-react';
 import { observer } from 'mobx-react';
+import { FileUploader } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
-import { Container } from 'react-bootstrap';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Col, Container, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
+import fileStore from '../../models/File';
 import { i18n } from '../../models/Translation';
-import { FileUpload } from '../FileUpload';
 
 const { t } = i18n;
 
@@ -49,6 +50,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
 
   render() {
     const { uploading, currentOne } = this.store;
+    const loading = uploading > 0 || fileStore.uploading > 0;
 
     return (
       <Container>
@@ -127,7 +129,8 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                 {t('upload_file')}
               </Form.Label>
               <Col sm={10}>
-                <FileUpload
+                <FileUploader
+                  store={fileStore}
                   accept="video/*,image/*,.pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   name="url"
                   max={1}
@@ -137,14 +140,14 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               </Col>
             </Form.Group>
           )}
-          <Button
+          <SpinnerButton
             className="mb-3"
             variant="primary"
             type="submit"
-            disabled={uploading > 0}
+            loading={loading}
           >
             {t('submit')}
-          </Button>
+          </SpinnerButton>
         </Form>
       </Container>
     );

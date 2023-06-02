@@ -1,7 +1,8 @@
 import { faAward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { Accordion, Button, Image } from 'react-bootstrap';
+import { Avatar } from 'idea-react';
+import { Accordion, Button } from 'react-bootstrap';
 
 import { Team } from '../../models/Team';
 import { i18n } from '../../models/Translation';
@@ -48,12 +49,7 @@ export const TeamAwardCard = ({
       <span className="pe-2">{t('team_leader')}</span>
 
       <span className="text-primary">
-        <Image
-          className="h-auto me-3"
-          style={{ maxWidth: '1.5rem' }}
-          alt="team-creator-photo"
-          src={creator.photo}
-        />
+        <Avatar className="me-3" size={1.5} src={creator.photo} />
         {creator.nickname}
       </span>
     </a>

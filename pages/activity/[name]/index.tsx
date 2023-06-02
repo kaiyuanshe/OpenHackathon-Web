@@ -25,12 +25,12 @@ import {
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
+import PageHead from '../../../components/layout/PageHead';
 import { MessageList } from '../../../components/Message/MessageList';
 import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
-import PageHead from '../../../components/PageHead';
 import { TeamCard } from '../../../components/Team/TeamCard';
+import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamList } from '../../../components/Team/TeamList';
-import { TeamCreateModal } from '../../../components/TeamCreateModal';
 import activityStore, {
   Activity,
   ActivityModel,

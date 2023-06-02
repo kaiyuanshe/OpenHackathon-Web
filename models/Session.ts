@@ -3,8 +3,6 @@ import { computed, observable } from 'mobx';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { uploadBlob } from '../pages/api/core';
-import { UploadUrl } from './Base';
 import { AuthingIdentity, AuthingUserBase, User } from './User';
 
 const { localStorage } = globalThis;
@@ -61,25 +59,6 @@ export class SessionModel extends BaseModel {
     localStorage?.clear();
 
     this.user = undefined;
-  }
-
-  @toggle('uploading')
-  async uploadFile(file: File) {
-    const { type, name } = file;
-
-    const { body } = await this.client.post<UploadUrl>(`user/generateFileUrl`, {
-      filename: name,
-    });
-    const parts = body!.uploadUrl.split('/');
-
-    const path = parts.slice(0, -1).join('/'),
-      [fileName, data] = parts.at(-1)!.split('?');
-
-    const URI = `${path}/${encodeURIComponent(fileName)}?${data}`;
-
-    await uploadBlob(URI, 'PUT', file, { 'Content-Type': type });
-
-    return URI;
   }
 
   exportURLOf(

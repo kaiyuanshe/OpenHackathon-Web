@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
 import { GitModel, GitRepository } from '../../models/Git';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { GitCard, GitCardProps } from './Card';
 
 export interface GitListProps

@@ -24,8 +24,8 @@ import activityStore from '../../models/Activity';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import { findDeep } from '../../utils/data';
-import { MainBreadcrumb } from '../MainBreadcrumb';
-import PageHead from '../PageHead';
+import { MainBreadcrumb } from '../layout/MainBreadcrumb';
+import PageHead from '../layout/PageHead';
 import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
 import { SessionBox } from '../User/SessionBox';
 

@@ -10,10 +10,10 @@ import {
 } from 'react-bootstrap-editor';
 import { Constructor, uniqueID } from 'web-utility';
 
-import sessionStore from '../models/Session';
+import fileStore from '../models/File';
 
 ImageTool.prototype.save = blob =>
-  sessionStore.uploadFile(new File([blob], uniqueID()));
+  fileStore.upload(new File([blob], uniqueID()));
 
 const ExcludeTools = [IFrameTool, AudioTool, VideoTool];
 

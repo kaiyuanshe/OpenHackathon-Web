@@ -1,25 +1,25 @@
 import { Loading } from 'idea-react';
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
+import { BadgeInput, FileUploader } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import activityStore, { Activity } from '../models/Activity';
-import { i18n } from '../models/Translation';
-import { DateTimeInput } from './DateTimeInput';
-import { FileUpload } from './FileUpload';
+import activityStore, { Activity } from '../../models/Activity';
+import fileStore from '../../models/File';
+import { i18n } from '../../models/Translation';
+import { DateTimeInput } from '../DateTimeInput';
 
 const { t } = i18n;
 
-const HTMLEditor = dynamic(() => import('../components/HTMLEditor'), {
+const HTMLEditor = dynamic(() => import('../HTMLEditor'), {
   ssr: false,
 });
 
 interface ActivityFormData extends Activity {
-  tagsString?: string;
   bannerUrls: string[] | string;
 }
 
@@ -42,7 +42,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
     const { detail } = await activityStore.getOne(name);
 
-    this.detailHTML = detail;
+    this.detailHTML = detail || '';
   }
 
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
@@ -66,7 +66,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         uri: bannerUrl,
       };
     });
-    data.tags = data?.tagsString?.split(/\s+/) || [];
     // @ts-ignore
     await activityStore.updateOne({ ...data, detail: detailHTML.trim() }, name);
 
@@ -98,7 +97,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       } = activityStore.currentOne,
       { downloading, uploading } = activityStore;
 
-    const loading = downloading > 0 || uploading > 0;
+    const loading = downloading > 0 || uploading > 0 || fileStore.uploading > 0;
 
     return (
       <Form
@@ -153,11 +152,10 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('tag')}
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="tagsString"
-              type="text"
+            <BadgeInput
+              name="tags"
               placeholder={t('tag_placeholder')}
-              defaultValue={tags.join(' ')}
+              defaultValue={tags}
             />
           </Col>
         </Form.Group>
@@ -167,7 +165,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('bannerUrls')}
           </Form.Label>
           <Col sm={10}>
-            <FileUpload
+            <FileUploader
+              store={fileStore}
               accept="image/*"
               name="bannerUrls"
               max={10}
