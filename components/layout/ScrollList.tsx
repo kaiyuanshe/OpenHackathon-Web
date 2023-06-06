@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 import { DataObject } from 'mobx-restful';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 
-import { i18n } from '../models/Translation';
+import { i18n } from '../../models/Translation';
 
 export interface XScrollListProps<T extends DataObject = DataObject>
   extends ScrollListProps<T> {

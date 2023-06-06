@@ -10,7 +10,7 @@ import {
 import platformAdmin from '../../models/PlatformAdmin';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
 
 const { t } = i18n;

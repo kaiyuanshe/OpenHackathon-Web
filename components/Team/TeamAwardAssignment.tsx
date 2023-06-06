@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 
 import activityStore from '../../models/Activity';
 import { AwardAssignment } from '../../models/Award';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 interface AwardAssignmentProps extends XScrollListProps<AwardAssignment> {
   activity: string;

@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';
 
 const { t } = i18n;

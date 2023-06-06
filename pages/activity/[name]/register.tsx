@@ -5,7 +5,7 @@ import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import PageHead from '../../../components/PageHead';
+import PageHead from '../../../components/layout/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Extensions, Question } from '../../../models/Question';

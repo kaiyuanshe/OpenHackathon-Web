@@ -4,7 +4,7 @@ import { formToJSON } from 'web-utility';
 
 import { i18n } from '../../models/Translation';
 import { User, UserModel } from '../../models/User';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 

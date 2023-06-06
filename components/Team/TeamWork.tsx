@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 
 import activityStore from '../../models/Activity';
 import { TeamWork } from '../../models/Team';
-import { XScrollList, XScrollListProps } from '../ScrollList';
+import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
 export interface TeamWorkProps extends XScrollListProps<TeamWork> {
   activity: string;

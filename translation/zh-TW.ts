@@ -224,7 +224,7 @@ export default {
   activity_name: '活動名稱',
   disaplay_name: '顯示名稱',
   tag: '標籤',
-  tag_placeholder: '標籤，請以空格分隔',
+  tag_placeholder: '按回車鍵以添加一個標籤',
   bannerUrls: '頭圖（必填，最多10張）',
   enrollment: '報名時間',
   activity_time: '活動時間',
