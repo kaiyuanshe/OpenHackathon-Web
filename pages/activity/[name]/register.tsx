@@ -19,11 +19,10 @@ export const getServerSideProps = withErrorLog<
   { activity: string; questionnaire: Question[] }
 >(
   withTranslation(async ({ params: { name } = {} }) => {
-    const { status } = await new ActivityModel().getOne(name!);
-    const { body } = await activityStore.getQuestionnaire(name!);
-    const questionnaire = body!.extensions.map(
-      v => JSON.parse(v.value) as Question,
-    );
+    const activityStore = new ActivityModel();
+    const { status } = await activityStore.getOne(name!),
+      questionnaire = await activityStore.getQuestionnaire(name!);
+
     return {
       notFound: status !== 'online',
       props: { activity: name!, questionnaire },

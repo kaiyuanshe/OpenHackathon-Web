@@ -10,7 +10,7 @@ import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import platformAdmin from './PlatformAdmin';
-import { Extensions } from './Question';
+import { Extensions, Question } from './Question';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
@@ -67,11 +67,9 @@ export interface ActivityLogsFilter extends Filter<Activity> {
   name: string;
 }
 
-export interface Questionnaire {
-  createdAt: string;
+export interface Questionnaire extends Base {
   extensions: Extensions[];
   hackathonName: string;
-  updatedAt: string;
 }
 
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
@@ -173,16 +171,26 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('downloading')
-  getQuestionnaire(name: string) {
-    const res = this.client.get<Questionnaire>(
-      `${this.baseURI}/${name}/questionnaire`,
-    );
-    return res;
+  async getQuestionnaire(activity = this.currentOne.name) {
+    try {
+      const { body } = await this.client.get<Questionnaire>(
+        `${this.baseURI}/${activity}/questionnaire`,
+      );
+      const questionnaire = body!.extensions.map(
+        v => JSON.parse(v.value) as Question,
+      );
+      return questionnaire;
+    } catch (error) {
+      return [];
+    }
   }
 
   @toggle('uploading')
-  createQuestionnaire(name: string, extensions: Extensions[]) {
-    return this.client.put(`${this.baseURI}/${name}/questionnaire`, {
+  createQuestionnaire(
+    extensions: Extensions[],
+    activity = this.currentOne.name,
+  ) {
+    return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
       extensions,
     });
   }

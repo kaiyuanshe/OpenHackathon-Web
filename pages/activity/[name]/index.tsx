@@ -53,17 +53,22 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
 
 export const getServerSideProps = withErrorLog<
   { name?: string },
-  { activity: Activity; organizationList: Organization[] }
+  {
+    activity: Activity;
+    organizationList: Organization[];
+    questionnaire: Question[];
+  }
 >(
   withTranslation(async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
-    const [activity, organizationList] = await Promise.all([
+    const [activity, organizationList, questionnaire] = await Promise.all([
       activityStore.getOne(name),
       activityStore.organizationOf(name).getList(),
+      activityStore.getQuestionnaire(name!),
     ]);
 
-    return { props: { activity, organizationList } };
+    return { props: { activity, organizationList, questionnaire } };
   }),
 );
 
@@ -147,17 +152,6 @@ export default class ActivityPage extends PureComponent<
       window.location.href = `/activity/${name}`;
     };
 
-    const checkQuestionnaire = async () => {
-      // 校验问卷是否存在
-      try {
-        await activityStore.getQuestionnaire(name);
-        window.location.href = `/activity/${name}/register`;
-      } catch (err) {
-        // 直接报名
-        registerNow();
-      }
-    };
-
     return (
       <>
         <ul className="list-unstyled">
@@ -227,11 +221,16 @@ export default class ActivityPage extends PureComponent<
             <Col>{StatusName()[status || 'none']}</Col>
           </Row>
         </ul>
-        {isShowSignupBtn && (
+        {isShowSignupBtn && this.props.questionnaire.length > 0 && (
           <Button
-            onClick={() => checkQuestionnaire()}
+            href={`/activity/${name}/register`}
             disabled={isDisableSignupBtn}
           >
+            {t('register_now')}
+          </Button>
+        )}
+        {isShowSignupBtn && !this.props.questionnaire.length && (
+          <Button onClick={() => registerNow()} disabled={isDisableSignupBtn}>
             {t('register_now')}
           </Button>
         )}
