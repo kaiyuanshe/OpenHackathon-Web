@@ -13,6 +13,7 @@ import platformAdmin from './PlatformAdmin';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
+import { GitTemplateModal } from './TemplateRepo';
 
 export interface Activity extends Base {
   name: string;
@@ -82,6 +83,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentTeam?: TeamModel;
   currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
+  @observable
+  currentTemplate?: GitTemplateModal;
+
+  templateOf(name = this.currentOne.name) {
+    return (this.currentTemplate = new GitTemplateModal(`hackathon/${name}`));
+  }
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));
@@ -154,6 +161,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     this.teamOf(name);
     this.organizationOf(name);
     this.messageOf(name);
+    this.templateOf(name);
 
     return (this.currentOne = {
       ...data,

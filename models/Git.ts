@@ -1,7 +1,7 @@
 import { components } from '@octokit/openapi-types';
 import { HTTPClient } from 'koajax';
 import { memoize } from 'lodash';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { BaseModel, ListModel, Stream, toggle } from 'mobx-restful';
 import { averageOf } from 'web-utility';
 
 import { Base, createListStream } from './Base';

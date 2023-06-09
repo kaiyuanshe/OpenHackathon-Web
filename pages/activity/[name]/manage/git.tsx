@@ -22,6 +22,10 @@ export default class ActivityManageGitPage extends PureComponent<
   @observable
   show = false;
 
+  handleReload = () => {
+    window.location.reload();
+  };
+
   render() {
     const { resolvedUrl, params } = this.props.route;
 
@@ -41,11 +45,14 @@ export default class ActivityManageGitPage extends PureComponent<
               {t('add_template_repository')}
             </Button>
           </header>
-          <GitList store={activityStore.currentGit} />
+          <GitList
+            store={activityStore.templateOf(this.props.route.params!.name + '')}
+          />
           <GitModal
             name={params!.name}
             show={this.show}
             onHide={() => (this.show = false)}
+            onReload={this.handleReload}
           />
         </Container>
       </ActivityManageFrame>
