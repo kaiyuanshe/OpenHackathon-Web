@@ -39,7 +39,6 @@ import activityStore, {
 import { isServer, Media } from '../../../models/Base';
 import { Enrollment } from '../../../models/Enrollment';
 import { Organization } from '../../../models/Organization';
-import { Extensions, Question } from '../../../models/Question';
 import sessionStore from '../../../models/Session';
 import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
@@ -117,7 +116,9 @@ export default class ActivityPage extends PureComponent<
 
   registerNow = async () => {
     const { name } = this.props.activity;
+
     await activityStore.signOne(name, []);
+
     self.alert(textJoin(t('hackathons'), name, t('registration_needs_review')));
     self.location.reload();
   };
