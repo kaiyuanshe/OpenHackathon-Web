@@ -89,9 +89,6 @@ export default class ActivityPage extends PureComponent<
   @observable
   showCreateTeam = false;
 
-  @observable
-  questionnaire: Question[] = [];
-
   @computed
   get loading() {
     return (
@@ -114,16 +111,22 @@ export default class ActivityPage extends PureComponent<
     } catch {}
 
     try {
-      this.questionnaire = await activityStore.getQuestionnaire(
-        this.props.activity.name,
-      );
+      await activityStore.getQuestionnaire(this.props.activity.name);
     } catch {}
   }
+
+  registerNow = async () => {
+    const { name } = this.props.activity;
+    await activityStore.signOne(name, []);
+    self.alert(textJoin(t('hackathons'), name, t('registration_needs_review')));
+    self.location.reload();
+  };
 
   renderMeta() {
     const { github } = sessionStore.metaOAuth,
       { status } = this.enrollmentStore.sessionOne || {},
       { sessionOne: myTeam } = this.teamStore || {},
+      { questionnaire } = activityStore,
       {
         name,
         location,
@@ -150,16 +153,6 @@ export default class ActivityPage extends PureComponent<
       now < +eventEnded &&
       status === 'approved' &&
       !myTeam;
-
-    const registerNow = async () => {
-      await activityStore.signOne(name, []);
-      self.alert(
-        textJoin(t('hackathons'), name, t('registration_needs_review')),
-      );
-      window.location.href = `/activity/${name}`;
-    };
-
-    console.log('questionnaire', this.questionnaire);
 
     return (
       <>
@@ -230,19 +223,19 @@ export default class ActivityPage extends PureComponent<
             <Col>{StatusName()[status || 'none']}</Col>
           </Row>
         </ul>
-        {isShowSignupBtn && this.questionnaire.length > 0 && (
-          <Button
-            href={`/activity/${name}/register`}
-            disabled={isDisableSignupBtn}
-          >
-            {t('register_now')}
-          </Button>
-        )}
-        {isShowSignupBtn && !this.questionnaire.length && (
-          <Button onClick={registerNow} disabled={isDisableSignupBtn}>
-            {t('register_now')}
-          </Button>
-        )}
+        {isShowSignupBtn &&
+          (questionnaire.length ? (
+            <Button
+              href={`/activity/${name}/register`}
+              disabled={isDisableSignupBtn}
+            >
+              {t('register_now')}
+            </Button>
+          ) : (
+            <Button onClick={this.registerNow} disabled={isDisableSignupBtn}>
+              {t('register_now')}
+            </Button>
+          ))}
         {isShowCreateTeamBtn && (
           <Button onClick={() => (this.showCreateTeam = true)}>
             {t('create_team')}

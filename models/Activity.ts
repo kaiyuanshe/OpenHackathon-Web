@@ -88,6 +88,8 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentTeam?: TeamModel;
   currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
+  @observable
+  questionnaire: Question[] = [];
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));
@@ -178,7 +180,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     const questionnaire = body!.extensions.map(
       v => JSON.parse(v.value) as Question,
     );
-    return questionnaire;
+    return (this.questionnaire = questionnaire);
   }
 
   @toggle('uploading')
