@@ -56,19 +56,17 @@ export const getServerSideProps = withErrorLog<
   {
     activity: Activity;
     organizationList: Organization[];
-    questionnaire: Question[];
   }
 >(
   withTranslation(async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
-    const [activity, organizationList, questionnaire] = await Promise.all([
+    const [activity, organizationList] = await Promise.all([
       activityStore.getOne(name),
       activityStore.organizationOf(name).getList(),
-      activityStore.getQuestionnaire(name!),
     ]);
 
-    return { props: { activity, organizationList, questionnaire } };
+    return { props: { activity, organizationList } };
   }),
 );
 
@@ -91,6 +89,9 @@ export default class ActivityPage extends PureComponent<
   @observable
   showCreateTeam = false;
 
+  @observable
+  questionnaire: Question[] = [];
+
   @computed
   get loading() {
     return (
@@ -110,6 +111,12 @@ export default class ActivityPage extends PureComponent<
         try {
           await this.teamStore.getSessionOne();
         } catch {}
+    } catch {}
+
+    try {
+      this.questionnaire = await activityStore.getQuestionnaire(
+        this.props.activity.name,
+      );
     } catch {}
   }
 
@@ -151,6 +158,8 @@ export default class ActivityPage extends PureComponent<
       );
       window.location.href = `/activity/${name}`;
     };
+
+    console.log('questionnaire', this.questionnaire);
 
     return (
       <>
@@ -221,7 +230,7 @@ export default class ActivityPage extends PureComponent<
             <Col>{StatusName()[status || 'none']}</Col>
           </Row>
         </ul>
-        {isShowSignupBtn && this.props.questionnaire.length > 0 && (
+        {isShowSignupBtn && this.questionnaire.length > 0 && (
           <Button
             href={`/activity/${name}/register`}
             disabled={isDisableSignupBtn}
@@ -229,8 +238,8 @@ export default class ActivityPage extends PureComponent<
             {t('register_now')}
           </Button>
         )}
-        {isShowSignupBtn && !this.props.questionnaire.length && (
-          <Button onClick={() => registerNow()} disabled={isDisableSignupBtn}>
+        {isShowSignupBtn && !this.questionnaire.length && (
+          <Button onClick={registerNow} disabled={isDisableSignupBtn}>
             {t('register_now')}
           </Button>
         )}

@@ -172,17 +172,13 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
 
   @toggle('downloading')
   async getQuestionnaire(activity = this.currentOne.name) {
-    try {
-      const { body } = await this.client.get<Questionnaire>(
-        `${this.baseURI}/${activity}/questionnaire`,
-      );
-      const questionnaire = body!.extensions.map(
-        v => JSON.parse(v.value) as Question,
-      );
-      return questionnaire;
-    } catch (error) {
-      return [];
-    }
+    const { body } = await this.client.get<Questionnaire>(
+      `${this.baseURI}/${activity}/questionnaire`,
+    );
+    const questionnaire = body!.extensions.map(
+      v => JSON.parse(v.value) as Question,
+    );
+    return questionnaire;
   }
 
   @toggle('uploading')
