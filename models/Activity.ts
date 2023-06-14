@@ -173,13 +173,21 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     });
   }
 
+  editQuestionnaireStatus(questionnaire: Question[]) {
+    return (this.questionnaire = questionnaire);
+  }
+
   @toggle('downloading')
   async getQuestionnaire(activity = this.currentOne.name) {
     const { body } = await this.client.get<Questionnaire>(
       `${this.baseURI}/${activity}/questionnaire`,
     );
     const questionnaire = body!.extensions.map(
-      v => JSON.parse(v.value) as Question,
+      v =>
+        ({
+          ...JSON.parse(v.value),
+          id: v.name,
+        } as Question),
     );
 
     return (this.questionnaire = questionnaire);
@@ -191,6 +199,16 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     activity = this.currentOne.name,
   ) {
     return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
+      extensions,
+    });
+  }
+
+  @toggle('uploading')
+  updateQuestionnaire(
+    extensions: Extensions[],
+    activity = this.currentOne.name,
+  ) {
+    return this.client.patch(`${this.baseURI}/${activity}/questionnaire`, {
       extensions,
     });
   }

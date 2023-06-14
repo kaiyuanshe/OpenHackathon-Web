@@ -23,6 +23,11 @@ export const menus: () => MenuItem[] = () => [
         icon: 'edit',
       },
       {
+        title: t('edit_questionnaire'),
+        href: 'questionnaire',
+        icon: 'edit',
+      },
+      {
         title: t('sign_up_user'),
         href: 'participant',
         icon: 'user',

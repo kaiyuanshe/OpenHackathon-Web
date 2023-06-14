@@ -5,6 +5,7 @@ import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
+import { QuestionnairePreview } from '../../../components/Activity/QuestionnairePreview';
 import PageHead from '../../../components/layout/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
@@ -94,14 +95,15 @@ class RegisterPage extends PureComponent<
         <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
-          <legend className="text-center">{t('questionnaire')}</legend>
+          <QuestionnairePreview questionnaire={questionnaire} />
+          {/* <legend className="text-center">{t('questionnaire')}</legend>
           <small className="text-muted mt-2">
             {t('please_complete_all_mandatory_fields_before_you_proceed')}
             <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
               <a className="text-primary ms-2"> {t('personal_profile')}</a>
             </Link>
           </small>
-          <ol className="my-3">{questionnaire.map(this.renderField)}</ol>
+          <ol className="my-3">{questionnaire.map(this.renderField)}</ol> */}
 
           <footer className="text-center my-2">
             <Button
