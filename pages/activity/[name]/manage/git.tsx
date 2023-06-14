@@ -1,8 +1,10 @@
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
-import { PureComponent } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { FormEvent,PureComponent } from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { GitList } from '../../../../components/Git';
@@ -21,9 +23,23 @@ export default class ActivityManageGitPage extends PureComponent<
 > {
   @observable
   show = false;
+  @observable
+  isChecked = true;
 
-  handleReload = () => {
-    window.location.reload();
+  store = activityStore.templateOf(this.props.route.params!.name + '');
+
+  selectedIds: string[] = [];
+
+  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { selectedIds } = this;
+    if (!selectedIds[0]) return alert('请至少选择一个仓库');
+
+    if (!confirm('确认删除')) return;
+
+    for (const id of selectedIds) await this.store.deleteOne(id);
   };
 
   render() {
@@ -37,22 +53,22 @@ export default class ActivityManageGitPage extends PureComponent<
       >
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
-            <Button
-              variant="success"
-              title={t('stay_tuned')}
-              onClick={() => (this.show = true)}
-            >
-              {t('add_template_repository')}
-            </Button>
+            <Form onSubmit={this.handleSubmit}>
+              <Button variant="danger" type="submit" className="me-2">
+                <FontAwesomeIcon className="me-2" icon={faTrash} />
+                {t('delete')}
+              </Button>
+              <Button variant="success" onClick={() => (this.show = true)}>
+                {t('add_template_repository')}
+              </Button>
+            </Form>
           </header>
-          <GitList
-            store={activityStore.templateOf(this.props.route.params!.name + '')}
-          />
+          <GitList store={this.store} />
           <GitModal
             name={params!.name}
             show={this.show}
             onHide={() => (this.show = false)}
-            onReload={this.handleReload}
+            onSave={() => (this.show = false) || this.store.refreshList()}
           />
         </Container>
       </ActivityManageFrame>

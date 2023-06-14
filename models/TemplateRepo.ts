@@ -36,7 +36,8 @@ export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
   }
 
   @toggle('uploading')
-  async deleteOne(id: string) {
-    await this.client.delete(`${this.baseURI}/${id}`);
+  async deleteOne(templateRepoId: string) {
+    await this.client.delete(`hackathon${this.baseURI}/${templateRepoId}`);
+    await this.removeOne(templateRepoId);
   }
 }

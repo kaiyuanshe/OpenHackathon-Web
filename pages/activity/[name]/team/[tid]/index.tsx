@@ -41,7 +41,7 @@ export const getServerSideProps = withErrorLog<
   TeamPageProps
 >(
   withTranslation(async ({ params: { name = '', tid = '' } = {} }) => {
-    const activityStore = new ActivityModel();
+    // const activityStore = new ActivityModel();
     const { currentTeam } = activityStore;
 
     const activity = await activityStore.getOne(name),

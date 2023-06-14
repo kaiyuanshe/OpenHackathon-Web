@@ -18,7 +18,7 @@ import { i18n } from '../../models/Translation';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   name?: string;
-  onReload: () => void;
+  onSave?: () => any;
 }
 
 const { t } = i18n;
@@ -32,7 +32,6 @@ export class GitModal extends PureComponent<GitModalProps> {
 
   gitTemplateStore = new GitTemplateModal(this.props.name!);
 
-  @action
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -44,8 +43,13 @@ export class GitModal extends PureComponent<GitModalProps> {
 
     await this.gitTemplateStore.updateOne(data);
 
-    this.props.onHide!();
-    this.props.onReload!();
+    this.props.onSave?.();
+    this.inputField.value = '';
+  };
+
+  cancelHandler = () => {
+    this.inputField.value = '';
+    this.props.onHide?.();
   };
 
   render() {
@@ -84,7 +88,11 @@ export class GitModal extends PureComponent<GitModalProps> {
             </FormGroup>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" type="reset" onClick={onHide}>
+            <Button
+              variant="secondary"
+              type="reset"
+              onClick={this.cancelHandler}
+            >
               {t('cancel')}
             </Button>
             <Button variant="primary" type="submit">
