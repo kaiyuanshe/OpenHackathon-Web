@@ -18,6 +18,7 @@ import { i18n } from '../../models/Translation';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   name?: string;
+  store: GitTemplateModal;
   onSave?: () => any;
 }
 
@@ -30,8 +31,6 @@ export class GitModal extends PureComponent<GitModalProps> {
   @observable
   validated = false;
 
-  gitTemplateStore = new GitTemplateModal(this.props.name!);
-
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -41,7 +40,7 @@ export class GitModal extends PureComponent<GitModalProps> {
 
     const data = formToJSON(form);
 
-    await this.gitTemplateStore.updateOne(data);
+    await this.props.store.updateOne(data);
 
     this.props.onSave?.();
     this.inputField.value = '';

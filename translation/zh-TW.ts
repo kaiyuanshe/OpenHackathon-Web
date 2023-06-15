@@ -296,4 +296,6 @@ export default {
   unlimited: '無限制',
   start_time_earlier_end_time: '開始時間必須在結束時間之前',
   address: '地址',
+  confirm_delete_repo: '確認刪除倉庫',
+  choose_at_least_one_repo: '請至少選擇一個倉庫',
 } as const;

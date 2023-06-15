@@ -1,4 +1,4 @@
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
+import { ListModel, Stream, toggle } from 'mobx-restful';
 
 import { Base, createListStream, InputData } from './Base';
 import sessionStore from './Session';
@@ -28,7 +28,7 @@ export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
   @toggle('uploading')
   async updateOne(data: InputData<GitTemplate>) {
     const { body } = await this.client.put<GitTemplate>(
-      `hackathon/${this.baseURI}/templateRepo`,
+      `${this.baseURI}/templateRepo`,
       data,
     );
 
@@ -37,7 +37,7 @@ export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
 
   @toggle('uploading')
   async deleteOne(templateRepoId: string) {
-    await this.client.delete(`hackathon${this.baseURI}/${templateRepoId}`);
+    await this.client.delete(`${this.baseURI}/templateRepo/${templateRepoId}`);
     await this.removeOne(templateRepoId);
   }
 }

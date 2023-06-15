@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
-import { FormEvent,PureComponent } from 'react';
+import { FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
@@ -35,16 +35,16 @@ export default class ActivityManageGitPage extends PureComponent<
     event.stopPropagation();
 
     const { selectedIds } = this;
-    if (!selectedIds[0]) return alert('请至少选择一个仓库');
+    if (!selectedIds[0]) return alert(t('choose_at_least_one_repo'));
 
-    if (!confirm('确认删除')) return;
+    if (!confirm(t('confirm_delete_repo'))) return;
 
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
 
   render() {
     const { resolvedUrl, params } = this.props.route;
-
+    console.log(this.selectedIds);
     return (
       <ActivityManageFrame
         path={resolvedUrl}
@@ -63,9 +63,13 @@ export default class ActivityManageGitPage extends PureComponent<
               </Button>
             </Form>
           </header>
-          <GitList store={this.store} />
+          <GitList
+            store={this.store}
+            selectedIds={this.selectedIds}
+            onSelect={list => (this.selectedIds = list)}
+          />
           <GitModal
-            name={params!.name}
+            store={this.store}
             show={this.show}
             onHide={() => (this.show = false)}
             onSave={() => (this.show = false) || this.store.refreshList()}

@@ -308,4 +308,6 @@ export default {
   unlimited: 'Unlimited',
   start_time_earlier_end_time: 'Start time must be earlier than end time',
   address: 'Address',
+  confirm_delete_repo: 'Confirm to delete Github Repository',
+  choose_at_least_one_repo: 'Please choose at least one Github Repository',
 } as const;

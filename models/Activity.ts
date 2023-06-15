@@ -83,7 +83,6 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentTeam?: TeamModel;
   currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
-  @observable
   currentTemplate?: GitTemplateModal;
 
   templateOf(name = this.currentOne.name) {
