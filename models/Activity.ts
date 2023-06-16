@@ -214,8 +214,10 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  deleteQuestionnaire(name: string) {
-    return this.client.delete(`${this.baseURI}/${name}/questionnaire`);
+  async deleteQuestionnaire(name: string) {
+    await this.client.delete(`${this.baseURI}/${name}/questionnaire`);
+
+    return (this.questionnaire = []);
   }
 
   @toggle('uploading')

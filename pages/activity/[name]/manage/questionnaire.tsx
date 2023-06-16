@@ -15,6 +15,7 @@ import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
+
 export const getServerSideProps = withRoute<{ name: string }>();
 
 @observer
@@ -27,9 +28,7 @@ class ActivityQuestionnairePage extends PureComponent<
   isCreate = true;
 
   async componentDidMount() {
-    if (isServer()) return;
-
-    if (!this.activity) return;
+    if (isServer() || !this.activity) return;
 
     // 获取问卷是否存在
     try {
@@ -41,11 +40,7 @@ class ActivityQuestionnairePage extends PureComponent<
   createRegister = async () => {
     const { questionnaire } = activityStore;
 
-    if (!questionnaire.length) {
-      self.alert(t('please_add_question'));
-
-      return;
-    }
+    if (!questionnaire[0]) return self.alert(t('please_add_question'));
 
     const questions: Extensions[] = questionnaire.map(v => ({
       name: v.id || v.title,
@@ -63,6 +58,8 @@ class ActivityQuestionnairePage extends PureComponent<
         ? t('create_questionnaire_success')
         : t('update_questionnaire_success'),
     );
+
+    this.isCreate = false;
   };
 
   deleteRegister = async () => {
@@ -73,14 +70,13 @@ class ActivityQuestionnairePage extends PureComponent<
     self.alert(t('delete_questionnaire_success'));
 
     this.isCreate = true;
-    activityStore.editQuestionnaireStatus([]);
   };
 
   addQuestionnaireItem = (questionnaireItem: Question) => {
-    if (activityStore.questionnaire.find(v => v.id === questionnaireItem.id)) {
-      self.alert(t('question_id_repeat'));
-      return;
-    }
+    if (
+      activityStore.questionnaire.find(({ id }) => id === questionnaireItem.id)
+    )
+      return self.alert(t('question_id_repeat'));
 
     activityStore.editQuestionnaireStatus([
       ...activityStore.questionnaire,
@@ -144,11 +140,9 @@ class ActivityQuestionnairePage extends PureComponent<
               )}
             </footer>
           </Col>
-          <Col sm={12}>
-            <div className="p-2">
-              <h5 className="mx-2">{t('preview_questionnaire')}</h5>
-              <QuestionnairePreview questionnaire={questionnaire} />
-            </div>
+          <Col sm={12} className="p-2">
+            <h5 className="mx-2">{t('preview_questionnaire')}</h5>
+            <QuestionnairePreview questionnaire={questionnaire} />
           </Col>
         </Row>
       </ActivityManageFrame>

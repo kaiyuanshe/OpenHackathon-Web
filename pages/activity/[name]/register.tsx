@@ -1,6 +1,5 @@
 import { textJoin } from 'mobx-i18n';
 import { InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -96,15 +95,6 @@ class RegisterPage extends PureComponent<
 
         <Form onSubmit={this.handleSubmit}>
           <QuestionnairePreview questionnaire={questionnaire} />
-          {/* <legend className="text-center">{t('questionnaire')}</legend>
-          <small className="text-muted mt-2">
-            {t('please_complete_all_mandatory_fields_before_you_proceed')}
-            <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-              <a className="text-primary ms-2"> {t('personal_profile')}</a>
-            </Link>
-          </small>
-          <ol className="my-3">{questionnaire.map(this.renderField)}</ol> */}
-
           <footer className="text-center my-2">
             <Button
               className="px-5"

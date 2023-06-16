@@ -312,7 +312,6 @@ export default {
   move_down: '下移',
   add_question: '添加问题',
   please_add_question: '请添加问题',
-  repeat: '重复',
   create_questionnaire: '创建问卷',
   update_questionnaire: '更新问卷',
   create_questionnaire_success: '创建问卷成功！',

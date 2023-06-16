@@ -56,7 +56,7 @@ export default class ParticipantPage extends PureComponent<
                 <div>{value}</div>
               </li>
             ))}
-            {extensions?.length === 0 && t('no_news_yet')}
+            {extensions?.[0] && t('no_news_yet')}
           </Modal.Body>
         </Modal>
       </ActivityManageFrame>

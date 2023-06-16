@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Form, Row } from 'react-bootstrap';
+import { Container, Form, Row } from 'react-bootstrap';
 
 import { Question } from '../../models/Question';
 import { i18n } from '../../models/Translation';
@@ -14,7 +14,10 @@ export interface QuestionnairePreviewProps {
 export function QuestionnairePreview({
   questionnaire,
 }: QuestionnairePreviewProps) {
-  const renderField = ({ options, multiple, title, ...props }: Question) =>
+  const renderField = (
+    { options, multiple, title, ...props }: Question,
+    index: number,
+  ) =>
     options ? (
       <Form.Group as="li" className="mb-3" key={title}>
         {title}
@@ -25,16 +28,15 @@ export function QuestionnairePreview({
               label={value}
               name={title}
               value={value}
-              id={value}
               key={value}
             />
           ))}
         </Row>
       </Form.Group>
     ) : (
-      <Form.Group as="li" className="mb-3 " key={title} controlId={title}>
+      <Form.Group as="li" className="mb-3 mt-2" key={title} controlId={title}>
         {title}
-        <Row className="mt-2">
+        <Row>
           <Form.Label></Form.Label>
           <Form.Control name={title} {...props} />
         </Row>
@@ -42,7 +44,7 @@ export function QuestionnairePreview({
     );
 
   return (
-    <div className="container-fluid">
+    <Container fluid as="fieldset">
       <legend className="text-center">{t('questionnaire')}</legend>
       <small className="text-muted mt-2">
         {t('please_complete_all_mandatory_fields_before_you_proceed')}
@@ -50,7 +52,7 @@ export function QuestionnairePreview({
           <a className="text-primary ms-2"> {t('personal_profile')}</a>
         </Link>
       </small>
-      <ol className="my-3">{questionnaire.map(renderField)}</ol>
-    </div>
+      <ol className="my-3 px-3">{questionnaire.map(renderField)}</ol>
+    </Container>
   );
 }

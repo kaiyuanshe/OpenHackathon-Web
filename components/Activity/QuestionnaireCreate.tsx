@@ -13,7 +13,7 @@ interface QuestionnaireCreateForm extends Omit<Question, 'options'> {
 }
 
 export interface QuestionnaireCreateProps {
-  onAdd: (data: Question) => void;
+  onAdd: (data: Question) => any;
 }
 
 export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
@@ -21,17 +21,16 @@ export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
     event.preventDefault();
     event.stopPropagation();
 
-    const data = formToJSON(
-      event.target as HTMLFormElement,
+    const { options, ...data } = formToJSON(
+      event.currentTarget,
     ) as QuestionnaireCreateForm;
-    const curOptoins = data.options;
 
     const emitData: Question = {
       ...data,
-      options: curOptoins
-        ? typeof curOptoins === 'string'
-          ? [curOptoins]
-          : curOptoins
+      options: options
+        ? typeof options === 'string'
+          ? [options]
+          : options
         : undefined,
     };
 
@@ -42,8 +41,8 @@ export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
     <div className="container-fluid">
       <Form onSubmit={handleSubmit}>
         <Row as="ul" className="list-unstyled w-100 align-items-end">
-          <Col sm={4}>
-            <Form.Group as="li" className="mb-2 w-20" key="id" controlId="id">
+          <Col as="li" sm={4}>
+            <Form.Group className="mb-2 w-20" controlId="id">
               <Form.Label>
                 {t('question_id')}
                 {t('quote_required')}
@@ -51,13 +50,8 @@ export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
               <Form.Control name={'id'} required />
             </Form.Group>
           </Col>
-          <Col sm={8}>
-            <Form.Group
-              as="li"
-              className="mb-2 flex-grow-1"
-              key="title"
-              controlId="title"
-            >
+          <Col as="li" sm={8}>
+            <Form.Group className="mb-2 flex-grow-1" controlId="title">
               <Form.Label>
                 {t('question_description')}
                 {t('quote_required')}
@@ -65,8 +59,8 @@ export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
               <Form.Control name={'title'} required />
             </Form.Group>
           </Col>
-          <Col sm={4}>
-            <Form.Group as="li" className="mb-2" key="type" controlId="type">
+          <Col as="li" sm={4}>
+            <Form.Group className="mb-2" controlId="type">
               <Form.Label>{t('question_type')}</Form.Label>
               <Form.Select name="type">
                 <option value="text">{t('text')}</option>
@@ -74,42 +68,25 @@ export function QuestionnaireCreate({ onAdd }: QuestionnaireCreateProps) {
               </Form.Select>
             </Form.Group>
           </Col>
-
-          <Col sm={8}>
-            <Form.Group
-              as="li"
-              className="mb-2"
-              key="options"
-              controlId="options"
-            >
+          <Col as="li" sm={8}>
+            <Form.Group className="mb-2" controlId="options">
               <Form.Label>{t('option_config')}</Form.Label>
               <BadgeInput name="options" placeholder={t('tag_placeholder')} />
             </Form.Group>
           </Col>
-          <Col sm={4}>
-            <Form.Group
-              as="li"
-              className="mb-2"
-              key="multiple"
-              controlId="multiple"
-            >
+          <Col as="li" sm={2}>
+            <Form.Group className="mb-2" controlId="multiple">
               <Form.Label>{t('whether_multiple')}</Form.Label>
-              <Form.Select name="multiple">
-                <option value="false">{t('no')}</option>
-                <option value="true">{t('yes')}</option>
-              </Form.Select>
+              <Form.Check className="mx-2" type="switch" name="multiple" />
             </Form.Group>
           </Col>
-          <Col sm={4}>
-            <Form.Group as="li" className="mb-2 " key="required">
+          <Col as="li" sm={2}>
+            <Form.Group className="mb-2" key="required">
               <Form.Label>{t('whether_required')}</Form.Label>
-              <Form.Select name="required">
-                <option value="false">{t('no')}</option>
-                <option value="true">{t('yes')}</option>
-              </Form.Select>
+              <Form.Check className="mx-2" type="switch" name="required" />
             </Form.Group>
           </Col>
-          <Col sm={4}>
+          <Col sm={8} className="text-end">
             <Button className="px-5 mb-2" type="submit" variant="success">
               {t('add_question')}
             </Button>
