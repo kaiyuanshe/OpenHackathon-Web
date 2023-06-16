@@ -42,10 +42,12 @@ export const getServerSideProps = withErrorLog<
 >(
   withTranslation(async ({ params: { name = '', tid = '' } = {} }) => {
     const activityStore = new ActivityModel();
+
+    const activity = await activityStore.getOne(name);
+
     const { currentTeam } = activityStore;
 
-    const activity = await activityStore.getOne(name),
-      team = await currentTeam!.getOne(tid);
+    const team = await currentTeam!.getOne(tid);
 
     const teamMemberList = await currentTeam!.currentMember!.getList(),
       teamWorkList = await currentTeam!.currentWork!.getList();
