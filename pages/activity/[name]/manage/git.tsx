@@ -23,8 +23,6 @@ export default class ActivityManageGitPage extends PureComponent<
 > {
   @observable
   show = false;
-  @observable
-  isChecked = true;
 
   store = activityStore.templateOf(this.props.route.params!.name + '');
 
@@ -44,7 +42,9 @@ export default class ActivityManageGitPage extends PureComponent<
 
   render() {
     const { resolvedUrl, params } = this.props.route;
-    console.log(this.selectedIds);
+    const { store } = this;
+    let { show, selectedIds } = this;
+
     return (
       <ActivityManageFrame
         path={resolvedUrl}
@@ -64,15 +64,15 @@ export default class ActivityManageGitPage extends PureComponent<
             </Form>
           </header>
           <GitList
-            store={this.store}
-            selectedIds={this.selectedIds}
-            onSelect={list => (this.selectedIds = list)}
+            store={store}
+            selectedIds={selectedIds}
+            onSelect={list => (selectedIds = list)}
           />
           <GitModal
-            store={this.store}
-            show={this.show}
-            onHide={() => (this.show = false)}
-            onSave={() => (this.show = false) || this.store.refreshList()}
+            store={store}
+            show={show}
+            onHide={() => (show = false)}
+            onSave={() => (show = false) || store.refreshList()}
           />
         </Container>
       </ActivityManageFrame>

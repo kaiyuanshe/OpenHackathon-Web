@@ -1,5 +1,5 @@
 import { text2color } from 'idea-react';
-import { Badge, Button, Card, Col, Form,Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 
 import { GitTemplate } from '../../models/TemplateRepo';
 import { i18n } from '../../models/Translation';
@@ -14,67 +14,75 @@ export const CardList = ({
   onSelect,
 }: XScrollListProps<GitTemplate>) => (
   <Row as="ul" className="list-unstyled g-4" xs={1} sm={2}>
-    {defaultData.map(({ repoLanguages = {}, repoTopics = [], url, id }) => (
-      <Card className="shadow-sm" key={id}>
-        <Card.Body className="d-flex flex-column gap-3">
-          <Card.Title as="h3" className="h5">
-            <a target="_blank" href={url} rel="noreferrer">
-              {url.replace(/^(.*[\\\/])/, '')}
-            </a>
-          </Card.Title>
+    {defaultData.map(
+      ({
+        repoLanguages = {},
+        repoTopics = [],
+        url,
+        id,
+        name = url.replace(/^(.*[\\\/])/, ''),
+      }) => (
+        <Card className="shadow-sm" key={id}>
+          <Card.Body className="d-flex flex-column gap-3">
+            <Card.Title as="h3" className="h5">
+              <a target="_blank" href={url} rel="noreferrer">
+                {name}
+              </a>
+            </Card.Title>
 
-          <nav className="flex-fill">
-            {repoTopics &&
-              repoTopics.map(topic => (
-                <Badge
-                  key={topic}
-                  className="me-1"
-                  bg={text2color(topic, ['light'])}
-                  as="a"
-                  target="_blank"
-                  href={`https://github.com/topics/${topic}`}
-                >
-                  {topic}
-                </Badge>
-              ))}
-          </nav>
-          <Row as="ul" className="list-unstyled g-4" xs={4}>
-            {repoLanguages &&
-              Object.keys(repoLanguages)?.map(language => (
-                <Col as="li" key={language}>
-                  <GitLogo name={language} />
-                </Col>
-              ))}
-          </Row>
-        </Card.Body>
-        <Card.Footer className="d-flex justify-content-between align-items-center">
-          <Button variant="success" target="_blank" href={url}>
-            {t('home_page')}
-          </Button>
-          <Form.Check
-            className="d-flex align-items-center"
-            style={{ gap: '0.5rem' }}
-            type="radio"
-            name="template"
-            value={url.replace(/^(.*[\\\/])/, '')}
-            label={t('select')}
-            checked={selectedIds.includes(id!)}
-            onChange={
-              onSelect &&
-              (({ currentTarget: { checked } }) => {
-                if (checked) return onSelect([...selectedIds, id!]);
+            <nav className="flex-fill">
+              {repoTopics &&
+                repoTopics.map(topic => (
+                  <Badge
+                    key={topic}
+                    className="me-1"
+                    bg={text2color(topic, ['light'])}
+                    as="a"
+                    target="_blank"
+                    href={`https://github.com/topics/${topic}`}
+                  >
+                    {topic}
+                  </Badge>
+                ))}
+            </nav>
+            <Row as="ul" className="list-unstyled g-4" xs={4}>
+              {repoLanguages &&
+                Object.keys(repoLanguages)?.map(language => (
+                  <Col as="li" key={language}>
+                    <GitLogo name={language} />
+                  </Col>
+                ))}
+            </Row>
+          </Card.Body>
+          <Card.Footer className="d-flex justify-content-between align-items-center">
+            <Button variant="success" target="_blank" href={url}>
+              {t('home_page')}
+            </Button>
+            <Form.Check
+              className="d-flex align-items-center"
+              style={{ gap: '0.5rem' }}
+              type="checkbox"
+              name="template"
+              value={name}
+              label={t('select')}
+              checked={selectedIds.includes(id!)}
+              onChange={
+                onSelect &&
+                (({ currentTarget: { checked } }) => {
+                  if (checked) return onSelect([...selectedIds, id!]);
 
-                const index = selectedIds.indexOf(id!);
+                  const index = selectedIds.indexOf(id!);
 
-                onSelect([
-                  ...selectedIds.slice(0, index),
-                  ...selectedIds.slice(index + 1),
-                ]);
-              })
-            }
-          />
-        </Card.Footer>
-      </Card>
-    ))}
+                  onSelect([
+                    ...selectedIds.slice(0, index),
+                    ...selectedIds.slice(index + 1),
+                  ]);
+                })
+              }
+            />
+          </Card.Footer>
+        </Card>
+      ),
+    )}
   </Row>
 );

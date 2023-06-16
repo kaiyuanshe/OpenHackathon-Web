@@ -8,6 +8,7 @@ export interface GitTemplate extends Base {
   isFetched: boolean;
   repoLanguages: {};
   repoTopics: string[];
+  name?: string;
 }
 
 export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
