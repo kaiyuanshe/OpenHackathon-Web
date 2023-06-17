@@ -2,6 +2,7 @@ import { i18n } from '../models/Translation';
 const { t } = i18n;
 
 export interface Question {
+  id?: string;
   title: string;
   options?: string[];
   multiple?: boolean;
