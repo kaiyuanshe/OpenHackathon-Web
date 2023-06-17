@@ -14,10 +14,7 @@ export interface QuestionnairePreviewProps {
 export function QuestionnairePreview({
   questionnaire,
 }: QuestionnairePreviewProps) {
-  const renderField = (
-    { options, multiple, title, ...props }: Question,
-    index: number,
-  ) =>
+  const renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
       <Form.Group as="li" className="mb-3" key={title}>
         {title}
@@ -37,7 +34,7 @@ export function QuestionnairePreview({
       <Form.Group as="li" className="mb-3 mt-2" key={title} controlId={title}>
         {title}
         <Row>
-          <Form.Label></Form.Label>
+          <Form.Label />
           <Form.Control name={title} {...props} />
         </Row>
       </Form.Group>
