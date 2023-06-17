@@ -8,7 +8,7 @@ const { t } = i18n;
 
 export interface QuestionnairePreviewProps {
   questionnaire: Question[];
-  onSubmit?: (data: Question[]) => void;
+  onSubmit?: (data: Question[]) => any;
 }
 
 export function QuestionnairePreview({
@@ -45,8 +45,9 @@ export function QuestionnairePreview({
       <legend className="text-center">{t('questionnaire')}</legend>
       <small className="text-muted mt-2">
         {t('please_complete_all_mandatory_fields_before_you_proceed')}
+
         <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-          <a className="text-primary ms-2"> {t('personal_profile')}</a>
+          <a className="text-primary ms-2">{t('personal_profile')}</a>
         </Link>
       </small>
       <ol className="my-3 px-3">{questionnaire.map(renderField)}</ol>

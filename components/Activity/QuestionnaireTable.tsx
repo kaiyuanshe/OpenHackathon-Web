@@ -18,7 +18,6 @@ export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
     const typeMap = {
       text: t('text'),
       url: t('link'),
-      '--': '--',
     };
 
     return (
@@ -47,8 +46,7 @@ export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
                   <td>{index + 1}</td>
                   <td>{id}</td>
                   <td>{title}</td>
-                  <td>{typeMap[type || '--']}</td>
-                  <td>{options?.join(';') || '--'}</td>
+                  <td>{type ? typeMap[type] : '--'}</td>
                   <td>
                     {options
                       ? multiple
