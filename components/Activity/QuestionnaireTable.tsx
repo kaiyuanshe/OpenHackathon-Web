@@ -9,13 +9,13 @@ const { t } = i18n;
 
 export interface QuestionnaireTableProps {
   questionnaire: Question[];
-  onDelete: (id: string) => void;
-  onMove: (id: string, direction: number) => void;
+  onDelete: (id: string) => any;
+  onMove: (id: string, direction: number) => any;
 }
 
 export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
   ({ questionnaire, onDelete, onMove }) => {
-    const typeMap = {
+    const typeMap: Record<string, string> = {
       text: t('text'),
       url: t('link'),
     };
@@ -38,7 +38,7 @@ export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
           <tbody>
             {questionnaire.map(
               (
-                { id, title, options, multiple, type, required },
+                { id, title, options, multiple, type = '', required },
                 index,
                 { length },
               ) => (
@@ -46,7 +46,8 @@ export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
                   <td>{index + 1}</td>
                   <td>{id}</td>
                   <td>{title}</td>
-                  <td>{type ? typeMap[type] : '--'}</td>
+                  <td>{typeMap[type] || '--'}</td>
+                  <td>{options?.join(';') || '--'}</td>
                   <td>
                     {options
                       ? multiple
@@ -80,3 +81,5 @@ export const QuestionnaireTable: FC<QuestionnaireTableProps> = observer(
     );
   },
 );
+
+QuestionnaireTable.displayName = 'QuestionnaireTable';
