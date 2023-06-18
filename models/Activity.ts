@@ -10,6 +10,7 @@ import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
 import platformAdmin from './PlatformAdmin';
+import { Extensions, Question } from './Question';
 import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
@@ -67,6 +68,11 @@ export interface ActivityLogsFilter extends Filter<Activity> {
   name: string;
 }
 
+export interface Questionnaire extends Base {
+  extensions: Extensions[];
+  hackathonName: string;
+}
+
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   client = sessionStore.client;
   baseURI = 'hackathon';
@@ -88,6 +94,9 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   templateOf(name = this.currentOne.name) {
     return (this.currentTemplate = new GitTemplateModal(`hackathon/${name}`));
   }
+
+  @observable
+  questionnaire: Question[] = [];
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));
@@ -169,6 +178,53 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
         .replace(/\\+t/g, ' ')
         .replace(/\\+"/g, '"'),
     });
+  }
+
+  editQuestionnaireStatus(questionnaire: Question[]) {
+    return (this.questionnaire = questionnaire);
+  }
+
+  @toggle('downloading')
+  async getQuestionnaire(activity = this.currentOne.name) {
+    const { body } = await this.client.get<Questionnaire>(
+      `${this.baseURI}/${activity}/questionnaire`,
+    );
+    const questionnaire = body!.extensions.map(
+      v =>
+        ({
+          ...JSON.parse(v.value),
+          id: v.name,
+        } as Question),
+    );
+
+    return (this.questionnaire = questionnaire);
+  }
+
+  @toggle('uploading')
+  createQuestionnaire(
+    extensions: Extensions[],
+    activity = this.currentOne.name,
+  ) {
+    return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
+      extensions,
+    });
+  }
+
+  @toggle('uploading')
+  updateQuestionnaire(
+    extensions: Extensions[],
+    activity = this.currentOne.name,
+  ) {
+    return this.client.patch(`${this.baseURI}/${activity}/questionnaire`, {
+      extensions,
+    });
+  }
+
+  @toggle('uploading')
+  async deleteQuestionnaire(name: string) {
+    await this.client.delete(`${this.baseURI}/${name}/questionnaire`);
+
+    return (this.questionnaire = []);
   }
 
   @toggle('uploading')

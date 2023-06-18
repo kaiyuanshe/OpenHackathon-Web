@@ -1,14 +1,14 @@
 import { textJoin } from 'mobx-i18n';
 import { InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
+import { QuestionnairePreview } from '../../../components/Activity/QuestionnairePreview';
 import PageHead from '../../../components/layout/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { Extensions, Question, questions } from '../../../models/Question';
+import { Extensions, Question } from '../../../models/Question';
 import { i18n } from '../../../models/Translation';
 import { withErrorLog, withTranslation } from '../../api/core';
 
@@ -16,14 +16,16 @@ const { t } = i18n;
 
 export const getServerSideProps = withErrorLog<
   { name: string },
-  { activity: string }
+  { activity: string; questionnaire: Question[] }
 >(
   withTranslation(async ({ params: { name } = {} }) => {
-    const { status } = await new ActivityModel().getOne(name!);
+    const activityStore = new ActivityModel();
+    const { status } = await activityStore.getOne(name!),
+      questionnaire = await activityStore.getQuestionnaire(name!);
 
     return {
       notFound: status !== 'online',
-      props: { activity: name! },
+      props: { activity: name!, questionnaire },
     };
   }),
 );
@@ -84,7 +86,7 @@ class RegisterPage extends PureComponent<
     );
 
   render() {
-    const { activity } = this.props,
+    const { activity, questionnaire } = this.props,
       { uploading } = activityStore;
 
     return (
@@ -92,15 +94,7 @@ class RegisterPage extends PureComponent<
         <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
-          <legend className="text-center">{t('questionnaire')}</legend>
-          <small className="text-muted mt-2">
-            {t('please_complete_all_mandatory_fields_before_you_proceed')}
-            <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-              <a className="text-primary ms-2"> {t('personal_profile')}</a>
-            </Link>
-          </small>
-          <ol className="my-3">{questions.map(this.renderField)}</ol>
-
+          <QuestionnairePreview questionnaire={questionnaire} />
           <footer className="text-center my-2">
             <Button
               className="px-5"

@@ -6,7 +6,7 @@ import sessionStore from './Session';
 export interface GitTemplate extends Base {
   url: string;
   isFetched: boolean;
-  repoLanguages: {};
+  repoLanguages: { [key: string]: string };
   repoTopics: string[];
   name?: string;
 }

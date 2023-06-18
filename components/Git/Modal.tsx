@@ -23,10 +23,11 @@ export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
 }
 
 const { t } = i18n;
+
 @observer
 export class GitModal extends PureComponent<GitModalProps> {
   @observable
-  inputField = { label: `${t('address')}`, text: `${t('url')}`, value: '' };
+  inputField = { label: t('address'), text: t('url'), value: '' };
 
   @observable
   validated = false;
@@ -36,13 +37,12 @@ export class GitModal extends PureComponent<GitModalProps> {
     event.stopPropagation();
     const form = event.currentTarget;
 
-    if (form.checkValidity() === false) return (this.validated = true);
+    if (!form.checkValidity()) return (this.validated = true);
 
-    const data = formToJSON(form);
+    const { store, onSave } = this.props;
+    await store.updateOne(formToJSON(form));
+    onSave?.();
 
-    await this.props.store.updateOne(data);
-
-    this.props.onSave?.();
     this.inputField.value = '';
   };
 
@@ -53,6 +53,7 @@ export class GitModal extends PureComponent<GitModalProps> {
 
   render() {
     const { show, onHide } = this.props;
+    const { label, text, value } = this.inputField;
 
     return (
       <Modal size="lg" {...{ show, onHide }}>
@@ -64,21 +65,22 @@ export class GitModal extends PureComponent<GitModalProps> {
           className="container-fluid"
           validated={this.validated}
           onSubmit={this.submitHandler}
+          onReset={this.cancelHandler}
         >
           <Modal.Body>
             <FormGroup as={Row} className="mb-3">
               <Form.Label column sm={2}>
-                {this.inputField.label}
+                {label}
               </Form.Label>
               <Col sm={10}>
                 <InputGroup>
-                  <InputGroup.Text>{this.inputField.text}</InputGroup.Text>
                   <Form.Control
-                    name={this.inputField.text}
                     type="url"
-                    value={this.inputField.value}
-                    onChange={event =>
-                      (this.inputField.value = event?.target.value)
+                    name={text}
+                    value={value}
+                    placeholder="https://github.com/idea2app/React-MobX-Bootstrap-ts"
+                    onChange={({ currentTarget: { value } }) =>
+                      (this.inputField.value = value)
                     }
                     required
                   />
@@ -87,11 +89,7 @@ export class GitModal extends PureComponent<GitModalProps> {
             </FormGroup>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="secondary"
-              type="reset"
-              onClick={this.cancelHandler}
-            >
+            <Button variant="secondary" type="reset">
               {t('cancel')}
             </Button>
             <Button variant="primary" type="submit">

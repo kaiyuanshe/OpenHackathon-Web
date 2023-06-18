@@ -21,6 +21,7 @@ export const GitCard: FC<GitCardProps> = observer(
     repoTopics = [],
     url,
     id,
+    name = url.replace(/^(.*[\\\/])/, ''),
     renderController,
     ...rest
   }) => (
@@ -28,34 +29,32 @@ export const GitCard: FC<GitCardProps> = observer(
       <Card.Body className="d-flex flex-column gap-3">
         <Card.Title as="h3" className="h5">
           <a target="_blank" href={url} rel="noreferrer">
-            {url.replace(/^(.*[\\\/])/, '')}
+            {name}
           </a>
         </Card.Title>
 
         <nav className="flex-fill">
-          {repoTopics &&
-            repoTopics.map(topic => (
-              <Badge
-                key={topic}
-                className="me-1"
-                bg={text2color(topic, ['light'])}
-                as="a"
-                target="_blank"
-                href={`https://github.com/topics/${topic}`}
-              >
-                {topic}
-              </Badge>
-            ))}
+          {repoTopics?.map(topic => (
+            <Badge
+              key={topic}
+              className="me-1"
+              bg={text2color(topic, ['light'])}
+              as="a"
+              target="_blank"
+              href={`https://github.com/topics/${topic}`}
+            >
+              {topic}
+            </Badge>
+          ))}
         </nav>
         <Row as="ul" className="list-unstyled g-4" xs={4}>
-          {repoLanguages &&
-            Object.keys(repoLanguages)?.map(language => (
-              <Col as="li" key={language}>
-                <GitLogo name={language} />
-              </Col>
-            ))}
+          {Object.keys(repoLanguages).map(language => (
+            <Col as="li" key={language}>
+              <GitLogo name={language} />
+            </Col>
+          ))}
         </Row>
-        {url.replace(/^(.*[\\\/])/, '')}
+        {name}
       </Card.Body>
       <Card.Footer className="d-flex justify-content-between align-items-center">
         {url && (
@@ -77,7 +76,7 @@ export const GitCard: FC<GitCardProps> = observer(
             type="radio"
             id={id}
             name="template"
-            value={url.replace(/^(.*[\\\/])/, '')}
+            value={name}
             label={t('select')}
           />
         )}

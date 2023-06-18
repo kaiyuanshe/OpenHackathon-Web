@@ -22,66 +22,67 @@ export const CardList = ({
         id,
         name = url.replace(/^(.*[\\\/])/, ''),
       }) => (
-        <Card className="shadow-sm" key={id}>
-          <Card.Body className="d-flex flex-column gap-3">
-            <Card.Title as="h3" className="h5">
-              <a target="_blank" href={url} rel="noreferrer">
-                {name}
-              </a>
-            </Card.Title>
+        <Col as="li" key={id}>
+          <Card className="shadow-sm">
+            <Card.Body className="d-flex flex-column gap-3">
+              <Card.Title as="h3" className="h5">
+                <a target="_blank" href={url} rel="noreferrer">
+                  {name}
+                </a>
+              </Card.Title>
 
-            <nav className="flex-fill">
-              {repoTopics &&
-                repoTopics.map(topic => (
-                  <Badge
-                    key={topic}
-                    className="me-1"
-                    bg={text2color(topic, ['light'])}
-                    as="a"
-                    target="_blank"
-                    href={`https://github.com/topics/${topic}`}
-                  >
-                    {topic}
-                  </Badge>
-                ))}
-            </nav>
-            <Row as="ul" className="list-unstyled g-4" xs={4}>
-              {repoLanguages &&
-                Object.keys(repoLanguages)?.map(language => (
-                  <Col as="li" key={language}>
-                    <GitLogo name={language} />
-                  </Col>
-                ))}
-            </Row>
-          </Card.Body>
-          <Card.Footer className="d-flex justify-content-between align-items-center">
-            <Button variant="success" target="_blank" href={url}>
-              {t('home_page')}
-            </Button>
-            <Form.Check
-              className="d-flex align-items-center"
-              style={{ gap: '0.5rem' }}
-              type="checkbox"
-              name="template"
-              value={name}
-              label={t('select')}
-              checked={selectedIds.includes(id!)}
-              onChange={
-                onSelect &&
-                (({ currentTarget: { checked } }) => {
-                  if (checked) return onSelect([...selectedIds, id!]);
+              <nav className="flex-fill">
+                {repoTopics &&
+                  repoTopics.map(topic => (
+                    <Badge
+                      key={topic}
+                      className="me-1"
+                      bg={text2color(topic, ['light'])}
+                      as="a"
+                      target="_blank"
+                      href={`https://github.com/topics/${topic}`}
+                    >
+                      {topic}
+                    </Badge>
+                  ))}
+              </nav>
+              <Row as="ul" className="list-unstyled g-4" xs={4}>
+                {repoLanguages &&
+                  Object.keys(repoLanguages)?.map(language => (
+                    <Col as="li" key={language}>
+                      <GitLogo name={language} />
+                    </Col>
+                  ))}
+              </Row>
+            </Card.Body>
+            <Card.Footer className="d-flex justify-content-between align-items-center">
+              <Button variant="success" target="_blank" href={url}>
+                {t('home_page')}
+              </Button>
+              <Form.Check
+                className="d-flex align-items-center gap-2"
+                type="checkbox"
+                name="template"
+                value={name}
+                label={t('select')}
+                checked={selectedIds.includes(id!)}
+                onChange={
+                  onSelect &&
+                  (({ currentTarget: { checked } }) => {
+                    if (checked) return onSelect([...selectedIds, id!]);
 
-                  const index = selectedIds.indexOf(id!);
+                    const index = selectedIds.indexOf(id!);
 
-                  onSelect([
-                    ...selectedIds.slice(0, index),
-                    ...selectedIds.slice(index + 1),
-                  ]);
-                })
-              }
-            />
-          </Card.Footer>
-        </Card>
+                    onSelect([
+                      ...selectedIds.slice(0, index),
+                      ...selectedIds.slice(index + 1),
+                    ]);
+                  })
+                }
+              />
+            </Card.Footer>
+          </Card>
+        </Col>
       ),
     )}
   </Row>

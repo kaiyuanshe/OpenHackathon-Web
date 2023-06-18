@@ -42,8 +42,7 @@ export default class ActivityManageGitPage extends PureComponent<
 
   render() {
     const { resolvedUrl, params } = this.props.route;
-    const { store } = this;
-    let { show, selectedIds } = this;
+    const { store, selectedIds } = this;
 
     return (
       <ActivityManageFrame
@@ -54,7 +53,7 @@ export default class ActivityManageGitPage extends PureComponent<
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
             <Form onSubmit={this.handleSubmit}>
-              <Button variant="danger" type="submit" className="me-2">
+              <Button variant="danger" className="me-2" type="submit">
                 <FontAwesomeIcon className="me-2" icon={faTrash} />
                 {t('delete')}
               </Button>
@@ -64,15 +63,14 @@ export default class ActivityManageGitPage extends PureComponent<
             </Form>
           </header>
           <GitList
-            store={store}
-            selectedIds={selectedIds}
-            onSelect={list => (selectedIds = list)}
+            {...{ store, selectedIds }}
+            onSelect={list => (this.selectedIds = list)}
           />
           <GitModal
             store={store}
-            show={show}
-            onHide={() => (show = false)}
-            onSave={() => (show = false) || store.refreshList()}
+            show={this.show}
+            onHide={() => (this.show = false)}
+            onSave={() => (this.show = false) || store.refreshList()}
           />
         </Container>
       </ActivityManageFrame>
