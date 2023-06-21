@@ -339,4 +339,5 @@ export default {
     'The questionnaire has been deleted successfully!',
   preview_questionnaire: 'Preview the questionnaire',
   confirm_to_delete_questionnaire: 'Confirm to delete the questionnaire?',
+  for_example: 'For example:',
 } as const;

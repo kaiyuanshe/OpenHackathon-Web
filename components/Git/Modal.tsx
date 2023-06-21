@@ -73,18 +73,19 @@ export class GitModal extends PureComponent<GitModalProps> {
                 {label}
               </Form.Label>
               <Col sm={10}>
-                <InputGroup>
-                  <Form.Control
-                    type="url"
-                    name={text}
-                    value={value}
-                    placeholder="https://github.com/idea2app/React-MobX-Bootstrap-ts"
-                    onChange={({ currentTarget: { value } }) =>
-                      (this.inputField.value = value)
-                    }
-                    required
-                  />
-                </InputGroup>
+                <Form.Control
+                  type="url"
+                  name={text}
+                  value={value}
+                  placeholder={
+                    t('for_example') +
+                    ' https://github.com/idea2app/React-MobX-Bootstrap-ts'
+                  }
+                  onChange={({ currentTarget: { value } }) =>
+                    (this.inputField.value = value)
+                  }
+                  required
+                />
               </Col>
             </FormGroup>
           </Modal.Body>

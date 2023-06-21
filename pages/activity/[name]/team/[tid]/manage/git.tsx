@@ -13,6 +13,7 @@ import {
 import { buildURLData, formToJSON } from 'web-utility';
 
 import { GitList, GitListProps } from '../../../../../../components/Git/List';
+// import {}
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
@@ -31,6 +32,7 @@ export default class GitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   teamStore = activityStore.teamOf(this.props.route.params!.name);
+  gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
   workStore = this.teamStore.workOf(this.props.route.params!.tid);
   workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
@@ -46,6 +48,8 @@ export default class GitPage extends PureComponent<
       template: string;
       repository: string;
     }>(event.currentTarget);
+    console.log(template, repository);
+    console.log(event.currentTarget);
 
     const { full_name, html_url } =
       await activityStore.currentGit.createOneFrom(template, repository);
@@ -96,7 +100,7 @@ export default class GitPage extends PureComponent<
               {t('create')}
             </Button>
           </div>
-          <GitList store={currentGit} />
+          <GitList store={this.gitTemplateStore} />
         </Modal.Body>
       </Modal>
     );
@@ -104,20 +108,17 @@ export default class GitPage extends PureComponent<
 
   renderController: GitListProps['renderController'] = ({
     id,
-    full_name,
+    name,
     default_branch,
-    html_url,
+    url,
   }) => (
     <>
-      <Button
-        variant="danger"
-        onClick={() => this.handleAuthorization(full_name)}
-      >
+      <Button variant="danger" onClick={() => this.handleAuthorization(name!)}>
         {t('authorize_all_teammates')}
       </Button>
 
       <DropdownButton variant="warning" title={t('instant_cloud_development')}>
-        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
+        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${url}`}>
           GitPod
         </Dropdown.Item>
         <Dropdown.Item

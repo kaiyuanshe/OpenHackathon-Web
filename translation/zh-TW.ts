@@ -323,4 +323,5 @@ export default {
   delete_questionnaire_success: '刪除問卷成功！',
   preview_questionnaire: '預覽問卷',
   confirm_to_delete_questionnaire: '確定刪除該問卷？',
+  for_example: '例如:',
 } as const;

@@ -9,6 +9,7 @@ export interface GitTemplate extends Base {
   repoLanguages: { [key: string]: string };
   repoTopics: string[];
   name?: string;
+  default_branch?: string;
 }
 
 export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {

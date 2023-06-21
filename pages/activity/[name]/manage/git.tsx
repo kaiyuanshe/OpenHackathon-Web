@@ -42,7 +42,7 @@ export default class ActivityManageGitPage extends PureComponent<
 
   render() {
     const { resolvedUrl, params } = this.props.route;
-    const { store, selectedIds } = this;
+    const { store, selectedIds, show } = this;
 
     return (
       <ActivityManageFrame
@@ -68,7 +68,7 @@ export default class ActivityManageGitPage extends PureComponent<
           />
           <GitModal
             store={store}
-            show={this.show}
+            show={show}
             onHide={() => (this.show = false)}
             onSave={() => (this.show = false) || store.refreshList()}
           />
