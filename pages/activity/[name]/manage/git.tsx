@@ -36,7 +36,6 @@ export default class ActivityManageGitPage extends PureComponent<
     if (!selectedIds[0]) return alert(t('choose_at_least_one_repo'));
 
     if (!confirm(t('confirm_delete_repo'))) return;
-
     for (const id of selectedIds) await this.store.deleteOne(id);
   };
 

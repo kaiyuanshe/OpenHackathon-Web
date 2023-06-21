@@ -48,8 +48,6 @@ export default class GitPage extends PureComponent<
       template: string;
       repository: string;
     }>(event.currentTarget);
-    console.log(template, repository);
-    console.log(event.currentTarget);
 
     const { full_name, html_url } =
       await activityStore.currentGit.createOneFrom(template, repository);
@@ -152,10 +150,10 @@ export default class GitPage extends PureComponent<
             </Button>
           </header>
 
-          <GitList
+          {/* <GitList
             store={this.workspaceStore}
             renderController={this.renderController}
-          />
+          /> */}
         </Container>
 
         {this.renderCreator()}
