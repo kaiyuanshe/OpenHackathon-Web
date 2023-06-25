@@ -12,8 +12,11 @@ import {
 } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
-import { GitList, GitListProps } from '../../../../../../components/Git/List';
-// import {}
+import { GitList } from '../../../../../../components/Git/List';
+import {
+  GitListProps,
+  TeamGitList,
+} from '../../../../../../components/Git/TeamGitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
@@ -57,6 +60,8 @@ export default class GitPage extends PureComponent<
       title: full_name,
       url: html_url,
     });
+    this.workspaceStore.refreshList();
+    this.creatorOpen = false;
   };
 
   async handleAuthorization(URI: string) {
@@ -108,7 +113,7 @@ export default class GitPage extends PureComponent<
     id,
     name,
     default_branch,
-    url,
+    html_url,
   }) => (
     <>
       <Button variant="danger" onClick={() => this.handleAuthorization(name!)}>
@@ -116,7 +121,7 @@ export default class GitPage extends PureComponent<
       </Button>
 
       <DropdownButton variant="warning" title={t('instant_cloud_development')}>
-        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${url}`}>
+        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
           GitPod
         </Dropdown.Item>
         <Dropdown.Item
@@ -150,10 +155,10 @@ export default class GitPage extends PureComponent<
             </Button>
           </header>
 
-          {/* <GitList
+          <TeamGitList
             store={this.workspaceStore}
             renderController={this.renderController}
-          /> */}
+          />
         </Container>
 
         {this.renderCreator()}

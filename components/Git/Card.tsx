@@ -21,6 +21,7 @@ export const GitCard: FC<GitCardProps> = observer(
     repoTopics = [],
     url,
     id,
+    description,
     name = url.replace('https://github.com/', ''),
     renderController,
     ...rest
@@ -48,13 +49,14 @@ export const GitCard: FC<GitCardProps> = observer(
           ))}
         </nav>
         <Row as="ul" className="list-unstyled g-4" xs={4}>
-          {Object.keys(repoLanguages).map(language => (
-            <Col as="li" key={language}>
-              <GitLogo name={language} />
-            </Col>
-          ))}
+          {repoLanguages &&
+            Object.keys(repoLanguages).map(language => (
+              <Col as="li" key={language}>
+                <GitLogo name={language} />
+              </Col>
+            ))}
         </Row>
-        {name}
+        {description && <Card.Text>{description}</Card.Text>}
       </Card.Body>
       <Card.Footer className="d-flex justify-content-between align-items-center">
         {url && (
@@ -67,7 +69,6 @@ export const GitCard: FC<GitCardProps> = observer(
           url,
           repoTopics,
           id,
-
           ...rest,
         }) || (
           <Form.Check

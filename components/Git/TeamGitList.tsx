@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react';
 import { Col, Row } from 'react-bootstrap';
 
-import { GitTemplate, GitTemplateModal } from '../../models/TemplateRepo';
+import { GitModel, GitRepository } from '../../models/Git';
 import { XScrollList, XScrollListProps } from '../layout/ScrollList';
-import { GitCard, GitCardProps } from './Card';
+import { GitTeamCard, TeamCardProps } from './GitTeamCard';
 
 export interface GitListProps
-  extends XScrollListProps<GitTemplate>,
-    Pick<GitCardProps, 'renderController'> {
-  store: GitTemplateModal;
+  extends XScrollListProps<GitRepository>,
+    Pick<TeamCardProps, 'renderController'> {
+  store: GitModel;
 }
 
 @observer
-export class GitList extends XScrollList<GitListProps> {
+export class TeamGitList extends XScrollList<GitListProps> {
   store = this.props.store;
 
   constructor(props: GitListProps) {
@@ -29,7 +29,7 @@ export class GitList extends XScrollList<GitListProps> {
       <Row as="ul" className="list-unstyled g-4" xs={1} sm={2}>
         {allItems.map(item => (
           <Col as="li" key={item.id}>
-            <GitCard
+            <GitTeamCard
               className="h-100 shadow-sm"
               {...item}
               renderController={renderController}

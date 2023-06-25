@@ -6,10 +6,11 @@ import sessionStore from './Session';
 export interface GitTemplate extends Base {
   url: string;
   isFetched: boolean;
-  repoLanguages: { [key: string]: string };
+  repoLanguages: Record<string, string>;
   repoTopics: string[];
   name?: string;
   default_branch?: string;
+  description?: string;
 }
 
 export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
@@ -28,11 +29,13 @@ export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: InputData<GitTemplate>) {
-    const { body } = await this.client.put<GitTemplate>(
-      `${this.baseURI}/templateRepo`,
-      data,
-    );
+  async updateOne(data: InputData<GitTemplate>, id?: string) {
+    const { body } = await (id
+      ? this.client.patch<GitTemplate>(
+          `${this.baseURI}/templateRepo/${id}`,
+          data,
+        )
+      : this.client.put<GitTemplate>(`${this.baseURI}/templateRepo`, data));
 
     return (this.currentOne = body!);
   }
