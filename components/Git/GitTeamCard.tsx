@@ -9,12 +9,12 @@ import { GitLogo } from './Logo';
 
 const { t } = i18n;
 
-export interface TeamCardProps extends GitRepository {
+export interface GitTeamCardProps extends GitRepository {
   className?: string;
   renderController?: (item: GitRepository) => ReactNode;
 }
 
-export const GitTeamCard: FC<TeamCardProps> = observer(
+export const GitTeamCard: FC<GitTeamCardProps> = observer(
   ({
     className = 'shadow-sm',
     languages = [],

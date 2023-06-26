@@ -77,14 +77,14 @@ export class GitModal extends PureComponent<GitModalProps> {
                   type="url"
                   name={text}
                   value={value}
-                  placeholder={
-                    t('for_example') +
-                    ' https://github.com/idea2app/React-MobX-Bootstrap-ts'
-                  }
+                  required
+                  placeholder={t(
+                    'for_example',
+                    'https://github.com/idea2app/React-MobX-Bootstrap-ts',
+                  )}
                   onChange={({ currentTarget: { value } }) =>
                     (this.inputField.value = value)
                   }
-                  required
                 />
               </Col>
             </FormGroup>

@@ -22,7 +22,7 @@ export const GitCard: FC<GitCardProps> = observer(
     url,
     id,
     description,
-    name = url.replace('https://github.com/', ''),
+    name = url?.replace('https://github.com/', ''),
     renderController,
     ...rest
   }) => (
