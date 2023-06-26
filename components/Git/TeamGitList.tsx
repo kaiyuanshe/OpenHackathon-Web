@@ -3,11 +3,11 @@ import { Col, Row } from 'react-bootstrap';
 
 import { GitModel, GitRepository } from '../../models/Git';
 import { XScrollList, XScrollListProps } from '../layout/ScrollList';
-import { GitTeamCard, TeamCardProps } from './GitTeamCard';
+import { GitTeamCard, GitTeamCardProps } from './GitTeamCard';
 
 export interface GitListProps
   extends XScrollListProps<GitRepository>,
-    Pick<TeamCardProps, 'renderController'> {
+    Pick<GitTeamCardProps, 'renderController'> {
   store: GitModel;
 }
 
