@@ -37,9 +37,8 @@ const MyApp = observer(
       </div>
 
       {!/manage|admin/.test(pathname) && (
-        <footer className="flex-fill d-flex justify-content-center align-items-center border-top py-4">
+        <footer className="d-flex justify-content-center align-items-center border-top py-4">
           <a
-            className="flex-fill d-flex justify-content-center align-items-center"
             href="https://github.com/idea2app/Next-Bootstrap-ts"
             target="_blank"
             rel="noopener noreferrer"
