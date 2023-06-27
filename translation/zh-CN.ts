@@ -323,5 +323,5 @@ export default {
   delete_questionnaire_success: '删除问卷成功！',
   preview_questionnaire: '问卷预览',
   confirm_to_delete_questionnaire: '确认删除该问卷？',
-  for_example: (example: string) => textJoin('例如：', example),
+  for_example: (example: string) => '例如：' + example,
 } as const;
