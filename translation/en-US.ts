@@ -181,7 +181,7 @@ export default {
   authorize_all_teammates: 'Authorize all teammates',
   instant_cloud_development: 'Instant cloud development',
   cloud_development_environment: 'Cloud development environment',
-  creat_clound_environment: 'Create a development environment',
+  create_cloud_environment: 'Create a development environment',
   team_registration: 'Team registration',
   role_management: 'Role Management',
   submit_work: 'Submit work',

@@ -174,7 +174,7 @@ export default {
   authorize_all_teammates: '授权全部队友',
   instant_cloud_development: '即刻云开发',
   cloud_development_environment: '云开发环境',
-  creat_clound_environment: '创建开发环境',
+  create_cloud_environment: '创建开发环境',
   team_registration: '团队报名',
   role_management: '角色管理',
   submit_work: '提交作品',
