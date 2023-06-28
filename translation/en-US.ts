@@ -181,7 +181,7 @@ export default {
   authorize_all_teammates: 'Authorize all teammates',
   instant_cloud_development: 'Instant cloud development',
   cloud_development_environment: 'Cloud development environment',
-  creat_clound_environment: 'Create a development environment',
+  create_cloud_environment: 'Create a development environment',
   team_registration: 'Team registration',
   role_management: 'Role Management',
   submit_work: 'Submit work',
@@ -307,6 +307,10 @@ export default {
   Year: 'Year',
   unlimited: 'Unlimited',
   start_time_earlier_end_time: 'Start time must be earlier than end time',
+  address: 'Address',
+  confirm_delete_repo: 'Confirm to delete the Github repository template',
+  choose_at_least_one_repo:
+    'Please choose at least one Github repository template',
   survey: 'Questionnaire',
   edit_questionnaire: 'Edit Questionnaire',
   text: 'text',
@@ -335,4 +339,5 @@ export default {
     'The questionnaire has been deleted successfully!',
   preview_questionnaire: 'Preview the questionnaire',
   confirm_to_delete_questionnaire: 'Confirm to delete the questionnaire?',
+  for_example: (example: string) => 'E.g., ' + example,
 } as const;

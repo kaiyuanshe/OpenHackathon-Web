@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
@@ -12,7 +12,11 @@ import {
 } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
-import { GitList, GitListProps } from '../../../../../../components/Git';
+import { GitList } from '../../../../../../components/Git/List';
+import {
+  GitListProps,
+  TeamGitList,
+} from '../../../../../../components/Git/TeamGitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
@@ -31,6 +35,7 @@ export default class GitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   teamStore = activityStore.teamOf(this.props.route.params!.name);
+  gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
   workStore = this.teamStore.workOf(this.props.route.params!.tid);
   workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
@@ -55,6 +60,8 @@ export default class GitPage extends PureComponent<
       title: full_name,
       url: html_url,
     });
+    this.workspaceStore.refreshList();
+    this.creatorOpen = false;
   };
 
   async handleAuthorization(URI: string) {
@@ -96,7 +103,7 @@ export default class GitPage extends PureComponent<
               {t('create')}
             </Button>
           </div>
-          <GitList store={currentGit} />
+          <GitList store={this.gitTemplateStore} />
         </Modal.Body>
       </Modal>
     );
@@ -104,38 +111,51 @@ export default class GitPage extends PureComponent<
 
   renderController: GitListProps['renderController'] = ({
     id,
-    full_name,
+    name,
     default_branch,
     html_url,
-  }) => (
-    <>
-      <Button
-        variant="danger"
-        onClick={() => this.handleAuthorization(full_name)}
-      >
-        {t('authorize_all_teammates')}
-      </Button>
+  }) => {
+    const { github } = sessionStore.metaOAuth;
 
-      <DropdownButton variant="warning" title={t('instant_cloud_development')}>
-        <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
-          GitPod
-        </Dropdown.Item>
-        <Dropdown.Item
-          target="_blank"
-          href={`https://github.com/codespaces/new?${buildURLData({
-            hide_repo_select: true,
-            repo: id,
-            ref: default_branch,
-          })}`}
+    return (
+      <>
+        <Button
+          variant="danger"
+          disabled={!github}
+          onClick={() => this.handleAuthorization(name!)}
         >
-          GitHub codespaces
-        </Dropdown.Item>
-      </DropdownButton>
-    </>
-  );
+          {t('authorize_all_teammates')}
+          {github ? '' : t('please_use_github_login')}
+        </Button>
+
+        <DropdownButton
+          variant="warning"
+          title={t('instant_cloud_development')}
+        >
+          <Dropdown.Item
+            target="_blank"
+            href={`https://gitpod.io/#${html_url}`}
+          >
+            GitPod
+          </Dropdown.Item>
+          <Dropdown.Item
+            target="_blank"
+            href={`https://github.com/codespaces/new?${buildURLData({
+              hide_repo_select: true,
+              repo: id,
+              ref: default_branch,
+            })}`}
+          >
+            GitHub codespaces
+          </Dropdown.Item>
+        </DropdownButton>
+      </>
+    );
+  };
 
   render() {
     const { resolvedUrl, params } = this.props.route;
+    const { github } = sessionStore.metaOAuth;
 
     return (
       <TeamManageFrame
@@ -146,12 +166,17 @@ export default class GitPage extends PureComponent<
       >
         <Container fluid>
           <header className="d-flex justify-content-end mb-3">
-            <Button variant="success" onClick={() => (this.creatorOpen = true)}>
-              {t('creat_clound_environment')}
+            <Button
+              variant="success"
+              disabled={!github}
+              onClick={() => (this.creatorOpen = true)}
+            >
+              {t('create_cloud_environment')}
+              {github ? '' : t('please_use_github_login')}
             </Button>
           </header>
 
-          <GitList
+          <TeamGitList
             store={this.workspaceStore}
             renderController={this.renderController}
           />
