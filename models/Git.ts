@@ -30,7 +30,7 @@ const gitClient = new HTTPClient({
   baseURI: 'https://api.github.com/',
   responseType: 'json',
 }).use(({ request }, next) => {
-  const { accessToken } = sessionStore.metaOAuth.github;
+  const { accessToken } = sessionStore.metaOAuth.github || {};
 
   if (accessToken)
     request.headers = {
