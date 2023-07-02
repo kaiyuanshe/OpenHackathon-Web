@@ -88,9 +88,7 @@ export const MessageListLayout = ({
             />
           </td>
           <td>{title}</td>
-          <td>
-            <Form.Control as="textarea" rows={3} value={content} readOnly />
-          </td>
+          <td>{content}</td>
           <td>{MessageTypeName()[MessageType.Hackathon]}</td>
           <td hidden={hideControls}>
             <Button
