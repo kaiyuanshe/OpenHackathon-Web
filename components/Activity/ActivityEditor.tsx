@@ -226,7 +226,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('ribbon')}
           </Form.Label>
           <Col sm={10}>
-            <Form.Control name="ribbon" type="text" defaultValue={ribbon} />
+            <Form.Control name="ribbon" defaultValue={ribbon} />
           </Col>
         </Form.Group>
 
