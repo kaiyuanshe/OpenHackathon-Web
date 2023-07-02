@@ -79,17 +79,15 @@ export const TeamWorkListLayout = ({
                   )
                 )}
               </div>
-              <time
-                className="p-2 text-truncate"
-                title={t('update_time')}
-                dateTime={updatedAt}
-              >
-                <FontAwesomeIcon
-                  className="text-success me-2"
-                  icon={faCalendarDay}
-                />
-                {new Date(updatedAt).toLocaleString()}
-              </time>
+              <div className="p-2 text-truncate">
+                <time title={t('update_time')} dateTime={updatedAt}>
+                  <FontAwesomeIcon
+                    className="text-success me-2"
+                    icon={faCalendarDay}
+                  />
+                  {new Date(updatedAt).toLocaleString()}
+                </time>
+              </div>
             </Card.Body>
             {controls && (
               <Card.Footer className="d-flex">
