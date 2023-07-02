@@ -119,7 +119,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
                   >
                     <FontAwesomeIcon
                       className="mx-3"
-                      style={{ height: '16px', width: '16px' }}
+                      style={{ height: '1rem', width: '1rem' }}
                       icon={icon}
                       color={active ? 'white' : 'primary'}
                     />
