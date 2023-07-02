@@ -16,7 +16,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
     <Form.Group as={Row} className="mb-3" controlId="displayName">
       <Form.Label column sm={3}>
         {t('disaplay_name')}
-        {t('quote_required')}
+        <span className="text-danger"> *</span>
       </Form.Label>
       <Col sm={9}>
         <Form.Control

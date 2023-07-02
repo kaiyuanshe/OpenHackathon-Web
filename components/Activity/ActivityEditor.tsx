@@ -111,6 +111,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="name">
           <Form.Label column sm={2}>
             {t('activity_id')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <Form.Control
@@ -131,13 +132,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="displayName">
           <Form.Label column sm={2}>
             {t('activity_name')}
-            {t('quote_required')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="displayName"
               type="text"
-              placeholder={t('activity_name')}
               required
               defaultValue={displayName}
             />
@@ -163,6 +163,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="image">
           <Form.Label column sm={2}>
             {t('bannerUrls')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <FileUploader
@@ -180,12 +181,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="location">
           <Form.Label column sm={2}>
             {t('activity_address')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="location"
               type="text"
-              placeholder={t('activity_address')}
               required
               defaultValue={location}
             />
@@ -196,7 +197,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         </Form.Group>
 
         <DateTimeInput
-          label={t('enrollment') + t('quote_required')}
+          label={t('enrollment')}
           name="enrollment"
           key="enrollment"
           startAt={enrollmentStartedAt}
@@ -204,7 +205,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           required
         />
         <DateTimeInput
-          label={t('activity_time') + t('quote_required')}
+          label={t('activity_time')}
           name="event"
           key="event"
           startAt={eventStartedAt}
@@ -212,7 +213,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           required
         />
         <DateTimeInput
-          label={t('judge_time') + t('quote_required')}
+          label={t('judge_time')}
           name="judge"
           key="judge"
           startAt={judgeStartedAt}
@@ -225,12 +226,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('ribbon')}
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="ribbon"
-              type="text"
-              placeholder={t('ribbon')}
-              defaultValue={ribbon}
-            />
+            <Form.Control name="ribbon" type="text" defaultValue={ribbon} />
           </Col>
         </Form.Group>
 
@@ -253,12 +249,12 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="summary">
           <Form.Label column sm={2}>
             {t('activity_introduction')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <Form.Control
               name="summary"
               type="text"
-              placeholder={t('activity_introduction')}
               defaultValue={summary}
               required
             />
@@ -271,6 +267,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
         <Form.Group as={Row} className="mb-3" controlId="briefInfo">
           <Form.Label column sm={2}>
             {t('hackathon_detail')}
+            <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
             <HTMLEditor

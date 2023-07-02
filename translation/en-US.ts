@@ -225,7 +225,6 @@ export default {
   has_published:
     'An publishing application has been made, please wait for review',
   edited_success: 'Modified Successfully ',
-  quote_required: '(required)',
   name_placeholder: 'ID, letters and numbers only',
   please_enter_name: 'Please enter a name',
   activity_id: 'Activity ID',
@@ -233,7 +232,7 @@ export default {
   disaplay_name: 'Display Name',
   tag: 'Tag',
   tag_placeholder: 'press Enter key to add a tag',
-  bannerUrls: 'Head picture (required, up to 10)',
+  bannerUrls: 'Head picture (up to 10)',
   enrollment: 'Registration Time',
   activity_time: 'Activity time',
   judge_time: 'Rating time',

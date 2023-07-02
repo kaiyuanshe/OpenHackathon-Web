@@ -46,7 +46,7 @@ export const QuestionnaireCreate: FC<QuestionnaireCreateProps> = observer(
             <Form.Group className="w-20" controlId="id">
               <Form.Label>
                 {t('question_id')}
-                {t('quote_required')}
+                <span className="text-danger"> *</span>
               </Form.Label>
               <Form.Control name="id" required />
             </Form.Group>
@@ -55,7 +55,7 @@ export const QuestionnaireCreate: FC<QuestionnaireCreateProps> = observer(
             <Form.Group className="flex-grow-1" controlId="title">
               <Form.Label>
                 {t('question_description')}
-                {t('quote_required')}
+                <span className="text-danger"> *</span>
               </Form.Label>
               <Form.Control name="title" required />
             </Form.Group>
