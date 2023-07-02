@@ -64,10 +64,10 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           <Form.Group className="mt-2" controlId="content">
             <Form.Label>{t('content')}</Form.Label>
             <Form.Control
-              name="content"
-              defaultValue={content}
               as="textarea"
+              name="content"
               required
+              defaultValue={content}
             />
           </Form.Group>
           <Form.Group className="mt-2" controlId="type">
