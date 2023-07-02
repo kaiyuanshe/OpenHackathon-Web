@@ -41,7 +41,7 @@ const MyApp = observer(
           <a
             href="https://github.com/idea2app/Next-Bootstrap-ts"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
           >
             {t('powered_by')}
             <span className="mx-2">

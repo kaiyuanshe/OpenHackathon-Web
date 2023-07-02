@@ -80,7 +80,7 @@ export const TeamWorkListLayout = ({
                 )}
               </div>
               <time
-                className="p-2 text-truncate"
+                className="d-block p-2 text-truncate"
                 title={t('update_time')}
                 dateTime={updatedAt}
               >

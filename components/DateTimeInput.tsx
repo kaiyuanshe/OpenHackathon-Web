@@ -47,6 +47,7 @@ export class DateTimeInput extends PureComponent<DateTimeInputProps> {
       <Form.Group as={Row} className="mb-3" controlId={id}>
         <Form.Label column sm={2}>
           {label}
+          <span className="text-danger"> *</span>
         </Form.Label>
         <Col sm={10}>
           <InputGroup className="mb-3">
