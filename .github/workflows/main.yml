@@ -15,12 +15,12 @@ jobs:
 
       - uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 8
 
       - uses: actions/setup-node@v3
         if: ${{ !env.VERCEL_TOKEN || !env.VERCEL_ORG_ID || !env.VERCEL_PROJECT_ID }}
         with:
-          node-version: 14
+          node-version: 18
           cache: pnpm
 
       - name: Install Dependencies

@@ -54,7 +54,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     if (form.checkValidity() === false) return (this.validated = true);
 
     const { name } = this.props,
-      { detailHTML } = this,
       data = formToJSON<ActivityFormData>(form);
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
@@ -67,7 +66,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
       };
     });
     // @ts-ignore
-    await activityStore.updateOne({ ...data, detail: detailHTML.trim() }, name);
+    await activityStore.updateOne(data, name);
 
     if (!name && confirm(t('create_work_success'))) {
       await activityStore.publishOne(data.name);
@@ -273,15 +272,16 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             {t('hackathon_detail')}
           </Form.Label>
           <Col sm={10}>
-            <HTMLEditor
-              defaultValue={this.detailHTML}
-              onChange={code => (this.detailHTML = code)}
-            />
+            {detail && (
+              <HTMLEditor
+                name="detail"
+                defaultValue={detail}
+                onChange={code => (this.detailHTML = code)}
+              />
+            )}
             <Form.Control
               className="d-none"
-              name="detail"
               isInvalid={!this.detailHTML.trim() && this.validated}
-              defaultValue={detail}
             />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
