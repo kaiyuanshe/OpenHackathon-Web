@@ -93,11 +93,11 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               {t('work_type')}
             </Form.Label>
             <Col sm={10}>
-              {workTypes.map(({ value }) => (
+              {workTypes.map(({ title, value }) => (
                 <Form.Check
                   type="radio"
                   inline
-                  label={value}
+                  label={title}
                   name="type"
                   value={value}
                   id={value}

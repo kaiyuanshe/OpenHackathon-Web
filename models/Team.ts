@@ -151,15 +151,20 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
         throw integrateError(error);
       }
       const { nameAvailable, reason, message } = checkNameAvailabilityBody!;
+
       if (!nameAvailable) {
-        const errMsg = message.replace('{0}', data.displayName || '');
-        throw new ReferenceError(`${reason}\n${errMsg}`);
+        const text = message.replace('{0}', data.displayName || '');
+
+        throw new ReferenceError(`${reason}\n${text}`);
       }
     }
+
     try {
       const { body } = await (id
         ? this.client.patch<Team>(`${this.baseURI}/${id}`, data)
         : this.client.put<Team>(this.baseURI, data));
+
+      await this.getSessionOne();
 
       return (this.currentOne = body!);
     } catch (error: any) {

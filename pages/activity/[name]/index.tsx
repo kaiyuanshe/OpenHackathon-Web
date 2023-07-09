@@ -117,16 +117,15 @@ export default class ActivityPage extends PureComponent<
   registerNow = async () => {
     const { name } = this.props.activity;
 
-    await activityStore.signOne(name, []);
+    await activityStore.signOne(name);
 
     self.alert(textJoin(t('hackathons'), name, t('registration_needs_review')));
-    self.location.reload();
   };
 
   renderMeta() {
     const { github } = sessionStore.metaOAuth,
-      { status } = this.enrollmentStore.sessionOne || {},
-      { sessionOne: myTeam } = this.teamStore || {},
+      { status } = activityStore.currentEnrollment?.sessionOne || {},
+      myTeam = activityStore.currentTeam?.sessionOne,
       { questionnaire } = activityStore,
       {
         name,
@@ -261,7 +260,7 @@ export default class ActivityPage extends PureComponent<
         this.props.activity,
       { showCreateTeam, loading } = this,
       { organizationList } = this.props,
-      myTeam = this.teamStore.sessionOne,
+      myTeam = activityStore.currentTeam?.sessionOne,
       myMessage = this.messageStore;
 
     return (
@@ -330,7 +329,6 @@ export default class ActivityPage extends PureComponent<
                 <OrganizationListLayout defaultData={organizationList} />
               </>
             )}
-
             {displayName && location && (
               <>
                 <h2 className="mt-3">{t('competition_location')}</h2>

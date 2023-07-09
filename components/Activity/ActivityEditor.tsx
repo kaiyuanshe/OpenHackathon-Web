@@ -56,6 +56,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     const { name } = this.props,
       data = formToJSON<ActivityFormData>(form);
 
+    data.detail = data.detail + '';
+
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
 

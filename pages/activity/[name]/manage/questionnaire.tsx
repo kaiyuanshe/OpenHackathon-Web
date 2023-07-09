@@ -6,7 +6,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { QuestionnaireCreate } from '../../../../components/Activity/QuestionnaireCreate';
-import { QuestionnairePreview } from '../../../../components/Activity/QuestionnairePreview';
+import { QuestionnaireForm } from '../../../../components/Activity/QuestionnairePreview';
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
 import activityStore from '../../../../models/Activity';
 import { isServer } from '../../../../models/Base';
@@ -142,7 +142,8 @@ class ActivityQuestionnairePage extends PureComponent<
           </Col>
           <Col sm={12} className="p-2">
             <h5 className="mx-2">{t('preview_questionnaire')}</h5>
-            <QuestionnairePreview questionnaire={questionnaire} />
+
+            <QuestionnaireForm fields={questionnaire} />
           </Col>
         </Row>
       </ActivityManageFrame>

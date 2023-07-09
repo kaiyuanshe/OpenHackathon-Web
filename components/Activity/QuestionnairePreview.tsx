@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import Link from 'next/link';
-import { FC } from 'react';
+import { PureComponent } from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
 import { Question } from '../../models/Question';
@@ -8,37 +8,41 @@ import { i18n } from '../../models/Translation';
 
 const { t } = i18n;
 
-export interface QuestionnairePreviewProps {
-  questionnaire: Question[];
+export interface QuestionnaireFormProps {
+  fields: Question[];
 }
 
-export const QuestionnairePreview: FC<QuestionnairePreviewProps> = observer(
-  ({ questionnaire }) => {
-    const renderField = ({ options, multiple, title, ...props }: Question) =>
-      options ? (
-        <Form.Group as="li" className="mb-3" key={title}>
-          {title}
-          <Row xs={1} sm={3} lg={4} className="mt-2">
-            {options.map(value => (
-              <Form.Check
-                type={multiple ? 'checkbox' : 'radio'}
-                label={value}
-                name={title}
-                value={value}
-                key={value}
-              />
-            ))}
-          </Row>
-        </Form.Group>
-      ) : (
-        <Form.Group as="li" className="mb-3 mt-2" key={title} controlId={title}>
-          {title}
-          <Row>
-            <Form.Label />
-            <Form.Control name={title} {...props} />
-          </Row>
-        </Form.Group>
-      );
+@observer
+export class QuestionnaireForm extends PureComponent<QuestionnaireFormProps> {
+  renderField = ({ options, multiple, title, ...props }: Question) =>
+    options ? (
+      <Form.Group as="li" className="mb-3" key={title}>
+        {title}
+        <Row xs={1} sm={3} lg={4} className="mt-2">
+          {options.map(value => (
+            <Form.Check
+              type={multiple ? 'checkbox' : 'radio'}
+              label={value}
+              name={title}
+              value={value}
+              id={value}
+              key={value}
+            />
+          ))}
+        </Row>
+      </Form.Group>
+    ) : (
+      <Form.Group as="li" className="mb-3 mt-2" key={title} controlId={title}>
+        {title}
+        <Row>
+          <Form.Label />
+          <Form.Control name={title} {...props} />
+        </Row>
+      </Form.Group>
+    );
+
+  render() {
+    const { fields } = this.props;
 
     return (
       <Container fluid as="fieldset">
@@ -50,10 +54,8 @@ export const QuestionnairePreview: FC<QuestionnairePreviewProps> = observer(
             <a className="text-primary ms-2">{t('personal_profile')}</a>
           </Link>
         </small>
-        <ol className="my-3 px-3">{questionnaire.map(renderField)}</ol>
+        <ol className="my-3 px-3">{fields.map(this.renderField)}</ol>
       </Container>
     );
-  },
-);
-
-QuestionnairePreview.displayName = 'QuestionnairePreview';
+  }
+}

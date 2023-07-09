@@ -1,10 +1,11 @@
 import { textJoin } from 'mobx-i18n';
+import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { QuestionnairePreview } from '../../../components/Activity/QuestionnairePreview';
+import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePreview';
 import PageHead from '../../../components/layout/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
@@ -30,7 +31,8 @@ export const getServerSideProps = withErrorLog<
   }),
 );
 
-class RegisterPage extends PureComponent<
+@observer
+export default class RegisterPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -58,33 +60,6 @@ class RegisterPage extends PureComponent<
     location.href = `/activity/${activity}`;
   };
 
-  renderField = ({ options, multiple, title, ...props }: Question) =>
-    options ? (
-      <Form.Group as="li" className="mb-3" key={title}>
-        {title}
-        <Row xs={1} sm={3} lg={4} className="mt-2">
-          {options.map(value => (
-            <Form.Check
-              type={multiple ? 'checkbox' : 'radio'}
-              label={value}
-              name={title}
-              value={value}
-              id={value}
-              key={value}
-            />
-          ))}
-        </Row>
-      </Form.Group>
-    ) : (
-      <Form.Group as="li" className="mb-3 " key={title} controlId={title}>
-        {title}
-        <Row className="mt-2">
-          <Form.Label></Form.Label>
-          <Form.Control name={title} {...props} />
-        </Row>
-      </Form.Group>
-    );
-
   render() {
     const { activity, questionnaire } = this.props,
       { uploading } = activityStore;
@@ -94,7 +69,8 @@ class RegisterPage extends PureComponent<
         <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
-          <QuestionnairePreview questionnaire={questionnaire} />
+          <QuestionnaireForm fields={questionnaire} />
+
           <footer className="text-center my-2">
             <Button
               className="px-5"
@@ -110,5 +86,3 @@ class RegisterPage extends PureComponent<
     );
   }
 }
-
-export default RegisterPage;

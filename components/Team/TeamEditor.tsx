@@ -33,6 +33,7 @@ export const TeamEditor: FC<TeamEditorProps> = ({ team, onSubmit }) => (
     <Form.Group as={Row} className="mb-3" controlId="description">
       <Form.Label column sm={3}>
         {t('team_introduction')}
+        <span className="text-danger"> *</span>
       </Form.Label>
       <Col sm={9}>
         <Form.Control

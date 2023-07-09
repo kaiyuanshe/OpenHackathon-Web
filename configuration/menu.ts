@@ -25,7 +25,7 @@ export const menus: () => MenuItem[] = () => [
       {
         title: t('edit_questionnaire'),
         href: 'questionnaire',
-        icon: 'edit',
+        icon: 'file-pen',
       },
       {
         title: t('sign_up_user'),
