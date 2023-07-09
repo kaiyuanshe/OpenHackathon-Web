@@ -82,11 +82,15 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentStaff?: StaffModel;
   currentGit = new GitModel();
   currentAward?: AwardModel;
+
   @observable
   currentEnrollment?: EnrollmentModel;
+
   currentMessage?: MessageModel;
+
   @observable
   currentTeam?: TeamModel;
+
   currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
   currentTemplate?: GitTemplateModal;
@@ -194,7 +198,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
         ({
           ...JSON.parse(v.value),
           id: v.name,
-        } as Question),
+        }) as Question,
     );
 
     return (this.questionnaire = questionnaire);
@@ -238,10 +242,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  signOne(name: string, extensions: Enrollment['extensions']) {
-    return this.client.put(`${this.baseURI}/${name}/enrollment`, {
+  async signOne(name: string, extensions: Enrollment['extensions'] = []) {
+    await this.client.put(`${this.baseURI}/${name}/enrollment`, {
       extensions,
     });
+
+    return this.currentEnrollment?.getSessionOne();
   }
 }
 

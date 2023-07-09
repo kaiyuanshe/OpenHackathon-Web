@@ -10,7 +10,6 @@ export default function Document() {
         />
         <link rel="manifest" href="/manifest.json" />
         <script src="https://polyfill.kaiyuanshe.cn/feature/PWAManifest.js"></script>
-        <script src="https://polyfill.kaiyuanshe.cn/feature/EventSubmitter.js"></script>
 
         <link
           rel="stylesheet"
@@ -18,7 +17,7 @@ export default function Document() {
         />
         <link
           rel="stylesheet"
-          href="https://unpkg.com/bootstrap-icons@1.10.4/font/bootstrap-icons.css"
+          href="https://unpkg.com/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
         />
         <link
           rel="stylesheet"
