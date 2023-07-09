@@ -37,6 +37,7 @@
     "react": "^17.0.2",
     "react-bootstrap": "^2.8.0",
     "react-bootstrap-editor": "^1.0.1",
+    "react-doc-viewer": "^0.1.5",
     "react-dom": "^17.0.2",
     "react-leaflet": "^3.2.5",
     "web-utility": "^4.0.0"

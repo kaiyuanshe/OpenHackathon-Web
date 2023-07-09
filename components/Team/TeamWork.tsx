@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react';
+import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 
 import activityStore from '../../models/Activity';
 import { TeamWork } from '../../models/Team';
@@ -15,15 +16,22 @@ const TeamWorkLiLayout = ({ defaultData = [] }: TeamWorkProps) => (
   <ul>
     {defaultData.map(({ updatedAt, id, title, description, type, url }) => (
       <li key={id} className="list-unstyled">
-        <a
-          className="text-primary text-truncate"
-          target="_blank"
-          href={url}
-          title={description}
-          rel="noreferrer"
-        >
-          {title}
-        </a>
+        <DocViewer
+          documents={[{ uri: url }]}
+          pluginRenderers={DocViewerRenderers}
+          config={{
+            header: {
+              overrideComponent: () => (
+                <>
+                  <div>{title}</div>
+                  <div>{description}</div>
+                  <div>{updatedAt}</div>
+                  <div>{type}</div>
+                </>
+              ),
+            },
+          }}
+        />
       </li>
     ))}
   </ul>
