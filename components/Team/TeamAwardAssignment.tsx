@@ -1,21 +1,20 @@
-import { observer } from 'mobx-react';
+import { FC } from 'react';
 
-import activityStore from '../../models/Activity';
 import { AwardAssignment } from '../../models/Award';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
-interface AwardAssignmentProps extends XScrollListProps<AwardAssignment> {
-  activity: string;
-  team: string;
-  value?: [];
+export interface TeamAwardAssignmentLayoutProps
+  extends XScrollListProps<AwardAssignment> {
   size?: 'sm' | 'lg';
   onDelete?: (id: AwardAssignment['id']) => any;
 }
 
-const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
+export const TeamAwardAssignmentLayout: FC<TeamAwardAssignmentLayoutProps> = ({
+  defaultData = [],
+}) => (
   <>
     <ol>
-      {value.map(({ updatedAt, id, description, award: { name } }) => (
+      {defaultData.map(({ updatedAt, id, description, award: { name } }) => (
         <li key={id} className="list-unstyled">
           {name}
         </li>
@@ -23,25 +22,3 @@ const TeamAwardAssignmentLayout = ({ value = [] }: AwardAssignmentProps) => (
     </ol>
   </>
 );
-
-@observer
-export class TeamAwardAssignmentList extends XScrollList<AwardAssignmentProps> {
-  store = activityStore
-    .teamOf(this.props.activity)
-    .assignmentOf(this.props.team);
-
-  constructor(props: AwardAssignmentProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return (
-      <TeamAwardAssignmentLayout
-        {...this.props}
-        defaultData={this.store.allItems}
-      />
-    );
-  }
-}

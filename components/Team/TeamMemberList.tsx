@@ -1,9 +1,7 @@
 import { Avatar } from 'idea-react';
-import { observer } from 'mobx-react';
 
-import activityStore from '../../models/Activity';
 import { TeamMember } from '../../models/Team';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 export interface TeamMemberListProps extends XScrollListProps<TeamMember> {
   activity: string;
@@ -25,18 +23,3 @@ export const TeamMemberListLayout = ({
     ))}
   </ul>
 );
-
-@observer
-export class TeamMemberList extends XScrollList<TeamMemberListProps> {
-  store = activityStore.teamOf(this.props.activity).memberOf(this.props.team);
-
-  constructor(props: TeamMemberListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return <TeamMemberListLayout defaultData={this.store.allItems} />;
-  }
-}
