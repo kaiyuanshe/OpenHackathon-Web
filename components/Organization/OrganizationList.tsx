@@ -29,21 +29,6 @@ export const OrganizationListLayout = ({
   </ul>
 );
 
-@observer
-export class OrganizationList extends XScrollList<OrganizationListProps> {
-  store = this.props.store;
-
-  constructor(props: OrganizationListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return <OrganizationListLayout defaultData={this.store.allItems} />;
-  }
-}
-
 export const OrganizationTableLayout = ({
   defaultData = [],
   selectedIds = [],

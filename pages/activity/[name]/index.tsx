@@ -10,6 +10,7 @@ import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { PureComponent } from 'react';
@@ -31,7 +32,7 @@ import { MessageList } from '../../../components/Message/MessageList';
 import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
-import { TeamList } from '../../../components/Team/TeamList';
+import { TeamListLayout } from '../../../components/Team/TeamList';
 import activityStore, {
   Activity,
   ActivityModel,
@@ -318,7 +319,13 @@ export default class ActivityPage extends PureComponent<
                 )}
                 <hr />
                 <h3>{t('all_teams')}</h3>
-                <TeamList store={this.teamStore} />
+                <ScrollList
+                  translator={i18n}
+                  store={this.teamStore}
+                  renderList={allItems => (
+                    <TeamListLayout defaultData={allItems} />
+                  )}
+                />
               </Tab>
             </Tabs>
           </Col>

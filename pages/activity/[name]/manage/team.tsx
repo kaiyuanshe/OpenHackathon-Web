@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import {
@@ -11,7 +12,7 @@ import {
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { TeamList } from '../../../../components/Team/TeamList';
+import { TeamListLayout } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
@@ -62,7 +63,11 @@ export default class TeamManagePage extends PureComponent<
               </Dropdown.Item>
             </DropdownButton>
           </header>
-          <TeamList store={this.store} />
+          <ScrollList
+            translator={i18n}
+            store={this.store}
+            renderList={allItems => <TeamListLayout defaultData={allItems} />}
+          />
         </Container>
       </ActivityManageFrame>
     );

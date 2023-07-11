@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
 
-import { ActivityLogList } from '../../../../components/Activity/ActivityLogList';
+import { ActivityLogListLayout } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
@@ -27,7 +28,13 @@ export default class LogPage extends PureComponent<
         name={params!.name}
         title={t('log')}
       >
-        <ActivityLogList store={this.store} />
+        <ScrollList
+          translator={i18n}
+          store={this.store}
+          renderList={allItems => (
+            <ActivityLogListLayout defaultData={allItems} />
+          )}
+        />
       </ActivityManageFrame>
     );
   }
