@@ -1,23 +1,23 @@
-import { observer } from 'mobx-react';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { Team, TeamModel } from '../../models/Team';
+import { Team } from '../../models/Team';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';
 
 const { t } = i18n;
 
-export interface TeamAwardListProps extends XScrollListProps<Team> {
-  store: TeamModel;
+export interface TeamAwardListLayoutProps extends XScrollListProps<Team> {
   onAssign?: (id: Team['id']) => any;
   onDelete?: (id: Team['id']) => any;
 }
 
-const TeamAwardListLayout = ({
+const TeamAwardListLayout: FC<TeamAwardListLayoutProps> = ({
   defaultData = [],
   onAssign,
-}: Omit<TeamAwardListProps, 'store'>) => (
+}) => (
   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
     {defaultData.map(item => (
       <Col key={item.id}>
@@ -31,34 +31,34 @@ const TeamAwardListLayout = ({
   </Row>
 );
 
-@observer
-export class TeamAwardList extends XScrollList<TeamAwardListProps> {
-  store = this.props.store;
+export type TeamAwardListProps = ScrollListProps<Team> &
+  TeamAwardListLayoutProps;
 
-  constructor(props: TeamAwardListProps) {
-    super(props);
-
-    this.boot();
-  }
-
+export class TeamAwardList extends PureComponent<TeamAwardListProps> {
   onAssign = (id: string) => {
     this.props.onAssign?.(id);
-    this.store.getOne(id);
+    this.props.store.getOne(id);
   };
 
   onDelete = (id: string) => {
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);
-    this.store.deleteOne(id);
+    this.props.store.deleteOne(id);
   };
 
-  renderList() {
+  render() {
     return (
-      <TeamAwardListLayout
-        defaultData={this.store.allItems}
-        onAssign={this.onAssign}
-        onDelete={this.onDelete}
+      <ScrollList
+        translator={i18n}
+        store={this.props.store}
+        renderList={allItems => (
+          <TeamAwardListLayout
+            defaultData={allItems}
+            onAssign={this.onAssign}
+            onDelete={this.onDelete}
+          />
+        )}
       />
     );
   }

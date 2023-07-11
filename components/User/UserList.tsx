@@ -1,24 +1,24 @@
-import { observer } from 'mobx-react';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { i18n } from '../../models/Translation';
-import { User, UserModel } from '../../models/User';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { User, UserFilter } from '../../models/User';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface UserListProps extends XScrollListProps<User> {
-  store: UserModel;
+export interface UserListLayoutProps extends XScrollListProps<User> {
   onSearch?: (keyword: string) => any;
 }
 
-export const UserListLayout = ({
+export const UserListLayout: FC<UserListLayoutProps> = ({
   defaultData = [],
   selectedIds,
   onSelect,
   onSearch,
-}: UserListProps) => (
+}) => (
   <>
     <Form
       onSubmit={event => {
@@ -88,32 +88,28 @@ export const UserListLayout = ({
   </>
 );
 
-@observer
-export class UserList extends XScrollList<UserListProps> {
-  store = this.props.store;
+export type UserListProps = ScrollListProps<User, UserFilter> &
+  UserListLayoutProps;
 
-  constructor(props: UserListProps) {
-    super(props);
-
-    this.boot();
-  }
-
+export class UserList extends PureComponent<UserListProps> {
   onSearch = async (keyword: string) => {
-    this.store.clear();
+    const { store, onSearch } = this.props;
 
-    await this.store.getList({ keyword });
+    store.clear();
 
-    this.props.onSearch?.(keyword);
+    await store.getList({ keyword });
+
+    onSearch?.(keyword);
   };
 
-  renderList() {
+  render() {
     return (
-      <UserListLayout
-        store={this.store}
-        defaultData={this.store.allItems}
-        selectedIds={this.selectedIds}
-        onSelect={this.onSelect}
-        onSearch={this.onSearch}
+      <ScrollList
+        translator={i18n}
+        store={this.props.store}
+        renderList={allItems => (
+          <UserListLayout {...this.props} defaultData={allItems} />
+        )}
       />
     );
   }

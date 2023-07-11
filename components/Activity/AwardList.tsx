@@ -1,27 +1,27 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observer } from 'mobx-react';
 import { Button, Image, Table } from 'react-bootstrap';
 
-import { Award, AwardModel } from '../../models/Award';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
+import { Award } from '../../models/Award';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface AwardListProps extends XScrollListProps<Award> {
-  store: AwardModel;
+export interface AwardListLayoutProps extends XScrollListProps<Award> {
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
 
-export const AwardTargetName = {
+export const AwardTargetName = () => ({
   individual: t('personal'),
   team: t('team'),
-};
+});
 
-const awardTableHead = [
+const AwardTableHead = () => [
   t('quantity'),
   t('type'),
   t('photo'),
@@ -30,15 +30,15 @@ const awardTableHead = [
   t('operation'),
 ];
 
-export const AwardListLayout = ({
+export const AwardListLayout: FC<AwardListLayoutProps> = ({
   defaultData = [],
   onEdit,
   onDelete,
-}: Omit<AwardListProps, 'store'>) => (
+}) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
-        {awardTableHead.map((data, idx) => (
+        {AwardTableHead().map((data, idx) => (
           <th key={idx}>{data}</th>
         ))}
       </tr>
@@ -48,7 +48,7 @@ export const AwardListLayout = ({
         ({ quantity, target, pictures, name, description, id }) => (
           <tr key={id}>
             <td>{quantity}</td>
-            <td>{AwardTargetName[target]}</td>
+            <td>{AwardTargetName()[target]}</td>
             <td>
               {pictures! && (
                 <Image
@@ -80,36 +80,33 @@ export const AwardListLayout = ({
   </Table>
 );
 
-@observer
-export class AwardList extends XScrollList<AwardListProps> {
-  store = this.props.store;
+export type AwardListProps = ScrollListProps<Award> & AwardListLayoutProps;
 
-  constructor(props: AwardListProps) {
-    super(props);
-
-    this.boot();
-  }
-
+export class AwardList extends PureComponent<AwardListProps> {
   onEdit = (id: string) => {
     this.props.onEdit?.(id);
-    this.store.getOne(id);
+    this.props.store.getOne(id);
   };
 
   onDelete = (id: string) => {
-    const { t } = i18n;
-
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);
-    this.store.deleteOne(id);
+    this.props.store.deleteOne(id);
   };
 
-  renderList() {
+  render() {
     return (
-      <AwardListLayout
-        defaultData={this.store.allItems}
-        onEdit={this.onEdit}
-        onDelete={this.onDelete}
+      <ScrollList
+        translator={i18n}
+        store={this.props.store}
+        renderList={allItems => (
+          <AwardListLayout
+            defaultData={allItems}
+            onEdit={this.onEdit}
+            onDelete={this.onDelete}
+          />
+        )}
       />
     );
   }

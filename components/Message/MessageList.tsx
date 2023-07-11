@@ -1,35 +1,32 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
-import {
-  Message,
-  MessageModel,
-  MessageType,
-  MessageTypeName,
-} from '../../models/Message';
+import { Message, MessageType, MessageTypeName } from '../../models/Message';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/participant.module.less';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface MessageListProps extends XScrollListProps<Message> {
-  store: MessageModel;
-  hideControls: boolean;
+export interface MessageListLayoutProps extends XScrollListProps<Message> {
+  hideControls?: boolean;
   onEdit?: (id: string) => any;
   onDelete?: (id: string) => any;
 }
 
-export const MessageListLayout = ({
+export const MessageListLayout: FC<MessageListLayoutProps> = ({
   defaultData = [],
   selectedIds = [],
   hideControls,
   onSelect,
   onEdit,
   onDelete,
-}: Omit<MessageListProps, 'store'>) => (
+}) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
@@ -109,37 +106,40 @@ export const MessageListLayout = ({
   </Table>
 );
 
+export type MessageListProps = ScrollListProps<Message> &
+  MessageListLayoutProps;
+
 @observer
-export class MessageList extends XScrollList<MessageListProps> {
-  store = this.props.store;
+export class MessageList extends PureComponent<MessageListProps> {
+  @observable
+  selectedIds: string[] = [];
 
-  constructor(props: MessageListProps) {
-    super(props);
-
-    this.boot();
-  }
+  onSelect = (list: string[]) =>
+    (this.selectedIds = list) && this.props.onSelect?.(list);
 
   onEdit = (id: string) => {
     this.props.onEdit?.(id);
-    this.store.getOne(id);
+    this.props.store.getOne(id);
   };
 
   onDelete = (id: string) => {
     if (!confirm(t('sure_delete_this_message'))) return;
 
     this.props.onDelete?.(id);
-    this.store.deleteOne(id);
+    this.props.store.deleteOne(id);
   };
 
-  renderList() {
+  render() {
     return (
-      <MessageListLayout
-        {...this.props}
-        defaultData={this.store.allItems}
-        selectedIds={this.selectedIds}
-        onSelect={this.onSelect}
-        onEdit={this.onEdit}
-        onDelete={this.onDelete}
+      <ScrollList
+        translator={i18n}
+        store={this.props.store}
+        renderList={allItems => (
+          <MessageListLayout
+            {...{ ...this.props, ...this }}
+            defaultData={allItems}
+          />
+        )}
       />
     );
   }

@@ -1,6 +1,7 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observer } from 'mobx-react';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import {
   Button,
   Card,
@@ -14,27 +15,26 @@ import {
 import activityStore from '../../models/Activity';
 import { TeamWork, TeamWorkType } from '../../models/Team';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface TeamWorkListProps extends XScrollListProps<TeamWork> {
+export interface TeamWorkListLayoutProps extends XScrollListProps<TeamWork> {
   activity: string;
   team: string;
   size?: 'sm' | 'lg';
-  value?: TeamWork[];
   controls?: boolean;
   onDelete?: (id: TeamWork['id']) => any;
 }
 
-export const TeamWorkListLayout = ({
+export const TeamWorkListLayout: FC<TeamWorkListLayoutProps> = ({
   defaultData = [],
   size,
   controls,
   onDelete,
   activity,
   team,
-}: TeamWorkListProps) => (
+}) => (
   <Container fluid className="pt-2">
     {controls && (
       <header className="mb-3">
@@ -116,25 +116,27 @@ export const TeamWorkListLayout = ({
   </Container>
 );
 
-@observer
-export class TeamWorkList extends XScrollList<TeamWorkListProps> {
+export type TeamWorkListProps = ScrollListProps<TeamWork> &
+  TeamWorkListLayoutProps;
+
+export class TeamWorkList extends PureComponent<TeamWorkListProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
-
-  constructor(props: TeamWorkListProps) {
-    super(props);
-
-    this.boot();
-  }
 
   onDelete = (id?: string) =>
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 
-  renderList() {
+  render() {
     return (
-      <TeamWorkListLayout
-        {...this.props}
-        value={this.store.allItems}
-        onDelete={this.onDelete}
+      <ScrollList
+        translator={i18n}
+        store={this.store}
+        renderList={allItems => (
+          <TeamWorkListLayout
+            {...this.props}
+            defaultData={allItems}
+            onDelete={this.onDelete}
+          />
+        )}
       />
     );
   }
