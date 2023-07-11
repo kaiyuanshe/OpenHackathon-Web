@@ -106,7 +106,7 @@ export const MessageListLayout: FC<MessageListLayoutProps> = ({
   </Table>
 );
 
-export type MessageListProps = ScrollListProps<Message> &
+export type MessageListProps = Pick<ScrollListProps<Message>, 'store'> &
   MessageListLayoutProps;
 
 @observer

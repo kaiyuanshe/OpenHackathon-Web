@@ -1,21 +1,21 @@
-import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import {
   Activity,
-  ActivityFilter,
   ActivityListType,
   ActivityModel,
 } from '../../models/Activity';
 import platformAdmin from '../../models/PlatformAdmin';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
 
 const { t } = i18n;
 
-export interface ActivityListProps
+export interface ActivityListLayoutProps
   extends XScrollListProps<Activity>,
     Pick<ActivityCardProps, 'onPublish' | 'onDelete'> {
   type?: ActivityListType;
@@ -23,13 +23,13 @@ export interface ActivityListProps
   userId?: string;
 }
 
-export const ActivityListLayout = ({
+export const ActivityListLayout: FC<ActivityListLayoutProps> = ({
   size,
   type = 'online',
   defaultData = [],
   userId,
   ...props
-}: ActivityListProps) => (
+}) => (
   <Row
     className="g-4"
     xs={1}
@@ -53,21 +53,13 @@ export const ActivityListLayout = ({
   </Row>
 );
 
-@observer
-export default class ActivityList extends XScrollList<ActivityListProps> {
+export type ActivityListProps = ActivityListLayoutProps;
+
+export default class ActivityList extends PureComponent<ActivityListProps> {
   store = new ActivityModel();
 
-  filter: ActivityFilter = {
-    userId: this.props.userId,
-    listType: this.props.type,
-  };
-
-  constructor(props: ActivityListProps) {
-    super(props);
-
-    this.boot();
-
-    if (props.type === 'admin' && !platformAdmin.isPlatformAdmin)
+  componentDidMount() {
+    if (this.props.type === 'admin' && !platformAdmin.isPlatformAdmin)
       platformAdmin.checkAuthorization();
   }
 
@@ -86,15 +78,22 @@ export default class ActivityList extends XScrollList<ActivityListProps> {
     this.props.onDelete?.(name);
   };
 
-  renderList() {
-    const { allItems } = this.store;
+  render() {
+    const { userId, type } = this.props;
 
     return (
-      <ActivityListLayout
-        {...this.props}
-        defaultData={allItems}
-        onPublish={this.onPublish}
-        onDelete={this.onDelete}
+      <ScrollList
+        translator={i18n}
+        store={this.store}
+        filter={{ userId, listType: type }}
+        renderList={allItems => (
+          <ActivityListLayout
+            {...this.props}
+            defaultData={allItems}
+            onPublish={this.onPublish}
+            onDelete={this.onDelete}
+          />
+        )}
       />
     );
   }

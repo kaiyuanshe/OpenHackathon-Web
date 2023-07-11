@@ -1,28 +1,23 @@
 import { observer } from 'mobx-react';
+import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
 import sessionStore from '../../models/Session';
-import {
-  MembershipStatus,
-  TeamMember,
-  TeamMemberFilter,
-  TeamMemberModel,
-} from '../../models/Team';
+import { TeamMember } from '../../models/Team';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface TeamAdministratorTableProps
+export interface TeamAdministratorTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  store: TeamMemberModel;
   onUpdateRole?: (userId: string, role: 'admin' | 'member') => any;
   onPopUpUpdateRoleModal?: (userId: string) => any;
 }
 
-const TableHeads = [
+const TableHeads = () => [
   '#',
   t('nick_name'),
   t('mail'),
@@ -33,23 +28,20 @@ const TableHeads = [
   t('role_type'),
 ];
 
-const RoleName = {
+const RoleName = () => ({
   member: t('member'),
   admin: t('admin'),
-};
+});
 
-export const TeamAdministratorTableLayout = observer(
-  ({
-    defaultData = [],
-    onUpdateRole,
-  }: Omit<TeamAdministratorTableProps, 'store'>) => {
+export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps> =
+  observer(({ defaultData = [], onUpdateRole }) => {
     const { id: currentUserId } = sessionStore?.user || {};
 
     return (
       <Table hover responsive="lg" className={styles.table}>
         <thead>
           <tr>
-            {TableHeads.map((data, idx) => (
+            {TableHeads().map((data, idx) => (
               <th key={idx + data}>{data}</th>
             ))}
           </tr>
@@ -87,7 +79,7 @@ export const TeamAdministratorTableLayout = observer(
                         }
                         defaultValue={role}
                       >
-                        {Object.entries(RoleName).map(([key, value]) => (
+                        {Object.entries(RoleName()).map(([key, value]) => (
                           <option key={key} value={key}>
                             {value}
                           </option>
@@ -106,33 +98,4 @@ export const TeamAdministratorTableLayout = observer(
         </tbody>
       </Table>
     );
-  },
-);
-
-@observer
-export class TeamAdministratorTable extends XScrollList<TeamAdministratorTableProps> {
-  store = this.props.store;
-
-  filter: TeamMemberFilter = {
-    status: MembershipStatus.APPROVED,
-  };
-
-  constructor(props: TeamAdministratorTableProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  onUpdateRole: TeamAdministratorTableProps['onUpdateRole'] = (userId, role) =>
-    this.store.updateRole(userId, role);
-
-  renderList() {
-    return (
-      <TeamAdministratorTableLayout
-        {...this.props}
-        defaultData={this.store.allItems}
-        onUpdateRole={this.onUpdateRole}
-      />
-    );
-  }
-}
+  });

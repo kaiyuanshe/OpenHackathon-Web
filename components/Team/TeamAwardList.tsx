@@ -31,7 +31,7 @@ const TeamAwardListLayout: FC<TeamAwardListLayoutProps> = ({
   </Row>
 );
 
-export type TeamAwardListProps = ScrollListProps<Team> &
+export type TeamAwardListProps = Pick<ScrollListProps<Team>, 'store'> &
   TeamAwardListLayoutProps;
 
 export class TeamAwardList extends PureComponent<TeamAwardListProps> {

@@ -1,9 +1,9 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Image, Table } from 'react-bootstrap';
-
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
+import { Button, Image, Table } from 'react-bootstrap';
+
 import { Award } from '../../models/Award';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
@@ -80,7 +80,8 @@ export const AwardListLayout: FC<AwardListLayoutProps> = ({
   </Table>
 );
 
-export type AwardListProps = ScrollListProps<Award> & AwardListLayoutProps;
+export type AwardListProps = Pick<ScrollListProps<Award>, 'store'> &
+  AwardListLayoutProps;
 
 export class AwardList extends PureComponent<AwardListProps> {
   onEdit = (id: string) => {

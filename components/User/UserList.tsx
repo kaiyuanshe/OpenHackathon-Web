@@ -88,7 +88,7 @@ export const UserListLayout: FC<UserListLayoutProps> = ({
   </>
 );
 
-export type UserListProps = ScrollListProps<User, UserFilter> &
+export type UserListProps = Pick<ScrollListProps<User, UserFilter>, 'store'> &
   UserListLayoutProps;
 
 export class UserList extends PureComponent<UserListProps> {

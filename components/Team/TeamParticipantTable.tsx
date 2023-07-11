@@ -1,12 +1,7 @@
-import { ScrollList, ScrollListProps } from 'mobx-restful-table';
-import { FC, PureComponent } from 'react';
+import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import {
-  MembershipStatus,
-  TeamMember,
-  TeamMemberModel,
-} from '../../models/Team';
+import { MembershipStatus, TeamMember } from '../../models/Team';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
@@ -102,29 +97,3 @@ export const TeamParticipantTableLayout: FC<
     </tbody>
   </Table>
 );
-
-export interface TeamParticipantTableProps
-  extends ScrollListProps<TeamMember>,
-    TeamParticipantTableLayoutProps {
-  store: TeamMemberModel;
-}
-
-export class TeamParticipantTable extends PureComponent<TeamParticipantTableProps> {
-  onApprove: TeamParticipantTableProps['onApprove'] = (userId, status) =>
-    this.props.store.approveOne(userId, status);
-
-  render() {
-    return (
-      <ScrollList
-        translator={i18n}
-        store={this.props.store}
-        renderList={allItems => (
-          <TeamParticipantTableLayout
-            defaultData={allItems}
-            onApprove={this.onApprove}
-          />
-        )}
-      />
-    );
-  }
-}

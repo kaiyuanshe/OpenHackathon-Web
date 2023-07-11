@@ -87,9 +87,7 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
   </Table>
 );
 
-export interface EnrollmentListProps
-  extends ScrollListProps<Enrollment>,
-    EnrollmentListLayoutProps {
+export interface EnrollmentListProps extends EnrollmentListLayoutProps {
   activity: string;
 }
 

@@ -1,6 +1,6 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import {
   Button,
@@ -116,10 +116,7 @@ export const TeamWorkListLayout: FC<TeamWorkListLayoutProps> = ({
   </Container>
 );
 
-export type TeamWorkListProps = ScrollListProps<TeamWork> &
-  TeamWorkListLayoutProps;
-
-export class TeamWorkList extends PureComponent<TeamWorkListProps> {
+export class TeamWorkList extends PureComponent<TeamWorkListLayoutProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
   onDelete = (id?: string) =>

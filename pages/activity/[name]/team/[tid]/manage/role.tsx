@@ -1,14 +1,16 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
 
-import { TeamAdministratorTable } from '../../../../../../components/Team/TeamAdministratorTable';
+import { TeamAdministratorTableLayout } from '../../../../../../components/Team/TeamAdministratorTable';
 import {
   TeamManageBaseRouterProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
+import { MembershipStatus } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
 import { withRoute, withTranslation } from '../../../../../api/core';
 
@@ -41,9 +43,18 @@ export default class TeamAdministratorPage extends PureComponent<
         path={resolvedUrl}
         title={t('role_management')}
       >
-        <TeamAdministratorTable
+        <ScrollList
+          translator={i18n}
           store={store}
-          onPopUpUpdateRoleModal={userId => (this.userId = userId)}
+          filter={{ status: MembershipStatus.APPROVED }}
+          renderList={allItems => (
+            <TeamAdministratorTableLayout
+              {...this.props}
+              defaultData={allItems}
+              onUpdateRole={(userId, role) => store.updateRole(userId, role)}
+              onPopUpUpdateRoleModal={userId => (this.userId = userId)}
+            />
+          )}
         />
       </TeamManageFrame>
     );
