@@ -2,12 +2,13 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { GitList } from '../../../../components/Git';
+import { CardList } from '../../../../components/Git/CardList';
 import { GitModal } from '../../../../components/Git/Modal';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
@@ -62,9 +63,16 @@ export default class ActivityManageGitPage extends PureComponent<
               </Button>
             </Form>
           </header>
-          <GitList
-            {...{ store, selectedIds }}
-            onSelect={list => (this.selectedIds = list)}
+          <ScrollList
+            translator={i18n}
+            store={store}
+            renderList={allItems => (
+              <CardList
+                defaultData={allItems}
+                selectedIds={selectedIds}
+                onSelect={list => (this.selectedIds = list)}
+              />
+            )}
           />
           <GitModal
             store={store}

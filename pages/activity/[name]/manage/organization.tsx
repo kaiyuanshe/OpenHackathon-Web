@@ -2,13 +2,14 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
-import { OrganizationTable } from '../../../../components/Organization/OrganizationList';
+import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
 import { withRoute } from '../../../api/core';
@@ -101,9 +102,16 @@ export default class OrganizationPage extends PureComponent<
               </Col>
             </Col>
             <Col className="flex-fill">
-              <OrganizationTable
+              <ScrollList
+                translator={i18n}
                 store={store}
-                onSelect={list => (this.selectedIds = list)}
+                renderList={allItems => (
+                  <OrganizationTableLayout
+                    defaultData={allItems}
+                    selectedIds={this.selectedIds}
+                    onSelect={list => (this.selectedIds = list)}
+                  />
+                )}
               />
             </Col>
           </Row>

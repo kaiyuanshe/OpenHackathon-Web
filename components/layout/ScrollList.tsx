@@ -6,7 +6,7 @@ import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { i18n } from '../../models/Translation';
 
 export interface XScrollListProps<T extends DataObject = DataObject>
-  extends ScrollListProps<T> {
+  extends Pick<ScrollListProps<T>, 'defaultData'> {
   selectedIds?: string[];
   onSelect?: (selectedIds: string[]) => any;
 }

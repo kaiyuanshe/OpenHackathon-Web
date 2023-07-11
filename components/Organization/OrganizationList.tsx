@@ -1,25 +1,20 @@
-import { observer } from 'mobx-react';
+import { FC } from 'react';
 import { Form, Image, Table } from 'react-bootstrap';
 
 import {
   Organization,
-  OrganizationModel,
-  OrganizationTypeName,
+  OrganizationTypeName
 } from '../../models/Organization';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 import { OrganizationCard } from './OrganizationCard';
 
 const { t } = i18n;
 
-export interface OrganizationListProps extends XScrollListProps<Organization> {
-  store: OrganizationModel;
-}
-
-export const OrganizationListLayout = ({
+export const OrganizationListLayout: FC<XScrollListProps<Organization>> = ({
   defaultData = [],
-}: Pick<OrganizationListProps, 'defaultData'>) => (
+}) => (
   <ul className="list-unstyled">
     {defaultData.map(item => (
       <li className="mb-2" key={item.id}>
@@ -29,11 +24,11 @@ export const OrganizationListLayout = ({
   </ul>
 );
 
-export const OrganizationTableLayout = ({
+export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
   defaultData = [],
   selectedIds = [],
   onSelect,
-}: Omit<OrganizationListProps, 'store'>) => (
+}) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
@@ -109,25 +104,3 @@ export const OrganizationTableLayout = ({
     </tbody>
   </Table>
 );
-
-@observer
-export class OrganizationTable extends XScrollList<OrganizationListProps> {
-  store = this.props.store;
-
-  constructor(props: OrganizationListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return (
-      <OrganizationTableLayout
-        {...this.props}
-        defaultData={this.store.allItems}
-        selectedIds={this.selectedIds}
-        onSelect={this.onSelect}
-      />
-    );
-  }
-}
