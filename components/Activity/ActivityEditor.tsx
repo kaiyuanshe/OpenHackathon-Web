@@ -45,6 +45,10 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     this.detailHTML = detail || '';
   }
 
+  componentWillUnmount() {
+    activityStore.clearCurrent();
+  }
+
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -56,7 +60,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
     const { name } = this.props,
       data = formToJSON<ActivityFormData>(form);
 
-    data.detail = data.detail + '';
+    data.detail = (data.detail || '') + '';
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
       const name = bannerUrl.split('/').slice(-1)[0];
@@ -271,13 +275,11 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            {detail && (
-              <HTMLEditor
-                name="detail"
-                defaultValue={detail}
-                onChange={code => (this.detailHTML = code)}
-              />
-            )}
+            <HTMLEditor
+              name="detail"
+              defaultValue={detail}
+              onChange={code => (this.detailHTML = code)}
+            />
             <Form.Control
               className="d-none"
               isInvalid={!this.detailHTML.trim() && this.validated}

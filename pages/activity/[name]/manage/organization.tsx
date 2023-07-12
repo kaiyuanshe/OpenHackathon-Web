@@ -24,6 +24,7 @@ export default class OrganizationPage extends PureComponent<
 > {
   store = activityStore.organizationOf(this.props.route.params!.name);
 
+  @observable
   selectedIds: string[] = [];
 
   @observable

@@ -22,12 +22,13 @@ export const getServerSideProps = withRoute<{ name: string }>();
 export default class ActivityManageGitPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
-  @observable
-  show = false;
-
   store = activityStore.templateOf(this.props.route.params!.name + '');
 
+  @observable
   selectedIds: string[] = [];
+
+  @observable
+  show = false;
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

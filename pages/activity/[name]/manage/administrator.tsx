@@ -24,6 +24,7 @@ export default class AdministratorPage extends PureComponent<
 > {
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
+  @observable
   selectedIds: string[] = [];
 
   @observable

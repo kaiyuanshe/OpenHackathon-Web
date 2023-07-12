@@ -26,6 +26,7 @@ export default function PlatformAdminPage() {
 class PlatformAdmin extends PureComponent {
   store = new PlatformAdminModel();
 
+  @observable
   selectedIds: string[] = [];
 
   @observable
