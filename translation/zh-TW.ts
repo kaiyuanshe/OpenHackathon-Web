@@ -1,4 +1,5 @@
 import { textJoin } from 'mobx-i18n';
+import { diffTime } from 'web-utility';
 
 export default {
   home_page: '主頁',
@@ -12,8 +13,8 @@ export default {
   idea2app_scaffolding: 'idea2app 腳手架強力驅動',
   registration_period: '報名時段',
   activity_period: '活動時段',
-  register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
-    textJoin(distance, unit, '後開始報名'),
+  register_after: ({ distance, unit }: ReturnType<typeof diffTime>) =>
+    textJoin(distance + '', unit, '後開始報名'),
   accepting_applications: '正在報名',
   activity_ended: '比賽結束',
   my_team: '我的團隊',

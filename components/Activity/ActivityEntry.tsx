@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
@@ -7,7 +8,7 @@ import { TimeUnit } from '../../utils/time';
 
 const { t } = i18n;
 
-export type ActivityStatusTextProps = Pick<
+export type ActivityStatusMeta = Pick<
   Activity,
   | 'status'
   | 'enrollmentStartedAt'
@@ -26,7 +27,7 @@ export const getActivityStatusText = ({
   eventEndedAt,
   judgeStartedAt,
   judgeEndedAt,
-}: ActivityStatusTextProps) => {
+}: ActivityStatusMeta) => {
   const now = Date.now(),
     isOnline = status === 'online',
     enrollmentStart = new Date(enrollmentStartedAt),
@@ -53,11 +54,12 @@ export const getActivityStatusText = ({
     ? t('judges_review')
     : t('activity_ended');
 };
-export interface ActivityEntryProps extends ActivityStatusTextProps {
+
+export interface ActivityEntryProps extends ActivityStatusMeta {
   href: string;
 }
 
-export function ActivityEntry({
+export const ActivityEntry: FC<ActivityEntryProps> = ({
   status,
   enrollmentStartedAt,
   enrollmentEndedAt,
@@ -66,7 +68,7 @@ export function ActivityEntry({
   judgeStartedAt,
   judgeEndedAt,
   href,
-}: ActivityEntryProps) {
+}) => {
   const now = Date.now(),
     isOnline = status === 'online',
     enrollmentStart = new Date(enrollmentStartedAt),
@@ -91,4 +93,4 @@ export function ActivityEntry({
       })}
     </Button>
   );
-}
+};

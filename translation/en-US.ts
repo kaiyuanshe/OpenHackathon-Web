@@ -1,4 +1,5 @@
 import { textJoin } from 'mobx-i18n';
+import { diffTime } from 'web-utility';
 
 export default {
   home_page: 'Home page',
@@ -12,8 +13,8 @@ export default {
   idea2app_scaffolding: 'idea2app Scaffolding',
   registration_period: 'Registration Period',
   activity_period: 'Activity Period',
-  register_after: ({ distance, unit }: Record<'distance' | 'unit', string>) =>
-    textJoin('Registration after', distance, unit),
+  register_after: ({ distance, unit }: ReturnType<typeof diffTime>) =>
+    textJoin('Registration after', distance + '', unit),
   accepting_applications: 'Accepting Applications',
   activity_ended: 'Activity ended',
   my_team: 'My Team',
