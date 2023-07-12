@@ -1,5 +1,6 @@
 import 'array-unique-proposal';
 
+import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
 import { HackathonAdmin } from '../../models/HackathonAdmin';
@@ -23,11 +24,11 @@ const TableHeads = [
   t('remark'),
 ];
 
-export const HackathonAdminList = ({
+export const HackathonAdminList: FC<XScrollListProps<HackathonAdmin>> = ({
   defaultData = [],
   selectedIds = [],
   onSelect,
-}: XScrollListProps<HackathonAdmin>) => (
+}) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>

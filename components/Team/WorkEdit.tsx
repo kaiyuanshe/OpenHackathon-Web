@@ -1,4 +1,5 @@
 import { SpinnerButton } from 'idea-react';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FileUploader } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
@@ -11,16 +12,6 @@ import { i18n } from '../../models/Translation';
 
 const { t } = i18n;
 
-const workTypes = [
-  { title: t('website'), value: 'website' },
-  { title: t('image'), value: 'image' },
-  { title: t('video'), value: 'video' },
-  { title: 'Word', value: 'word' },
-  { title: 'PowerPoint', value: 'powerpoint' },
-  { title: 'PDF', value: 'pdf' },
-  { title: 'ZIP', value: 'zip' },
-];
-
 export interface WorkEditProps {
   name: string;
   tid: string;
@@ -31,10 +22,40 @@ export interface WorkEditProps {
 export class WorkEdit extends PureComponent<WorkEditProps> {
   store = activityStore.teamOf(this.props.name).workOf(this.props.tid);
 
-  componentDidMount() {
+  @computed
+  get workTypes() {
+    return [
+      { title: t('website'), value: 'website' },
+      { title: t('image'), value: 'image', accept: 'image/*' },
+      { title: t('video'), value: 'video', accept: 'video/*' },
+      {
+        title: 'Word',
+        value: 'word',
+        accept:
+          'application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      },
+      {
+        title: 'PowerPoint',
+        value: 'powerpoint',
+        accept:
+          'application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      },
+      { title: 'PDF', value: 'pdf', accept: 'application/pdf' },
+      { title: 'ZIP', value: 'zip', accept: 'application/zip' },
+    ];
+  }
+
+  @observable
+  currentType = this.workTypes[0].value;
+
+  async componentDidMount() {
     const { wid } = this.props;
 
-    if (wid) this.store.getOne(wid);
+    if (!wid) return;
+
+    const { type } = await this.store.getOne(wid);
+
+    this.currentType = type;
   }
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -49,7 +70,8 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
   };
 
   render() {
-    const { uploading, currentOne } = this.store;
+    const { workTypes, currentType } = this,
+      { uploading, currentOne } = this.store;
     const loading = uploading > 0 || fileStore.uploading > 0;
 
     return (
@@ -102,12 +124,13 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                   value={value}
                   id={value}
                   key={value}
-                  defaultChecked={currentOne?.type === value}
+                  checked={currentType === value}
+                  onClick={() => (this.currentType = value)}
                 />
               ))}
             </Col>
           </Form.Group>
-          {currentOne?.type === 'website' && (
+          {currentType === 'website' ? (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
                 {t('work_url')}
@@ -122,8 +145,7 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
                 />
               </Col>
             </Form.Group>
-          )}
-          {currentOne?.type !== 'website' && (
+          ) : (
             <Form.Group as={Row} className="mb-3" controlId="url">
               <Form.Label column sm={2}>
                 {t('upload_file')}
@@ -131,8 +153,10 @@ export class WorkEdit extends PureComponent<WorkEditProps> {
               <Col sm={10}>
                 <FileUploader
                   store={fileStore}
-                  accept="video/*,image/*,.pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   name="url"
+                  accept={
+                    workTypes.find(({ value }) => value === currentType)?.accept
+                  }
                   max={1}
                   required
                   defaultValue={currentOne?.url ? [currentOne.url] : []}

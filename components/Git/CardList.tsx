@@ -1,4 +1,5 @@
 import { text2color } from 'idea-react';
+import { FC } from 'react';
 import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 
 import { GitTemplate } from '../../models/TemplateRepo';
@@ -8,11 +9,11 @@ import { GitLogo } from './Logo';
 
 const { t } = i18n;
 
-export const CardList = ({
+export const CardList: FC<XScrollListProps<GitTemplate>> = ({
   defaultData = [],
   selectedIds = [],
   onSelect,
-}: XScrollListProps<GitTemplate>) => (
+}) => (
   <Row as="ul" className="list-unstyled g-4" xs={1} sm={2}>
     {defaultData.map(
       ({

@@ -1,25 +1,26 @@
-import { observer } from 'mobx-react';
+import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { FC, PureComponent } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
 import { Enrollment, statusName } from '../../models/Enrollment';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/participant.module.less';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface EnrollmentListProps extends XScrollListProps<Enrollment> {
-  activity: string;
+export interface EnrollmentListLayoutProps
+  extends XScrollListProps<Enrollment> {
   onPopUp?: (extensions: Enrollment['extensions']) => any;
   onVerify?: (userId: string, status: Enrollment['status']) => any;
 }
 
-export const EnrollmentListLayout = ({
+export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
   defaultData = [],
   onPopUp,
   onVerify,
-}: Pick<EnrollmentListProps, 'defaultData' | 'onPopUp' | 'onVerify'>) => (
+}) => (
   <Table className={styles['container-table']}>
     <thead>
       <tr>
@@ -86,28 +87,31 @@ export const EnrollmentListLayout = ({
   </Table>
 );
 
-@observer
-export class EnrollmentList extends XScrollList<EnrollmentListProps> {
+export interface EnrollmentListProps extends EnrollmentListLayoutProps {
+  activity: string;
+}
+
+export class EnrollmentList extends PureComponent<EnrollmentListProps> {
   store = activityStore.enrollmentOf(this.props.activity);
 
-  constructor(props: EnrollmentListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  onVerify: EnrollmentListProps['onVerify'] = async (userId, status) => {
+  onVerify: EnrollmentListLayoutProps['onVerify'] = async (userId, status) => {
     await this.store.verifyOne(userId, status);
 
     this.props.onVerify?.(userId, status);
   };
 
-  renderList() {
+  render() {
     return (
-      <EnrollmentListLayout
-        defaultData={this.store.allItems}
-        onPopUp={this.props.onPopUp}
-        onVerify={this.onVerify}
+      <ScrollList
+        translator={i18n}
+        store={this.store}
+        renderList={allItems => (
+          <EnrollmentListLayout
+            defaultData={allItems}
+            onPopUp={this.props.onPopUp}
+            onVerify={this.onVerify}
+          />
+        )}
       />
     );
   }

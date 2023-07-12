@@ -1,6 +1,7 @@
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import type { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
@@ -10,7 +11,7 @@ import { CommentBox } from '../../../../../components/CommentBox';
 import { MainBreadcrumb } from '../../../../../components/layout/MainBreadcrumb';
 import PageHead from '../../../../../components/layout/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
-import { TeamMemberList } from '../../../../../components/Team/TeamMemberList';
+import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, {
   Activity,
@@ -228,9 +229,12 @@ export default class TeamPage extends PureComponent<
                 <h2 className="text-dark fw-bold h6 ">
                   <Icon name="people-fill" /> {t('team_members')}
                 </h2>
-                <TeamMemberList
-                  activity={hackathonName}
-                  team={id}
+                <ScrollList
+                  translator={i18n}
+                  store={this.store}
+                  renderList={allItems => (
+                    <TeamMemberListLayout defaultData={allItems} />
+                  )}
                   defaultData={teamMemberList}
                 />
               </Card.Body>

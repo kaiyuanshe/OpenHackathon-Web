@@ -1,30 +1,25 @@
-import { observer } from 'mobx-react';
+import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import {
-  MembershipStatus,
-  TeamMember,
-  TeamMemberModel,
-} from '../../models/Team';
+import { MembershipStatus, TeamMember } from '../../models/Team';
 import { i18n } from '../../models/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
+import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface TeamParticipantTableProps
+export interface TeamParticipantTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  store: TeamMemberModel;
   onApprove?: (userId: string, status: MembershipStatus) => any;
 }
 
-const StatusName: Record<TeamMember['status'], string> = {
+const StatusName: () => Record<TeamMember['status'], string> = () => ({
   approved: t('status_approved'),
   pendingApproval: t('status_pending'),
-};
+});
 
-const TableHeads = [
+const TableHeads = () => [
   '#',
   t('nick_name'),
   t('mail'),
@@ -36,14 +31,13 @@ const TableHeads = [
   t('status'),
 ];
 
-export const TeamParticipantTableLayout = ({
-  defaultData = [],
-  onApprove,
-}: Omit<TeamParticipantTableProps, 'store'>) => (
+export const TeamParticipantTableLayout: FC<
+  TeamParticipantTableLayoutProps
+> = ({ defaultData = [], onApprove }) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
-        {TableHeads.map((data, idx) => (
+        {TableHeads().map((data, idx) => (
           <th key={idx + data}>{data}</th>
         ))}
       </tr>
@@ -84,7 +78,7 @@ export const TeamParticipantTableLayout = ({
                     }
                     defaultValue={status}
                   >
-                    {Object.entries(StatusName).map(([key, value]) => (
+                    {Object.entries(StatusName()).map(([key, value]) => (
                       <option key={key} value={key}>
                         {value}
                       </option>
@@ -103,26 +97,3 @@ export const TeamParticipantTableLayout = ({
     </tbody>
   </Table>
 );
-
-@observer
-export class TeamParticipantTable extends XScrollList<TeamParticipantTableProps> {
-  store = this.props.store;
-
-  constructor(props: TeamParticipantTableProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  onApprove: TeamParticipantTableProps['onApprove'] = (userId, status) =>
-    this.store.approveOne(userId, status);
-
-  renderList() {
-    return (
-      <TeamParticipantTableLayout
-        defaultData={this.store.allItems}
-        onApprove={this.onApprove}
-      />
-    );
-  }
-}

@@ -2,12 +2,13 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
-import { PlatformAdminList } from '../../components/PlatformAdmin/PlatformAdminList';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
+import { HackathonAdminList } from '../../components/User/HackathonAdminList';
 import { PlatformAdminModel } from '../../models/PlatformAdmin';
 import { i18n } from '../../models/Translation';
 
@@ -25,6 +26,7 @@ export default function PlatformAdminPage() {
 class PlatformAdmin extends PureComponent {
   store = new PlatformAdminModel();
 
+  @observable
   selectedIds: string[] = [];
 
   @observable
@@ -63,9 +65,16 @@ class PlatformAdmin extends PureComponent {
             <FontAwesomeIcon className="me-2" icon={faTrash} />
             {t('delete')}
           </Button>
-          <PlatformAdminList
+          <ScrollList
+            translator={i18n}
             store={store}
-            onSelect={list => (this.selectedIds = list)}
+            renderList={allItems => (
+              <HackathonAdminList
+                defaultData={allItems}
+                selectedIds={this.selectedIds}
+                onSelect={list => (this.selectedIds = list)}
+              />
+            )}
           />
         </Form>
 

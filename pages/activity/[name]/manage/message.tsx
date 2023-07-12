@@ -26,9 +26,10 @@ export default class MessageListPage extends PureComponent<
   form = createRef<HTMLFormElement>();
 
   @observable
-  show = false;
-
   selectedIds: string[] = [];
+
+  @observable
+  show = false;
 
   handleReset = () => this.form.current?.reset();
 

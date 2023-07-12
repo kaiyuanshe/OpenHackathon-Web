@@ -20,7 +20,7 @@ export const getServerSideProps = withRoute<{ name: string }>();
 const { t } = i18n;
 
 @observer
-class AwardPage extends PureComponent<
+export default class AwardPage extends PureComponent<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > {
   store = activityStore.awardOf(this.props.route.params!.name);
@@ -106,7 +106,7 @@ class AwardPage extends PureComponent<
           </Form.Label>
           <Col sm="9">
             <Form.Select name="target">
-              {Object.entries(AwardTargetName).map(([value, name]) => (
+              {Object.entries(AwardTargetName()).map(([value, name]) => (
                 <option
                   key={name}
                   value={value}
@@ -161,5 +161,3 @@ class AwardPage extends PureComponent<
     );
   }
 }
-
-export default AwardPage;

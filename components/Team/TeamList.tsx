@@ -1,11 +1,10 @@
-import { observer } from 'mobx-react';
+import { ScrollListProps } from 'mobx-restful-table';
 import { Col, Row } from 'react-bootstrap';
 
 import { Team, TeamModel } from '../../models/Team';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 import { TeamCard } from './TeamCard';
 
-export interface TeamListProps extends XScrollListProps<Team> {
+export interface TeamListProps extends ScrollListProps<Team> {
   store: TeamModel;
 }
 
@@ -20,18 +19,3 @@ export const TeamListLayout = ({
     ))}
   </Row>
 );
-
-@observer
-export class TeamList extends XScrollList<TeamListProps> {
-  store = this.props.store;
-
-  constructor(props: TeamListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return <TeamListLayout defaultData={this.store.allItems} />;
-  }
-}

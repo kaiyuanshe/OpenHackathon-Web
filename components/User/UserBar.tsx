@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import Link from 'next/link';
 import { Button, Dropdown } from 'react-bootstrap';
 
 import sessionStore from '../../models/Session';
@@ -21,9 +20,10 @@ const UserBar = observer(() => {
         </SessionBox>
       ) : (
         <>
-          <Link href="/activity/create" passHref>
-            <Button variant="success">{t('create_hackathons')}</Button>
-          </Link>
+          <Button variant="success" href="/activity/create">
+            {t('create_hackathons')}
+          </Button>
+
           <Dropdown>
             <Dropdown.Toggle>{showName}</Dropdown.Toggle>
             <Dropdown.Menu>

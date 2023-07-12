@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { PureComponent } from 'react';
 
@@ -6,7 +7,7 @@ import {
   TeamManageBaseRouterProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
-import { TeamParticipantTable } from '../../../../../../components/Team/TeamParticipantTable';
+import { TeamParticipantTableLayout } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
 import { i18n } from '../../../../../../models/Translation';
 import { withRoute, withTranslation } from '../../../../../api/core';
@@ -37,7 +38,16 @@ export default class TeamParticipantPage extends PureComponent<
         path={resolvedUrl}
         title={t('team_registration')}
       >
-        <TeamParticipantTable store={store} />
+        <ScrollList
+          translator={i18n}
+          store={store}
+          renderList={allItems => (
+            <TeamParticipantTableLayout
+              defaultData={allItems}
+              onApprove={(userId, status) => store.approveOne(userId, status)}
+            />
+          )}
+        />
       </TeamManageFrame>
     );
   }

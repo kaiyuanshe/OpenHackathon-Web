@@ -1,10 +1,9 @@
-import { observer } from 'mobx-react';
+import { ScrollListProps } from 'mobx-restful-table';
 import { Badge, ListGroup } from 'react-bootstrap';
 
 import { Log, LogModel } from '../../models/Log';
-import { XScrollList, XScrollListProps } from '../layout/ScrollList';
 
-export interface ActivityLogListProps extends XScrollListProps<Log> {
+export interface ActivityLogListProps extends ScrollListProps<Log> {
   store: LogModel;
 }
 
@@ -24,18 +23,3 @@ export const ActivityLogListLayout = ({
     ))}
   </ListGroup>
 );
-
-@observer
-export class ActivityLogList extends XScrollList<ActivityLogListProps> {
-  store = this.props.store;
-
-  constructor(props: ActivityLogListProps) {
-    super(props);
-
-    this.boot();
-  }
-
-  renderList() {
-    return <ActivityLogListLayout defaultData={this.store.allItems} />;
-  }
-}

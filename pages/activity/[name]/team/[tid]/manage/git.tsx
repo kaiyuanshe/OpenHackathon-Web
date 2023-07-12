@@ -1,5 +1,6 @@
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import { FormEvent, PureComponent } from 'react';
 import {
@@ -12,10 +13,10 @@ import {
 } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
-import { GitList } from '../../../../../../components/Git/List';
+import { GitListLayout } from '../../../../../../components/Git/List';
 import {
-  GitListProps,
-  TeamGitList,
+  TeamGitListLayout,
+  TeamGitListLayoutProps,
 } from '../../../../../../components/Git/TeamGitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
@@ -103,13 +104,17 @@ export default class GitPage extends PureComponent<
               {t('create')}
             </Button>
           </div>
-          <GitList store={this.gitTemplateStore} />
+          <ScrollList
+            translator={i18n}
+            store={this.gitTemplateStore}
+            renderList={allItems => <GitListLayout defaultData={allItems} />}
+          />
         </Modal.Body>
       </Modal>
     );
   }
 
-  renderController: GitListProps['renderController'] = ({
+  renderController: TeamGitListLayoutProps['renderController'] = ({
     id,
     name,
     default_branch,
@@ -176,9 +181,15 @@ export default class GitPage extends PureComponent<
             </Button>
           </header>
 
-          <TeamGitList
+          <ScrollList
+            translator={i18n}
             store={this.workspaceStore}
-            renderController={this.renderController}
+            renderList={allItems => (
+              <TeamGitListLayout
+                defaultData={allItems}
+                renderController={this.renderController}
+              />
+            )}
           />
         </Container>
 
