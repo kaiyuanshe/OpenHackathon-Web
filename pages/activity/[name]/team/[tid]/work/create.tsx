@@ -1,12 +1,14 @@
 import type { InferGetServerSidePropsType } from 'next';
+import { cache, compose, router, translator } from 'next-ssr-middleware';
 
 import PageHead from '../../../../../../components/layout/PageHead';
 import { WorkEdit } from '../../../../../../components/Team/WorkEdit';
 import { i18n } from '../../../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>(
-  withTranslation(),
+export const getServerSideProps = compose(
+  cache(),
+  translator(i18n),
+  router<Record<'name' | 'tid', string>>,
 );
 
 const { t } = i18n;

@@ -1,6 +1,7 @@
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
+import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -11,25 +12,22 @@ import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Extensions, Question } from '../../../models/Question';
 import { i18n } from '../../../models/Translation';
-import { withErrorLog, withTranslation } from '../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withErrorLog<
+export const getServerSideProps = compose<
   { name: string },
   { activity: string; questionnaire: Question[] }
->(
-  withTranslation(async ({ params: { name } = {} }) => {
-    const activityStore = new ActivityModel();
-    const { status } = await activityStore.getOne(name!),
-      questionnaire = await activityStore.getQuestionnaire(name!);
+>(cache(), translator(i18n), errorLogger, async ({ params: { name } = {} }) => {
+  const activityStore = new ActivityModel();
+  const { status } = await activityStore.getOne(name!),
+    questionnaire = await activityStore.getQuestionnaire(name!);
 
-    return {
-      notFound: status !== 'online',
-      props: { activity: name!, questionnaire },
-    };
-  }),
-);
+  return {
+    notFound: status !== 'online',
+    props: { activity: name!, questionnaire },
+  };
+});
 
 @observer
 export default class RegisterPage extends PureComponent<

@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
+import { cache, compose, router, translator } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import {
   Button,
@@ -23,10 +24,11 @@ import activityStore from '../../../../../../models/Activity';
 import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<Record<'name' | 'tid', string>>(
-  withTranslation(),
+export const getServerSideProps = compose(
+  cache(),
+  translator(i18n),
+  router<Record<'name' | 'tid', string>>,
 );
 
 const { t } = i18n;

@@ -1,4 +1,5 @@
 import type { InferGetServerSidePropsType } from 'next';
+import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
@@ -8,18 +9,23 @@ import { TopUserList } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
 import { i18n } from '../models/Translation';
 import { UserModel } from '../models/User';
-import { withTranslation } from './api/core';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
 const { t } = i18n;
 
-export const getServerSideProps = withTranslation(async () => {
-  const [activities, topUsers] = await Promise.all([
-    new ActivityModel().getList({}, 1, 6),
-    new UserModel().getUserTopList(),
-  ]);
-  return { props: { activities, topUsers } };
-});
+export const getServerSideProps = compose(
+  cache(),
+  translator(i18n),
+  errorLogger,
+  async () => {
+    const [activities, topUsers] = await Promise.all([
+      new ActivityModel().getList({}, 1, 6),
+      new UserModel().getUserTopList(),
+    ]);
+
+    return { props: { activities, topUsers } };
+  },
+);
 
 const HomePage = ({
   activities,

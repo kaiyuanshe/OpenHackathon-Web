@@ -4,6 +4,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
+import { cache, compose, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
@@ -12,11 +13,10 @@ import { CardList } from '../../../../components/Git/CardList';
 import { GitModal } from '../../../../components/Git/Modal';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose(cache(), router<{ name: string }>);
 
 @observer
 export default class ActivityManageGitPage extends PureComponent<

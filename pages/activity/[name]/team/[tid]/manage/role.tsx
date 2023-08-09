@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
+import { cache, compose, router, translator } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 
 import { TeamAdministratorTableLayout } from '../../../../../../components/Team/TeamAdministratorTable';
@@ -12,10 +13,11 @@ import {
 import activityStore from '../../../../../../models/Activity';
 import { MembershipStatus } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
-import { withRoute, withTranslation } from '../../../../../api/core';
 
-export const getServerSideProps = withRoute<TeamManageBaseRouterProps>(
-  withTranslation(),
+export const getServerSideProps = compose(
+  cache(),
+  translator(i18n),
+  router<TeamManageBaseRouterProps>,
 );
 
 const { t } = i18n;

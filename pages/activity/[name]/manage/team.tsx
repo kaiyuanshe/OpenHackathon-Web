@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
+import { cache, compose, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import {
   Button,
@@ -15,9 +16,8 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamListLayout } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose(cache(), router<{ name: string }>);
 
 const { t } = i18n;
 
