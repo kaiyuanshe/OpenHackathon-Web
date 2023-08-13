@@ -13,6 +13,7 @@ import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
+import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import {
   Button,
@@ -43,7 +44,6 @@ import { Organization } from '../../../models/Organization';
 import sessionStore from '../../../models/Session';
 import { i18n } from '../../../models/Translation';
 import { convertDatetime } from '../../../utils/time';
-import { withErrorLog, withTranslation } from '../../api/core';
 
 const { t } = i18n;
 
@@ -51,14 +51,17 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
 });
 
-export const getServerSideProps = withErrorLog<
+export const getServerSideProps = compose<
   { name?: string },
   {
     activity: Activity;
     organizationList: Organization[];
   }
 >(
-  withTranslation(async ({ params: { name = '' } = {} }) => {
+  cache(),
+  errorLogger,
+  translator(i18n),
+  async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
     const [activity, organizationList] = await Promise.all([
@@ -67,7 +70,7 @@ export const getServerSideProps = withErrorLog<
     ]);
 
     return { props: { activity, organizationList } };
-  }),
+  },
 );
 
 const StatusName: () => Record<Enrollment['status'], string> = () => ({

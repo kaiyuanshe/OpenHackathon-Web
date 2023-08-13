@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -13,9 +14,11 @@ import {
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Award';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 const { t } = i18n;
 

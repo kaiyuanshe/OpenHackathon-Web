@@ -4,6 +4,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
@@ -12,9 +13,11 @@ import { AdministratorModal } from '../../../../components/User/ActivityAdminist
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 const { t } = i18n;
 

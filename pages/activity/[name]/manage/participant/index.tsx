@@ -1,6 +1,7 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -9,9 +10,11 @@ import { EnrollmentList } from '../../../../../components/Activity/EnrollmentLis
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
 import { i18n } from '../../../../../models/Translation';
-import { withRoute } from '../../../../api/core';
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 const { t } = i18n;
 

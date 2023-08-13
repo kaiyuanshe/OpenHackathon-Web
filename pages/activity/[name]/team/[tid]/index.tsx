@@ -3,6 +3,7 @@ import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import type { InferGetServerSidePropsType } from 'next';
+import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -26,7 +27,6 @@ import {
   TeamWork,
 } from '../../../../../models/Team';
 import { i18n } from '../../../../../models/Translation';
-import { withErrorLog, withTranslation } from '../../../../api/core';
 
 const { t } = i18n;
 
@@ -37,11 +37,14 @@ interface TeamPageProps {
   teamWorkList: TeamWork[];
 }
 
-export const getServerSideProps = withErrorLog<
+export const getServerSideProps = compose<
   Partial<Record<'name' | 'tid', string>>,
   TeamPageProps
 >(
-  withTranslation(async ({ params: { name = '', tid = '' } = {} }) => {
+  cache(),
+  errorLogger,
+  translator(i18n),
+  async ({ params: { name = '', tid = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
     const activity = await activityStore.getOne(name);
@@ -56,7 +59,7 @@ export const getServerSideProps = withErrorLog<
     return {
       props: { activity, team, teamMemberList, teamWorkList },
     };
-  }),
+  },
 );
 
 @observer

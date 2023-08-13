@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
 import { InferGetServerSidePropsType } from 'next';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -8,13 +9,15 @@ import { formToJSON } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
-import { Award, AwardAssignment } from '../../../../models/Award';
+import { AwardAssignment } from '../../../../models/Award';
 import { i18n } from '../../../../models/Translation';
-import { withRoute } from '../../../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = withRoute<{ name: string }>();
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 @observer
 class EvaluationPage extends PureComponent<

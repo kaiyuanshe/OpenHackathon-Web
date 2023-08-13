@@ -9,13 +9,13 @@ import classNames from 'classnames';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import PageHead from '../../components/layout/PageHead';
 import sessionStore from '../../models/Session';
 import { i18n } from '../../models/Translation';
 import userStore, { User } from '../../models/User';
-import { withErrorLog, withTranslation } from '../api/core';
 
 const ActivityList = dynamic(
     () => import('../../components/Activity/ActivityList'),
@@ -23,10 +23,13 @@ const ActivityList = dynamic(
   ),
   { t } = i18n;
 
-export const getServerSideProps = withErrorLog<{ id?: string }, User>(
-  withTranslation(async ({ params: { id = '' } = {} }) => ({
+export const getServerSideProps = compose<{ id?: string }, User>(
+  cache(),
+  errorLogger,
+  translator(i18n),
+  async ({ params: { id = '' } = {} }) => ({
     props: await userStore.getOne(id),
-  })),
+  }),
 );
 
 const UserDetailPage = ({
