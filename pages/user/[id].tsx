@@ -25,8 +25,8 @@ const ActivityList = dynamic(
 
 export const getServerSideProps = compose<{ id?: string }, User>(
   cache(),
-  translator(i18n),
   errorLogger,
+  translator(i18n),
   async ({ params: { id = '' } = {} }) => ({
     props: await userStore.getOne(id),
   }),

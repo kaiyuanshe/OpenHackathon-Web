@@ -15,8 +15,8 @@ const { t } = i18n;
 
 export const getServerSideProps = compose(
   cache(),
-  translator(i18n),
   errorLogger,
+  translator(i18n),
   async () => {
     const [activities, topUsers] = await Promise.all([
       new ActivityModel().getList({}, 1, 6),

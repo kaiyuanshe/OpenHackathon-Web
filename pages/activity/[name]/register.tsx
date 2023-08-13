@@ -18,7 +18,7 @@ const { t } = i18n;
 export const getServerSideProps = compose<
   { name: string },
   { activity: string; questionnaire: Question[] }
->(cache(), translator(i18n), errorLogger, async ({ params: { name } = {} }) => {
+>(cache(), errorLogger, translator(i18n), async ({ params: { name } = {} }) => {
   const activityStore = new ActivityModel();
   const { status } = await activityStore.getOne(name!),
     questionnaire = await activityStore.getQuestionnaire(name!);

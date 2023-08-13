@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
-import { cache, compose, router, translator } from 'next-ssr-middleware';
+import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 
 import {
@@ -12,11 +12,10 @@ import { TeamParticipantTableLayout } from '../../../../../../components/Team/Te
 import activityStore from '../../../../../../models/Activity';
 import { i18n } from '../../../../../../models/Translation';
 
-export const getServerSideProps = compose(
-  cache(),
-  translator(i18n),
-  router<TeamManageBaseRouterProps>,
-);
+export const getServerSideProps = compose<
+  TeamManageBaseRouterProps,
+  RouteProps<TeamManageBaseRouterProps>
+>(router, translator(i18n));
 
 const { t } = i18n;
 

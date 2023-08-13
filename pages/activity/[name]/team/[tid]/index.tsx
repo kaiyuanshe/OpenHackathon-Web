@@ -42,8 +42,8 @@ export const getServerSideProps = compose<
   TeamPageProps
 >(
   cache(),
-  translator(i18n),
   errorLogger,
+  translator(i18n),
   async ({ params: { name = '', tid = '' } = {} }) => {
     const activityStore = new ActivityModel();
 

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
-import { cache, compose, router } from 'next-ssr-middleware';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
@@ -15,7 +15,10 @@ import { i18n } from '../../../../models/Translation';
 
 const { t } = i18n;
 
-export const getServerSideProps = compose(cache(), router<{ name: string }>);
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 @observer
 export default class MessageListPage extends PureComponent<

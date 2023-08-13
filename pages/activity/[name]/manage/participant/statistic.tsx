@@ -2,7 +2,7 @@ import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
-import { cache, compose, router } from 'next-ssr-middleware';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
 
@@ -17,7 +17,10 @@ const EnrollmentStatisticCharts = dynamic(
   { ssr: false },
 );
 
-export const getServerSideProps = compose(cache(), router<{ name: string }>);
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 @observer
 export default class EnrollmentStatisticPage extends PureComponent<

@@ -1,5 +1,5 @@
 import { InferGetServerSidePropsType } from 'next';
-import { cache, compose, router } from 'next-ssr-middleware';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
 
 import { ActivityEditor } from '../../../../components/Activity/ActivityEditor';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
@@ -7,7 +7,10 @@ import { i18n } from '../../../../models/Translation';
 
 const { t } = i18n;
 
-export const getServerSideProps = compose(cache(), router<{ name: string }>);
+export const getServerSideProps = compose<
+  { name: string },
+  RouteProps<{ name: string }>
+>(router);
 
 const ActivityEditPage = ({
   route: { resolvedUrl, params },

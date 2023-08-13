@@ -59,8 +59,8 @@ export const getServerSideProps = compose<
   }
 >(
   cache(),
-  translator(i18n),
   errorLogger,
+  translator(i18n),
   async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
