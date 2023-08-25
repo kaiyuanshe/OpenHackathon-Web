@@ -280,8 +280,8 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               onChange={code => (this.detailHTML = code)}
             />
             <Form.Control
+              hidden
               name="detail"
-              className="d-none"
               required
               defaultValue={this.detailHTML || detail}
             />
