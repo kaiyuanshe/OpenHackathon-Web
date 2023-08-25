@@ -282,7 +282,6 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             <Form.Control
               name="detail"
               className="d-none"
-              isInvalid={!this.detailHTML.trim() && this.validated}
               required
               defaultValue={this.detailHTML || detail}
             />
