@@ -55,7 +55,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
     const form = event.currentTarget;
 
-    if (form.checkValidity() === false) return (this.validated = true);
+    if (!form.checkValidity()) return (this.validated = true);
 
     const { name } = this.props,
       data = formToJSON<ActivityFormData>(form);
@@ -271,18 +271,16 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
 
         <Form.Group as={Row} className="mb-3" controlId="briefInfo">
           <Form.Label column sm={2}>
-            {t('hackathon_detail')}
+            {t('activity_detail')}
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <HTMLEditor
-              name="detail"
-              defaultValue={detail}
-              onChange={code => (this.detailHTML = code)}
-            />
+            <HTMLEditor onChange={code => (this.detailHTML = code)} />
             <Form.Control
+              name="detail"
               className="d-none"
-              isInvalid={!this.detailHTML.trim() && this.validated}
+              required
+              defaultValue={this.detailHTML}
             />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
