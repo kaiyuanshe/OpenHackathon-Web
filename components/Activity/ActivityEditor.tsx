@@ -30,9 +30,6 @@ export interface ActivityEditorProps {
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   @observable
-  detailHTML = '';
-
-  @observable
   validated = false;
 
   async componentDidMount() {
@@ -275,7 +272,10 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <HTMLEditor onChange={code => (this.detailHTML = code)} />
+            <HTMLEditor
+              defaultValue={detail}
+              onChange={code => (this.detailHTML = code)}
+            />
             <Form.Control
               name="detail"
               className="d-none"
