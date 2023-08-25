@@ -30,6 +30,9 @@ export interface ActivityEditorProps {
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   @observable
+  detailHTML = '';
+
+  @observable
   validated = false;
 
   async componentDidMount() {
@@ -279,8 +282,9 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
             <Form.Control
               name="detail"
               className="d-none"
+              isInvalid={!this.detailHTML.trim() && this.validated}
               required
-              defaultValue={this.detailHTML}
+              defaultValue={this.detailHTML || detail}
             />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
