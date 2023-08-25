@@ -276,14 +276,14 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Form.Label>
           <Col sm={10}>
             <HTMLEditor
-              defaultValue={detail}
-              onChange={code => (this.detailHTML = code)}
+              defaultValue={this.detailHTML}
+              onChange={code => (this.detailHTML = code === '<br>' ? '' : code)}
             />
             <Form.Control
               hidden
               name="detail"
               required
-              defaultValue={this.detailHTML || detail}
+              defaultValue={this.detailHTML}
             />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
