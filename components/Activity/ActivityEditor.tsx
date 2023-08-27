@@ -283,7 +283,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
               hidden
               name="detail"
               required
-              defaultValue={this.detailHTML || detail}
+              value={this.detailHTML}
             />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
