@@ -1,4 +1,4 @@
-import { Loading } from 'idea-react';
+import { CodeBlock, Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
@@ -26,6 +26,12 @@ interface ActivityFormData extends Activity {
 export interface ActivityEditorProps {
   name?: string;
 }
+
+const isEmptyHTML = (html: string): boolean => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+  return tempDiv.textContent?.trim() === '';
+};
 
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
@@ -277,7 +283,9 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           <Col sm={10}>
             <HTMLEditor
               defaultValue={this.detailHTML}
-              onChange={code => (this.detailHTML = code === '<br>' ? '' : code)}
+              onChange={code =>
+                (this.detailHTML = isEmptyHTML(code) ? '' : code)
+              }
             />
             <Form.Control
               hidden
