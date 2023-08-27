@@ -282,7 +282,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           </Form.Label>
           <Col sm={10}>
             <HTMLEditor
-              defaultValue={this.detailHTML}
+              defaultValue={detail}
               onChange={code =>
                 (this.detailHTML = isEmptyHTML(code) ? '' : code)
               }
