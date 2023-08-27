@@ -1,4 +1,4 @@
-import { CodeBlock, Loading } from 'idea-react';
+import { Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
