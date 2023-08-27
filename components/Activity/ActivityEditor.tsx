@@ -27,12 +27,6 @@ export interface ActivityEditorProps {
   name?: string;
 }
 
-const isEmptyHTML = (html: string): boolean => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-  return tempDiv.textContent?.trim() === '';
-};
-
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
   @observable
@@ -283,9 +277,7 @@ export class ActivityEditor extends PureComponent<ActivityEditorProps> {
           <Col sm={10}>
             <HTMLEditor
               defaultValue={detail}
-              onChange={code =>
-                (this.detailHTML = isEmptyHTML(code) ? '' : code)
-              }
+              onChange={code => (this.detailHTML = code)}
             />
             <Form.Control
               hidden
