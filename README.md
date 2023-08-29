@@ -17,10 +17,10 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 
 ## Technology stack
 
-- Language: [TypeScript v4][2]
+- Language: [TypeScript v5][2]
 - Component engine: [Nextjs v12][3]
 - Component suite: [Bootstrap v5][4]
-- State management: [MobX][6]
+- State management: [MobX v5][6]
 - PWA framework: [Workbox v6][5]
 - CI / CD: GitHub [Actions][11] + [Vercel][12]
 
