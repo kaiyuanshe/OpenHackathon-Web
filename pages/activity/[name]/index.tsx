@@ -280,9 +280,9 @@ export default class ActivityPage extends PureComponent<
               <Carousel.Item key={uri}>
                 <Image
                   className={`d-block object-fit-cover ${styles.carouselImageHeight}`}
+                  fluid
                   src={uri}
                   alt={name}
-                  fluid
                 />
               </Carousel.Item>
             ))}
