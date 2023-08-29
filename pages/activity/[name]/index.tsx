@@ -279,7 +279,7 @@ export default class ActivityPage extends PureComponent<
             {((banners || []) as Media[]).map(({ uri }) => (
               <Carousel.Item key={uri}>
                 <Image
-                  className={`d-block object-fit-fill ${styles.carouselImageHeight}`}
+                  className={`d-block object-fit-cover ${styles.carouselImageHeight}`}
                   src={uri}
                   alt={name}
                   fluid
