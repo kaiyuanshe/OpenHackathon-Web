@@ -41,15 +41,21 @@ export function ActivityCard({
   return (
     <Card className={classNames('border-success', className)}>
       <Card.Body>
-        <Card.Title className="text-primary text-truncate" title={displayName}>
+        <Card.Title
+          className="text-primary text-truncate text-wrap"
+          title={displayName}
+        >
           <Link href={`/activity/${name}`}>{displayName}</Link>
         </Card.Title>
-        <Row as="small" className="border-bottom py-2 g-4" xs={1} sm={2}>
-          <Col className="text-truncate" title={eventStartedAtText}>
+        <Row as="small" className="g-4" xs={1}>
+          <Col
+            className="text-truncate border-bottom pb-2"
+            title={eventStartedAtText}
+          >
             <FontAwesomeIcon className="text-success" icon={faCalendarDay} />{' '}
             {eventStartedAtText}
           </Col>
-          <Col className="text-truncate" title={location}>
+          <Col className="text-truncate border-bottom pb-2" title={location}>
             <FontAwesomeIcon className="text-success" icon={faMapLocationDot} />{' '}
             {location}
           </Col>
