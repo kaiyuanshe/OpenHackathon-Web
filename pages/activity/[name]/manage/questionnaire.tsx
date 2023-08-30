@@ -1,6 +1,5 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { InferGetServerSidePropsType } from 'next';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -16,15 +15,20 @@ import { i18n } from '../../../../models/Translation';
 
 const { t } = i18n;
 
+type ActivityQuestionnairePageProps = RouteProps<{ name: string }>;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
+  ActivityQuestionnairePageProps
 >(router);
 
 @observer
-class ActivityQuestionnairePage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class ActivityQuestionnairePage extends PureComponent<ActivityQuestionnairePageProps> {
+  constructor(props: ActivityQuestionnairePageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   activity = this.props.route.params!.name;
 
   @observable
@@ -36,6 +40,7 @@ class ActivityQuestionnairePage extends PureComponent<
     // 获取问卷是否存在
     try {
       await activityStore.getQuestionnaire(this.activity);
+
       this.isCreate = false;
     } catch {}
   }
@@ -81,21 +86,20 @@ class ActivityQuestionnairePage extends PureComponent<
     )
       return self.alert(t('question_id_repeat'));
 
-    activityStore.editQuestionnaireStatus([
+    return activityStore.editQuestionnaireStatus([
       ...activityStore.questionnaire,
       questionnaireItem,
     ]);
   };
 
-  deleteQuestionnaireItem = async (id: string) => {
+  deleteQuestionnaireItem = (id: string) => {
     const curQuestionnaire = activityStore.questionnaire.filter(
       v => v.id !== id,
     );
-
-    activityStore.editQuestionnaireStatus(curQuestionnaire);
+    return activityStore.editQuestionnaireStatus(curQuestionnaire);
   };
 
-  handleMoveQuestionnaireItem = async (id: string, direction: number) => {
+  handleMoveQuestionnaireItem = (id: string, direction: number) => {
     const curQuestionnaire = [...activityStore.questionnaire];
     const index = curQuestionnaire.findIndex(v => v.id === id);
 
@@ -104,7 +108,7 @@ class ActivityQuestionnairePage extends PureComponent<
       1,
       curQuestionnaire[index],
     )[0];
-    activityStore.editQuestionnaireStatus(curQuestionnaire);
+    return activityStore.editQuestionnaireStatus(curQuestionnaire);
   };
 
   render() {
@@ -153,5 +157,3 @@ class ActivityQuestionnairePage extends PureComponent<
     );
   }
 }
-
-export default ActivityQuestionnairePage;

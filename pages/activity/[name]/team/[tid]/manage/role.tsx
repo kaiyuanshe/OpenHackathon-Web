@@ -1,4 +1,3 @@
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
@@ -29,9 +28,6 @@ export default class TeamAdministratorPage extends PureComponent<
     .teamOf(this.props.route.params!.name)
     .memberOf(this.props.route.params!.tid);
 
-  @observable
-  userId?: string;
-
   render() {
     const { store } = this;
     const { resolvedUrl, params } = this.props.route;
@@ -53,7 +49,6 @@ export default class TeamAdministratorPage extends PureComponent<
               {...this.props}
               defaultData={allItems}
               onUpdateRole={(userId, role) => store.updateRole(userId, role)}
-              onPopUpUpdateRoleModal={userId => (this.userId = userId)}
             />
           )}
         />

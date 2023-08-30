@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ChangeEvent, PureComponent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
@@ -19,6 +19,11 @@ export interface DateTimeInputProps {
 
 @observer
 export class DateTimeInput extends PureComponent<DateTimeInputProps> {
+  constructor(props: DateTimeInputProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
   start = '';
 
@@ -43,6 +48,7 @@ export class DateTimeInput extends PureComponent<DateTimeInputProps> {
   render() {
     const { id, label, name, required, startAt, endAt } = this.props,
       { isInvalid } = this;
+
     return (
       <Form.Group as={Row} className="mb-3" controlId={id}>
         <Form.Label column sm={2}>

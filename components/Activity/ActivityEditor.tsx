@@ -1,5 +1,5 @@
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { BadgeInput, FileUploader } from 'mobx-restful-table';
@@ -13,11 +13,8 @@ import fileStore from '../../models/File';
 import { i18n } from '../../models/Translation';
 import { DateTimeInput } from '../DateTimeInput';
 
-const { t } = i18n;
-
-const HTMLEditor = dynamic(() => import('../HTMLEditor'), {
-  ssr: false,
-});
+const { t } = i18n,
+  HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
 
 interface ActivityFormData extends Activity {
   bannerUrls: string[] | string;
@@ -29,6 +26,11 @@ export interface ActivityEditorProps {
 
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
+  constructor(props: ActivityEditorProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
   detailHTML = '';
 

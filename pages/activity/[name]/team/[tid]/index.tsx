@@ -1,8 +1,8 @@
 import { Icon } from 'idea-react';
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { observePropsState } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import type { InferGetServerSidePropsType } from 'next';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
@@ -63,15 +63,21 @@ export const getServerSideProps = compose<
 );
 
 @observer
-export default class TeamPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+@observePropsState
+export default class TeamPage extends PureComponent<TeamPageProps> {
+  constructor(props: TeamPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
+  declare observedProps: TeamPageProps;
+
   store = activityStore
     .teamOf(this.props.activity.name)
     .memberOf(this.props.team.id);
 
   @observable
-  currentUserInThisTeam?: TeamMember;
+  currentUserInThisTeam?: TeamMember = undefined;
 
   @observable
   teamMemberRole = '';
@@ -79,11 +85,12 @@ export default class TeamPage extends PureComponent<
   @observable
   isShowJoinReqModal = false;
 
+  @computed
   get currentRoute() {
     const {
       activity: { displayName: hackathonDisplayName },
       team: { hackathonName, displayName },
-    } = this.props;
+    } = this.observedProps;
 
     return [
       {
@@ -97,7 +104,7 @@ export default class TeamPage extends PureComponent<
   @computed
   get isShowJoinTeamBtn() {
     const now = Date.now(),
-      { eventStartedAt, eventEndedAt } = this.props.activity,
+      { eventStartedAt, eventEndedAt } = this.observedProps.activity,
       { currentEnrollment, currentTeam } = activityStore;
 
     return (
@@ -110,30 +117,10 @@ export default class TeamPage extends PureComponent<
 
   @computed
   get isShowLeaveTeamBtn() {
-    return activityStore.currentTeam?.sessionOne?.id === this.props.team.id;
+    return (
+      activityStore.currentTeam?.sessionOne?.id === this.observedProps.team.id
+    );
   }
-
-  handleJoinTeam = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    await this.store.joinTeam(formToJSON(event.currentTarget));
-
-    this.isShowJoinReqModal = false;
-  };
-
-  handleLeaveTeam = async () => {
-    const operation =
-      this.currentUserInThisTeam?.status === MembershipStatus.APPROVED
-        ? t('leave_team')
-        : t('cancel_application');
-
-    if (!confirm(`${t('please_make_sure')}${operation}`)) return;
-
-    await this.store.leaveTeam();
-
-    alert(`${operation}${t('success')}`);
-  };
 
   async componentDidMount() {
     if (isServer()) return;
@@ -161,6 +148,28 @@ export default class TeamPage extends PureComponent<
         await activityStore.teamOf(name).getSessionOne();
       } catch {}
   }
+
+  handleJoinTeam = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    await this.store.joinTeam(formToJSON(event.currentTarget));
+
+    this.isShowJoinReqModal = false;
+  };
+
+  handleLeaveTeam = async () => {
+    const operation =
+      this.currentUserInThisTeam?.status === MembershipStatus.APPROVED
+        ? t('leave_team')
+        : t('cancel_application');
+
+    if (!confirm(`${t('please_make_sure')}${operation}`)) return;
+
+    await this.store.leaveTeam();
+
+    alert(`${operation}${t('success')}`);
+  };
 
   render() {
     const hackathonDisplayName = this.props.activity.displayName,

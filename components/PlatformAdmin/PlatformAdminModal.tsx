@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
@@ -18,6 +18,11 @@ export interface PlatformAdminModalProps
 
 @observer
 export class PlatformAdminModal extends PureComponent<PlatformAdminModalProps> {
+  constructor(props: PlatformAdminModalProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
   userId = '';
 

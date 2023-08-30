@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import Link from 'next/link';
 import { Fragment, PureComponent } from 'react';
@@ -37,6 +37,11 @@ export interface TeamManageFrameProps extends ActivityManageFrameProps {
 
 @observer
 export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
+  constructor(props: TeamManageFrameProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
   teamMemberRole = '';
 
@@ -49,17 +54,18 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
 
     try {
       this.isLoading = true;
+
       const currentUserInThisTeam =
         user?.id &&
         (await activityStore.teamOf(name).memberOf(tid).getOne(user.id));
+
       this.teamMemberRole = currentUserInThisTeam
         ? currentUserInThisTeam.role
         : '';
     } catch (error: any) {
       const { status } = error as ErrorBaseData;
-      if (status !== 404) {
-        this.teamMemberRole = '';
-      }
+
+      if (status !== 404) this.teamMemberRole = '';
     } finally {
       this.isLoading = false;
     }

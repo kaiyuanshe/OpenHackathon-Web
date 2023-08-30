@@ -1,8 +1,7 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { InferGetServerSidePropsType } from 'next';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
@@ -15,15 +14,20 @@ import { i18n } from '../../../../models/Translation';
 
 const { t } = i18n;
 
+type MessageListPageProps = RouteProps<{ name: string }>;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
+  MessageListPageProps
 >(router);
 
 @observer
-export default class MessageListPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class MessageListPage extends PureComponent<MessageListPageProps> {
+  constructor(props: MessageListPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   store = activityStore.messageOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();
