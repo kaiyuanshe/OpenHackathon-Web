@@ -1,9 +1,8 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
@@ -16,15 +15,20 @@ import { i18n } from '../../../../models/Translation';
 
 const { t } = i18n;
 
+type ActivityManageGitPageProps = RouteProps<{ name: string }>;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
+  ActivityManageGitPageProps
 >(router);
 
 @observer
-export default class ActivityManageGitPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class ActivityManageGitPage extends PureComponent<ActivityManageGitPageProps> {
+  constructor(props: ActivityManageGitPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   store = activityStore.templateOf(this.props.route.params!.name + '');
 
   @observable

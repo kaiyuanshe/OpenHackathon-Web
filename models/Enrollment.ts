@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
@@ -34,23 +34,24 @@ export interface EnrollmentStatistic
 export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
   ListModel,
 ) {
+  constructor(baseURI: string) {
+    super();
+    makeObservable(this);
+
+    this.baseURI = `${baseURI}/enrollment`;
+  }
+
   client = sessionStore.client;
   indexKey = 'userId' as const;
 
   @observable
-  sessionOne?: Enrollment;
+  sessionOne?: Enrollment = undefined;
 
-  @observable
-  statistic: EnrollmentStatistic = {};
+  declare statistic: EnrollmentStatistic;
 
   @computed
   get exportURL() {
     return sessionStore.exportURLOf('enrollments', this.baseURI);
-  }
-
-  constructor(baseURI: string) {
-    super();
-    this.baseURI = `${baseURI}/enrollment`;
   }
 
   openStream(filter: EnrollmentFilter) {

@@ -1,7 +1,6 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
 import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import {
@@ -25,17 +24,22 @@ import sessionStore from '../../../../../../models/Session';
 import { TeamWorkType } from '../../../../../../models/Team';
 import { i18n } from '../../../../../../models/Translation';
 
+type GitPageProps = RouteProps<Record<'name' | 'tid', string>>;
+
 export const getServerSideProps = compose<
   Record<'name' | 'tid', string>,
-  RouteProps<Record<'name' | 'tid', string>>
+  GitPageProps
 >(router, translator(i18n));
 
 const { t } = i18n;
 
 @observer
-export default class GitPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class GitPage extends PureComponent<GitPageProps> {
+  constructor(props: GitPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(this.props.route.params!.tid);

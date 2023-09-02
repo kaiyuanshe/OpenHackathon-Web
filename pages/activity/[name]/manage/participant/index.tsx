@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
@@ -11,21 +11,26 @@ import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Enrollment';
 import { i18n } from '../../../../../models/Translation';
 
+type ParticipantPageProps = RouteProps<{ name: string }>;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
+  ParticipantPageProps
 >(router);
 
 const { t } = i18n;
 
 @observer
-export default class ParticipantPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class ParticipantPage extends PureComponent<ParticipantPageProps> {
+  constructor(props: ParticipantPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   @observable
-  extensions?: Enrollment['extensions'];
+  extensions?: Enrollment['extensions'] = undefined;
 
   render() {
     const { resolvedUrl, params } = this.props.route,

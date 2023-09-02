@@ -7,11 +7,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
@@ -52,13 +51,12 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
 });
 
-export const getServerSideProps = compose<
-  { name?: string },
-  {
-    activity: Activity;
-    organizationList: Organization[];
-  }
->(
+interface ActivityPageProps {
+  activity: Activity;
+  organizationList: Organization[];
+}
+
+export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
   cache(),
   errorLogger,
   translator(i18n),
@@ -82,9 +80,12 @@ const StatusName: () => Record<Enrollment['status'], string> = () => ({
 });
 
 @observer
-export default class ActivityPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class ActivityPage extends PureComponent<ActivityPageProps> {
+  constructor(props: ActivityPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   logStore = activityStore.logOf(this.props.activity.name);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);

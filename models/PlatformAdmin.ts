@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { createListStream, Filter } from './Base';
@@ -13,6 +13,11 @@ export class PlatformAdminModel extends Stream<
   PlatformAdmin,
   PlatformAdminFilter
 >(ListModel) {
+  constructor() {
+    super();
+    makeObservable(this);
+  }
+
   client = sessionStore.client;
   baseURI = 'platform/admin';
   indexKey = 'userId' as const;

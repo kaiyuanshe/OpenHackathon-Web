@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
@@ -24,6 +24,11 @@ export default function PlatformAdminPage() {
 
 @observer
 class PlatformAdmin extends PureComponent {
+  constructor(props: {}) {
+    super(props);
+    makeObservable(this);
+  }
+
   store = new PlatformAdminModel();
 
   @observable

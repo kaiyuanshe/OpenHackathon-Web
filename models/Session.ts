@@ -1,5 +1,5 @@
 import { HTTPClient } from 'koajax';
-import { computed, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
@@ -8,6 +8,14 @@ import { AuthingIdentity, AuthingUserBase, User } from './User';
 const { localStorage } = globalThis;
 
 export class SessionModel extends BaseModel {
+  constructor() {
+    super();
+    makeObservable(this);
+
+    if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
+      this.signOut();
+  }
+
   @observable
   user?: User = localStorage?.user && JSON.parse(localStorage.user);
 
@@ -38,13 +46,6 @@ export class SessionModel extends BaseModel {
 
     return next();
   });
-
-  constructor() {
-    super();
-
-    if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
-      this.signOut();
-  }
 
   @toggle('uploading')
   async signIn(profile: AuthingUserBase) {

@@ -17,10 +17,10 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 
 ## Technology stack
 
-- Language: [TypeScript v4][2]
+- Language: [TypeScript v5][2]
 - Component engine: [Nextjs v12][3]
 - Component suite: [Bootstrap v5][4]
-- State management: [MobX][6]
+- State management: [MobX v6][6]
 - PWA framework: [Workbox v6][5]
 - CI / CD: GitHub [Actions][11] + [Vercel][12]
 
@@ -62,7 +62,7 @@ Check out our [Next.js deployment documentation][17] for more details.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web?ref=badge_large)
 
-[1]: https://reactjs.org/
+[1]: https://react.dev/
 [2]: https://www.typescriptlang.org/
 [3]: https://nextjs.org/
 [4]: https://getbootstrap.com/

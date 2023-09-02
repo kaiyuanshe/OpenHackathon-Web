@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { InferGetServerSidePropsType } from 'next';
@@ -14,17 +14,22 @@ import { HackathonAdminList } from '../../../../components/User/HackathonAdminLi
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Translation';
 
+type AdministratorPageProps = RouteProps<{ name: string }>;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
+  AdministratorPageProps
 >(router);
 
 const { t } = i18n;
 
 @observer
-export default class AdministratorPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class AdministratorPage extends PureComponent<AdministratorPageProps> {
+  constructor(props: AdministratorPageProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
   @observable

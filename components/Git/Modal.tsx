@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import {
@@ -6,7 +6,6 @@ import {
   Col,
   Form,
   FormGroup,
-  InputGroup,
   Modal,
   ModalProps,
   Row,
@@ -26,8 +25,13 @@ const { t } = i18n;
 
 @observer
 export class GitModal extends PureComponent<GitModalProps> {
+  constructor(props: GitModalProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
-  inputField = { label: t('address'), text: t('url'), value: '' };
+  value = '';
 
   @observable
   validated = false;
@@ -43,17 +47,17 @@ export class GitModal extends PureComponent<GitModalProps> {
     await store.updateOne(formToJSON(form));
     onSave?.();
 
-    this.inputField.value = '';
+    this.value = '';
   };
 
   cancelHandler = () => {
-    this.inputField.value = '';
+    this.value = '';
     this.props.onHide?.();
   };
 
   render() {
     const { show, onHide } = this.props;
-    const { label, text, value } = this.inputField;
+    const { value } = this;
 
     return (
       <Modal size="lg" {...{ show, onHide }}>
@@ -70,12 +74,12 @@ export class GitModal extends PureComponent<GitModalProps> {
           <Modal.Body>
             <FormGroup as={Row} className="mb-3">
               <Form.Label column sm={2}>
-                {label}
+                {t('address')}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
                   type="url"
-                  name={text}
+                  name={t('url')}
                   value={value}
                   required
                   placeholder={t(
@@ -83,7 +87,7 @@ export class GitModal extends PureComponent<GitModalProps> {
                     'https://github.com/idea2app/React-MobX-Bootstrap-ts',
                   )}
                   onChange={({ currentTarget: { value } }) =>
-                    (this.inputField.value = value)
+                    (this.value = value)
                   }
                 />
               </Col>

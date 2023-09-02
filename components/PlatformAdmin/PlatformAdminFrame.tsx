@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { observable, reaction } from 'mobx';
+import { makeObservable, observable, reaction } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
@@ -51,6 +51,11 @@ export interface PlatformAdminFrameProps {
 
 @observer
 export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
+  constructor(props: PlatformAdminFrameProps) {
+    super(props);
+    makeObservable(this);
+  }
+
   @observable
   loading = false;
 
