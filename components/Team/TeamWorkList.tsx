@@ -123,13 +123,15 @@ export class TeamWorkList extends PureComponent<TeamWorkListLayoutProps> {
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 
   render() {
+    const { props } = this;
+
     return (
       <ScrollList
         translator={i18n}
         store={this.store}
         renderList={allItems => (
           <TeamWorkListLayout
-            {...this.props}
+            {...props}
             defaultData={allItems}
             onDelete={this.onDelete}
           />

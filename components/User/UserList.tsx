@@ -103,12 +103,18 @@ export class UserList extends PureComponent<UserListProps> {
   };
 
   render() {
+    const { props } = this;
+
     return (
       <ScrollList
         translator={i18n}
         store={this.props.store}
         renderList={allItems => (
-          <UserListLayout {...this.props} defaultData={allItems} />
+          <UserListLayout
+            {...props}
+            defaultData={allItems}
+            onSearch={this.onSearch}
+          />
         )}
       />
     );

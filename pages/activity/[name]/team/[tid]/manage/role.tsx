@@ -29,7 +29,7 @@ export default class TeamAdministratorPage extends PureComponent<
     .memberOf(this.props.route.params!.tid);
 
   render() {
-    const { store } = this;
+    const { props, store } = this;
     const { resolvedUrl, params } = this.props.route;
     const { name, tid } = params!;
 
@@ -46,7 +46,7 @@ export default class TeamAdministratorPage extends PureComponent<
           filter={{ status: MembershipStatus.APPROVED }}
           renderList={allItems => (
             <TeamAdministratorTableLayout
-              {...this.props}
+              {...props}
               defaultData={allItems}
               onUpdateRole={(userId, role) => store.updateRole(userId, role)}
             />

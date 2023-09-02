@@ -79,7 +79,8 @@ export default class ActivityList extends PureComponent<ActivityListProps> {
   };
 
   render() {
-    const { userId, type } = this.props;
+    const { props } = this;
+    const { userId, type } = props;
 
     return (
       <ScrollList
@@ -88,7 +89,7 @@ export default class ActivityList extends PureComponent<ActivityListProps> {
         filter={{ userId, listType: type }}
         renderList={allItems => (
           <ActivityListLayout
-            {...this.props}
+            {...props}
             defaultData={allItems}
             onPublish={this.onPublish}
             onDelete={this.onDelete}

@@ -42,8 +42,8 @@ dependencies:
     specifier: ^1.0.0-rc.22
     version: 1.0.0-rc.22(@types/react@17.0.65)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
   koajax:
-    specifier: ^0.8.6
-    version: 0.8.6(jsdom@22.1.0)(typescript@5.2.2)
+    specifier: ^0.9.1
+    version: 0.9.1(jsdom@22.1.0)(typescript@5.2.2)
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
@@ -54,32 +54,32 @@ dependencies:
     specifier: ^4.17.21
     version: 4.17.21
   mobx:
-    specifier: ^6.10.1
-    version: 6.10.1
+    specifier: ^6.10.2
+    version: 6.10.2
   mobx-i18n:
     specifier: ^0.4.1
-    version: 0.4.1(mobx@6.10.1)
+    version: 0.4.1(mobx@6.10.2)
   mobx-react:
     specifier: ^9.0.1
-    version: 9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
+    version: 9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
   mobx-react-helper:
-    specifier: ^0.2.5
-    version: 0.2.5(mobx@6.10.1)(react@17.0.2)
+    specifier: ^0.2.7
+    version: 0.2.7(mobx@6.10.2)(react@17.0.2)
   mobx-restful:
     specifier: ^0.6.11
-    version: 0.6.11(jsdom@22.1.0)(mobx@6.10.1)(typescript@5.2.2)
+    version: 0.6.11(jsdom@22.1.0)(mobx@6.10.2)(typescript@5.2.2)
   mobx-restful-table:
     specifier: ^1.1.2
-    version: 1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
+    version: 1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
   next:
     specifier: ^12.3.4
     version: 12.3.4(@babel/core@7.22.11)(react-dom@17.0.2)(react@17.0.2)
   next-ssr-middleware:
     specifier: ^0.5.1
-    version: 0.5.1(mobx@6.10.1)(next@12.3.4)(typescript@5.2.2)
+    version: 0.5.1(mobx@6.10.2)(next@12.3.4)(typescript@5.2.2)
   open-react-map:
-    specifier: ^0.6.1
-    version: 0.6.1(jsdom@22.1.0)(mobx-react@9.0.1)(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
+    specifier: ^0.6.4
+    version: 0.6.4(jsdom@22.1.0)(mobx-react@9.0.1)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
   react:
     specifier: ^17.0.2
     version: 17.0.2
@@ -107,14 +107,14 @@ devDependencies:
     specifier: ^18.0.0
     version: 18.0.0
   '@types/leaflet':
-    specifier: ^1.9.3
-    version: 1.9.3
+    specifier: ^1.9.4
+    version: 1.9.4
   '@types/lodash':
     specifier: ^4.14.197
     version: 4.14.197
   '@types/node':
-    specifier: ^18.17.12
-    version: 18.17.12
+    specifier: ^18.17.13
+    version: 18.17.13
   '@types/react':
     specifier: ^17.0.65
     version: 17.0.65
@@ -150,7 +150,7 @@ devDependencies:
     version: 3.0.3
   ts-node:
     specifier: ^10.9.1
-    version: 10.9.1(@types/node@18.17.12)(typescript@5.2.2)
+    version: 10.9.1(@types/node@18.17.13)(typescript@5.2.2)
   typescript:
     specifier: ~5.2.2
     version: 5.2.2
@@ -1961,7 +1961,7 @@ packages:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.17.12
+      '@types/node': 18.17.13
     dev: true
 
   /@types/js-cookie@2.2.7:
@@ -1976,8 +1976,8 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@types/leaflet@1.9.3:
-    resolution: {integrity: sha512-Caa1lYOgKVqDkDZVWkto2Z5JtVo09spEaUt2S69LiugbBpoqQu92HYFMGUbYezZbnBkyOxMNPXHSgRrRY5UyIA==}
+  /@types/leaflet@1.9.4:
+    resolution: {integrity: sha512-kfwgQf4eOxoe/tD9CaKQrBKHbc7VpyfJOG5sxsQtkH+ML9xYa8hUC3UMa0wU1pKfciJtO0pU9g9XbWhPo7iBCA==}
     dependencies:
       '@types/geojson': 7946.0.10
 
@@ -1989,8 +1989,8 @@ packages:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
     dev: true
 
-  /@types/node@18.17.12:
-    resolution: {integrity: sha512-d6xjC9fJ/nSnfDeU0AMDsaJyb1iHsqCSOdi84w4u+SlN/UgQdY5tRhpMzaFYsI4mnpvgTivEaQd0yOUhAtOnEQ==}
+  /@types/node@18.17.13:
+    resolution: {integrity: sha512-SlLPDDe6YQl1JnQQy4hgsuJeo5q5c1TBU4be4jeBLXsqpjoDbfb0HesSfhMwnaxfSJ4txtfzJzW5/x/43fkkfQ==}
     dev: true
 
   /@types/prop-types@15.7.5:
@@ -2012,7 +2012,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 18.17.12
+      '@types/node': 18.17.13
     dev: true
 
   /@types/scheduler@0.16.3:
@@ -3934,8 +3934,8 @@ packages:
       editorjs-html: 3.4.3
       iterable-observer: 1.0.0
       lodash: 4.17.21
-      mobx: 6.10.1
-      mobx-react: 9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
+      mobx: 6.10.2
+      mobx-react: 9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
       prismjs: 1.29.0
       react: 17.0.2
       react-bootstrap: 2.8.0(@types/react@17.0.65)(react-dom@17.0.2)(react@17.0.2)
@@ -4274,7 +4274,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.17.12
+      '@types/node': 18.17.13
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -4283,7 +4283,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.17.12
+      '@types/node': 18.17.13
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -4452,6 +4452,20 @@ packages:
       - typescript
     dev: false
 
+  /koajax@0.9.1(jsdom@22.1.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-Pc7JH08XbyyzTR8Ct3ic2Fc9JOLwgxQ2Q0KH7ebZYbE45ps3RZLLwEqNwq6TW7QwESyD6ofRNXkM/Ei28wmK3w==}
+    peerDependencies:
+      jsdom: '>=21'
+    dependencies:
+      '@swc/helpers': 0.5.1
+      iterable-observer: 1.0.0
+      jsdom: 22.1.0
+      regenerator-runtime: 0.14.0
+      web-utility: 4.1.0(typescript@5.2.2)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
   /language-subtag-registry@0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}
     dev: true
@@ -4614,8 +4628,8 @@ packages:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
     dev: true
 
-  /lodash.eq@4.0.0:
-    resolution: {integrity: sha512-vbrJpXL6kQNG6TkInxX12DZRfuYVllSxhwYqjYB78g2zF3UI15nFO/0AgmZnZRnaQ38sZtjCiVjGr2rnKt4v0g==}
+  /lodash.isequalwith@4.4.0:
+    resolution: {integrity: sha512-dcZON0IalGBpRmJBmMkaoV7d3I80R2O+FrzsZyHdNSFrANq/cgDqKQNmAHE8UEj4+QYWwwhkQOVdLHiAopzlsQ==}
     dev: false
 
   /lodash.merge@4.6.2:
@@ -4763,29 +4777,29 @@ packages:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
     dev: true
 
-  /mobx-i18n@0.4.1(mobx@6.10.1):
+  /mobx-i18n@0.4.1(mobx@6.10.2):
     resolution: {integrity: sha512-4nHFPlWb6cUqchg9U50oS3aJ2EJ0RS2qhkh1+s4++GLobtnglMWnbbOMh55C4p6yrgZmr5f1U1nqk6yAbLAU3g==}
     peerDependencies:
       mobx: '>=4'
     dependencies:
       '@swc/helpers': 0.5.1
-      mobx: 6.10.1
+      mobx: 6.10.2
       regenerator-runtime: 0.14.0
     dev: false
 
-  /mobx-react-helper@0.2.5(mobx@6.10.1)(react@17.0.2):
-    resolution: {integrity: sha512-RUvXhIXD3Qz7NJVNU8HzBpPZYDcGxjnFPFlzCDvc4WI5mT9UjloaJuBc4CSi3ErCSF5pV72fHYOVl7lOTW/KOQ==}
+  /mobx-react-helper@0.2.7(mobx@6.10.2)(react@17.0.2):
+    resolution: {integrity: sha512-PdluyljTTe3YLbfPZKN1Onq3DN55lIWvTFmzbkVlsyTZEg//o7e/iqGGuCG1l3yDwXvLe5zqTltD5FdylSJORg==}
     peerDependencies:
       mobx: '>=4'
       react: '>=16'
     dependencies:
       '@swc/helpers': 0.5.1
-      lodash.eq: 4.0.0
-      mobx: 6.10.1
+      lodash.isequalwith: 4.4.0
+      mobx: 6.10.2
       react: 17.0.2
     dev: false
 
-  /mobx-react-lite@4.0.4(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2):
+  /mobx-react-lite@4.0.4(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-68uNYvQC/5Dazs3sIBv+bnpzRwcWde8y4ujHiLizhq8yeQtJ2tlNUGSh4r40gyE5M0utACIofBDsAj2hplcovQ==}
     peerDependencies:
       mobx: ^6.9.0
@@ -4798,13 +4812,13 @@ packages:
       react-native:
         optional: true
     dependencies:
-      mobx: 6.10.1
+      mobx: 6.10.2
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       use-sync-external-store: 1.2.0(react@17.0.2)
     dev: false
 
-  /mobx-react@9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2):
+  /mobx-react@9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-0idiElBgNMJg20YqGgHvYEnlqIJpPDQaOkxj2dHJIZeqCvUh+zBkBkMkpUFw/uEd1OdPUvT0y+AFBqsWIUAXww==}
     peerDependencies:
       mobx: ^6.9.0
@@ -4817,13 +4831,13 @@ packages:
       react-native:
         optional: true
     dependencies:
-      mobx: 6.10.1
-      mobx-react-lite: 4.0.4(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
+      mobx: 6.10.2
+      mobx-react-lite: 4.0.4(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /mobx-restful-table@1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
+  /mobx-restful-table@1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
     resolution: {integrity: sha512-fxAzdsbeNzbnjDHLdDOtAMOJ33b1i98jP7Rpst1WXhxLW6MyCgJ4Pl7HhKHWcvacSnKQ5nnDK5iUXYokmKYvag==}
     peerDependencies:
       mobx: '>=4'
@@ -4835,11 +4849,11 @@ packages:
       '@swc/helpers': 0.5.1
       classnames: 2.3.2
       lodash: 4.17.21
-      mobx: 6.10.1
-      mobx-i18n: 0.4.1(mobx@6.10.1)
-      mobx-react: 9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
-      mobx-react-helper: 0.2.5(mobx@6.10.1)(react@17.0.2)
-      mobx-restful: 0.6.11(jsdom@22.1.0)(mobx@6.10.1)(typescript@5.2.2)
+      mobx: 6.10.2
+      mobx-i18n: 0.4.1(mobx@6.10.2)
+      mobx-react: 9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
+      mobx-react-helper: 0.2.7(mobx@6.10.2)(react@17.0.2)
+      mobx-restful: 0.6.11(jsdom@22.1.0)(mobx@6.10.2)(typescript@5.2.2)
       react: 17.0.2
       react-bootstrap: 2.8.0(@types/react@17.0.65)(react-dom@17.0.2)(react@17.0.2)
       regenerator-runtime: 0.14.0
@@ -4850,7 +4864,7 @@ packages:
       - typescript
     dev: false
 
-  /mobx-restful@0.6.11(jsdom@22.1.0)(mobx@6.10.1)(typescript@5.2.2):
+  /mobx-restful@0.6.11(jsdom@22.1.0)(mobx@6.10.2)(typescript@5.2.2):
     resolution: {integrity: sha512-93hwtSSc50A7r+rLim3dRXlAJPx+kUR1qYWxM6L9kuIag8R5oTFNCte8FlsgOegGcX2p66U1Tkn6T26lomIoxg==}
     peerDependencies:
       mobx: '>=4'
@@ -4858,7 +4872,7 @@ packages:
       '@swc/helpers': 0.5.1
       class-validator: 0.14.0
       koajax: 0.8.6(jsdom@22.1.0)(typescript@5.2.2)
-      mobx: 6.10.1
+      mobx: 6.10.2
       reflect-metadata: 0.1.13
       regenerator-runtime: 0.14.0
       web-utility: 4.1.0(typescript@5.2.2)
@@ -4867,8 +4881,8 @@ packages:
       - typescript
     dev: false
 
-  /mobx@6.10.1:
-    resolution: {integrity: sha512-oKibSy1GDJI+KfCKbqgFbxYt7DcpZ6jkq9byTzr9AYDGWOg4snI9Ux21U3hpFqhK4Ouw78CJQomRDbfXo1R6pg==}
+  /mobx@6.10.2:
+    resolution: {integrity: sha512-B1UGC3ieK3boCjnMEcZSwxqRDMdzX65H/8zOHbuTY8ZhvrIjTUoLRR2TP2bPqIgYRfb3+dUigu8yMZufNjn0LQ==}
     dev: false
 
   /moment@2.29.4:
@@ -4953,12 +4967,12 @@ packages:
       - webpack
     dev: true
 
-  /next-ssr-middleware@0.5.1(mobx@6.10.1)(next@12.3.4)(typescript@5.2.2):
+  /next-ssr-middleware@0.5.1(mobx@6.10.2)(next@12.3.4)(typescript@5.2.2):
     resolution: {integrity: sha512-DqIM6t60Gj6t3T4hkZ9vvpVyNdYlGv/pcmKN/7Q/xeuCW764s4UzAmiSlAX+rGzWXc439myRQw0hzDLtOnHe6A==}
     peerDependencies:
       next: '>=9.3'
     dependencies:
-      mobx-i18n: 0.4.1(mobx@6.10.1)
+      mobx-i18n: 0.4.1(mobx@6.10.2)
       next: 12.3.4(@babel/core@7.22.11)(react-dom@17.0.2)(react@17.0.2)
       tslib: 2.6.2
       web-utility: 4.1.0(typescript@5.2.2)
@@ -5123,8 +5137,8 @@ packages:
       mimic-fn: 4.0.0
     dev: true
 
-  /open-react-map@0.6.1(jsdom@22.1.0)(mobx-react@9.0.1)(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
-    resolution: {integrity: sha512-sVzu45boPlBjVQaHwFoQNpoFi51IOht/luHPRwWe2j6/fWhVD98BZCnVYrWTVPB/kvPivXAVwDsoJ4kt8zdYbw==}
+  /open-react-map@0.6.4(jsdom@22.1.0)(mobx-react@9.0.1)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
+    resolution: {integrity: sha512-W6tk/R1Z04CfIRBLGg7FmtvThwOnSOL3ggJUvNvnKtvbFCwEyzwR9Sg74gn12Q5yEIDFLC4QSW26SNaQEyX1ng==}
     peerDependencies:
       mobx: '>=4'
       mobx-react: '>=6'
@@ -5132,12 +5146,12 @@ packages:
       react-dom: '>=16 <18'
     dependencies:
       '@swc/helpers': 0.5.1
-      '@types/leaflet': 1.9.3
+      '@types/leaflet': 1.9.4
       koajax: 0.8.6(jsdom@22.1.0)(typescript@5.2.2)
       leaflet: 1.9.4
-      mobx: 6.10.1
-      mobx-react: 9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
-      mobx-react-helper: 0.2.5(mobx@6.10.1)(react@17.0.2)
+      mobx: 6.10.2
+      mobx-react: 9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
+      mobx-react-helper: 0.2.7(mobx@6.10.2)(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       react-leaflet: 3.2.5(leaflet@1.9.4)(react-dom@17.0.2)(react@17.0.2)
@@ -5917,8 +5931,8 @@ packages:
     dependencies:
       '@swc/helpers': 0.5.1
       edkit: 1.0.2
-      mobx: 6.10.1
-      mobx-react: 9.0.1(mobx@6.10.1)(react-dom@17.0.2)(react@17.0.2)
+      mobx: 6.10.2
+      mobx-react: 9.0.1(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       web-utility: 4.1.0(typescript@5.2.2)
@@ -6736,7 +6750,7 @@ packages:
     resolution: {integrity: sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==}
     dev: false
 
-  /ts-node@10.9.1(@types/node@18.17.12)(typescript@5.2.2):
+  /ts-node@10.9.1(@types/node@18.17.13)(typescript@5.2.2):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -6755,7 +6769,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 18.17.12
+      '@types/node': 18.17.13
       acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3

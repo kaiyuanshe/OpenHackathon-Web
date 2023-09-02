@@ -135,13 +135,15 @@ export class MessageList extends PureComponent<MessageListProps> {
   };
 
   render() {
+    const { props } = this;
+
     return (
       <ScrollList
         translator={i18n}
         store={this.props.store}
         renderList={allItems => (
           <MessageListLayout
-            {...{ ...this.props, ...this }}
+            {...{ ...props, ...this }}
             defaultData={allItems}
           />
         )}

@@ -15,7 +15,7 @@ export const ActivityLogListLayout = ({
       <ListGroup.Item
         key={id}
         as="li"
-        className="d-flex justify-content-between"
+        className="d-flex justify-content-between align-items-center"
       >
         <div className="ms-2 me-auto">{message}</div>
         <Badge>{activityLogType}</Badge>

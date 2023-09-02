@@ -3,14 +3,8 @@
   "version": "2.0.0-rc",
   "description": "Open-source Hackathon Platform with Git-based Cloud Development Environment",
   "private": true,
-  "scripts": {
-    "prepare": "husky install",
-    "dev": "next dev",
-    "build": "rm -rf .next  &&  next build",
-    "export": "npm run build  &&  next export",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "lint-staged  &&  npm run lint"
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "@authing/native-js-ui-components": "^3.1.31",
@@ -24,19 +18,19 @@
     "classnames": "^2.3.2",
     "echarts-jsx": "^0.5.2",
     "idea-react": "^1.0.0-rc.22",
-    "koajax": "^0.8.6",
+    "koajax": "^0.9.1",
     "leaflet": "^1.9.4",
     "leaflet.chinatmsproviders": "^3.0.6",
     "lodash": "^4.17.21",
-    "mobx": "^6.10.1",
+    "mobx": "^6.10.2",
     "mobx-i18n": "^0.4.1",
     "mobx-react": "^9.0.1",
-    "mobx-react-helper": "^0.2.5",
+    "mobx-react-helper": "^0.2.7",
     "mobx-restful": "^0.6.11",
     "mobx-restful-table": "^1.1.2",
     "next": "^12.3.4",
     "next-ssr-middleware": "^0.5.1",
-    "open-react-map": "^0.6.1",
+    "open-react-map": "^0.6.4",
     "react": "^17.0.2",
     "react-bootstrap": "^2.8.0",
     "react-bootstrap-editor": "^1.0.5",
@@ -47,9 +41,9 @@
   "devDependencies": {
     "@babel/core": "^7.22.11",
     "@octokit/openapi-types": "^18.0.0",
-    "@types/leaflet": "^1.9.3",
+    "@types/leaflet": "^1.9.4",
     "@types/lodash": "^4.14.197",
-    "@types/node": "^18.17.12",
+    "@types/node": "^18.17.13",
     "@types/react": "^17.0.65",
     "eslint": "^8.48.0",
     "eslint-config-next": "^12.3.4",
@@ -78,5 +72,14 @@
   "lint-staged": {
     "*.{html,md,less,json,yml,js,ts,tsx}": "prettier --write",
     "*.{js,jsx,ts,tsx}": "eslint --fix"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "dev": "next dev",
+    "build": "rm -rf .next  &&  next build",
+    "export": "npm run build  &&  next export",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "lint-staged  &&  npm run lint"
   }
 }
