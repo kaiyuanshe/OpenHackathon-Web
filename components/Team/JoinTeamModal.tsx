@@ -1,7 +1,7 @@
 import { FormEventHandler } from 'react';
 import { Button, Col, Form, Modal, ModalProps } from 'react-bootstrap';
 
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

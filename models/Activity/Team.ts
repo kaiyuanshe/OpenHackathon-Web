@@ -2,18 +2,18 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { NameAvailability } from './Activity';
-import { AwardAssignment } from './Award';
 import {
   Base,
   createListStream,
   Filter,
   InputData,
   integrateError,
-} from './Base';
-import { WorkspaceModel } from './Git';
-import sessionStore from './Session';
-import { User } from './User';
+} from '../Base';
+import { WorkspaceModel } from '../Git';
+import { User } from '../User';
+import sessionStore from '../User/Session';
+import { AwardAssignment } from './Award';
+import { NameAvailability } from './index';
 
 export enum TeamWorkType {
   IMAGE = 'image',

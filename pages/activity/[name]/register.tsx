@@ -10,8 +10,8 @@ import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePre
 import PageHead from '../../../components/layout/PageHead';
 import { SessionBox } from '../../../components/User/SessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { Extensions, Question } from '../../../models/Question';
-import { i18n } from '../../../models/Translation';
+import { Extensions, Question } from '../../../models/Activity/Question';
+import { i18n } from '../../../models/Base/Translation';
 
 const { t } = i18n;
 

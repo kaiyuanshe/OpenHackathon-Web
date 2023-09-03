@@ -3,7 +3,7 @@ import { compose, RouteProps, router } from 'next-ssr-middleware';
 
 import { ActivityEditor } from '../../../../components/Activity/ActivityEditor';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { i18n } from '../../../../models/Translation';
+import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 

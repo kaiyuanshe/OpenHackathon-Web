@@ -6,8 +6,12 @@ import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
-import { Message, MessageType, MessageTypeName } from '../../models/Message';
-import { i18n } from '../../models/Translation';
+import {
+  Message,
+  MessageType,
+  MessageTypeName,
+} from '../../models/Activity/Message';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/participant.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 

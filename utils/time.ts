@@ -1,6 +1,6 @@
 import { Day, Hour, Minute, Month, Second, Week, Year } from 'web-utility';
 
-import { i18n } from '../models/Translation';
+import { i18n } from '../models/Base/Translation';
 
 const { t } = i18n;
 

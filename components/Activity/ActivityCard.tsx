@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Card, Col, Row } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 import { convertDatetime } from '../../utils/time';
 import { ActivityControl, ActivityControlProps } from './ActivityControl';
 import { ActivityEntry } from './ActivityEntry';

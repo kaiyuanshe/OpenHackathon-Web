@@ -1,8 +1,8 @@
 import { User } from '@authing/native-js-ui-components';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream, InputData, Media } from './Base';
-import sessionStore from './Session';
+import { Base, createListStream, InputData, Media } from '../Base';
+import sessionStore from '../User/Session';
 import { Team } from './Team';
 
 export interface Award

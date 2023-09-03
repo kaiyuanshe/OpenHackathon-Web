@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 
 import ActivityList from '../../components/Activity/ActivityList';
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import sessionStore from '../../models/User/Session';
 
 const { t } = i18n;
 

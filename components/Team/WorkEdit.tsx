@@ -7,8 +7,8 @@ import { Col, Container, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
-import fileStore from '../../models/File';
-import { i18n } from '../../models/Translation';
+import fileStore from '../../models/Base/File';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

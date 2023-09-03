@@ -7,9 +7,9 @@ import {
   ActivityListType,
   ActivityModel,
 } from '../../models/Activity';
-import platformAdmin from '../../models/PlatformAdmin';
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import platformAdmin from '../../models/User/PlatformAdmin';
+import sessionStore from '../../models/User/Session';
 import { XScrollListProps } from '../layout/ScrollList';
 import { ActivityCard, ActivityCardProps } from './ActivityCard';
 

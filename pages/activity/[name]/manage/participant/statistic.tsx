@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../../models/Activity';
-import { i18n } from '../../../../../models/Translation';
+import { i18n } from '../../../../../models/Base/Translation';
 
 const { t } = i18n;
 

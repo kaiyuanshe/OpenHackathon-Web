@@ -20,9 +20,9 @@ import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { adminMenus } from '../../configuration/menu';
-import platformAdminStore from '../../models/PlatformAdmin';
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import platformAdminStore from '../../models/User/PlatformAdmin';
+import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import PageHead from '../layout/PageHead';

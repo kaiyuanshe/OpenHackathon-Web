@@ -9,9 +9,9 @@ import { QuestionnaireCreate } from '../../../../components/Activity/Questionnai
 import { QuestionnaireForm } from '../../../../components/Activity/QuestionnairePreview';
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
 import activityStore from '../../../../models/Activity';
+import { Extensions, Question } from '../../../../models/Activity/Question';
 import { isServer } from '../../../../models/Base';
-import { Extensions, Question } from '../../../../models/Question';
-import { i18n } from '../../../../models/Translation';
+import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 

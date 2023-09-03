@@ -1,7 +1,7 @@
 import { ScrollListProps } from 'mobx-restful-table';
 import { Col, Row } from 'react-bootstrap';
 
-import { Team, TeamModel } from '../../models/Team';
+import { Team, TeamModel } from '../../models/Activity/Team';
 import { TeamCard } from './TeamCard';
 
 export interface TeamListProps extends ScrollListProps<Team> {

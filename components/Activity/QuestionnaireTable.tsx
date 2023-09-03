@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import { FC } from 'react';
 import { Button, Container, Table } from 'react-bootstrap';
 
-import { Question } from '../../models/Question';
-import { i18n } from '../../models/Translation';
+import { Question } from '../../models/Activity/Question';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

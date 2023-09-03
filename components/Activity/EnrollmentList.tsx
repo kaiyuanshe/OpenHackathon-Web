@@ -1,10 +1,10 @@
-import { ScrollList, ScrollListProps } from 'mobx-restful-table';
+import { ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { Enrollment, statusName } from '../../models/Enrollment';
-import { i18n } from '../../models/Translation';
+import { Enrollment, statusName } from '../../models/Activity/Enrollment';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/participant.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 

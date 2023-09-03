@@ -7,8 +7,8 @@ import {
   Organization,
   OrganizationModel,
   OrganizationTypeName,
-} from '../../models/Organization';
-import { i18n } from '../../models/Translation';
+} from '../../models/Activity/Organization';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

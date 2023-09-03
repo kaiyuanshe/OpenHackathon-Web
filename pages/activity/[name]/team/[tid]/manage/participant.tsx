@@ -10,7 +10,7 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTableLayout } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
-import { i18n } from '../../../../../../models/Translation';
+import { i18n } from '../../../../../../models/Base/Translation';
 
 export const getServerSideProps = compose<
   TeamManageBaseRouterProps,

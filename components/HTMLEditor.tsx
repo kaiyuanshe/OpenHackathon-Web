@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap-editor';
 import { Constructor, uniqueID } from 'web-utility';
 
-import fileStore from '../models/File';
+import fileStore from '../models/Base/File';
 
 ImageTool.prototype.save = blob =>
   fileStore.upload(new File([blob], uniqueID()));

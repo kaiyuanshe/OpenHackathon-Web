@@ -3,9 +3,9 @@ import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
-import { PlatformAdminModel } from '../../models/PlatformAdmin';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 import userStore from '../../models/User';
+import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 import { UserList } from '../User/UserList';
 
 const { t } = i18n;

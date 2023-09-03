@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 import ActivityList from '../../components/Activity/ActivityList';
 import PageHead from '../../components/layout/PageHead';
 import { ActivityModel } from '../../models/Activity';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

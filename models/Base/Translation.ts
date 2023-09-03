@@ -1,12 +1,12 @@
 import { TranslationModel } from 'mobx-i18n';
 
-import zhCN from '../translation/zh-CN';
+import zhCN from '../../translation/zh-CN';
 
 export const i18n = new TranslationModel({
   'zh-CN': zhCN,
-  'zh-TW': () => import('../translation/zh-TW'),
-  'zh-HK': () => import('../translation/zh-TW'),
-  'en-US': () => import('../translation/en-US'),
+  'zh-TW': () => import('../../translation/zh-TW'),
+  'zh-HK': () => import('../../translation/zh-TW'),
+  'en-US': () => import('../../translation/en-US'),
 });
 
 export const LanguageName: Partial<

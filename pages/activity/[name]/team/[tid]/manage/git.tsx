@@ -20,9 +20,9 @@ import {
 } from '../../../../../../components/Git/TeamGitList';
 import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
-import sessionStore from '../../../../../../models/Session';
-import { TeamWorkType } from '../../../../../../models/Team';
-import { i18n } from '../../../../../../models/Translation';
+import { TeamWorkType } from '../../../../../../models/Activity/Team';
+import { i18n } from '../../../../../../models/Base/Translation';
+import sessionStore from '../../../../../../models/User/Session';
 
 type GitPageProps = RouteProps<Record<'name' | 'tid', string>>;
 

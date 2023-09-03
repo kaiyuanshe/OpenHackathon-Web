@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { PureComponent } from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
-import { Question } from '../../models/Question';
-import { i18n } from '../../models/Translation';
+import { Question } from '../../models/Activity/Question';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

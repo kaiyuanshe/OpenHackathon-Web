@@ -9,8 +9,8 @@ import { Button, Form } from 'react-bootstrap';
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { HackathonAdminList } from '../../components/User/HackathonAdminList';
-import { PlatformAdminModel } from '../../models/PlatformAdmin';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 
 const { t } = i18n;
 

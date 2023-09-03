@@ -9,8 +9,8 @@ import { formToJSON } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
-import { AwardAssignment } from '../../../../models/Award';
-import { i18n } from '../../../../models/Translation';
+import { AwardAssignment } from '../../../../models/Activity/Award';
+import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 

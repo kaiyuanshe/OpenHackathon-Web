@@ -7,7 +7,7 @@ import { ActivityListLayout } from '../components/Activity/ActivityList';
 import PageHead from '../components/layout/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
-import { i18n } from '../models/Translation';
+import { i18n } from '../models/Base/Translation';
 import { UserModel } from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 

@@ -13,8 +13,8 @@ import {
 } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { TeamWork, TeamWorkType } from '../../models/Team';
-import { i18n } from '../../models/Translation';
+import { TeamWork, TeamWorkType } from '../../models/Activity/Team';
+import { i18n } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;

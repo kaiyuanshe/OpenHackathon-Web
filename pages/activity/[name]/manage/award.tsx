@@ -12,8 +12,8 @@ import {
   AwardTargetName,
 } from '../../../../components/Activity/AwardList';
 import activityStore from '../../../../models/Activity';
-import { Award } from '../../../../models/Award';
-import { i18n } from '../../../../models/Translation';
+import { Award } from '../../../../models/Activity/Award';
+import { i18n } from '../../../../models/Base/Translation';
 
 export const getServerSideProps = compose<
   { name: string },

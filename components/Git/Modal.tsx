@@ -12,8 +12,8 @@ import {
 } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
+import { i18n } from '../../models/Base/Translation';
 import { GitTemplateModal } from '../../models/TemplateRepo';
-import { i18n } from '../../models/Translation';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   name?: string;

@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
 import { Activity } from '../../models/Activity';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 import { TimeUnit } from '../../utils/time';
 
 const { t } = i18n;

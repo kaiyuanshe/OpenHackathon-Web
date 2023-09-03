@@ -1,6 +1,9 @@
 import { Card } from 'react-bootstrap';
 
-import { Organization, OrganizationTypeName } from '../../models/Organization';
+import {
+  Organization,
+  OrganizationTypeName,
+} from '../../models/Activity/Organization';
 
 export const OrganizationCard = ({
   name,

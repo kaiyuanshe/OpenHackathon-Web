@@ -10,7 +10,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { MessageList } from '../../../../components/Message/MessageList';
 import { MessageModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Translation';
+import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 

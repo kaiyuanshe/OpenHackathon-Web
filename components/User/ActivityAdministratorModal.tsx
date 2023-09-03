@@ -4,8 +4,8 @@ import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { Staff, StaffModel } from '../../models/Staff';
-import { i18n } from '../../models/Translation';
+import { Staff, StaffModel } from '../../models/Activity/Staff';
+import { i18n } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { UserList } from './UserList';
 

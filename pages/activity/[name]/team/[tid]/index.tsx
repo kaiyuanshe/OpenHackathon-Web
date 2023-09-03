@@ -18,15 +18,15 @@ import activityStore, {
   Activity,
   ActivityModel,
 } from '../../../../../models/Activity';
-import { ErrorBaseData, isServer } from '../../../../../models/Base';
-import sessionStore from '../../../../../models/Session';
 import {
   MembershipStatus,
   Team,
   TeamMember,
   TeamWork,
-} from '../../../../../models/Team';
-import { i18n } from '../../../../../models/Translation';
+} from '../../../../../models/Activity/Team';
+import { ErrorBaseData, isServer } from '../../../../../models/Base';
+import { i18n } from '../../../../../models/Base/Translation';
+import sessionStore from '../../../../../models/User/Session';
 
 const { t } = i18n;
 

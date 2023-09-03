@@ -22,8 +22,8 @@ import { Container, Nav } from 'react-bootstrap';
 
 import { menus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import PageHead from '../layout/PageHead';

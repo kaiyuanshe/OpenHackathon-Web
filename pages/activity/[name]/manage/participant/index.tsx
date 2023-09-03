@@ -8,8 +8,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import { EnrollmentList } from '../../../../../components/Activity/EnrollmentList';
 import activityStore from '../../../../../models/Activity';
-import { Enrollment } from '../../../../../models/Enrollment';
-import { i18n } from '../../../../../models/Translation';
+import { Enrollment } from '../../../../../models/Activity/Enrollment';
+import { i18n } from '../../../../../models/Base/Translation';
 
 type ParticipantPageProps = RouteProps<{ name: string }>;
 

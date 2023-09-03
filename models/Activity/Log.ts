@@ -1,7 +1,7 @@
 import { IDType, ListModel, Stream } from 'mobx-restful';
 
-import { Base, createListStream } from './Base';
-import sessionStore from './Session';
+import { Base, createListStream } from '../Base';
+import sessionStore from '../User/Session';
 
 export interface Log extends Base {
   operatorId: IDType;

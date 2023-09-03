@@ -13,9 +13,9 @@ import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import PageHead from '../../components/layout/PageHead';
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 import userStore, { User } from '../../models/User';
+import sessionStore from '../../models/User/Session';
 
 const ActivityList = dynamic(
     () => import('../../components/Activity/ActivityList'),

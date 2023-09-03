@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
-import platformAdmin from '../../models/PlatformAdmin';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import platformAdmin from '../../models/User/PlatformAdmin';
 
 const { t } = i18n;
 

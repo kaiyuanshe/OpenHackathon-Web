@@ -12,7 +12,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Translation';
+import { i18n } from '../../../../models/Base/Translation';
 
 type AdministratorPageProps = RouteProps<{ name: string }>;
 
