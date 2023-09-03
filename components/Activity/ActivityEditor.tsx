@@ -9,8 +9,8 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore, { Activity } from '../../models/Activity';
-import fileStore from '../../models/File';
-import { i18n } from '../../models/Translation';
+import fileStore from '../../models/Base/File';
+import { i18n } from '../../models/Base/Translation';
 import { DateTimeInput } from '../DateTimeInput';
 
 const { t } = i18n,

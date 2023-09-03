@@ -3,8 +3,8 @@ import 'array-unique-proposal';
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { HackathonAdmin } from '../../models/HackathonAdmin';
-import { i18n } from '../../models/Translation';
+import { HackathonAdmin } from '../../models/Activity/Staff';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
 import { XScrollListProps } from '../layout/ScrollList';

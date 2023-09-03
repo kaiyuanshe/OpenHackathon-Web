@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { TeamWork } from '../../models/Team';
+import { TeamWork } from '../../models/Activity/Team';
 import { XScrollListProps } from '../layout/ScrollList';
 
 export interface SimpleTeamWorkListLayoutProps

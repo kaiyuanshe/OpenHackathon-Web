@@ -1,6 +1,6 @@
 import { Avatar } from 'idea-react';
 
-import { TeamMember } from '../../models/Team';
+import { TeamMember } from '../../models/Activity/Team';
 import { XScrollListProps } from '../layout/ScrollList';
 
 export interface TeamMemberListProps extends XScrollListProps<TeamMember> {

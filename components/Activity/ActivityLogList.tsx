@@ -1,7 +1,7 @@
 import { ScrollListProps } from 'mobx-restful-table';
 import { Badge, ListGroup } from 'react-bootstrap';
 
-import { Log, LogModel } from '../../models/Log';
+import { Log, LogModel } from '../../models/Activity/Log';
 
 export interface ActivityLogListProps extends ScrollListProps<Log> {
   store: LogModel;

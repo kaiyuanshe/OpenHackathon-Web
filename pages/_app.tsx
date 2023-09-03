@@ -5,11 +5,11 @@ import { configure } from 'mobx';
 import { enableStaticRendering, observer } from 'mobx-react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Image } from 'react-bootstrap';
+import { Image, SSRProvider } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
 import { ErrorBaseData, isServer } from '../models/Base';
-import { i18n } from '../models/Translation';
+import { i18n } from '../models/Base/Translation';
 
 configure({ enforceActions: 'never' });
 
@@ -27,7 +27,7 @@ globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
 
 const MyApp = observer(
   ({ router: { pathname }, Component, pageProps }: AppProps) => (
-    <>
+    <SSRProvider>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -53,7 +53,7 @@ const MyApp = observer(
           </a>
         </footer>
       )}
-    </>
+    </SSRProvider>
   ),
 );
 export default MyApp;

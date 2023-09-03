@@ -7,8 +7,8 @@ import { PureComponent } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { Team } from '../../models/Team';
-import { i18n } from '../../models/Translation';
+import { Team } from '../../models/Activity/Team';
+import { i18n } from '../../models/Base/Translation';
 import { TeamAwardAssignmentLayout } from './TeamAwardAssignment';
 import { TeamMemberListLayout } from './TeamMemberList';
 import { SimpleTeamWorkListLayout } from './TeamWork';

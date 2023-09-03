@@ -11,7 +11,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Translation';
+import { i18n } from '../../../../models/Base/Translation';
 
 type OrganizationPageProps = RouteProps<{ name: string }>;
 

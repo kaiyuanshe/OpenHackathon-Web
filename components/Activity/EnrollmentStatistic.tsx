@@ -11,8 +11,8 @@ import { PureComponent } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { isEmpty } from 'web-utility';
 
-import { EnrollmentModel } from '../../models/Enrollment';
-import { i18n } from '../../models/Translation';
+import { EnrollmentModel } from '../../models/Activity/Enrollment';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

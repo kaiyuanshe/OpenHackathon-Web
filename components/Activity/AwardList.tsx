@@ -4,8 +4,8 @@ import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Image, Table } from 'react-bootstrap';
 
-import { Award } from '../../models/Award';
-import { i18n } from '../../models/Translation';
+import { Award } from '../../models/Activity/Award';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 

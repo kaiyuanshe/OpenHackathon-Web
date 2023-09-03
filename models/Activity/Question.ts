@@ -1,4 +1,5 @@
-import { i18n } from '../models/Translation';
+import { i18n } from '../Base/Translation';
+
 const { t } = i18n;
 
 export interface Question {

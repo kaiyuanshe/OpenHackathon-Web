@@ -3,7 +3,7 @@ import { FC, PureComponent } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
 import { User, UserFilter } from '../../models/User';
 import { XScrollListProps } from '../layout/ScrollList';
 

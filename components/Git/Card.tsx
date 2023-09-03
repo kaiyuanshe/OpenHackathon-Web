@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 import { FC, ReactNode } from 'react';
 import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 
+import { i18n } from '../../models/Base/Translation';
 import { GitTemplate } from '../../models/TemplateRepo';
-import { i18n } from '../../models/Translation';
 import { GitLogo } from './Logo';
 
 const { t } = i18n;

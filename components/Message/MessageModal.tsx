@@ -4,8 +4,12 @@ import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { Message, MessageModel, MessageTypeName } from '../../models/Message';
-import { i18n } from '../../models/Translation';
+import {
+  Message,
+  MessageModel,
+  MessageTypeName,
+} from '../../models/Activity/Message';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

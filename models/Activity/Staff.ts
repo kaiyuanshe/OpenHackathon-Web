@@ -2,9 +2,15 @@ import { computed } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
 
-import { createListStream, InputData } from './Base';
-import { HackathonAdmin } from './HackathonAdmin';
-import sessionStore from './Session';
+import { Base, createListStream, InputData } from '../Base';
+import { User } from '../User';
+import sessionStore from '../User/Session';
+
+export interface HackathonAdmin
+  extends Base,
+    Record<'hackathonName' | 'description' | 'userId', string> {
+  user: User;
+}
 
 export interface Staff extends HackathonAdmin {
   type: 'admin' | 'judge' | 'member';

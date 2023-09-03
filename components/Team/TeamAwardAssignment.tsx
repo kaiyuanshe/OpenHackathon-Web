@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { AwardAssignment } from '../../models/Award';
+import { AwardAssignment } from '../../models/Activity/Award';
 import { XScrollListProps } from '../layout/ScrollList';
 
 export interface TeamAwardAssignmentLayoutProps

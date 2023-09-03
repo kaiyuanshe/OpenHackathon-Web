@@ -2,19 +2,19 @@ import { action, makeObservable, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
+import { Base, createListStream, Filter, InputData, Media } from '../Base';
+import { GitModel } from '../Git';
+import { GitTemplateModal } from '../TemplateRepo';
+import platformAdmin from '../User/PlatformAdmin';
+import sessionStore from '../User/Session';
 import { AwardModel } from './Award';
-import { Base, createListStream, Filter, InputData, Media } from './Base';
 import { Enrollment, EnrollmentModel } from './Enrollment';
-import { GitModel } from './Git';
 import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';
-import platformAdmin from './PlatformAdmin';
 import { Extensions, Question } from './Question';
-import sessionStore from './Session';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
-import { GitTemplateModal } from './TemplateRepo';
 
 export interface Activity extends Base {
   name: string;

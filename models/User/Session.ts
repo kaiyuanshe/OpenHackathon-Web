@@ -3,7 +3,7 @@ import { computed, makeObservable, observable } from 'mobx';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { AuthingIdentity, AuthingUserBase, User } from './User';
+import { AuthingIdentity, AuthingUserBase, User } from '.';
 
 const { localStorage } = globalThis;
 

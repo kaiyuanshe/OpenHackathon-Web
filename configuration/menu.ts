@@ -1,7 +1,7 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { Staff } from '../models/Staff';
-import { i18n } from '../models/Translation';
+import { Staff } from '../models/Activity/Staff';
+import { i18n } from '../models/Base/Translation';
 
 const { t } = i18n;
 

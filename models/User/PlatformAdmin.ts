@@ -1,8 +1,8 @@
 import { makeObservable, observable } from 'mobx';
 import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 
-import { createListStream, Filter } from './Base';
-import { HackathonAdmin } from './HackathonAdmin';
+import { HackathonAdmin } from '../Activity/Staff';
+import { createListStream, Filter } from '../Base';
 import sessionStore from './Session';
 
 export type PlatformAdmin = HackathonAdmin;

@@ -2,8 +2,8 @@ import { HTTPError, Request, request } from 'koajax';
 import { DataObject, toggle } from 'mobx-restful';
 import { FileModel } from 'mobx-restful-table';
 
-import { ErrorBaseData, UploadUrl } from './Base';
-import sessionStore from './Session';
+import sessionStore from '../User/Session';
+import { ErrorBaseData, UploadUrl } from './index';
 
 export class AzureFileModel extends FileModel {
   static async uploadBlob<T = void>(

@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { MembershipStatus, TeamMember } from '../../models/Team';
-import { i18n } from '../../models/Translation';
+import { MembershipStatus, TeamMember } from '../../models/Activity/Team';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
 import { XScrollListProps } from '../layout/ScrollList';

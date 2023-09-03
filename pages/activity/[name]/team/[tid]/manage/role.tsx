@@ -10,8 +10,8 @@ import {
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
-import { MembershipStatus } from '../../../../../../models/Team';
-import { i18n } from '../../../../../../models/Translation';
+import { MembershipStatus } from '../../../../../../models/Activity/Team';
+import { i18n } from '../../../../../../models/Base/Translation';
 
 export const getServerSideProps = compose<
   TeamManageBaseRouterProps,

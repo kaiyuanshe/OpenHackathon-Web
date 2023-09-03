@@ -3,9 +3,9 @@ import { Form, Image, Table } from 'react-bootstrap';
 
 import {
   Organization,
-  OrganizationTypeName
-} from '../../models/Organization';
-import { i18n } from '../../models/Translation';
+  OrganizationTypeName,
+} from '../../models/Activity/Organization';
+import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 import { OrganizationCard } from './OrganizationCard';

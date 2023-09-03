@@ -2,9 +2,9 @@ import { observer } from 'mobx-react';
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import sessionStore from '../../models/Session';
-import { TeamMember } from '../../models/Team';
-import { i18n } from '../../models/Translation';
+import { TeamMember } from '../../models/Activity/Team';
+import { i18n } from '../../models/Base/Translation';
+import sessionStore from '../../models/User/Session';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
 import { XScrollListProps } from '../layout/ScrollList';

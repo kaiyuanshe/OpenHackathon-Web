@@ -4,9 +4,9 @@ import { memoize } from 'lodash';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { averageOf } from 'web-utility';
 
+import { TeamWork, TeamWorkType } from './Activity/Team';
 import { Base, createListStream } from './Base';
-import sessionStore from './Session';
-import { TeamWork, TeamWorkType } from './Team';
+import sessionStore from './User/Session';
 
 type Repository = components['schemas']['repository'];
 
@@ -58,9 +58,8 @@ const getGitRepository = memoize(
       homepage,
     } = body!;
 
-    const { body: languageCount } = await gitClient.get<Record<string, number>>(
-      languages_url,
-    );
+    const { body: languageCount } =
+      await gitClient.get<Record<string, number>>(languages_url);
 
     const languageAverage = averageOf(...Object.values(languageCount!));
 

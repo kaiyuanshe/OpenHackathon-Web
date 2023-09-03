@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import { Avatar } from 'idea-react';
 import { HTMLAttributes } from 'react';
 
-import { Team } from '../../models/Team';
-import { i18n } from '../../models/Translation';
+import { Team } from '../../models/Activity/Team';
+import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 

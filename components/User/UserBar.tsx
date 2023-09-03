@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import { Button, Dropdown } from 'react-bootstrap';
 
-import sessionStore from '../../models/Session';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import sessionStore from '../../models/User/Session';
 import LanguageMenu from './LanguageMenu';
 import { SessionBox } from './SessionBox';
 

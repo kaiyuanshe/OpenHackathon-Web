@@ -15,10 +15,10 @@ import { Col, Nav } from 'react-bootstrap';
 
 import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
+import { Staff } from '../../models/Activity/Staff';
 import { ErrorBaseData } from '../../models/Base';
-import sessionStore from '../../models/Session';
-import { Staff } from '../../models/Staff';
-import { i18n } from '../../models/Translation';
+import { i18n } from '../../models/Base/Translation';
+import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';

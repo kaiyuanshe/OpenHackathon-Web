@@ -37,11 +37,11 @@ import activityStore, {
   Activity,
   ActivityModel,
 } from '../../../models/Activity';
+import { Enrollment } from '../../../models/Activity/Enrollment';
+import { Organization } from '../../../models/Activity/Organization';
 import { isServer, Media } from '../../../models/Base';
-import { Enrollment } from '../../../models/Enrollment';
-import { Organization } from '../../../models/Organization';
-import sessionStore from '../../../models/Session';
-import { i18n } from '../../../models/Translation';
+import { i18n } from '../../../models/Base/Translation';
+import sessionStore from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
 import styles from './activityDetail.module.less';
 

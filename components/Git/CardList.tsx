@@ -2,8 +2,8 @@ import { text2color } from 'idea-react';
 import { FC } from 'react';
 import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 
+import { i18n } from '../../models/Base/Translation';
 import { GitTemplate } from '../../models/TemplateRepo';
-import { i18n } from '../../models/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 import { GitLogo } from './Logo';
 
