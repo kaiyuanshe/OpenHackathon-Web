@@ -43,7 +43,6 @@ import { isServer, Media } from '../../../models/Base';
 import { i18n } from '../../../models/Base/Translation';
 import sessionStore from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
-import styles from './activityDetail.module.less';
 
 const { t } = i18n;
 
@@ -279,15 +278,20 @@ export default class ActivityPage extends PureComponent<ActivityPageProps> {
           <Carousel>
             {((banners || []) as Media[]).map(({ uri }) => (
               <Carousel.Item key={uri}>
-                <Image
-                  className={`d-block object-fit-cover ${styles.carouselImageHeight}`}
-                  fluid
-                  src={uri}
-                  alt={name}
-                />
+                <div
+                  className="d-flex align-items-center"
+                  style={{ height: '45vh' }}
+                >
+                  <Image
+                    className=" w-100 h-100 object-fit-cover"
+                    src={uri}
+                    alt={name}
+                  />
+                </div>
               </Carousel.Item>
             ))}
           </Carousel>
+
           <Col className="d-flex flex-column justify-content-start">
             <h2>{displayName}</h2>
             <aside className="pb-2">
