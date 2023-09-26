@@ -1,19 +1,12 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ScrollList } from 'mobx-restful-table';
+import { FilePreview } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Image,
-  Ratio,
-  Row,
-} from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { TeamWork, TeamWorkType } from '../../models/Activity/Team';
+import { TeamWork } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 
@@ -69,15 +62,7 @@ export const TeamWorkListLayout: FC<TeamWorkListLayoutProps> = ({
                 {description}
               </p>
               <div className="border-bottom py-2 my-2">
-                {type === TeamWorkType.IMAGE ? (
-                  <Image src={url} className="mw-100" alt={title} />
-                ) : (
-                  type === TeamWorkType.VIDEO && (
-                    <Ratio aspectRatio="16x9">
-                      <video controls width="250" src={url} />
-                    </Ratio>
-                  )
-                )}
+                <FilePreview className="w-100" type={type} path={url} />
               </div>
               <time
                 className="d-block p-2 text-truncate"
