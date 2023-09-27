@@ -69,8 +69,8 @@ dependencies:
     specifier: ^0.6.11
     version: 0.6.11(jsdom@22.1.0)(mobx@6.10.2)(typescript@5.2.2)
   mobx-restful-table:
-    specifier: ^1.1.2
-    version: 1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
+    specifier: ^1.1.4
+    version: 1.1.4(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2)
   next:
     specifier: ^12.3.4
     version: 12.3.4(@babel/core@7.22.11)(react-dom@17.0.2)(react@17.0.2)
@@ -1907,6 +1907,12 @@ packages:
 
   /@swc/helpers@0.5.1:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
+  /@swc/helpers@0.5.2:
+    resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
     dependencies:
       tslib: 2.6.2
     dev: false
@@ -4837,8 +4843,8 @@ packages:
       react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /mobx-restful-table@1.1.2(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
-    resolution: {integrity: sha512-fxAzdsbeNzbnjDHLdDOtAMOJ33b1i98jP7Rpst1WXhxLW6MyCgJ4Pl7HhKHWcvacSnKQ5nnDK5iUXYokmKYvag==}
+  /mobx-restful-table@1.1.4(@types/react@17.0.65)(mobx-i18n@0.4.1)(mobx-react@9.0.1)(mobx-restful@0.6.11)(mobx@6.10.2)(react-dom@17.0.2)(react@17.0.2)(typescript@5.2.2):
+    resolution: {integrity: sha512-scf/3JKAPTVY86KSXq4dbNkyBTvPqzFIXDy3uL2dDbgVKgPV1fHbPUtiP71dPd7vEj+dt8eVbHbVOS+DyeOjZg==}
     peerDependencies:
       mobx: '>=4'
       mobx-i18n: ^0.4
@@ -4846,7 +4852,7 @@ packages:
       mobx-restful: ^0.6
       react: '>=16.8'
     dependencies:
-      '@swc/helpers': 0.5.1
+      '@swc/helpers': 0.5.2
       classnames: 2.3.2
       lodash: 4.17.21
       mobx: 6.10.2
@@ -5363,6 +5369,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -6291,9 +6298,11 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    requiresBuild: true
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -6342,6 +6351,7 @@ packages:
   /semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 
