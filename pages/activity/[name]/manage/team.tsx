@@ -1,7 +1,12 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import {
   Button,
@@ -17,17 +22,17 @@ import { TeamListLayout } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
+type TeamManagePageProps = RouteProps<{ name: string }> & JWTProps;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
->(router);
+  TeamManagePageProps
+>(router, jwtVerifier());
 
 const { t } = i18n;
 
 @observer
-export default class TeamManagePage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class TeamManagePage extends PureComponent<TeamManagePageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -46,6 +51,7 @@ export default class TeamManagePage extends PureComponent<
 
     return (
       <ActivityManageFrame
+        {...this.props}
         path={resolvedUrl}
         name={params!.name}
         title={t('team_manage')}

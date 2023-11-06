@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
+import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 
 import { TeamAdministratorTableLayout } from '../../../../../../components/Team/TeamAdministratorTable';
 import {
-  TeamManageBaseRouterProps,
+  TeamManageBaseParams,
+  TeamManageBaseProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
@@ -14,16 +14,14 @@ import { MembershipStatus } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
 
 export const getServerSideProps = compose<
-  TeamManageBaseRouterProps,
-  RouteProps<TeamManageBaseRouterProps>
->(router, translator(i18n));
+  TeamManageBaseParams,
+  TeamManageBaseProps
+>(router, jwtVerifier(), translator(i18n));
 
 const { t } = i18n;
 
 @observer
-export default class TeamAdministratorPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class TeamAdministratorPage extends PureComponent<TeamManageBaseProps> {
   store = activityStore
     .teamOf(this.props.route.params!.name)
     .memberOf(this.props.route.params!.tid);
@@ -31,12 +29,11 @@ export default class TeamAdministratorPage extends PureComponent<
   render() {
     const { props, store } = this;
     const { resolvedUrl, params } = this.props.route;
-    const { name, tid } = params!;
 
     return (
       <TeamManageFrame
-        name={name}
-        tid={tid}
+        {...this.props}
+        {...params!}
         path={resolvedUrl}
         title={t('role_management')}
       >

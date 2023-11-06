@@ -1,7 +1,14 @@
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+  translator,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import {
   Button,
@@ -18,24 +25,26 @@ import {
   TeamGitListLayout,
   TeamGitListLayoutProps,
 } from '../../../../../../components/Git/TeamGitList';
-import { TeamManageFrame } from '../../../../../../components/Team/TeamManageFrame';
+import {
+  TeamManageBaseParams,
+  TeamManageBaseProps,
+  TeamManageFrame,
+} from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
 import { TeamWorkType } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
 import sessionStore from '../../../../../../models/User/Session';
 
-type GitPageProps = RouteProps<Record<'name' | 'tid', string>>;
-
 export const getServerSideProps = compose<
-  Record<'name' | 'tid', string>,
-  GitPageProps
->(router, translator(i18n));
+  TeamManageBaseParams,
+  TeamManageBaseProps
+>(router, jwtVerifier(), translator(i18n));
 
 const { t } = i18n;
 
 @observer
-export default class GitPage extends PureComponent<GitPageProps> {
-  constructor(props: GitPageProps) {
+export default class GitPage extends PureComponent<TeamManageBaseProps> {
+  constructor(props: TeamManageBaseProps) {
     super(props);
     makeObservable(this);
   }
@@ -169,9 +178,9 @@ export default class GitPage extends PureComponent<GitPageProps> {
 
     return (
       <TeamManageFrame
+        {...this.props}
+        {...params!}
         path={resolvedUrl}
-        name={params!.name + ''}
-        tid={params!.tid}
         title={t('cloud_development_environment')}
       >
         <Container fluid>

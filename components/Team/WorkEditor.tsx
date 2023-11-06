@@ -12,15 +12,11 @@ import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 
-export interface WorkEditProps {
-  name: string;
-  tid: string;
-  wid?: string;
-}
+export type WorkEditorProps = Record<'name' | 'tid', string> & { wid?: string };
 
 @observer
-export class WorkEdit extends PureComponent<WorkEditProps> {
-  constructor(props: WorkEditProps) {
+export class WorkEditor extends PureComponent<WorkEditorProps> {
+  constructor(props: WorkEditorProps) {
     super(props);
     makeObservable(this);
   }

@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
 import { computed, makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import Link from 'next/link';
+import { JWTProps, RouteProps } from 'next-ssr-middleware';
 import { Fragment, PureComponent } from 'react';
 import { Col, Nav } from 'react-bootstrap';
 
@@ -22,14 +22,16 @@ import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
-import PageHead from '../layout/PageHead';
-import { SessionBox } from '../User/SessionBox';
+import { PageHead } from '../layout/PageHead';
+import { ServerSessionBox } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
 library.add(faTrophy, faUser, faUserSecret, faCloud);
 
-export type TeamManageBaseRouterProps = Record<'path' | 'name' | 'tid', string>;
+export type TeamManageBaseParams = Record<'name' | 'tid', string>;
+
+export type TeamManageBaseProps = RouteProps<TeamManageBaseParams> & JWTProps;
 
 export interface TeamManageFrameProps extends ActivityManageFrameProps {
   tid: string;
@@ -87,19 +89,16 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
                 (teamMemberRole === 'admin' ||
                   (teamMemberRole &&
                     roles?.includes(teamMemberRole as Staff['type']))) && (
-                  <Link
+                  <Nav.Link
                     key={title}
                     href={`/activity/${name}/team/${tid}/manage/${href}`}
-                    passHref
                   >
-                    <Nav.Link>
-                      <FontAwesomeIcon
-                        icon={icon}
-                        className="text-primary ms-3 me-3"
-                      />
-                      <span className="d-md-none d-lg-inline">{title}</span>
-                    </Nav.Link>
-                  </Link>
+                    <FontAwesomeIcon
+                      icon={icon}
+                      className="text-primary ms-3 me-3"
+                    />
+                    <span className="d-md-none d-lg-inline">{title}</span>
+                  </Nav.Link>
                 ),
             )}
           </Fragment>
@@ -131,13 +130,11 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
 
   render() {
     const { authorized, currentRoute, isLoading } = this,
-      { children, name, title, tid } = this.props;
+      { children, name, title, tid, ...props } = this.props;
 
-    return isLoading ? (
-      <Loading />
-    ) : (
-      <SessionBox
-        auto
+    return (
+      <ServerSessionBox
+        {...props}
         className={
           authorized
             ? 'row row-cols-xs-1 row-cols-md-2'
@@ -146,7 +143,9 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
       >
         <PageHead title={`${title} - ${tid} - ${name} ${t('team_manage')}`} />
 
-        {authorized ? (
+        {isLoading ? (
+          <Loading />
+        ) : authorized ? (
           <>
             <Col md="auto">{this.renderNav()}</Col>
 
@@ -158,7 +157,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </SessionBox>
+      </ServerSessionBox>
     );
   }
 }

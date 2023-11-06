@@ -27,7 +27,7 @@ import {
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
-import PageHead from '../../../components/layout/PageHead';
+import { PageHead } from '../../../components/layout/PageHead';
 import { MessageList } from '../../../components/Message/MessageList';
 import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
 import { TeamCard } from '../../../components/Team/TeamCard';
@@ -354,13 +354,11 @@ export default class ActivityPage extends PureComponent<ActivityPageProps> {
               <>
                 <h2 className="mt-3">{t('competition_location')}</h2>
 
-                {!isServer() && (
-                  <div style={{ minHeight: '10rem' }}>
-                    <ChinaMap zoom={10} title={displayName} address={location}>
-                      {t('no_address_navigation')}
-                    </ChinaMap>
-                  </div>
-                )}
+                <div style={{ minHeight: '10rem' }}>
+                  <ChinaMap zoom={10} title={displayName} address={location}>
+                    {t('no_address_navigation')}
+                  </ChinaMap>
+                </div>
               </>
             )}
           </Col>

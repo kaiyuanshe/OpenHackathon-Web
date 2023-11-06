@@ -5,7 +5,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import Link from 'next/link';
 import { Card, Col, Row } from 'react-bootstrap';
 
 import { Activity } from '../../models/Activity';
@@ -42,10 +41,12 @@ export function ActivityCard({
     <Card className={classNames('border-success', className)}>
       <Card.Body>
         <Card.Title
+          as="a"
           className="text-primary text-truncate text-wrap"
           title={displayName}
+          href={`/activity/${name}`}
         >
-          <Link href={`/activity/${name}`}>{displayName}</Link>
+          {displayName}
         </Card.Title>
         <Row as="small" className="g-4" xs={1}>
           <Col

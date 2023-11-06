@@ -1,25 +1,28 @@
-import type { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
+import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
 
-import PageHead from '../../../../../../components/layout/PageHead';
-import { WorkEdit } from '../../../../../../components/Team/WorkEdit';
+import { PageHead } from '../../../../../../components/layout/PageHead';
+import {
+  WorkEditor,
+  WorkEditorProps,
+} from '../../../../../../components/Team/WorkEditor';
+import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import { i18n } from '../../../../../../models/Base/Translation';
+import { TeamWorkEditProps } from './[wid]/edit';
 
-export const getServerSideProps = compose<
-  Record<'name' | 'tid', string>,
-  RouteProps<Record<'name' | 'tid', string>>
->(router, translator(i18n));
+export const getServerSideProps = compose<WorkEditorProps, TeamWorkEditProps>(
+  router,
+  jwtVerifier(),
+  translator(i18n),
+);
 
 const { t } = i18n;
 
-export default function WorkCreatePage({
-  route: { params },
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function WorkCreatePage(props: TeamWorkEditProps) {
   return (
-    <>
+    <ServerSessionBox {...props}>
       <PageHead title={t('submit_work')} />
 
-      <WorkEdit {...params!} />
-    </>
+      <WorkEditor {...props.route.params!} />
+    </ServerSessionBox>
   );
 }

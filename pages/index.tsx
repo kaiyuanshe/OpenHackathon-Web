@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
 import { ActivityListLayout } from '../components/Activity/ActivityList';
-import PageHead from '../components/layout/PageHead';
+import { PageHead } from '../components/layout/PageHead';
 import { TopUserList } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
 import { i18n } from '../models/Base/Translation';

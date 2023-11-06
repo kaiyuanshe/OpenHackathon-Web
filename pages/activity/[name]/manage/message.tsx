@@ -2,7 +2,13 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { createRef, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
@@ -14,12 +20,12 @@ import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 
-type MessageListPageProps = RouteProps<{ name: string }>;
+type MessageListPageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   MessageListPageProps
->(router);
+>(router, jwtVerifier());
 
 @observer
 export default class MessageListPage extends PureComponent<MessageListPageProps> {
@@ -61,6 +67,7 @@ export default class MessageListPage extends PureComponent<MessageListPageProps>
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={params!.name}
         path={resolvedUrl}
         title={t('announcement_manage')}

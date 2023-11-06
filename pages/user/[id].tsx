@@ -8,14 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
+import { Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
-import PageHead from '../../components/layout/PageHead';
+import { PageHead } from '../../components/layout/PageHead';
 import { i18n } from '../../models/Base/Translation';
 import userStore, { User } from '../../models/User';
-import sessionStore from '../../models/User/Session';
 
 const ActivityList = dynamic(
     () => import('../../components/Activity/ActivityList'),
@@ -91,13 +89,6 @@ const UserDetailPage = ({
                   icon={faWeibo}
                 />
               </Card.Body>
-              {sessionStore.user?.id === id && (
-                <Card.Body className="text-center border-top p-3">
-                  <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-                    <Button variant="warning">{t('edit_profile')}</Button>
-                  </Link>
-                </Card.Body>
-              )}
             </Card>
           </Container>
         </Col>

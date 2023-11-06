@@ -1,23 +1,24 @@
 import { observer } from 'mobx-react';
-import { Container } from 'react-bootstrap';
+import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
+import { FC } from 'react';
 
 import { ActivityEditor } from '../../components/Activity/ActivityEditor';
-import PageHead from '../../components/layout/PageHead';
-import { SessionBox } from '../../components/User/SessionBox';
+import { PageHead } from '../../components/layout/PageHead';
+import { ServerSessionBox } from '../../components/User/ServerSessionBox';
 import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 
-const createActivity = observer(() => (
-  <SessionBox auto>
+export const getServerSideProps = compose<{}, JWTProps>(jwtVerifier());
+
+const ActivityCreatePage: FC<JWTProps> = observer(props => (
+  <ServerSessionBox className="container my-4" {...props}>
     <PageHead title={t('create_activity')} />
 
-    <Container className="my-4">
-      <h2 className="text-center mb-3">{t('create_activity')}</h2>
+    <h2 className="text-center mb-3">{t('create_activity')}</h2>
 
-      <ActivityEditor />
-    </Container>
-  </SessionBox>
+    <ActivityEditor />
+  </ServerSessionBox>
 ));
 
-export default createActivity;
+export default ActivityCreatePage;

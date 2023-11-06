@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
+import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
@@ -14,17 +15,11 @@ import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 
 const { t } = i18n;
 
-export default function PlatformAdminPage() {
-  return (
-    <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
-      <PlatformAdmin />
-    </PlatformAdminFrame>
-  );
-}
+export const getServerSideProps = compose<{}, JWTProps>(jwtVerifier());
 
 @observer
-class PlatformAdmin extends PureComponent {
-  constructor(props: {}) {
+export default class PlatformAdminPage extends PureComponent<JWTProps> {
+  constructor(props: JWTProps) {
     super(props);
     makeObservable(this);
   }
@@ -55,7 +50,11 @@ class PlatformAdmin extends PureComponent {
     const loading = store.uploading > 0;
 
     return (
-      <>
+      <PlatformAdminFrame
+        {...this.props}
+        title={t('admin_management')}
+        path="platform-admin"
+      >
         <Form onSubmit={this.handleSubmit}>
           <Button
             variant="success"
@@ -89,7 +88,7 @@ class PlatformAdmin extends PureComponent {
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || this.store.refreshList()}
         />
-      </>
+      </PlatformAdminFrame>
     );
   }
 }

@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react';
-import Link from 'next/link';
 import { PureComponent } from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
@@ -49,10 +48,14 @@ export class QuestionnaireForm extends PureComponent<QuestionnaireFormProps> {
         <legend className="text-center">{t('questionnaire')}</legend>
         <small className="text-muted mt-2">
           {t('please_complete_all_mandatory_fields_before_you_proceed')}
-
-          <Link href="https://ophapiv2-demo.authing.cn/u" passHref>
-            <a className="text-primary ms-2">{t('personal_profile')}</a>
-          </Link>
+          <a
+            className="text-primary ms-2"
+            target="_blank"
+            href="https://ophapiv2-demo.authing.cn/u"
+            rel="noreferrer"
+          >
+            {t('personal_profile')}
+          </a>
         </small>
         <ol className="my-3 px-3">{fields.map(this.renderField)}</ol>
       </Container>

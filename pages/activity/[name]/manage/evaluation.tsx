@@ -1,7 +1,12 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -14,15 +19,15 @@ import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 
+type EvaluationPageProps = RouteProps<{ name: string }> & JWTProps;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
->(router);
+  EvaluationPageProps
+>(router, jwtVerifier());
 
 @observer
-class EvaluationPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class EvaluationPage extends PureComponent<EvaluationPageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
 
@@ -115,6 +120,7 @@ class EvaluationPage extends PureComponent<
 
     return (
       <ActivityManageFrame
+        {...this.props}
         path={resolvedUrl}
         name={params!.name}
         title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
@@ -146,5 +152,3 @@ class EvaluationPage extends PureComponent<
     );
   }
 }
-
-export default EvaluationPage;

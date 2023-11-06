@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
@@ -13,12 +19,12 @@ import { OrganizationTableLayout } from '../../../../components/Organization/Org
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
-type OrganizationPageProps = RouteProps<{ name: string }>;
+type OrganizationPageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   OrganizationPageProps
->(router);
+>(router, jwtVerifier());
 
 const { t } = i18n;
 
@@ -84,6 +90,7 @@ export default class OrganizationPage extends PureComponent<OrganizationPageProp
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={params!.name}
         path={resolvedUrl}
         title={t('organizer_manage')}
