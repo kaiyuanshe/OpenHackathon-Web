@@ -1,6 +1,12 @@
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 
@@ -15,12 +21,12 @@ import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 
-type ActivityQuestionnairePageProps = RouteProps<{ name: string }>;
+type ActivityQuestionnairePageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   ActivityQuestionnairePageProps
->(router);
+>(router, jwtVerifier());
 
 @observer
 export default class ActivityQuestionnairePage extends PureComponent<ActivityQuestionnairePageProps> {
@@ -118,6 +124,7 @@ export default class ActivityQuestionnairePage extends PureComponent<ActivityQue
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={activity}
         path={resolvedUrl}
         title={t('edit_questionnaire')}

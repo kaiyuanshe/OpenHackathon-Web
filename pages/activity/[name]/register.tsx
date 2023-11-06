@@ -1,38 +1,50 @@
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
-import { InferGetServerSidePropsType } from 'next';
-import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
+import {
+  cache,
+  compose,
+  errorLogger,
+  JWTProps,
+  jwtVerifier,
+  translator,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePreview';
-import PageHead from '../../../components/layout/PageHead';
-import { SessionBox } from '../../../components/User/SessionBox';
+import { PageHead } from '../../../components/layout/PageHead';
+import { ServerSessionBox } from '../../../components/User/ServerSessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Extensions, Question } from '../../../models/Activity/Question';
 import { i18n } from '../../../models/Base/Translation';
 
 const { t } = i18n;
 
-export const getServerSideProps = compose<
-  { name: string },
-  { activity: string; questionnaire: Question[] }
->(cache(), errorLogger, translator(i18n), async ({ params: { name } = {} }) => {
-  const activityStore = new ActivityModel();
-  const { status } = await activityStore.getOne(name!),
-    questionnaire = await activityStore.getQuestionnaire(name!);
+interface RegisterPageProps extends JWTProps {
+  activity: string;
+  questionnaire: Question[];
+}
 
-  return {
-    notFound: status !== 'online',
-    props: { activity: name!, questionnaire },
-  };
-});
+export const getServerSideProps = compose<{ name: string }, RegisterPageProps>(
+  jwtVerifier(),
+  cache(),
+  errorLogger,
+  translator(i18n),
+  async ({ params: { name } = {} }) => {
+    const activityStore = new ActivityModel();
+    const { status } = await activityStore.getOne(name!),
+      questionnaire = await activityStore.getQuestionnaire(name!);
+
+    return {
+      notFound: status !== 'online',
+      props: { activity: name!, questionnaire },
+    };
+  },
+);
 
 @observer
-export default class RegisterPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class RegisterPage extends PureComponent<RegisterPageProps> {
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -63,7 +75,7 @@ export default class RegisterPage extends PureComponent<
       { uploading } = activityStore;
 
     return (
-      <SessionBox auto className="container">
+      <ServerSessionBox className="container" {...this.props}>
         <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
@@ -80,7 +92,7 @@ export default class RegisterPage extends PureComponent<
             </Button>
           </footer>
         </Form>
-      </SessionBox>
+      </ServerSessionBox>
     );
   }
 }

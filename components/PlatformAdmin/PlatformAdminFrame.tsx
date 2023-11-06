@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { makeObservable, observable, reaction } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
@@ -22,11 +22,13 @@ import { Container, Nav } from 'react-bootstrap';
 import { adminMenus } from '../../configuration/menu';
 import { i18n } from '../../models/Base/Translation';
 import platformAdminStore from '../../models/User/PlatformAdmin';
-import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
-import PageHead from '../layout/PageHead';
-import { SessionBox } from '../User/SessionBox';
+import { PageHead } from '../layout/PageHead';
+import {
+  ServerSessionBox,
+  ServerSessionBoxProps,
+} from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -44,7 +46,7 @@ library.add(
   faDesktop,
 );
 
-export interface PlatformAdminFrameProps {
+export interface PlatformAdminFrameProps extends ServerSessionBoxProps {
   title: string;
   path?: string;
 }
@@ -59,19 +61,10 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
   @observable
   loading = false;
 
-  sessionDisposer = reaction(
-    () => sessionStore.user,
-    user => user && this.componentDidMount(),
-  );
-
   async componentDidMount() {
     this.loading = true;
     await platformAdminStore.checkAuthorization();
     this.loading = false;
-  }
-
-  componentWillUnmount() {
-    this.sessionDisposer();
   }
 
   get currentRoute() {
@@ -123,16 +116,17 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
   render() {
     const { currentRoute, loading } = this,
-      { children, title } = this.props,
+      { children, title, ...props } = this.props,
       { isPlatformAdmin } = platformAdminStore;
 
     return (
-      <SessionBox
-        auto
+      <ServerSessionBox
+        {...props}
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
         <PageHead title={`${title} - ${t('platform_management')}`} />
+
         {loading ? (
           <Loading />
         ) : isPlatformAdmin ? (
@@ -147,7 +141,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </SessionBox>
+      </ServerSessionBox>
     );
   }
 }

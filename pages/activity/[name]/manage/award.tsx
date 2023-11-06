@@ -1,7 +1,12 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
@@ -15,17 +20,17 @@ import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Activity/Award';
 import { i18n } from '../../../../models/Base/Translation';
 
-export const getServerSideProps = compose<
-  { name: string },
-  RouteProps<{ name: string }>
->(router);
+type AwardPageProps = RouteProps<{ name: string }> & JWTProps;
+
+export const getServerSideProps = compose<{ name: string }, AwardPageProps>(
+  router,
+  jwtVerifier(),
+);
 
 const { t } = i18n;
 
 @observer
-export default class AwardPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class AwardPage extends PureComponent<AwardPageProps> {
   store = activityStore.awardOf(this.props.route.params!.name);
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -144,6 +149,7 @@ export default class AwardPage extends PureComponent<
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={params!.name}
         path={resolvedUrl}
         title={t('prize_settings')}

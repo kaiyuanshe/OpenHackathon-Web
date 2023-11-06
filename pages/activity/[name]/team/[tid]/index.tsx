@@ -10,7 +10,7 @@ import { formToJSON } from 'web-utility';
 
 import { CommentBox } from '../../../../../components/CommentBox';
 import { MainBreadcrumb } from '../../../../../components/layout/MainBreadcrumb';
-import PageHead from '../../../../../components/layout/PageHead';
+import { PageHead } from '../../../../../components/layout/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';

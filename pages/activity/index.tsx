@@ -4,7 +4,7 @@ import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { Container } from 'react-bootstrap';
 
 import ActivityList from '../../components/Activity/ActivityList';
-import PageHead from '../../components/layout/PageHead';
+import { PageHead } from '../../components/layout/PageHead';
 import { ActivityModel } from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
 

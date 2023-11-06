@@ -29,7 +29,7 @@
     "mobx-restful": "^0.6.12",
     "mobx-restful-table": "^1.2.2",
     "next": "^14.0.1",
-    "next-ssr-middleware": "^0.6.0",
+    "next-ssr-middleware": "^0.6.1",
     "open-react-map": "^0.7.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
@@ -70,6 +70,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "install": "get-git-folder https://github.com/kaiyuanshe/service-configuration main OpenHackathon-Web  ||  true",
     "dev": "next dev",
     "build": "rm -rf .next  &&  next build",
     "export": "npm run build  &&  next export",

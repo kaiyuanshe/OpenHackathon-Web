@@ -72,8 +72,8 @@ dependencies:
     specifier: ^14.0.1
     version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
   next-ssr-middleware:
-    specifier: ^0.6.0
-    version: 0.6.0(mobx@6.10.2)(next@14.0.1)(typescript@5.2.2)
+    specifier: ^0.6.1
+    version: 0.6.1(mobx@6.10.2)(next@14.0.1)(typescript@5.2.2)
   open-react-map:
     specifier: ^0.7.0
     version: 0.7.0(mobx-react@9.0.1)(mobx@6.10.2)(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
@@ -4869,8 +4869,8 @@ packages:
       - webpack
     dev: true
 
-  /next-ssr-middleware@0.6.0(mobx@6.10.2)(next@14.0.1)(typescript@5.2.2):
-    resolution: {integrity: sha512-W8GXl7ysJyiKiX8/qOtJFCGQE+TjxtSHRR/gflp2/b00+eWRhXRznIvJ8gpjbFYZ26FtQxlyfCfcY/CChwePzQ==}
+  /next-ssr-middleware@0.6.1(mobx@6.10.2)(next@14.0.1)(typescript@5.2.2):
+    resolution: {integrity: sha512-6pAYMM8KWsVj9wYyzLBgSih2IAtJQkPjyTq2r4NPF99oZdGKrwOXyRKmYrN7rAdYRYhkBAjsq14JQePNdWJIWw==}
     peerDependencies:
       next: '>=9.3'
     dependencies:

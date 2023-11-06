@@ -17,7 +17,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import { Fragment, PropsWithChildren, PureComponent } from 'react';
+import { Fragment, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { menus } from '../../configuration/menu';
@@ -25,8 +25,9 @@ import activityStore from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
-import PageHead from '../layout/PageHead';
+import { PageHead } from '../layout/PageHead';
 import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
+import { ServerSessionBox } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -46,9 +47,9 @@ library.add(
   faUserSecret,
 );
 
-export type ActivityManageFrameProps = PropsWithChildren<
-  PlatformAdminFrameProps & { name: string }
->;
+export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
+  name: string;
+}
 
 @observer
 export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
@@ -125,10 +126,11 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
 
   render() {
     const { authorized, currentRoute } = this,
-      { children, name, title } = this.props;
+      { children, name, title, ...props } = this.props;
 
     return (
-      <div
+      <ServerSessionBox
+        {...props}
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
@@ -146,7 +148,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </div>
+      </ServerSessionBox>
     );
   }
 }

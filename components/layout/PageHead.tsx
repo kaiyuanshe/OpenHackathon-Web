@@ -1,15 +1,15 @@
 import Head from 'next/head';
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
-export interface PageHeadProps {
+export type PageHeadProps = PropsWithChildren<{
   title?: string;
   description?: string;
-}
+}>;
 
 const Name = process.env.NEXT_PUBLIC_SITE_NAME,
   Summary = process.env.NEXT_PUBLIC_SITE_SUMMARY;
 
-const PageHead: FC<PageHeadProps> = ({
+export const PageHead: FC<PageHeadProps> = ({
   title,
   description = Summary,
   children,
@@ -26,5 +26,3 @@ const PageHead: FC<PageHeadProps> = ({
     {children}
   </Head>
 );
-
-export default PageHead;

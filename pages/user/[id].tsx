@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
-import PageHead from '../../components/layout/PageHead';
+import { PageHead } from '../../components/layout/PageHead';
 import { i18n } from '../../models/Base/Translation';
 import userStore, { User } from '../../models/User';
 

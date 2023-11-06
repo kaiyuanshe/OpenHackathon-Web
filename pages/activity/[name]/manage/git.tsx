@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
@@ -15,12 +21,12 @@ import { i18n } from '../../../../models/Base/Translation';
 
 const { t } = i18n;
 
-type ActivityManageGitPageProps = RouteProps<{ name: string }>;
+type ActivityManageGitPageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   ActivityManageGitPageProps
->(router);
+>(router, jwtVerifier());
 
 @observer
 export default class ActivityManageGitPage extends PureComponent<ActivityManageGitPageProps> {
@@ -55,6 +61,7 @@ export default class ActivityManageGitPage extends PureComponent<ActivityManageG
 
     return (
       <ActivityManageFrame
+        {...this.props}
         path={resolvedUrl}
         name={params!.name}
         title={t('cloud_development_environment')}

@@ -1,7 +1,13 @@
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
@@ -11,12 +17,12 @@ import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Activity/Enrollment';
 import { i18n } from '../../../../../models/Base/Translation';
 
-type ParticipantPageProps = RouteProps<{ name: string }>;
+type ParticipantPageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   ParticipantPageProps
->(router);
+>(router, jwtVerifier());
 
 const { t } = i18n;
 
@@ -35,11 +41,12 @@ export default class ParticipantPage extends PureComponent<ParticipantPageProps>
   render() {
     const { resolvedUrl, params } = this.props.route,
       { extensions } = this;
-    const activity = params!.name;
+    const { name } = params!;
 
     return (
       <ActivityManageFrame
-        name={activity}
+        {...this.props}
+        name={name}
         path={resolvedUrl}
         title={t('sign_up_user')}
       >
@@ -50,7 +57,7 @@ export default class ParticipantPage extends PureComponent<ParticipantPageProps>
         </header>
 
         <EnrollmentList
-          activity={activity}
+          activity={name}
           onPopUp={extensions => (this.extensions = extensions)}
         />
         <Modal show={!!extensions} onHide={() => (this.extensions = undefined)}>

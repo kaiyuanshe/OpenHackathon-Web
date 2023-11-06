@@ -1,8 +1,13 @@
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
-import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
 
@@ -17,15 +22,15 @@ const EnrollmentStatisticCharts = dynamic(
   { ssr: false },
 );
 
+type EnrollmentStatisticPageProps = RouteProps<{ name: string }> & JWTProps;
+
 export const getServerSideProps = compose<
   { name: string },
-  RouteProps<{ name: string }>
->(router);
+  EnrollmentStatisticPageProps
+>(router, jwtVerifier());
 
 @observer
-export default class EnrollmentStatisticPage extends PureComponent<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> {
+export default class EnrollmentStatisticPage extends PureComponent<EnrollmentStatisticPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   render() {
@@ -34,6 +39,7 @@ export default class EnrollmentStatisticPage extends PureComponent<
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={params!.name}
         path={resolvedUrl}
         title={t('registration_statistics')}

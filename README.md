@@ -18,7 +18,7 @@ Open-source Hackathon Platform with Git-based Cloud Development Environment
 ## Technology stack
 
 - Language: [TypeScript v5][2]
-- Component engine: [Nextjs v12][3]
+- Component engine: [Nextjs v14][3]
 - Component suite: [Bootstrap v5][4]
 - State management: [MobX v6][6]
 - PWA framework: [Workbox v6][5]
@@ -60,7 +60,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform][12] f
 
 Check out our [Next.js deployment documentation][17] for more details.
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web?ref=badge_large)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web.svg?type=large)][18]
 
 [1]: https://react.dev/
 [2]: https://www.typescriptlang.org/
@@ -76,3 +76,4 @@ Check out our [Next.js deployment documentation][17] for more details.
 [15]: https://nextjs.org/learn
 [16]: https://github.com/vercel/next.js/
 [17]: https://nextjs.org/docs/deployment
+[18]: https://app.fossa.com/projects/git%2Bgithub.com%2Fkaiyuanshe%2FOpenHackathon-Web?ref=badge_large

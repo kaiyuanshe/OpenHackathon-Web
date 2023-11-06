@@ -3,8 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { InferGetServerSidePropsType } from 'next';
-import { compose, RouteProps, router } from 'next-ssr-middleware';
+import {
+  compose,
+  JWTProps,
+  jwtVerifier,
+  RouteProps,
+  router,
+} from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
@@ -14,12 +19,12 @@ import { HackathonAdminList } from '../../../../components/User/HackathonAdminLi
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
-type AdministratorPageProps = RouteProps<{ name: string }>;
+type AdministratorPageProps = RouteProps<{ name: string }> & JWTProps;
 
 export const getServerSideProps = compose<
   { name: string },
   AdministratorPageProps
->(router);
+>(router, jwtVerifier());
 
 const { t } = i18n;
 
@@ -86,6 +91,7 @@ export default class AdministratorPage extends PureComponent<AdministratorPagePr
 
     return (
       <ActivityManageFrame
+        {...this.props}
         name={params!.name}
         path={resolvedUrl}
         title={t('admin')}
