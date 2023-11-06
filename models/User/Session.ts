@@ -1,7 +1,8 @@
 import { HTTPClient } from 'koajax';
 import { computed, makeObservable, observable } from 'mobx';
+import { setCookie } from 'mobx-i18n';
 import { BaseModel, toggle } from 'mobx-restful';
-import { buildURLData } from 'web-utility';
+import { buildURLData, sleep } from 'web-utility';
 
 import { AuthingIdentity, AuthingUserBase, User } from '.';
 
@@ -48,18 +49,24 @@ export class SessionModel extends BaseModel {
   });
 
   @toggle('uploading')
-  async signIn(profile: AuthingUserBase) {
+  async signIn(profile: AuthingUserBase, reload = false) {
     const { body } = await this.client.post<User>('login', profile);
 
+    setCookie('token', body!.token, { path: '/' });
     localStorage.user = JSON.stringify(body);
+
+    if (reload) sleep().then(() => location.reload());
 
     return (this.user = body);
   }
 
-  signOut() {
+  signOut(reload = false) {
+    setCookie('token', '', { path: '/', expires: new Date() });
     localStorage?.clear();
 
     this.user = undefined;
+
+    if (reload) location.reload();
   }
 
   exportURLOf(

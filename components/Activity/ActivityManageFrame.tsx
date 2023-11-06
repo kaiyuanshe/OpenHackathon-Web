@@ -15,20 +15,18 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { computed, reaction } from 'mobx';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import { Fragment, PureComponent } from 'react';
+import { Fragment, PropsWithChildren, PureComponent } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { menus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
-import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import PageHead from '../layout/PageHead';
 import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
-import { SessionBox } from '../User/SessionBox';
 
 const { t } = i18n;
 
@@ -48,25 +46,14 @@ library.add(
   faUserSecret,
 );
 
-export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
-  name: string;
-}
+export type ActivityManageFrameProps = PropsWithChildren<
+  PlatformAdminFrameProps & { name: string }
+>;
 
 @observer
 export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
-  sessionDisposer = reaction(
-    () => sessionStore.user,
-    user => user && this.componentDidMount(),
-  );
-
-  async componentDidMount() {
-    await activityStore.getOne(this.props.name);
-
-    if (!activityStore.currentOne.roles) sessionStore.signOut();
-  }
-
-  componentWillUnmount() {
-    this.sessionDisposer();
+  componentDidMount() {
+    activityStore.getOne(this.props.name);
   }
 
   get currentRoute() {
@@ -141,8 +128,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
       { children, name, title } = this.props;
 
     return (
-      <SessionBox
-        auto
+      <div
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
@@ -160,7 +146,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </SessionBox>
+      </div>
     );
   }
 }
