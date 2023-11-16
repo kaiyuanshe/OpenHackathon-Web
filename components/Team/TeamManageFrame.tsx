@@ -23,7 +23,6 @@ import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
-import { ServerSessionBox } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -130,11 +129,10 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
 
   render() {
     const { authorized, currentRoute, isLoading } = this,
-      { children, name, title, tid, ...props } = this.props;
+      { children, name, title, tid } = this.props;
 
     return (
-      <ServerSessionBox
-        {...props}
+      <div
         className={
           authorized
             ? 'row row-cols-xs-1 row-cols-md-2'
@@ -157,7 +155,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </ServerSessionBox>
+      </div>
     );
   }
 }

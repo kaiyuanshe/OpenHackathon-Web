@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Avatar } from 'idea-react';
-import { HTMLAttributes } from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import { Team } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
@@ -13,7 +13,7 @@ export type TeamCardProps = HTMLAttributes<HTMLDivElement> &
     'hackathonName' | 'displayName' | 'creatorId' | 'creator' | 'membersCount'
   >;
 
-export const TeamCard = ({
+export const TeamCard: FC<TeamCardProps> = ({
   className,
   id,
   hackathonName,
@@ -21,7 +21,7 @@ export const TeamCard = ({
   membersCount,
   creatorId,
   creator,
-}: TeamCardProps) => (
+}) => (
   <div className={classNames('border p-2', className)}>
     <a
       className="fs-4 text-primary text-truncate"

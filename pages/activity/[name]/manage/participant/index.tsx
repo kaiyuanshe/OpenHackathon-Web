@@ -1,6 +1,5 @@
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { InferGetServerSidePropsType } from 'next';
 import {
   compose,
   JWTProps,
@@ -8,11 +7,12 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { FC, PureComponent } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import { EnrollmentList } from '../../../../../components/Activity/EnrollmentList';
+import { ServerSessionBox } from '../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../models/Activity';
 import { Enrollment } from '../../../../../models/Activity/Enrollment';
 import { i18n } from '../../../../../models/Base/Translation';
@@ -26,8 +26,23 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
+const ParticipantPage: FC<ParticipantPageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('sign_up_user')}
+    >
+      <ParticipantEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default ParticipantPage;
+
 @observer
-export default class ParticipantPage extends PureComponent<ParticipantPageProps> {
+class ParticipantEditor extends PureComponent<ParticipantPageProps> {
   constructor(props: ParticipantPageProps) {
     super(props);
     makeObservable(this);
@@ -41,15 +56,9 @@ export default class ParticipantPage extends PureComponent<ParticipantPageProps>
   render() {
     const { resolvedUrl, params } = this.props.route,
       { extensions } = this;
-    const { name } = params!;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={name}
-        path={resolvedUrl}
-        title={t('sign_up_user')}
-      >
+      <>
         <header className="d-flex justify-content-end mb-3 px-3">
           <Button variant="success" href={resolvedUrl + '/statistic'}>
             {t('view_statistics')}
@@ -57,7 +66,7 @@ export default class ParticipantPage extends PureComponent<ParticipantPageProps>
         </header>
 
         <EnrollmentList
-          activity={name}
+          activity={params!.name}
           onPopUp={extensions => (this.extensions = extensions)}
         />
         <Modal show={!!extensions} onHide={() => (this.extensions = undefined)}>
@@ -74,7 +83,7 @@ export default class ParticipantPage extends PureComponent<ParticipantPageProps>
             {extensions?.[0] && t('no_news_yet')}
           </Modal.Body>
         </Modal>
-      </ActivityManageFrame>
+      </>
     );
   }
 }

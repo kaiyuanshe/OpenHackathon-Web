@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Badge, Col, Image, Row, Table } from 'react-bootstrap';
 import { parseJSON } from 'web-utility';
 
@@ -12,7 +13,7 @@ export interface TopUserListProps {
   value: TopUser[];
 }
 
-export const TopUserList = ({ value = [] }: TopUserListProps) => (
+export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
   <Row className={styles.topUserRow}>
     <Col sm={12} xs={12} lg={7}>
       <div className={`shadow rounded-3 ${styles.showTitle}`}>

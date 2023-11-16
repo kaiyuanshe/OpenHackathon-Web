@@ -4,12 +4,13 @@ import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { HackathonAdminList } from '../../components/User/HackathonAdminList';
+import { ServerSessionBox } from '../../components/User/ServerSessionBox';
 import { i18n } from '../../models/Base/Translation';
 import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 
@@ -17,9 +18,23 @@ const { t } = i18n;
 
 export const getServerSideProps = compose<{}, JWTProps>(jwtVerifier());
 
+const PlatformAdminPage: FC<JWTProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <PlatformAdminFrame
+      {...props}
+      title={t('admin_management')}
+      path="platform-admin"
+    >
+      <PlatformAdminView />
+    </PlatformAdminFrame>
+  </ServerSessionBox>
+));
+
+export default PlatformAdminPage;
+
 @observer
-export default class PlatformAdminPage extends PureComponent<JWTProps> {
-  constructor(props: JWTProps) {
+class PlatformAdminView extends PureComponent {
+  constructor(props: {}) {
     super(props);
     makeObservable(this);
   }
@@ -50,45 +65,38 @@ export default class PlatformAdminPage extends PureComponent<JWTProps> {
     const loading = store.uploading > 0;
 
     return (
-      <PlatformAdminFrame
-        {...this.props}
-        title={t('admin_management')}
-        path="platform-admin"
-      >
-        <Form onSubmit={this.handleSubmit}>
-          <Button
-            variant="success"
-            className="my-3 me-2"
-            disabled={loading}
-            onClick={() => (this.show = true)}
-          >
-            <FontAwesomeIcon className="me-2" icon={faPlus} />
-            {t('add')}
-          </Button>
-          <Button variant="danger" type="submit" disabled={loading}>
-            <FontAwesomeIcon className="me-2" icon={faTrash} />
-            {t('delete')}
-          </Button>
-          <ScrollList
-            translator={i18n}
-            store={store}
-            renderList={allItems => (
-              <HackathonAdminList
-                defaultData={allItems}
-                selectedIds={this.selectedIds}
-                onSelect={list => (this.selectedIds = list)}
-              />
-            )}
-          />
-        </Form>
-
+      <Form onSubmit={this.handleSubmit}>
+        <Button
+          variant="success"
+          className="my-3 me-2"
+          disabled={loading}
+          onClick={() => (this.show = true)}
+        >
+          <FontAwesomeIcon className="me-2" icon={faPlus} />
+          {t('add')}
+        </Button>
+        <Button variant="danger" type="submit" disabled={loading}>
+          <FontAwesomeIcon className="me-2" icon={faTrash} />
+          {t('delete')}
+        </Button>
+        <ScrollList
+          translator={i18n}
+          store={store}
+          renderList={allItems => (
+            <HackathonAdminList
+              defaultData={allItems}
+              selectedIds={this.selectedIds}
+              onSelect={list => (this.selectedIds = list)}
+            />
+          )}
+        />
         <PlatformAdminModal
           store={store}
           show={show}
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || this.store.refreshList()}
         />
-      </PlatformAdminFrame>
+      </Form>
     );
   }
 }

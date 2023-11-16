@@ -7,12 +7,13 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { AwardAssignment } from '../../../../models/Activity/Award';
 import { i18n } from '../../../../models/Base/Translation';
@@ -26,8 +27,27 @@ export const getServerSideProps = compose<
   EvaluationPageProps
 >(router, jwtVerifier());
 
+const EvaluationPage: FC<EvaluationPageProps> = observer(props => {
+  const { resolvedUrl, params } = props.route;
+
+  return (
+    <ServerSessionBox {...props}>
+      <ActivityManageFrame
+        {...props}
+        path={resolvedUrl}
+        name={params!.name}
+        title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
+      >
+        <EvalationEditor {...props} />
+      </ActivityManageFrame>
+    </ServerSessionBox>
+  );
+});
+
+export default EvaluationPage;
+
 @observer
-export default class EvaluationPage extends PureComponent<EvaluationPageProps> {
+class EvalationEditor extends PureComponent<EvaluationPageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
 
@@ -116,39 +136,30 @@ export default class EvaluationPage extends PureComponent<EvaluationPageProps> {
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route;
-
     return (
-      <ActivityManageFrame
-        {...this.props}
-        path={resolvedUrl}
-        name={params!.name}
-        title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
-      >
-        <Row xs={1} md={2}>
-          <Col md={8} className="ms-2 p-2">
-            <Form onSubmit={this.onSearch}>
-              <InputGroup>
-                <Form.Control
-                  type="search"
-                  id="teamSearch"
-                  name="teamSearch"
-                  required
-                  aria-label="search team"
-                  placeholder={t('team_name')}
-                />
-                <Button type="submit">{t('search')}</Button>
-              </InputGroup>
-            </Form>
-            <div className="my-3">
-              <TeamAwardList store={this.store} />
-            </div>
-          </Col>
-          <Col md={3} className="p-2">
-            {this.renderForm()}
-          </Col>
-        </Row>
-      </ActivityManageFrame>
+      <Row xs={1} md={2}>
+        <Col md={8} className="ms-2 p-2">
+          <Form onSubmit={this.onSearch}>
+            <InputGroup>
+              <Form.Control
+                type="search"
+                id="teamSearch"
+                name="teamSearch"
+                required
+                aria-label="search team"
+                placeholder={t('team_name')}
+              />
+              <Button type="submit">{t('search')}</Button>
+            </InputGroup>
+          </Form>
+          <div className="my-3">
+            <TeamAwardList store={this.store} />
+          </div>
+        </Col>
+        <Col md={3} className="p-2">
+          {this.renderForm()}
+        </Col>
+      </Row>
     );
   }
 }

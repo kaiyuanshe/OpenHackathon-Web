@@ -9,7 +9,7 @@ import {
   translator,
 } from 'next-ssr-middleware';
 import { FormEvent, PureComponent } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePreview';

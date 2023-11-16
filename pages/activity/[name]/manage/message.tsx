@@ -9,12 +9,13 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { createRef, FC, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { MessageList } from '../../../../components/Message/MessageList';
 import { MessageModal } from '../../../../components/Message/MessageModal';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -27,8 +28,23 @@ export const getServerSideProps = compose<
   MessageListPageProps
 >(router, jwtVerifier());
 
+const MessageListPage: FC<MessageListPageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('announcement_manage')}
+    >
+      <MessageListEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default MessageListPage;
+
 @observer
-export default class MessageListPage extends PureComponent<MessageListPageProps> {
+class MessageListEditor extends PureComponent<MessageListPageProps> {
   constructor(props: MessageListPageProps) {
     super(props);
     makeObservable(this);
@@ -61,53 +77,44 @@ export default class MessageListPage extends PureComponent<MessageListPageProps>
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { store, show } = this;
+    const { store, show } = this;
     const loading = store.uploading > 0;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={params!.name}
-        path={resolvedUrl}
-        title={t('announcement_manage')}
-      >
-        <Container fluid>
-          <Form
-            className="d-flex justify-content-between align-items-center"
-            onSubmit={this.handleSubmit}
+      <Container fluid>
+        <Form
+          className="d-flex justify-content-between align-items-center"
+          onSubmit={this.handleSubmit}
+        >
+          <Button
+            variant="success"
+            className="my-3"
+            disabled={loading}
+            onClick={() => (this.show = true)}
           >
-            <Button
-              variant="success"
-              className="my-3"
-              disabled={loading}
-              onClick={() => (this.show = true)}
-            >
-              <FontAwesomeIcon className="me-2" icon={faPlus} />
-              {t('publish_announcement')}
-            </Button>
-            <Button variant="danger" type="submit" disabled={loading}>
-              <FontAwesomeIcon className="me-2" icon={faTrash} />
-              {t('delete')}
-            </Button>
-          </Form>
+            <FontAwesomeIcon className="me-2" icon={faPlus} />
+            {t('publish_announcement')}
+          </Button>
+          <Button variant="danger" type="submit" disabled={loading}>
+            <FontAwesomeIcon className="me-2" icon={faTrash} />
+            {t('delete')}
+          </Button>
+        </Form>
 
-          <MessageList
-            store={store}
-            hideControls={false}
-            onSelect={list => (this.selectedIds = list)}
-            onEdit={() => (this.show = true)}
-            onDelete={this.handleReset}
-          />
-        </Container>
-
+        <MessageList
+          store={store}
+          hideControls={false}
+          onSelect={list => (this.selectedIds = list)}
+          onEdit={() => (this.show = true)}
+          onDelete={this.handleReset}
+        />
         <MessageModal
           store={store}
           show={show}
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || store.refreshList()}
         />
-      </ActivityManageFrame>
+      </Container>
     );
   }
 }

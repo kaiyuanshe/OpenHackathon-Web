@@ -126,11 +126,10 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
 
   render() {
     const { authorized, currentRoute } = this,
-      { children, name, title, ...props } = this.props;
+      { children, name, title } = this.props;
 
     return (
-      <ServerSessionBox
-        {...props}
+      <div
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
@@ -148,7 +147,7 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </ServerSessionBox>
+      </div>
     );
   }
 }

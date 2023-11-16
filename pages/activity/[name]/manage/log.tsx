@@ -11,6 +11,7 @@ import { PureComponent } from 'react';
 
 import { ActivityLogListLayout } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -31,20 +32,22 @@ export default class LogPage extends PureComponent<LogPageProps> {
     const { resolvedUrl, params } = this.props.route;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        path={resolvedUrl}
-        name={params!.name}
-        title={t('log')}
-      >
-        <ScrollList
-          translator={i18n}
-          store={this.store}
-          renderList={allItems => (
-            <ActivityLogListLayout defaultData={allItems} />
-          )}
-        />
-      </ActivityManageFrame>
+      <ServerSessionBox {...this.props}>
+        <ActivityManageFrame
+          {...this.props}
+          path={resolvedUrl}
+          name={params!.name}
+          title={t('log')}
+        >
+          <ScrollList
+            translator={i18n}
+            store={this.store}
+            renderList={allItems => (
+              <ActivityLogListLayout defaultData={allItems} />
+            )}
+          />
+        </ActivityManageFrame>
+      </ServerSessionBox>
     );
   }
 }

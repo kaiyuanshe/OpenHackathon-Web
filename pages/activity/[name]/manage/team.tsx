@@ -7,7 +7,7 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import {
   Button,
   Container,
@@ -19,6 +19,7 @@ import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamListLayout } from '../../../../components/Team/TeamList';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -31,8 +32,23 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
+const TeamManagePage: FC<TeamManagePageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      {...props}
+      path={props.route.resolvedUrl}
+      name={props.route.params!.name}
+      title={t('team_manage')}
+    >
+      <TeamManageEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default TeamManagePage;
+
 @observer
-export default class TeamManagePage extends PureComponent<TeamManagePageProps> {
+class TeamManageEditor extends PureComponent<TeamManagePageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -46,39 +62,30 @@ export default class TeamManagePage extends PureComponent<TeamManagePageProps> {
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { exportURL, workExportURL } = this.store;
+    const { exportURL, workExportURL } = this.store;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        path={resolvedUrl}
-        name={params!.name}
-        title={t('team_manage')}
-      >
-        <Container fluid>
-          <header className="d-flex justify-content-between mb-3">
-            <Form className="d-flex" onSubmit={this.onSearch}>
-              <Form.Control type="search" name="search" />
+      <Container fluid>
+        <header className="d-flex justify-content-between mb-3">
+          <Form className="d-flex" onSubmit={this.onSearch}>
+            <Form.Control type="search" name="search" />
 
-              <Button type="submit" className="ms-3 text-nowrap">
-                {t('search')}
-              </Button>
-            </Form>
-            <DropdownButton variant="success" title={t('export')}>
-              <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
-              <Dropdown.Item href={workExportURL}>
-                {t('all_works')}
-              </Dropdown.Item>
-            </DropdownButton>
-          </header>
-          <ScrollList
-            translator={i18n}
-            store={this.store}
-            renderList={allItems => <TeamListLayout defaultData={allItems} />}
-          />
-        </Container>
-      </ActivityManageFrame>
+            <Button type="submit" className="ms-3 text-nowrap">
+              {t('search')}
+            </Button>
+          </Form>
+          <DropdownButton variant="success" title={t('export')}>
+            <Dropdown.Item href={exportURL}>{t('all_teams')}</Dropdown.Item>
+            <Dropdown.Item href={workExportURL}>{t('all_works')}</Dropdown.Item>
+          </DropdownButton>
+        </header>
+
+        <ScrollList
+          translator={i18n}
+          store={this.store}
+          renderList={allItems => <TeamListLayout defaultData={allItems} />}
+        />
+      </Container>
     );
   }
 }

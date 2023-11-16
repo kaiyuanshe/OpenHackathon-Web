@@ -25,10 +25,7 @@ import platformAdminStore from '../../models/User/PlatformAdmin';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
-import {
-  ServerSessionBox,
-  ServerSessionBoxProps,
-} from '../User/ServerSessionBox';
+import { ServerSessionBoxProps } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -116,12 +113,11 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
 
   render() {
     const { currentRoute, loading } = this,
-      { children, title, ...props } = this.props,
+      { children, title } = this.props,
       { isPlatformAdmin } = platformAdminStore;
 
     return (
-      <ServerSessionBox
-        {...props}
+      <div
         className="d-flex justify-content-center align-items-center"
         style={{ height: 'calc(100vh - 3.5rem)' }}
       >
@@ -141,7 +137,7 @@ export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
         ) : (
           <div className="display-3">{t('no_permission')}</div>
         )}
-      </ServerSessionBox>
+      </div>
     );
   }
 }

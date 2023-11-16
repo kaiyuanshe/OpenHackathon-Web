@@ -9,6 +9,7 @@ import {
   TeamManageBaseProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
+import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
 import { MembershipStatus } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
@@ -31,25 +32,27 @@ export default class TeamAdministratorPage extends PureComponent<TeamManageBaseP
     const { resolvedUrl, params } = this.props.route;
 
     return (
-      <TeamManageFrame
-        {...this.props}
-        {...params!}
-        path={resolvedUrl}
-        title={t('role_management')}
-      >
-        <ScrollList
-          translator={i18n}
-          store={store}
-          filter={{ status: MembershipStatus.APPROVED }}
-          renderList={allItems => (
-            <TeamAdministratorTableLayout
-              {...props}
-              defaultData={allItems}
-              onUpdateRole={(userId, role) => store.updateRole(userId, role)}
-            />
-          )}
-        />
-      </TeamManageFrame>
+      <ServerSessionBox {...this.props}>
+        <TeamManageFrame
+          {...this.props}
+          {...params!}
+          path={resolvedUrl}
+          title={t('role_management')}
+        >
+          <ScrollList
+            translator={i18n}
+            store={store}
+            filter={{ status: MembershipStatus.APPROVED }}
+            renderList={allItems => (
+              <TeamAdministratorTableLayout
+                {...props}
+                defaultData={allItems}
+                onUpdateRole={(userId, role) => store.updateRole(userId, role)}
+              />
+            )}
+          />
+        </TeamManageFrame>
+      </ServerSessionBox>
     );
   }
 }

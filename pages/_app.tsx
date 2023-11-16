@@ -5,6 +5,7 @@ import { configure } from 'mobx';
 import { enableStaticRendering, observer } from 'mobx-react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { FC } from 'react';
 import { Image } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
@@ -25,8 +26,8 @@ globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
   if (tips) alert(tips);
 });
 
-const MyApp = observer(
-  ({ router: { pathname }, Component, pageProps }: AppProps) => (
+const MyApp: FC<AppProps> = observer(
+  ({ router: { pathname }, Component, pageProps }) => (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

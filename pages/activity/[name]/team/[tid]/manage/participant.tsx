@@ -9,6 +9,7 @@ import {
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTableLayout } from '../../../../../../components/Team/TeamParticipantTable';
+import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
 import { i18n } from '../../../../../../models/Base/Translation';
 
@@ -30,23 +31,25 @@ export default class TeamParticipantPage extends PureComponent<TeamManageBasePro
     const { resolvedUrl, params } = this.props.route;
 
     return (
-      <TeamManageFrame
-        {...this.props}
-        {...params!}
-        path={resolvedUrl}
-        title={t('team_registration')}
-      >
-        <ScrollList
-          translator={i18n}
-          store={store}
-          renderList={allItems => (
-            <TeamParticipantTableLayout
-              defaultData={allItems}
-              onApprove={(userId, status) => store.approveOne(userId, status)}
-            />
-          )}
-        />
-      </TeamManageFrame>
+      <ServerSessionBox {...this.props}>
+        <TeamManageFrame
+          {...this.props}
+          {...params!}
+          path={resolvedUrl}
+          title={t('team_registration')}
+        >
+          <ScrollList
+            translator={i18n}
+            store={store}
+            renderList={allItems => (
+              <TeamParticipantTableLayout
+                defaultData={allItems}
+                onApprove={(userId, status) => store.approveOne(userId, status)}
+              />
+            )}
+          />
+        </TeamManageFrame>
+      </ServerSessionBox>
     );
   }
 }
