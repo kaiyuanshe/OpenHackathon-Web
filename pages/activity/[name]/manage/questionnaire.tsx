@@ -7,13 +7,14 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { FC, PureComponent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { QuestionnaireCreate } from '../../../../components/Activity/QuestionnaireCreate';
 import { QuestionnaireForm } from '../../../../components/Activity/QuestionnairePreview';
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { Extensions, Question } from '../../../../models/Activity/Question';
 import { isServer } from '../../../../models/Base';
@@ -28,8 +29,24 @@ export const getServerSideProps = compose<
   ActivityQuestionnairePageProps
 >(router, jwtVerifier());
 
+const ActivityQuestionnairePage: FC<ActivityQuestionnairePageProps> = observer(
+  props => (
+    <ServerSessionBox {...props}>
+      <ActivityManageFrame
+        {...props}
+        name={props.route.params!.name}
+        path={props.route.resolvedUrl}
+        title={t('edit_questionnaire')}
+      >
+        <ActivityQuestionnaireEditor {...props} />
+      </ActivityManageFrame>
+    </ServerSessionBox>
+  ),
+);
+export default ActivityQuestionnairePage;
+
 @observer
-export default class ActivityQuestionnairePage extends PureComponent<ActivityQuestionnairePageProps> {
+class ActivityQuestionnaireEditor extends PureComponent<ActivityQuestionnairePageProps> {
   constructor(props: ActivityQuestionnairePageProps) {
     super(props);
     makeObservable(this);
@@ -118,49 +135,40 @@ export default class ActivityQuestionnairePage extends PureComponent<ActivityQue
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route;
-    const activity = params!.name;
     const { questionnaire } = activityStore;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={activity}
-        path={resolvedUrl}
-        title={t('edit_questionnaire')}
-      >
-        <Row className="gx-10">
-          <Col sm={12}>
-            <QuestionnaireCreate onAdd={this.addQuestionnaireItem} />
-            <QuestionnaireTable
-              questionnaire={questionnaire}
-              onDelete={this.deleteQuestionnaireItem}
-              onMove={this.handleMoveQuestionnaireItem}
-            />
-            <footer className="text-center">
-              <Button className="mx-1 px-5" onClick={this.createRegister}>
-                {this.isCreate
-                  ? t('create_questionnaire')
-                  : t('update_questionnaire')}
+      <Row className="gx-10">
+        <Col sm={12}>
+          <QuestionnaireCreate onAdd={this.addQuestionnaireItem} />
+          <QuestionnaireTable
+            questionnaire={questionnaire}
+            onDelete={this.deleteQuestionnaireItem}
+            onMove={this.handleMoveQuestionnaireItem}
+          />
+          <footer className="text-center">
+            <Button className="mx-1 px-5" onClick={this.createRegister}>
+              {this.isCreate
+                ? t('create_questionnaire')
+                : t('update_questionnaire')}
+            </Button>
+            {this.isCreate ? null : (
+              <Button
+                className="px-5"
+                variant="danger"
+                onClick={this.deleteRegister}
+              >
+                {t('delete_questionnaire')}
               </Button>
-              {this.isCreate ? null : (
-                <Button
-                  className="px-5"
-                  variant="danger"
-                  onClick={this.deleteRegister}
-                >
-                  {t('delete_questionnaire')}
-                </Button>
-              )}
-            </footer>
-          </Col>
-          <Col sm={12} className="p-2">
-            <h5 className="mx-2">{t('preview_questionnaire')}</h5>
+            )}
+          </footer>
+        </Col>
+        <Col sm={12} className="p-2">
+          <h5 className="mx-2">{t('preview_questionnaire')}</h5>
 
-            <QuestionnaireForm fields={questionnaire} />
-          </Col>
-        </Row>
-      </ActivityManageFrame>
+          <QuestionnaireForm fields={questionnaire} />
+        </Col>
+      </Row>
     );
   }
 }

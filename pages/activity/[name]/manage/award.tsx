@@ -7,7 +7,7 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -16,6 +16,7 @@ import {
   AwardList,
   AwardTargetName,
 } from '../../../../components/Activity/AwardList';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Activity/Award';
 import { i18n } from '../../../../models/Base/Translation';
@@ -29,8 +30,22 @@ export const getServerSideProps = compose<{ name: string }, AwardPageProps>(
 
 const { t } = i18n;
 
+const AwardPage: FC<AwardPageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('prize_settings')}
+    >
+      <AwardEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default AwardPage;
+
 @observer
-export default class AwardPage extends PureComponent<AwardPageProps> {
+class AwardEditor extends PureComponent<AwardPageProps> {
   store = activityStore.awardOf(this.props.route.params!.name);
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -144,29 +159,21 @@ export default class AwardPage extends PureComponent<AwardPageProps> {
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { store } = this;
+    const { store } = this;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={params!.name}
-        path={resolvedUrl}
-        title={t('prize_settings')}
-      >
-        <Row xs="1" sm="2" className="my-3">
-          <Col sm="4" md="4">
-            {this.renderForm()}
-          </Col>
-          <Col className="flex-fill">
-            <AwardList
-              store={store}
-              onDelete={this.handleReset}
-              onEdit={this.handleReset}
-            />
-          </Col>
-        </Row>
-      </ActivityManageFrame>
+      <Row xs="1" sm="2" className="my-3">
+        <Col sm="4" md="4">
+          {this.renderForm()}
+        </Col>
+        <Col className="flex-fill">
+          <AwardList
+            store={store}
+            onDelete={this.handleReset}
+            onEdit={this.handleReset}
+          />
+        </Col>
+      </Row>
     );
   }
 }

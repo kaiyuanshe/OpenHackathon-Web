@@ -10,12 +10,13 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -28,8 +29,23 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
+const OrganizationPage: FC<OrganizationPageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('organizer_manage')}
+    >
+      <OrganizationEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default OrganizationPage;
+
 @observer
-export default class OrganizationPage extends PureComponent<OrganizationPageProps> {
+class OrganizationEditor extends PureComponent<OrganizationPageProps> {
   constructor(props: OrganizationPageProps) {
     super(props);
     makeObservable(this);
@@ -84,53 +100,45 @@ export default class OrganizationPage extends PureComponent<OrganizationPageProp
   }
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { store, show } = this;
+    const { store, show } = this;
     const loading = store.uploading > 0;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={params!.name}
-        path={resolvedUrl}
-        title={t('organizer_manage')}
-      >
-        <Form onSubmit={this.handleSubmit}>
-          <Row xs={1} sm={2}>
-            <Col sm="auto" md="auto">
-              {this.renderList()}
+      <Form onSubmit={this.handleSubmit}>
+        <Row xs={1} sm={2}>
+          <Col sm="auto" md="auto">
+            {this.renderList()}
 
-              <Col className="d-flex flex-column">
-                <Button
-                  variant="success"
-                  className="my-3"
-                  disabled={loading}
-                  onClick={() => (this.show = true)}
-                >
-                  <FontAwesomeIcon className="me-2" icon={faPlus} />
-                  {t('add')}
-                </Button>
-                <Button variant="danger" type="submit" disabled={loading}>
-                  <FontAwesomeIcon className="me-2" icon={faTrash} />
-                  {t('delete')}
-                </Button>
-              </Col>
+            <Col className="d-flex flex-column">
+              <Button
+                variant="success"
+                className="my-3"
+                disabled={loading}
+                onClick={() => (this.show = true)}
+              >
+                <FontAwesomeIcon className="me-2" icon={faPlus} />
+                {t('add')}
+              </Button>
+              <Button variant="danger" type="submit" disabled={loading}>
+                <FontAwesomeIcon className="me-2" icon={faTrash} />
+                {t('delete')}
+              </Button>
             </Col>
-            <Col className="flex-fill">
-              <ScrollList
-                translator={i18n}
-                store={store}
-                renderList={allItems => (
-                  <OrganizationTableLayout
-                    defaultData={allItems}
-                    selectedIds={this.selectedIds}
-                    onSelect={list => (this.selectedIds = list)}
-                  />
-                )}
-              />
-            </Col>
-          </Row>
-        </Form>
+          </Col>
+          <Col className="flex-fill">
+            <ScrollList
+              translator={i18n}
+              store={store}
+              renderList={allItems => (
+                <OrganizationTableLayout
+                  defaultData={allItems}
+                  selectedIds={this.selectedIds}
+                  onSelect={list => (this.selectedIds = list)}
+                />
+              )}
+            />
+          </Col>
+        </Row>
 
         <OrganizationModal
           store={store}
@@ -138,7 +146,7 @@ export default class OrganizationPage extends PureComponent<OrganizationPageProp
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || store.refreshList()}
         />
-      </ActivityManageFrame>
+      </Form>
     );
   }
 }

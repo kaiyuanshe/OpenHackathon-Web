@@ -1,15 +1,8 @@
 import { makeObservable, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-  translator,
-} from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
+import { FC, FormEvent, PureComponent } from 'react';
 import {
   Button,
   Container,
@@ -30,6 +23,7 @@ import {
   TeamManageBaseProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
+import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
 import { TeamWorkType } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
@@ -42,8 +36,23 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
+const GitPage: FC<TeamManageBaseProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <TeamManageFrame
+      {...props}
+      {...props.route.params!}
+      path={props.route.resolvedUrl}
+      title={t('cloud_development_environment')}
+    >
+      <GitView {...props} />
+    </TeamManageFrame>
+  </ServerSessionBox>
+));
+
+export default GitPage;
+
 @observer
-export default class GitPage extends PureComponent<TeamManageBaseProps> {
+class GitView extends PureComponent<TeamManageBaseProps> {
   constructor(props: TeamManageBaseProps) {
     super(props);
     makeObservable(this);
@@ -173,42 +182,33 @@ export default class GitPage extends PureComponent<TeamManageBaseProps> {
   };
 
   render() {
-    const { resolvedUrl, params } = this.props.route;
     const { github } = sessionStore.metaOAuth;
 
     return (
-      <TeamManageFrame
-        {...this.props}
-        {...params!}
-        path={resolvedUrl}
-        title={t('cloud_development_environment')}
-      >
-        <Container fluid>
-          <header className="d-flex justify-content-end mb-3">
-            <Button
-              variant="success"
-              disabled={!github}
-              onClick={() => (this.creatorOpen = true)}
-            >
-              {t('create_cloud_environment')}
-              {github ? '' : t('please_use_github_login')}
-            </Button>
-          </header>
+      <Container fluid>
+        <header className="d-flex justify-content-end mb-3">
+          <Button
+            variant="success"
+            disabled={!github}
+            onClick={() => (this.creatorOpen = true)}
+          >
+            {t('create_cloud_environment')}
+            {github ? '' : t('please_use_github_login')}
+          </Button>
+        </header>
 
-          <ScrollList
-            translator={i18n}
-            store={this.workspaceStore}
-            renderList={allItems => (
-              <TeamGitListLayout
-                defaultData={allItems}
-                renderController={this.renderController}
-              />
-            )}
-          />
-        </Container>
-
+        <ScrollList
+          translator={i18n}
+          store={this.workspaceStore}
+          renderList={allItems => (
+            <TeamGitListLayout
+              defaultData={allItems}
+              renderController={this.renderController}
+            />
+          )}
+        />
         {this.renderCreator()}
-      </TeamManageFrame>
+      </Container>
     );
   }
 }

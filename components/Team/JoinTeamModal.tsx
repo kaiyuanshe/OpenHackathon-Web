@@ -1,4 +1,4 @@
-import { FormEventHandler } from 'react';
+import { FC, FormEventHandler } from 'react';
 import { Button, Col, Form, Modal, ModalProps } from 'react-bootstrap';
 
 import { i18n } from '../../models/Base/Translation';
@@ -10,11 +10,11 @@ export interface JoinTeamModalProps
   onSubmit: FormEventHandler<HTMLFormElement>;
 }
 
-export const JoinTeamModal = ({
+export const JoinTeamModal: FC<JoinTeamModalProps> = ({
   show,
   onHide,
   onSubmit,
-}: JoinTeamModalProps) => (
+}) => (
   <Modal show={show} onHide={onHide}>
     <Modal.Header closeButton>
       <Modal.Title>{t('join_team')}</Modal.Title>

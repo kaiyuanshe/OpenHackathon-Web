@@ -8,10 +8,11 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { FC, PureComponent } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
+import { ServerSessionBox } from '../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../models/Activity';
 import { i18n } from '../../../../../models/Base/Translation';
 
@@ -29,21 +30,31 @@ export const getServerSideProps = compose<
   EnrollmentStatisticPageProps
 >(router, jwtVerifier());
 
+const EnrollmentStatisticPage: FC<EnrollmentStatisticPageProps> = observer(
+  props => (
+    <ServerSessionBox>
+      <ActivityManageFrame
+        {...props}
+        name={props.route.params!.name}
+        path={props.route.resolvedUrl}
+        title={t('registration_statistics')}
+      >
+        <EnrollmentStatisticView {...props} />
+      </ActivityManageFrame>
+    </ServerSessionBox>
+  ),
+);
+export default EnrollmentStatisticPage;
+
 @observer
-export default class EnrollmentStatisticPage extends PureComponent<EnrollmentStatisticPageProps> {
+class EnrollmentStatisticView extends PureComponent<EnrollmentStatisticPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { downloading, allItems, exportURL } = this.store;
+    const { downloading, allItems, exportURL } = this.store;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={params!.name}
-        path={resolvedUrl}
-        title={t('registration_statistics')}
-      >
+      <>
         {downloading > 0 && <Loading />}
 
         <header className="d-flex justify-content-between align-items-center mb-3 px-3">
@@ -56,8 +67,9 @@ export default class EnrollmentStatisticPage extends PureComponent<EnrollmentSta
             {t('export_excel')}
           </Button>
         </header>
+
         <EnrollmentStatisticCharts store={this.store} />
-      </ActivityManageFrame>
+      </>
     );
   }
 }

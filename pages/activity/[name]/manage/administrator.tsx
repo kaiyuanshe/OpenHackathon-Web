@@ -10,12 +10,13 @@ import {
   RouteProps,
   router,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { FC, FormEvent, PureComponent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
+import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -28,8 +29,22 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
+const AdministratorPage: FC<AdministratorPageProps> = observer(props => (
+  <ServerSessionBox {...props}>
+    <ActivityManageFrame
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('admin')}
+    >
+      <AdministratorEditor {...props} />
+    </ActivityManageFrame>
+  </ServerSessionBox>
+));
+
+export default AdministratorPage;
+
 @observer
-export default class AdministratorPage extends PureComponent<AdministratorPageProps> {
+class AdministratorEditor extends PureComponent<AdministratorPageProps> {
   constructor(props: AdministratorPageProps) {
     super(props);
     makeObservable(this);
@@ -85,53 +100,45 @@ export default class AdministratorPage extends PureComponent<AdministratorPagePr
   }
 
   render() {
-    const { resolvedUrl, params } = this.props.route,
-      { store, show } = this;
+    const { store, show } = this;
     const loading = store.uploading > 0;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        name={params!.name}
-        path={resolvedUrl}
-        title={t('admin')}
-      >
-        <Form onSubmit={this.handleSubmit}>
-          <Row xs="1" sm="2">
-            <Col sm="auto" md="auto">
-              {this.renderList()}
+      <Form onSubmit={this.handleSubmit}>
+        <Row xs="1" sm="2">
+          <Col sm="auto" md="auto">
+            {this.renderList()}
 
-              <Col className="d-flex flex-column">
-                <Button
-                  variant="success"
-                  className="my-3"
-                  disabled={loading}
-                  onClick={() => (this.show = true)}
-                >
-                  <FontAwesomeIcon className="me-2" icon={faPlus} />
-                  {t('add')}
-                </Button>
-                <Button variant="danger" type="submit" disabled={loading}>
-                  <FontAwesomeIcon className="me-2" icon={faTrash} />
-                  {t('delete')}
-                </Button>
-              </Col>
+            <Col className="d-flex flex-column">
+              <Button
+                variant="success"
+                className="my-3"
+                disabled={loading}
+                onClick={() => (this.show = true)}
+              >
+                <FontAwesomeIcon className="me-2" icon={faPlus} />
+                {t('add')}
+              </Button>
+              <Button variant="danger" type="submit" disabled={loading}>
+                <FontAwesomeIcon className="me-2" icon={faTrash} />
+                {t('delete')}
+              </Button>
             </Col>
-            <Col className="flex-fill">
-              <ScrollList
-                translator={i18n}
-                store={store}
-                renderList={allItems => (
-                  <HackathonAdminList
-                    defaultData={allItems}
-                    selectedIds={this.selectedIds}
-                    onSelect={list => (this.selectedIds = list)}
-                  />
-                )}
-              />
-            </Col>
-          </Row>
-        </Form>
+          </Col>
+          <Col className="flex-fill">
+            <ScrollList
+              translator={i18n}
+              store={store}
+              renderList={allItems => (
+                <HackathonAdminList
+                  defaultData={allItems}
+                  selectedIds={this.selectedIds}
+                  onSelect={list => (this.selectedIds = list)}
+                />
+              )}
+            />
+          </Col>
+        </Row>
 
         <AdministratorModal
           store={store}
@@ -139,7 +146,7 @@ export default class AdministratorPage extends PureComponent<AdministratorPagePr
           onHide={() => (this.show = false)}
           onSave={() => (this.show = false) || this.store.refreshList()}
         />
-      </ActivityManageFrame>
+      </Form>
     );
   }
 }
