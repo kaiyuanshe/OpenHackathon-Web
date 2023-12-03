@@ -1,5 +1,5 @@
-const withLess = require('next-with-less'),
-  setPWA = require('next-pwa');
+import withLess from 'next-with-less';
+import setPWA from 'next-pwa';
 
 const { NODE_ENV, CI } = process.env;
 
@@ -11,7 +11,7 @@ const withPWA = setPWA({
 });
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+export default {
   ...withPWA(withLess({ reactStrictMode: true })),
   ...(CI ? { output: 'standalone' } : {}),
 };
