@@ -28,6 +28,7 @@
     "mobx-react-helper": "^0.2.7",
     "mobx-restful": "^0.6.12",
     "mobx-restful-table": "^1.2.2",
+    "mobx-strapi": "^0.4.5",
     "next": "^14.0.4",
     "next-ssr-middleware": "^0.6.1",
     "open-react-map": "^0.7.0",

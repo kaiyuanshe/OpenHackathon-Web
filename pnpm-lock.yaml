@@ -68,6 +68,9 @@ dependencies:
   mobx-restful-table:
     specifier: ^1.2.2
     version: 1.2.2(@types/react@18.2.45)(mobx-i18n@0.4.2)(mobx-react@9.0.2)(mobx-restful@0.6.12)(mobx@6.10.2)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+  mobx-strapi:
+    specifier: ^0.4.5
+    version: 0.4.5(mobx@6.10.2)(typescript@5.3.3)
   next:
     specifier: ^14.0.4
     version: 14.0.4(@babel/core@7.23.6)(react-dom@18.2.0)(react@18.2.0)
@@ -1610,6 +1613,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -1618,6 +1622,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -1626,6 +1631,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
     requiresBuild: true
     optional: true
 
@@ -1634,6 +1640,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
     requiresBuild: true
     optional: true
 
@@ -4917,6 +4924,22 @@ packages:
       koajax: 0.9.6(typescript@5.3.3)
       mobx: 6.10.2
       reflect-metadata: 0.1.14
+      regenerator-runtime: 0.14.0
+      web-utility: 4.1.3(typescript@5.3.3)
+    transitivePeerDependencies:
+      - jsdom
+      - typescript
+    dev: false
+
+  /mobx-strapi@0.4.5(mobx@6.10.2)(typescript@5.3.3):
+    resolution: {integrity: sha512-RfXysk6yEV4bfKaUfnJ5DJYNeXUpnsmKjfbAAU0d8Qqa3Z4jtwHudXJKI6oxZaPFvn+nVjSK/gEpWYBvgDtktw==}
+    peerDependencies:
+      mobx: '>=4 <6'
+    dependencies:
+      '@swc/helpers': 0.5.3
+      mobx: 6.10.2
+      mobx-restful: 0.6.12(mobx@6.10.2)(typescript@5.3.3)
+      qs: 6.11.2
       regenerator-runtime: 0.14.0
       web-utility: 4.1.3(typescript@5.3.3)
     transitivePeerDependencies:
