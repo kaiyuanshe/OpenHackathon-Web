@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
@@ -34,18 +34,13 @@ export default PlatformAdminPage;
 
 @observer
 class PlatformAdminView extends PureComponent {
-  constructor(props: {}) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = new PlatformAdminModel();
 
   @observable
-  selectedIds: string[] = [];
+  accessor selectedIds: string[] = [];
 
   @observable
-  show = false;
+  accessor show = false;
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -4,11 +4,11 @@ import { buildURLData } from 'web-utility';
 
 import { SessionUser, strapiClient } from '../../../models/User/Session';
 
-export const getServerSideProps = compose(
+export const getServerSideProps = compose<{ provider: string }>(
   errorLogger,
-  async ({ query, res }) => {
+  async ({ params, query, res }) => {
     const { body } = await strapiClient.get<{ jwt: string; user: SessionUser }>(
-      `auth/github/callback?${buildURLData(query)}`,
+      `auth/${params!.provider}/callback?${buildURLData(query)}`,
     );
     res.setHeader('Set-Cookie', `token=${body!.jwt}; Path=/`);
 
@@ -16,6 +16,6 @@ export const getServerSideProps = compose(
   },
 );
 
-const GitHubRedirection: FC = () => <></>;
+const ProviderRedirection: FC = () => <></>;
 
-export default GitHubRedirection;
+export default ProviderRedirection;

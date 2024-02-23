@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   compose,
@@ -45,20 +45,15 @@ export default MessageListPage;
 
 @observer
 class MessageListEditor extends PureComponent<MessageListPageProps> {
-  constructor(props: MessageListPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = activityStore.messageOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();
 
   @observable
-  selectedIds: string[] = [];
+  accessor selectedIds: string[] = [];
 
   @observable
-  show = false;
+  accessor show = false;
 
   handleReset = () => this.form.current?.reset();
 

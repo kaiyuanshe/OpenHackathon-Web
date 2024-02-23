@@ -45,58 +45,67 @@ const UserDetailPage = ({
   >
     <PageHead title={t('profile')} />
 
-    <Container className="d-flex flex-column flex-lg-row gap-4">
-      <Card border="secondery" className="border">
-        <Card.Title as="h2" className="m-3">
-          {nickname}
-        </Card.Title>
-        <Card.Img
-          src={photo}
-          style={{ width: '6.5rem' }}
-          className="mx-3 mb-3"
-          alt=""
-        />
-
-        <Card.Body className="text-start border-top p-3">
-          <a
-            target="_blank"
-            href={`https://github.com/${nickname}`}
-            rel="noreferrer"
-          >
-            <FontAwesomeIcon
-              className={classNames(
-                'fa-stack',
-                registerSource.includes(`social:github`)
-                  ? 'text-success'
-                  : 'text-secondary',
-              )}
-              icon={faGithub}
+    <Container>
+      <Row className="g-4">
+        <Col xs={12} lg={3}>
+          <Card border="secondery" className="border">
+            <Card.Title as="h2" className="m-3">
+              {nickname}
+            </Card.Title>
+            <Card.Img
+              className="mx-3 mb-3"
+              style={{ width: '6.5rem' }}
+              src={photo}
+              alt=""
             />
-          </a>
-          <FontAwesomeIcon className="text-secondary fa-stack" icon={faQq} />
-          <FontAwesomeIcon
-            className="text-secondary fa-stack"
-            icon={faWeixin}
-          />
-          <FontAwesomeIcon className="text-secondary fa-stack" icon={faWeibo} />
-        </Card.Body>
-      </Card>
-      <div className="flex-fill">
-        <Tabs
-          defaultActiveKey="enroll"
-          className="w-100 mb-3 justify-content-center"
-        >
-          <Tab eventKey="enroll" title={t('followed_hackathons')}>
-            <ActivityList type="enrolled" userId={id} />
-          </Tab>
-          <Tab eventKey="created" title={t('owned_hackathons')}>
-            <ActivityList type="created" userId={id} />
-          </Tab>
-          <Tab eventKey="admin" title={t('joined_hackathons')}>
-            <ActivityList type="admin" userId={id} />
-          </Tab>
-        </Tabs>
-      </div>
+            <Card.Body className="text-start border-top p-3">
+              <a
+                target="_blank"
+                href={`https://github.com/${nickname}`}
+                rel="noreferrer"
+              >
+                <FontAwesomeIcon
+                  className={classNames(
+                    'fa-stack',
+                    registerSource.includes(`social:github`)
+                      ? 'text-success'
+                      : 'text-secondary',
+                  )}
+                  icon={faGithub}
+                />
+              </a>
+              <FontAwesomeIcon
+                className="text-secondary fa-stack"
+                icon={faQq}
+              />
+              <FontAwesomeIcon
+                className="text-secondary fa-stack"
+                icon={faWeixin}
+              />
+              <FontAwesomeIcon
+                className="text-secondary fa-stack"
+                icon={faWeibo}
+              />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={12} lg={9}>
+          <Tabs
+            defaultActiveKey="enroll"
+            className="w-100 mb-3 justify-content-center"
+          >
+            <Tab eventKey="enroll" title={t('followed_hackathons')}>
+              <ActivityList type="enrolled" userId={id} />
+            </Tab>
+            <Tab eventKey="created" title={t('owned_hackathons')}>
+              <ActivityList type="created" userId={id} />
+            </Tab>
+            <Tab eventKey="admin" title={t('joined_hackathons')}>
+              <ActivityList type="admin" userId={id} />
+            </Tab>
+          </Tabs>
+        </Col>
+      </Row>
     </Container>
   </div>
 );

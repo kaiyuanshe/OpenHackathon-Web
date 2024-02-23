@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ChangeEvent, PureComponent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
@@ -19,16 +19,11 @@ export interface DateTimeInputProps {
 
 @observer
 export class DateTimeInput extends PureComponent<DateTimeInputProps> {
-  constructor(props: DateTimeInputProps) {
-    super(props);
-    makeObservable(this);
-  }
+  @observable
+  accessor start = '';
 
   @observable
-  start = '';
-
-  @observable
-  end = '';
+  accessor end = '';
 
   @computed
   get isInvalid() {

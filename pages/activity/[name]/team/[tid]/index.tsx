@@ -1,5 +1,5 @@
 import { Icon } from 'idea-react';
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { observePropsState } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
@@ -62,28 +62,25 @@ export const getServerSideProps = compose<
   },
 );
 
+export default interface TeamPage {
+  observedProps: TeamPageProps;
+}
+
 @observer
 @observePropsState
 export default class TeamPage extends PureComponent<TeamPageProps> {
-  constructor(props: TeamPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
-  declare observedProps: TeamPageProps;
-
   store = activityStore
     .teamOf(this.props.activity.name)
     .memberOf(this.props.team.id);
 
   @observable
-  currentUserInThisTeam?: TeamMember = undefined;
+  accessor currentUserInThisTeam: TeamMember | undefined;
 
   @observable
-  teamMemberRole = '';
+  accessor teamMemberRole = '';
 
   @observable
-  isShowJoinReqModal = false;
+  accessor isShowJoinReqModal = false;
 
   @computed
   get currentRoute() {
