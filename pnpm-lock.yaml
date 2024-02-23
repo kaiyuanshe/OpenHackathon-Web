@@ -37,7 +37,7 @@ dependencies:
     version: 0.5.4(react@18.2.0)(typescript@5.3.3)
   idea-react:
     specifier: ^2.0.0-rc.2
-    version: 2.0.0-rc.2(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+    version: 2.0.0-rc.2(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   koajax:
     specifier: ^0.9.6
     version: 0.9.6(typescript@5.3.3)
@@ -67,10 +67,10 @@ dependencies:
     version: 0.7.0-rc.0(mobx@6.12.0)(typescript@5.3.3)
   mobx-restful-table:
     specifier: ^2.0.0-rc.0
-    version: 2.0.0-rc.0(@types/react@18.2.57)(mobx-i18n@0.5.0)(mobx-react@9.1.0)(mobx-restful@0.7.0-rc.0)(mobx@6.12.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+    version: 2.0.0-rc.0(@types/react@18.2.58)(mobx-i18n@0.5.0)(mobx-react@9.1.0)(mobx-restful@0.7.0-rc.0)(mobx@6.12.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   mobx-strapi:
     specifier: ^0.4.5
-    version: 0.4.5(mobx@6.10.2)(typescript@5.3.3)
+    version: 0.4.5(mobx@6.12.0)(typescript@5.3.3)
   next:
     specifier: ^14.1.0
     version: 14.1.0(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
@@ -85,7 +85,7 @@ dependencies:
     version: 18.2.0
   react-bootstrap:
     specifier: ^2.10.1
-    version: 2.10.1(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)
+    version: 2.10.1(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0)
   react-bootstrap-editor:
     specifier: ^2.0.1
     version: 2.0.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
@@ -126,7 +126,7 @@ devDependencies:
     version: 18.19.18
   '@types/react':
     specifier: ^18.2.57
-    version: 18.2.57
+    version: 18.2.58
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -334,6 +334,7 @@ packages:
 
   /@babel/helper-create-class-features-plugin@7.23.10(@babel/core@7.23.9):
     resolution: {integrity: sha512-2XpP2XhkXzgxecPNEEK8Vz8Asj9aRxt08oKOqtiZoqV2UGZ5T+EkyP9sXQ9nwMxBIG34a7jmasVqoMop7VdPUw==}
+    engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
     dependencies:
@@ -853,6 +854,7 @@ packages:
 
   /@babel/plugin-transform-classes@7.23.8(@babel/core@7.23.9):
     resolution: {integrity: sha512-yAYslGsY1bX6Knmg46RjiCiNSwJKv2IUC8qOdYKqMMr0491SXFhcHqOdRDeCRohOOIzwN/90C6mQ9qAKgrP7dg==}
+    engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -2131,6 +2133,7 @@ packages:
 
   /@types/node@18.19.18:
     resolution: {integrity: sha512-80CP7B8y4PzZF0GWx15/gVWRrB5y/bIjNI84NK3cmQJu0WZwvmj2WMA5LcofQFVfLqqCSp545+U2LsrVzX36Zg==}
+    dependencies:
       undici-types: 5.26.5
     dev: true
 
@@ -2144,11 +2147,11 @@ packages:
   /@types/react-transition-group@4.4.10:
     resolution: {integrity: sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==}
     dependencies:
-      '@types/react': 18.2.57
+      '@types/react': 18.2.58
     dev: false
 
-  /@types/react@18.2.57:
-    resolution: {integrity: sha512-ZvQsktJgSYrQiMirAN60y4O/LRevIV8hUzSOSNB6gfR3/o3wCBFQx3sPwIYtuDMeiVgsSS3UzCV26tEzgnfvQw==}
+  /@types/react@18.2.58:
+    resolution: {integrity: sha512-TaGvMNhxvG2Q0K0aYxiKfNDS5m5ZsoIBBbtfUorxdH4NGSXIlYvZxLJI+9Dd3KjeB3780bciLyAb7ylO8pLhPw==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
@@ -2165,6 +2168,10 @@ packages:
 
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
+
+  /@types/validator@13.11.9:
+    resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
+    dev: false
 
   /@types/warning@3.0.3:
     resolution: {integrity: sha512-D1XC7WK8K+zZEveUPY+cf4+kgauk8N4eHr/XIHXGlGYkHLud6hK9lYfZk1ry1TNh798cZUCgb6MqGEG8DkJt6Q==}
@@ -2852,6 +2859,14 @@ packages:
     resolution: {integrity: sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==}
     engines: {node: '>=6.0'}
     dev: true
+
+  /class-validator@0.14.1:
+    resolution: {integrity: sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==}
+    dependencies:
+      '@types/validator': 13.11.9
+      libphonenumber-js: 1.10.57
+      validator: 13.11.0
+    dev: false
 
   /classnames@2.5.1:
     resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
@@ -4131,6 +4146,7 @@ packages:
 
   /hasown@2.0.1:
     resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
+    engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
 
@@ -4170,7 +4186,7 @@ packages:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
     dev: true
 
-  /idea-react@2.0.0-rc.2(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+  /idea-react@2.0.0-rc.2(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
     resolution: {integrity: sha512-E+HZegixmsKRplvZol9AU6GAH8Hzn1dzwKqizos9hsd3vjMSr2dG0dtABelERdrqifhTIO7YYxnubTsExjK9xQ==}
     peerDependencies:
       react: '>=16'
@@ -4190,7 +4206,7 @@ packages:
       mobx-react-helper: 0.3.1(mobx@6.12.0)(react@18.2.0)
       prismjs: 1.29.0
       react: 18.2.0
-      react-bootstrap: 2.10.1(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)
+      react-bootstrap: 2.10.1(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0)
       react-dom: 18.2.0(react@18.2.0)
       react-editor-js: 2.1.0(@editorjs/editorjs@2.29.0)(@editorjs/paragraph@2.11.3)(react@18.2.0)
       react-element-to-jsx-string: 15.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -4251,6 +4267,7 @@ packages:
 
   /internal-slot@1.0.7:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
+    engines: {node: '>= 0.4'}
     dependencies:
       es-errors: 1.3.0
       hasown: 2.0.1
@@ -4784,6 +4801,10 @@ packages:
       type-check: 0.4.0
     dev: true
 
+  /libphonenumber-js@1.10.57:
+    resolution: {integrity: sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==}
+    dev: false
+
   /lilconfig@3.0.0:
     resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
     engines: {node: '>=14'}
@@ -5141,7 +5162,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /mobx-restful-table@2.0.0-rc.0(@types/react@18.2.57)(mobx-i18n@0.5.0)(mobx-react@9.1.0)(mobx-restful@0.7.0-rc.0)(mobx@6.12.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+  /mobx-restful-table@2.0.0-rc.0(@types/react@18.2.58)(mobx-i18n@0.5.0)(mobx-react@9.1.0)(mobx-restful@0.7.0-rc.0)(mobx@6.12.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
     resolution: {integrity: sha512-1ERdomImZVGgVtQyuiYS6Bphm+pCnHTJmkj404mO6vN82/RdkUThhMA4viCAbHCFWs3RZPg2OHrM3rCwoYKeCw==}
     peerDependencies:
       mobx: '>=6.11'
@@ -5159,12 +5180,29 @@ packages:
       mobx-react-helper: 0.3.1(mobx@6.12.0)(react@18.2.0)
       mobx-restful: 0.7.0-rc.0(mobx@6.12.0)(typescript@5.3.3)
       react: 18.2.0
-      react-bootstrap: 2.10.1(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0)
+      react-bootstrap: 2.10.1(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0)
       regenerator-runtime: 0.14.1
       web-utility: 4.3.0(typescript@5.3.3)
     transitivePeerDependencies:
       - '@types/react'
       - react-dom
+      - typescript
+    dev: false
+
+  /mobx-restful@0.6.12(mobx@6.12.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-T9h++i/Ca31FPiBDNPux4b4kygeBk9SYxn3Ol7Mg9rNLAd/0j2eFG7UQTeL3qgFwEDzq8M1s2SoH0SSZjm9lag==}
+    peerDependencies:
+      mobx: '>=4'
+    dependencies:
+      '@swc/helpers': 0.5.6
+      class-validator: 0.14.1
+      koajax: 0.9.6(typescript@5.3.3)
+      mobx: 6.12.0
+      reflect-metadata: 0.1.14
+      regenerator-runtime: 0.14.1
+      web-utility: 4.3.0(typescript@5.3.3)
+    transitivePeerDependencies:
+      - jsdom
       - typescript
     dev: false
 
@@ -5176,6 +5214,22 @@ packages:
       '@swc/helpers': 0.5.6
       koajax: 0.9.6(typescript@5.3.3)
       mobx: 6.12.0
+      regenerator-runtime: 0.14.1
+      web-utility: 4.3.0(typescript@5.3.3)
+    transitivePeerDependencies:
+      - jsdom
+      - typescript
+    dev: false
+
+  /mobx-strapi@0.4.5(mobx@6.12.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-RfXysk6yEV4bfKaUfnJ5DJYNeXUpnsmKjfbAAU0d8Qqa3Z4jtwHudXJKI6oxZaPFvn+nVjSK/gEpWYBvgDtktw==}
+    peerDependencies:
+      mobx: '>=4 <6'
+    dependencies:
+      '@swc/helpers': 0.5.6
+      mobx: 6.12.0
+      mobx-restful: 0.6.12(mobx@6.12.0)(typescript@5.3.3)
+      qs: 6.11.2
       regenerator-runtime: 0.14.1
       web-utility: 4.3.0(typescript@5.3.3)
     transitivePeerDependencies:
@@ -6270,7 +6324,7 @@ packages:
       - typescript
     dev: false
 
-  /react-bootstrap@2.10.1(@types/react@18.2.57)(react-dom@18.2.0)(react@18.2.0):
+  /react-bootstrap@2.10.1(@types/react@18.2.58)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-J3OpRZIvCTQK+Tg/jOkRUvpYLHMdGeU9KqFUBQrV0d/Qr/3nsINpiOJyZMWnM5SJ3ctZdhPA6eCIKpEJR3Ellg==}
     peerDependencies:
       '@types/react': '>=16.14.8'
@@ -6283,7 +6337,7 @@ packages:
       '@babel/runtime': 7.23.9
       '@restart/hooks': 0.4.16(react@18.2.0)
       '@restart/ui': 1.6.6(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.57
+      '@types/react': 18.2.58
       '@types/react-transition-group': 4.4.10
       classnames: 2.5.1
       dom-helpers: 5.2.1
@@ -6442,6 +6496,10 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
+  /reflect-metadata@0.1.14:
+    resolution: {integrity: sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==}
+    dev: false
+
   /reflect.getprototypeof@1.0.5:
     resolution: {integrity: sha512-62wgfC8dJWrmxv44CA36pLDnP6KKl3Vhxb7PL+8+qrrFMMoJij4vgiMP8zV4O8+CBMXY1mHxI5fITGHXFHVmQQ==}
     engines: {node: '>= 0.4'}
@@ -6581,7 +6639,7 @@ packages:
       jest-worker: 26.6.2
       rollup: 2.79.1
       serialize-javascript: 4.0.0
-      terser: 5.27.2
+      terser: 5.28.0
     dev: true
 
   /rollup@2.79.1:
@@ -7100,12 +7158,12 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.27.2
+      terser: 5.28.0
       webpack: 5.90.3
     dev: true
 
-  /terser@5.27.2:
-    resolution: {integrity: sha512-sHXmLSkImesJ4p5apTeT63DsV4Obe1s37qT8qvwHRmVxKTBH7Rv9Wr26VcAMmLbmk9UliiwK8z+657NyJHHy/w==}
+  /terser@5.28.0:
+    resolution: {integrity: sha512-UK1n2JZN6gqfwmjzcikRp+uF/7jdwPXO7M0k/Hnqxzj3T5POL4YBVrv5Y4MKixTzBq4OmH7FfEYRxcy/Eh7YhA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -7293,7 +7351,7 @@ packages:
       react: '>=15.0.0'
     dependencies:
       '@babel/runtime': 7.23.9
-      '@types/react': 18.2.57
+      '@types/react': 18.2.58
       invariant: 2.2.4
       react: 18.2.0
       react-lifecycles-compat: 3.0.4
@@ -7383,6 +7441,11 @@ packages:
     resolution: {integrity: sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==}
     dependencies:
       base64-arraybuffer: 1.0.2
+    dev: false
+
+  /validator@13.11.0:
+    resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
+    engines: {node: '>= 0.10'}
     dev: false
 
   /warning@4.0.3:
@@ -7631,6 +7694,7 @@ packages:
 
   /workbox-google-analytics@6.6.0:
     resolution: {integrity: sha512-p4DJa6OldXWd6M9zRl0H6vB9lkrmqYFkRQ2xEiNdBFp9U0LhsGO7hsBscVEyH9H2/3eZZt8c97NB2FD9U2NJ+Q==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 6.6.0
       workbox-core: 6.6.0
