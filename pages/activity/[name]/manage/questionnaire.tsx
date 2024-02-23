@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   compose,
@@ -47,15 +47,10 @@ export default ActivityQuestionnairePage;
 
 @observer
 class ActivityQuestionnaireEditor extends PureComponent<ActivityQuestionnairePageProps> {
-  constructor(props: ActivityQuestionnairePageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   activity = this.props.route.params!.name;
 
   @observable
-  isCreate = true;
+  accessor isCreate = true;
 
   async componentDidMount() {
     if (isServer() || !this.activity) return;

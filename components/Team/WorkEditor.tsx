@@ -1,5 +1,5 @@
 import { SpinnerButton } from 'idea-react';
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FileUploader } from 'mobx-restful-table';
 import { FormEvent, PureComponent } from 'react';
@@ -16,11 +16,6 @@ export type WorkEditorProps = Record<'name' | 'tid', string> & { wid?: string };
 
 @observer
 export class WorkEditor extends PureComponent<WorkEditorProps> {
-  constructor(props: WorkEditorProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = activityStore.teamOf(this.props.name).workOf(this.props.tid);
 
   @computed
@@ -47,7 +42,7 @@ export class WorkEditor extends PureComponent<WorkEditorProps> {
   }
 
   @observable
-  currentType = this.workTypes[0].value;
+  accessor currentType = this.workTypes[0].value;
 
   async componentDidMount() {
     const { wid } = this.props;

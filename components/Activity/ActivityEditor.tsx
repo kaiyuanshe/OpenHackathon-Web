@@ -1,5 +1,5 @@
 import { Loading } from 'idea-react';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { BadgeInput, FileUploader } from 'mobx-restful-table';
@@ -26,16 +26,11 @@ export interface ActivityEditorProps {
 
 @observer
 export class ActivityEditor extends PureComponent<ActivityEditorProps> {
-  constructor(props: ActivityEditorProps) {
-    super(props);
-    makeObservable(this);
-  }
+  @observable
+  accessor detailHTML = '';
 
   @observable
-  detailHTML = '';
-
-  @observable
-  validated = false;
+  accessor validated = false;
 
   async componentDidMount() {
     const { name } = this.props;

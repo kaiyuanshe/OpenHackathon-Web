@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
@@ -53,11 +53,6 @@ export default GitPage;
 
 @observer
 class GitView extends PureComponent<TeamManageBaseProps> {
-  constructor(props: TeamManageBaseProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
@@ -65,7 +60,7 @@ class GitView extends PureComponent<TeamManageBaseProps> {
   workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
 
   @observable
-  creatorOpen = false;
+  accessor creatorOpen = false;
 
   handleCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

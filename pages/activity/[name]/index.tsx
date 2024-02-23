@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
@@ -80,18 +80,13 @@ const StatusName: () => Record<Enrollment['status'], string> = () => ({
 
 @observer
 export default class ActivityPage extends PureComponent<ActivityPageProps> {
-  constructor(props: ActivityPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   logStore = activityStore.logOf(this.props.activity.name);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
   messageStore = activityStore.messageOf(this.props.activity.name);
 
   @observable
-  showCreateTeam = false;
+  accessor showCreateTeam = false;
 
   @computed
   get loading() {

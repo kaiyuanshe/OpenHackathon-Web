@@ -1,4 +1,4 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
@@ -70,7 +70,6 @@ export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
 export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   constructor(baseURI: string) {
     super();
-    makeObservable(this);
 
     this.baseURI = `${baseURI}/team`;
   }
@@ -82,7 +81,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   currentAssignment?: TeamAssignmentModel;
 
   @observable
-  sessionOne?: Team = undefined;
+  accessor sessionOne: Team | undefined;
 
   @computed
   get exportURL() {
@@ -180,15 +179,13 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
 ) {
   constructor(baseURI: string) {
     super();
-    makeObservable(this);
-
     this.baseURI = `${baseURI}/member`;
   }
 
   client = sessionStore.client;
 
   @observable
-  sessionOne?: TeamMember = undefined;
+  accessor sessionOne: TeamMember | undefined;
 
   openStream(filter: Filter<TeamMember>) {
     return createListStream<TeamMember>(

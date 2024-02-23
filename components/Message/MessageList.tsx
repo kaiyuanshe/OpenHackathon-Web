@@ -1,6 +1,6 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
@@ -115,13 +115,8 @@ export type MessageListProps = Pick<ScrollListProps<Message>, 'store'> &
 
 @observer
 export class MessageList extends PureComponent<MessageListProps> {
-  constructor(props: MessageListProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   @observable
-  selectedIds: string[] = [];
+  accessor selectedIds: string[] = [];
 
   onSelect = (list: string[]) =>
     (this.selectedIds = list) && this.props.onSelect?.(list);
