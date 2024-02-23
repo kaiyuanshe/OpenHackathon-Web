@@ -1,4 +1,5 @@
-import { Icon } from 'idea-react';
+import { faShieldHalved } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { JWTProps } from 'next-ssr-middleware';
 import { FC, HTMLAttributes } from 'react';
@@ -18,9 +19,10 @@ export const ServerSessionBox: FC<ServerSessionBoxProps> = observer(
         <Button
           variant="dark"
           size="lg"
-          href={`${strapiClient.baseURI}connect/github`}
+          href={`${strapiClient.baseURI}connect/auth0`}
         >
-          <Icon className="me-2" name="github" /> GitHub {i18n.t('sign_in')}
+          <FontAwesomeIcon className="me-2" icon={faShieldHalved} />
+          Auth0 {i18n.t('sign_in')}
         </Button>
       )}
     </div>
