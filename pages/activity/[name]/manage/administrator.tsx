@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import {
@@ -45,18 +45,13 @@ export default AdministratorPage;
 
 @observer
 class AdministratorEditor extends PureComponent<AdministratorPageProps> {
-  constructor(props: AdministratorPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
   @observable
-  selectedIds: string[] = [];
+  accessor selectedIds: string[] = [];
 
   @observable
-  show = false;
+  accessor show = false;
 
   //处理删除管理员或裁判
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

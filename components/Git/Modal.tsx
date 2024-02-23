@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import {
@@ -25,16 +25,11 @@ const { t } = i18n;
 
 @observer
 export class GitModal extends PureComponent<GitModalProps> {
-  constructor(props: GitModalProps) {
-    super(props);
-    makeObservable(this);
-  }
+  @observable
+  accessor value = '';
 
   @observable
-  value = '';
-
-  @observable
-  validated = false;
+  accessor validated = false;
 
   submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

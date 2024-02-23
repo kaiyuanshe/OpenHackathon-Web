@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
 import { HTMLAttributes, PureComponent, UIEvent } from 'react';
@@ -14,13 +14,8 @@ export interface SessionBoxProps extends HTMLAttributes<HTMLDivElement> {
 
 @observer
 export class SessionBox extends PureComponent<SessionBoxProps> {
-  constructor(props: SessionBoxProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   @observable
-  cover = false;
+  accessor cover = false;
 
   openDialog = ({ target }: UIEvent<HTMLElement>) =>
     !(target as HTMLElement).closest('#session-dialog') && (this.cover = true);

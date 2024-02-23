@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { JWTProps, RouteProps } from 'next-ssr-middleware';
 import { Fragment, PureComponent } from 'react';
@@ -38,16 +38,11 @@ export interface TeamManageFrameProps extends ActivityManageFrameProps {
 
 @observer
 export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
-  constructor(props: TeamManageFrameProps) {
-    super(props);
-    makeObservable(this);
-  }
+  @observable
+  accessor teamMemberRole = '';
 
   @observable
-  teamMemberRole = '';
-
-  @observable
-  isLoading = false;
+  accessor isLoading = false;
 
   async componentDidMount() {
     const { name, tid } = this.props,

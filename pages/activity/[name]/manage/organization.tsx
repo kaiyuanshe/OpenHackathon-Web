@@ -1,6 +1,6 @@
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import {
@@ -46,18 +46,13 @@ export default OrganizationPage;
 
 @observer
 class OrganizationEditor extends PureComponent<OrganizationPageProps> {
-  constructor(props: OrganizationPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = activityStore.organizationOf(this.props.route.params!.name);
 
   @observable
-  selectedIds: string[] = [];
+  accessor selectedIds: string[] = [];
 
   @observable
-  show = false;
+  accessor show = false;
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

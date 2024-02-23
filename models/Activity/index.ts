@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
@@ -74,11 +74,6 @@ export interface Questionnaire extends Base {
 }
 
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
-  constructor() {
-    super();
-    makeObservable(this);
-  }
-
   client = sessionStore.client;
   baseURI = 'hackathon';
   indexKey = 'name' as const;
@@ -88,12 +83,12 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   currentAward?: AwardModel;
 
   @observable
-  currentEnrollment?: EnrollmentModel = undefined;
+  accessor currentEnrollment: EnrollmentModel | undefined;
 
   currentMessage?: MessageModel;
 
   @observable
-  currentTeam?: TeamModel = undefined;
+  accessor currentTeam: TeamModel | undefined;
 
   currentLog?: LogModel;
   currentOrganization?: OrganizationModel;
@@ -104,7 +99,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @observable
-  questionnaire: Question[] = [];
+  accessor questionnaire: Question[] = [];
 
   staffOf(name = this.currentOne.name) {
     return (this.currentStaff = new StaffModel(`hackathon/${name}`));

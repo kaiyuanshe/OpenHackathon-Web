@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   compose,
@@ -43,15 +43,10 @@ export default ParticipantPage;
 
 @observer
 class ParticipantEditor extends PureComponent<ParticipantPageProps> {
-  constructor(props: ParticipantPageProps) {
-    super(props);
-    makeObservable(this);
-  }
-
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   @observable
-  extensions?: Enrollment['extensions'] = undefined;
+  accessor extensions: Enrollment['extensions'] | undefined;
 
   render() {
     const { resolvedUrl, params } = this.props.route,

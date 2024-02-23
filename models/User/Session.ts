@@ -1,5 +1,5 @@
 import { HTTPClient } from 'koajax';
-import { computed, makeObservable, observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { parseCookie, setCookie } from 'mobx-i18n';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData, sleep } from 'web-utility';
@@ -39,14 +39,14 @@ export interface SessionUser
 export class SessionModel extends BaseModel {
   constructor() {
     super();
-    makeObservable(this);
 
     if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
       this.signOut();
   }
 
   @observable
-  user?: User = localStorage?.user && JSON.parse(localStorage.user);
+  accessor user: User | undefined =
+    localStorage?.user && JSON.parse(localStorage.user);
 
   @computed
   get userOAuth() {
