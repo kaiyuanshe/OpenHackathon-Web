@@ -69,8 +69,8 @@ dependencies:
     specifier: ^2.0.0-rc.0
     version: 2.0.0-rc.0(@types/react@18.2.58)(mobx-i18n@0.5.0)(mobx-react@9.1.0)(mobx-restful@0.7.0-rc.0)(mobx@6.12.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   mobx-strapi:
-    specifier: ^0.4.5
-    version: 0.4.5(mobx@6.12.0)(typescript@5.3.3)
+    specifier: ^0.5.0
+    version: 0.5.0(mobx@6.12.0)(typescript@5.3.3)
   next:
     specifier: ^14.1.0
     version: 14.1.0(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
@@ -2169,10 +2169,6 @@ packages:
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
-  /@types/validator@13.11.9:
-    resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
-    dev: false
-
   /@types/warning@3.0.3:
     resolution: {integrity: sha512-D1XC7WK8K+zZEveUPY+cf4+kgauk8N4eHr/XIHXGlGYkHLud6hK9lYfZk1ry1TNh798cZUCgb6MqGEG8DkJt6Q==}
     dev: false
@@ -2859,14 +2855,6 @@ packages:
     resolution: {integrity: sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==}
     engines: {node: '>=6.0'}
     dev: true
-
-  /class-validator@0.14.1:
-    resolution: {integrity: sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==}
-    dependencies:
-      '@types/validator': 13.11.9
-      libphonenumber-js: 1.10.57
-      validator: 13.11.0
-    dev: false
 
   /classnames@2.5.1:
     resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
@@ -4801,10 +4789,6 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /libphonenumber-js@1.10.57:
-    resolution: {integrity: sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==}
-    dev: false
-
   /lilconfig@3.0.0:
     resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
     engines: {node: '>=14'}
@@ -5189,23 +5173,6 @@ packages:
       - typescript
     dev: false
 
-  /mobx-restful@0.6.12(mobx@6.12.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-T9h++i/Ca31FPiBDNPux4b4kygeBk9SYxn3Ol7Mg9rNLAd/0j2eFG7UQTeL3qgFwEDzq8M1s2SoH0SSZjm9lag==}
-    peerDependencies:
-      mobx: '>=4'
-    dependencies:
-      '@swc/helpers': 0.5.6
-      class-validator: 0.14.1
-      koajax: 0.9.6(typescript@5.3.3)
-      mobx: 6.12.0
-      reflect-metadata: 0.1.14
-      regenerator-runtime: 0.14.1
-      web-utility: 4.3.0(typescript@5.3.3)
-    transitivePeerDependencies:
-      - jsdom
-      - typescript
-    dev: false
-
   /mobx-restful@0.7.0-rc.0(mobx@6.12.0)(typescript@5.3.3):
     resolution: {integrity: sha512-fM2ymsA+u8N0sCK8d1sb26Zja9G4PxKMWuRzFJzVzvKX0ba1pViRCeC4qiH8ITzhAw/vIySNeGZ8iObxAZN5ww==}
     peerDependencies:
@@ -5221,14 +5188,14 @@ packages:
       - typescript
     dev: false
 
-  /mobx-strapi@0.4.5(mobx@6.12.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-RfXysk6yEV4bfKaUfnJ5DJYNeXUpnsmKjfbAAU0d8Qqa3Z4jtwHudXJKI6oxZaPFvn+nVjSK/gEpWYBvgDtktw==}
+  /mobx-strapi@0.5.0(mobx@6.12.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-vJkaK56KPNHhQ0YrBU8zsGNVj64DVwcqqGBVFGMw+O7CntZ+q21/Y/NadolhEroTpU0PbGtq4ogG7h4EBB9GSA==}
     peerDependencies:
-      mobx: '>=4 <6'
+      mobx: '>=6.11'
     dependencies:
       '@swc/helpers': 0.5.6
       mobx: 6.12.0
-      mobx-restful: 0.6.12(mobx@6.12.0)(typescript@5.3.3)
+      mobx-restful: 0.7.0-rc.0(mobx@6.12.0)(typescript@5.3.3)
       qs: 6.11.2
       regenerator-runtime: 0.14.1
       web-utility: 4.3.0(typescript@5.3.3)
@@ -6496,10 +6463,6 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
-  /reflect-metadata@0.1.14:
-    resolution: {integrity: sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==}
-    dev: false
-
   /reflect.getprototypeof@1.0.5:
     resolution: {integrity: sha512-62wgfC8dJWrmxv44CA36pLDnP6KKl3Vhxb7PL+8+qrrFMMoJij4vgiMP8zV4O8+CBMXY1mHxI5fITGHXFHVmQQ==}
     engines: {node: '>= 0.4'}
@@ -7441,11 +7404,6 @@ packages:
     resolution: {integrity: sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==}
     dependencies:
       base64-arraybuffer: 1.0.2
-    dev: false
-
-  /validator@13.11.0:
-    resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
-    engines: {node: '>= 0.10'}
     dev: false
 
   /warning@4.0.3:
