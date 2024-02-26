@@ -176,7 +176,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(StrapiListModel) {
 }
 
 export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
-  ListModel,
+  StrapiListModel,
 ) {
   constructor(baseURI: string) {
     super();
@@ -226,7 +226,7 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
   }
 }
 
-export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
+export class TeamWorkModel extends Stream<TeamWork>(StrapiListModel) {
   client = strapiClient;
 
   constructor(baseURI: string) {
@@ -252,7 +252,9 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
   }
 }
 
-export class TeamAssignmentModel extends Stream<AwardAssignment>(ListModel) {
+export class TeamAssignmentModel extends Stream<AwardAssignment>(
+  StrapiListModel,
+) {
   client = strapiClient;
 
   constructor(baseURI: string) {
