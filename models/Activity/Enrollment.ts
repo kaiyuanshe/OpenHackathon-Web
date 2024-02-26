@@ -1,11 +1,12 @@
 import { computed, observable } from 'mobx';
-import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
+import { Statistic, Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
 import { Base, createListStream, Filter } from '../Base';
 import { i18n } from '../Base/Translation';
 import { User } from '../User';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 const { t } = i18n;
 
@@ -32,7 +33,7 @@ export interface EnrollmentStatistic
 }
 
 export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
-  ListModel,
+  StrapiListModel,
 ) {
   constructor(baseURI: string) {
     super();
@@ -40,7 +41,7 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
     this.baseURI = `${baseURI}/enrollment`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
   indexKey = 'userId' as const;
 
   @observable

@@ -1,12 +1,13 @@
 import { components } from '@octokit/openapi-types';
 import { HTTPClient } from 'koajax';
 import { memoize } from 'lodash';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { averageOf } from 'web-utility';
 
 import { TeamWork, TeamWorkType } from './Activity/Team';
 import { Base, createListStream } from './Base';
-import sessionStore from './User/Session';
+import sessionStore, { strapiClient } from './User/Session';
 
 type Repository = components['schemas']['repository'];
 
@@ -84,7 +85,7 @@ const getGitRepository = memoize(
   },
 );
 
-export class GitModel extends Stream<GitRepository>(ListModel) {
+export class GitModel extends Stream<GitRepository>(StrapiListModel) {
   baseURI = 'repos';
   client = gitClient;
 
@@ -133,7 +134,7 @@ const DefaultTemplates = [
 ];
 
 export class WorkspaceModel extends GitModel {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();

@@ -1,7 +1,8 @@
-import { IDType, ListModel, Stream } from 'mobx-restful';
+import { IDType, Stream } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 
 import { Base, createListStream } from '../Base';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 export interface Log extends Base {
   operatorId: IDType;
@@ -10,8 +11,8 @@ export interface Log extends Base {
   activityLogType: string;
 }
 
-export class LogModel extends Stream<Log>(ListModel) {
-  client = sessionStore.client;
+export class LogModel extends Stream<Log>(StrapiListModel) {
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();

@@ -1,12 +1,13 @@
 import { action, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, InputData, Media } from '../Base';
 import { GitModel } from '../Git';
 import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -73,8 +74,10 @@ export interface Questionnaire extends Base {
   hackathonName: string;
 }
 
-export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
-  client = sessionStore.client;
+export class ActivityModel extends Stream<Activity, ActivityFilter>(
+  StrapiListModel,
+) {
+  client = strapiClient;
   baseURI = 'hackathon';
   indexKey = 'name' as const;
 
