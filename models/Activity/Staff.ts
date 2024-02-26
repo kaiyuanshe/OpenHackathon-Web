@@ -4,7 +4,7 @@ import { groupBy, mergeStream } from 'web-utility';
 
 import { Base, createListStream, InputData } from '../Base';
 import { User } from '../User';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 export interface HackathonAdmin
   extends Base,
@@ -17,7 +17,7 @@ export interface Staff extends HackathonAdmin {
 }
 
 export class StaffModel extends Stream<Staff>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
   indexKey = 'userId' as const;
 
   constructor(public baseURI: string) {

@@ -3,7 +3,7 @@ import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 
 import { HackathonAdmin } from '../Activity/Staff';
 import { createListStream, Filter } from '../Base';
-import sessionStore from './Session';
+import sessionStore, { strapiClient } from './Session';
 
 export type PlatformAdmin = HackathonAdmin;
 
@@ -13,7 +13,7 @@ export class PlatformAdminModel extends Stream<
   PlatformAdmin,
   PlatformAdminFilter
 >(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
   baseURI = 'platform/admin';
   indexKey = 'userId' as const;
 

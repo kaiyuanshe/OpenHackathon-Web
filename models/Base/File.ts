@@ -2,7 +2,7 @@ import { HTTPError, Request, request } from 'koajax';
 import { DataObject, toggle } from 'mobx-restful';
 import { FileModel } from 'mobx-restful-table';
 
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 import { ErrorBaseData, UploadUrl } from './index';
 
 export class AzureFileModel extends FileModel {
@@ -38,7 +38,7 @@ export class AzureFileModel extends FileModel {
   async upload(file: File) {
     const { type, name } = file;
 
-    const { body } = await sessionStore.client.post<UploadUrl>(
+    const { body } = await strapiClient.post<UploadUrl>(
       `user/generateFileUrl`,
       {
         filename: name,

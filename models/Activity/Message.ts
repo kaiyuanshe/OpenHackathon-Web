@@ -3,7 +3,7 @@ import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, InputData } from '../Base';
 import { i18n } from '../Base/Translation';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 const { t } = i18n;
 
@@ -23,7 +23,7 @@ export interface Message extends Base {
 export type MessageFilter = Filter<Message>;
 
 export class MessageModel extends Stream<Message, MessageFilter>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();

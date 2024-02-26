@@ -6,7 +6,7 @@ import { averageOf } from 'web-utility';
 
 import { TeamWork, TeamWorkType } from './Activity/Team';
 import { Base, createListStream } from './Base';
-import sessionStore from './User/Session';
+import sessionStore, { strapiClient } from './User/Session';
 
 type Repository = components['schemas']['repository'];
 
@@ -133,7 +133,7 @@ const DefaultTemplates = [
 ];
 
 export class WorkspaceModel extends GitModel {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();

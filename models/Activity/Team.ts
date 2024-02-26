@@ -11,7 +11,7 @@ import {
 } from '../Base';
 import { WorkspaceModel } from '../Git';
 import { User } from '../User';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 import { AwardAssignment } from './Award';
 import { NameAvailability } from './index';
 
@@ -74,7 +74,7 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
     this.baseURI = `${baseURI}/team`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
   currentWorkspace?: WorkspaceModel;
@@ -182,7 +182,7 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
     this.baseURI = `${baseURI}/member`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
 
   @observable
   accessor sessionOne: TeamMember | undefined;
@@ -226,7 +226,7 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
 }
 
 export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();
@@ -252,7 +252,7 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
 }
 
 export class TeamAssignmentModel extends Stream<AwardAssignment>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();

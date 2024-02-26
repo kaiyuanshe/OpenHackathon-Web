@@ -6,7 +6,7 @@ import { Base, createListStream, Filter, InputData, Media } from '../Base';
 import { GitModel } from '../Git';
 import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -74,7 +74,7 @@ export interface Questionnaire extends Base {
 }
 
 export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
   baseURI = 'hackathon';
   indexKey = 'name' as const;
 

@@ -4,7 +4,7 @@ import { groupBy } from 'web-utility';
 
 import { Base, createListStream, InputData, Media } from '../Base';
 import { i18n } from '../Base/Translation';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 const { t } = i18n;
 
@@ -33,7 +33,7 @@ export interface Organization extends Base {
 }
 
 export class OrganizationModel extends Stream<Organization>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
 
   constructor(public baseURI: string) {
     super();

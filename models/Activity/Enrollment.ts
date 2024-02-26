@@ -5,7 +5,7 @@ import { buildURLData, countBy, groupBy } from 'web-utility';
 import { Base, createListStream, Filter } from '../Base';
 import { i18n } from '../Base/Translation';
 import { User } from '../User';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 
 const { t } = i18n;
 
@@ -40,7 +40,7 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
     this.baseURI = `${baseURI}/enrollment`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
   indexKey = 'userId' as const;
 
   @observable

@@ -2,7 +2,7 @@ import { ListModel, Stream } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, ListData } from '../Base';
-import sessionStore from './Session';
+import sessionStore, { strapiClient } from './Session';
 
 export interface UserBase {
   username: string;
@@ -126,7 +126,7 @@ export interface UserFilter extends Filter<User> {
 }
 
 export class UserModel extends Stream<User, UserFilter>(ListModel) {
-  client = sessionStore.client;
+  client = strapiClient;
   baseURI = 'user';
 
   async getUserTopList() {
