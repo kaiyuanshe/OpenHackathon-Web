@@ -1,4 +1,5 @@
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 
 import { Base, createListStream, InputData } from './Base';
 import sessionStore, { strapiClient } from './User/Session';
@@ -13,7 +14,7 @@ export interface GitTemplate extends Base {
   description?: string;
 }
 
-export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
+export class GitTemplateModal extends Stream<GitTemplate>(StrapiListModel) {
   client = strapiClient;
 
   constructor(public baseURI: string) {

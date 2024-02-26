@@ -1,4 +1,5 @@
-import { ListModel, Stream } from 'mobx-restful';
+import { Stream } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, ListData } from '../Base';
@@ -125,7 +126,7 @@ export interface UserFilter extends Filter<User> {
   keyword?: string;
 }
 
-export class UserModel extends Stream<User, UserFilter>(ListModel) {
+export class UserModel extends Stream<User, UserFilter>(StrapiListModel) {
   client = strapiClient;
   baseURI = 'user';
 

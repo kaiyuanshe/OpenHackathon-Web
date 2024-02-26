@@ -1,5 +1,6 @@
 import { computed } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { groupBy, mergeStream } from 'web-utility';
 
 import { Base, createListStream, InputData } from '../Base';
@@ -16,7 +17,7 @@ export interface Staff extends HackathonAdmin {
   type: 'admin' | 'judge' | 'member';
 }
 
-export class StaffModel extends Stream<Staff>(ListModel) {
+export class StaffModel extends Stream<Staff>(StrapiListModel) {
   client = strapiClient;
   indexKey = 'userId' as const;
 

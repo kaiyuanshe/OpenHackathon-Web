@@ -1,4 +1,5 @@
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
+import { IDType, Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, InputData } from '../Base';
@@ -22,7 +23,9 @@ export interface Message extends Base {
 
 export type MessageFilter = Filter<Message>;
 
-export class MessageModel extends Stream<Message, MessageFilter>(ListModel) {
+export class MessageModel extends Stream<Message, MessageFilter>(
+  StrapiListModel,
+) {
   client = strapiClient;
 
   constructor(baseURI: string) {

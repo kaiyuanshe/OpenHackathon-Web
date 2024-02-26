@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import {
@@ -67,7 +68,7 @@ export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
   description?: string;
 }
 
-export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
+export class TeamModel extends Stream<Team, TeamFilter>(StrapiListModel) {
   constructor(baseURI: string) {
     super();
 

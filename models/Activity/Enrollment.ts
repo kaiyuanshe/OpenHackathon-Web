@@ -1,5 +1,6 @@
 import { computed, observable } from 'mobx';
-import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
+import { Statistic, Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
 import { Base, createListStream, Filter } from '../Base';
@@ -32,7 +33,7 @@ export interface EnrollmentStatistic
 }
 
 export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
-  ListModel,
+  StrapiListModel,
 ) {
   constructor(baseURI: string) {
     super();

@@ -1,5 +1,6 @@
 import { computed } from 'mobx';
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
+import { IDType, Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { groupBy } from 'web-utility';
 
 import { Base, createListStream, InputData, Media } from '../Base';
@@ -32,7 +33,7 @@ export interface Organization extends Base {
   url?: string;
 }
 
-export class OrganizationModel extends Stream<Organization>(ListModel) {
+export class OrganizationModel extends Stream<Organization>(StrapiListModel) {
   client = strapiClient;
 
   constructor(public baseURI: string) {

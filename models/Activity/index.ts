@@ -1,5 +1,6 @@
 import { action, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import { Base, createListStream, Filter, InputData, Media } from '../Base';
@@ -73,7 +74,9 @@ export interface Questionnaire extends Base {
   hackathonName: string;
 }
 
-export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
+export class ActivityModel extends Stream<Activity, ActivityFilter>(
+  StrapiListModel,
+) {
   client = strapiClient;
   baseURI = 'hackathon';
   indexKey = 'name' as const;

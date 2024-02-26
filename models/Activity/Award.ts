@@ -1,5 +1,6 @@
 import { User } from '@authing/native-js-ui-components';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 
 import { Base, createListStream, InputData, Media } from '../Base';
 import sessionStore, { strapiClient } from '../User/Session';
@@ -22,7 +23,7 @@ export interface AwardAssignment
   award: Award;
 }
 
-export class AwardModel extends Stream<Award>(ListModel) {
+export class AwardModel extends Stream<Award>(StrapiListModel) {
   client = strapiClient;
   currentAssignment?: AwardAssignmentModel;
 
@@ -55,7 +56,9 @@ export class AwardModel extends Stream<Award>(ListModel) {
   }
 }
 
-export class AwardAssignmentModel extends Stream<AwardAssignment>(ListModel) {
+export class AwardAssignmentModel extends Stream<AwardAssignment>(
+  StrapiListModel,
+) {
   client = strapiClient;
 
   constructor(baseURI: string) {
