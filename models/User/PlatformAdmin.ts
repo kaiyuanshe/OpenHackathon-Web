@@ -1,9 +1,10 @@
 import { observable } from 'mobx';
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
+import { IDType, Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 
 import { HackathonAdmin } from '../Activity/Staff';
 import { createListStream, Filter } from '../Base';
-import sessionStore from './Session';
+import sessionStore, { strapiClient } from './Session';
 
 export type PlatformAdmin = HackathonAdmin;
 
@@ -12,8 +13,8 @@ export type PlatformAdminFilter = Filter<PlatformAdmin>;
 export class PlatformAdminModel extends Stream<
   PlatformAdmin,
   PlatformAdminFilter
->(ListModel) {
-  client = sessionStore.client;
+>(StrapiListModel) {
+  client = strapiClient;
   baseURI = 'platform/admin';
   indexKey = 'userId' as const;
 

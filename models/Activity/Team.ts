@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { Stream, toggle } from 'mobx-restful';
+import { StrapiListModel } from 'mobx-strapi';
 import { buildURLData } from 'web-utility';
 
 import {
@@ -11,7 +12,7 @@ import {
 } from '../Base';
 import { WorkspaceModel } from '../Git';
 import { User } from '../User';
-import sessionStore from '../User/Session';
+import sessionStore, { strapiClient } from '../User/Session';
 import { AwardAssignment } from './Award';
 import { NameAvailability } from './index';
 
@@ -67,14 +68,14 @@ export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
   description?: string;
 }
 
-export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
+export class TeamModel extends Stream<Team, TeamFilter>(StrapiListModel) {
   constructor(baseURI: string) {
     super();
 
     this.baseURI = `${baseURI}/team`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
   currentWorkspace?: WorkspaceModel;
@@ -175,14 +176,14 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
 }
 
 export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
-  ListModel,
+  StrapiListModel,
 ) {
   constructor(baseURI: string) {
     super();
     this.baseURI = `${baseURI}/member`;
   }
 
-  client = sessionStore.client;
+  client = strapiClient;
 
   @observable
   accessor sessionOne: TeamMember | undefined;
@@ -225,8 +226,8 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
   }
 }
 
-export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
-  client = sessionStore.client;
+export class TeamWorkModel extends Stream<TeamWork>(StrapiListModel) {
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();
@@ -251,8 +252,10 @@ export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
   }
 }
 
-export class TeamAssignmentModel extends Stream<AwardAssignment>(ListModel) {
-  client = sessionStore.client;
+export class TeamAssignmentModel extends Stream<AwardAssignment>(
+  StrapiListModel,
+) {
+  client = strapiClient;
 
   constructor(baseURI: string) {
     super();
