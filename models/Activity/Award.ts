@@ -23,7 +23,7 @@ export interface AwardAssignment
   award: Award;
 }
 
-export class AwardModel extends Stream<Award>(StrapiListModel) {
+export class AwardModel extends StrapiListModel<Award> {
   client = strapiClient;
   currentAssignment?: AwardAssignmentModel;
 
