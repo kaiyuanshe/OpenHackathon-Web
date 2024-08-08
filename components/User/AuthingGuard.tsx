@@ -17,7 +17,7 @@ const AuthingGuard: FC<AuthingGuardProps> = ({
 }) => (
   <div
     className="d-flex justify-content-center"
-    ref={async target => {
+    ref={target => {
       if (!target) return;
 
       const guard = new Guard(AppId, {
