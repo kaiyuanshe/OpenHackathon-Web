@@ -1,12 +1,13 @@
 import '../styles/globals.less';
 
+import { Icon } from 'idea-react';
 import { HTTPError } from 'koajax';
 import { configure } from 'mobx';
 import { enableStaticRendering, observer } from 'mobx-react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC } from 'react';
-import { Image } from 'react-bootstrap';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
 import { ErrorBaseData, isServer } from '../models/Base';
@@ -40,18 +41,36 @@ const MyApp: FC<AppProps> = observer(
       </div>
 
       {!/manage|admin/.test(pathname) && (
-        <footer className="d-flex justify-content-center align-items-center border-top py-4">
-          <a
-            href="https://github.com/idea2app/Next-Bootstrap-ts"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t('powered_by')}
-            <span className="mx-2">
-              <Image src="/nextjs.png" alt="Next Logo" width={48} />
-            </span>
-            {t('idea2app_scaffolding')}
-          </a>
+        <footer className="border-top bg-light text-secondary py-5">
+          <Container>
+            <Row className="align-items-center small text-center g-2">
+              <Col xs={12} sm={8}>
+                <Row xs={1} md={2} className="align-items-center">
+                  <a
+                    href="https://github.com/idea2app/Next-Bootstrap-ts"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {t('powered_by')}
+                    <span className="mx-2">
+                      <Image src="/nextjs.png" alt="Next Logo" width={48} />
+                    </span>
+                    {t('idea2app_scaffolding')}
+                  </a>
+                </Row>
+              </Col>
+              <Col xs={12} sm={1}>
+                <a
+                  className="stretched-link"
+                  target="_blank"
+                  href="https://monitor.kaiyuanshe.cn/status/service"
+                  rel="noreferrer"
+                >
+                  <Icon name="hdd-network" size={1.5} />
+                </a>
+              </Col>
+            </Row>
+          </Container>
         </footer>
       )}
     </>
