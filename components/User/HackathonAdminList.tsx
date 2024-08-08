@@ -44,12 +44,12 @@ export const HackathonAdminList: FC<XScrollListProps<HackathonAdmin>> = ({
                 aria-label="selectAll"
                 checked={selectedIds.length === defaultData.length}
                 // https://github.com/facebook/react/issues/1798
-                ref={(input: HTMLInputElement | null) =>
-                  input &&
-                  (input.indeterminate =
-                    !!selectedIds.length &&
-                    selectedIds.length < defaultData.length)
-                }
+                ref={(input: HTMLInputElement | null) => {
+                  if (input)
+                    input.indeterminate =
+                      !!selectedIds.length &&
+                      selectedIds.length < defaultData.length;
+                }}
                 onChange={() =>
                   onSelect?.(
                     selectedIds.length === defaultData.length

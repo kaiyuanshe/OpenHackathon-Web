@@ -41,12 +41,12 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
               selectedIds?.length > 0 &&
               selectedIds?.length === defaultData?.length
             }
-            ref={(input: HTMLInputElement | null) =>
-              input &&
-              (input.indeterminate =
-                !!selectedIds?.length &&
-                selectedIds.length < defaultData.length)
-            }
+            ref={(input: HTMLInputElement | null) => {
+              if (input)
+                input.indeterminate =
+                  !!selectedIds?.length &&
+                  selectedIds.length < defaultData.length;
+            }}
             onChange={() =>
               onSelect?.(
                 selectedIds.length === defaultData.length
