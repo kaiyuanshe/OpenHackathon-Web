@@ -4,7 +4,6 @@ import { diffTime } from 'web-utility';
 
 import { Activity } from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
-import { TimeUnit } from '../../utils/time';
 
 const { t } = i18n;
 
@@ -36,23 +35,23 @@ export const getActivityStatusText = ({
     eventEnd = new Date(eventEndedAt),
     judgeStart = new Date(judgeStartedAt),
     judgeEnd = new Date(judgeEndedAt),
-    enrollmentDiff = diffTime(enrollmentStart, new Date(), TimeUnit());
+    enrollmentDiff = diffTime(enrollmentStart, new Date());
 
   return !isOnline
     ? t('pending_review')
     : now < +enrollmentStart
-    ? t('register_after', enrollmentDiff)
-    : now < +enrollmentEnd
-    ? t('accepting_applications')
-    : now < +eventStart
-    ? t('registration_deadline')
-    : now < +eventEnd
-    ? t('in_progress')
-    : now < +judgeStart
-    ? t('submit_work_deadline')
-    : now < +judgeEnd
-    ? t('judges_review')
-    : t('activity_ended');
+      ? t('register_after', enrollmentDiff)
+      : now < +enrollmentEnd
+        ? t('accepting_applications')
+        : now < +eventStart
+          ? t('registration_deadline')
+          : now < +eventEnd
+            ? t('in_progress')
+            : now < +judgeStart
+              ? t('submit_work_deadline')
+              : now < +judgeEnd
+                ? t('judges_review')
+                : t('activity_ended');
 };
 
 export interface ActivityEntryProps extends ActivityStatusMeta {
