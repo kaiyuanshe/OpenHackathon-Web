@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { FilePreview, ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Card, CardProps, Col, Container, Row } from 'react-bootstrap';
+import { formatDate } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import { TeamWork } from '../../models/Activity/Team';
@@ -55,7 +56,7 @@ export const TeamWorkCard: FC<TeamWorkCardProps> = observer(
           dateTime={updatedAt}
         >
           <FontAwesomeIcon className="text-success me-2" icon={faCalendarDay} />
-          {new Date(updatedAt).toLocaleString()}
+          {formatDate(updatedAt)}
         </time>
       </Card.Body>
       {controls && (

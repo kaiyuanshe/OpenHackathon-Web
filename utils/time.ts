@@ -1,4 +1,13 @@
-import { Day, Hour, Minute, Month, Second, Week, Year } from 'web-utility';
+import {
+  Day,
+  formatDate,
+  Hour,
+  Minute,
+  Month,
+  Second,
+  Week,
+  Year,
+} from 'web-utility';
 
 import { i18n } from '../models/Base/Translation';
 
@@ -16,4 +25,4 @@ export const TimeUnit = () =>
   ]);
 
 export const convertDatetime = (datetime = '') =>
-  datetime && new Date(datetime).toLocaleString();
+  datetime && formatDate(datetime);
