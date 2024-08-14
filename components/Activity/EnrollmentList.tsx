@@ -13,7 +13,7 @@ const { t } = i18n;
 export interface EnrollmentListLayoutProps
   extends XScrollListProps<Enrollment> {
   onPopUp?: (extensions: Enrollment['extensions']) => any;
-  onVerify?: (userId: string, status: Enrollment['status']) => any;
+  onVerify?: (userId: number, status: Enrollment['status']) => any;
 }
 
 export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({

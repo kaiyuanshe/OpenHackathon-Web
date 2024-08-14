@@ -1,3 +1,4 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { HTTPClient } from 'koajax';
 import { computed, observable } from 'mobx';
 import { parseCookie, setCookie } from 'mobx-i18n';
@@ -23,10 +24,6 @@ export const strapiClient = new HTTPClient({
 
   return next();
 });
-
-export interface Base extends Record<'createdAt' | 'updatedAt', string> {
-  id: number;
-}
 
 export interface SessionUser
   extends Base,
@@ -71,8 +68,10 @@ export class SessionModel extends BaseModel {
     const { token } = this.user || {};
 
     if (token)
-      request.headers = { ...request.headers, Authorization: `token ${token}` };
-
+      request.headers = {
+        ...request.headers,
+        Authorization: `Bearer ${token}`,
+      };
     return next();
   });
 

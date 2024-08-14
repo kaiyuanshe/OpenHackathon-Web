@@ -1,13 +1,6 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { HTTPError } from 'koajax';
 import { Filter as BaseFilter, RESTClient } from 'mobx-restful';
-
-export interface Base {
-  id?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type Media = Record<'name' | 'description' | 'uri', string>;
 
 export interface UploadUrl
   extends Record<'filename' | 'uploadUrl' | 'url', string> {

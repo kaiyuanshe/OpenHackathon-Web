@@ -1,14 +1,14 @@
+import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
-import { Activity } from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 
 export type ActivityStatusMeta = Pick<
-  Activity,
+  Hackathon,
   | 'status'
   | 'enrollmentStartedAt'
   | 'enrollmentEndedAt'

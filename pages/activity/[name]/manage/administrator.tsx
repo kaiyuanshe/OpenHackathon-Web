@@ -48,7 +48,7 @@ class AdministratorEditor extends PureComponent<AdministratorPageProps> {
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
   @observable
-  accessor selectedIds: string[] = [];
+  accessor selectedIds: number[] = [];
 
   @observable
   accessor show = false;

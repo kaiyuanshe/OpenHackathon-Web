@@ -12,8 +12,8 @@ import { XScrollListProps } from '../layout/ScrollList';
 const { t } = i18n;
 
 export interface AwardListLayoutProps extends XScrollListProps<Award> {
-  onEdit?: (id: string) => any;
-  onDelete?: (id: string) => any;
+  onEdit?: (id: number) => any;
+  onDelete?: (id: number) => any;
 }
 
 export const AwardTargetName = () => ({
@@ -84,12 +84,12 @@ export type AwardListProps = Pick<ScrollListProps<Award>, 'store'> &
   AwardListLayoutProps;
 
 export class AwardList extends PureComponent<AwardListProps> {
-  onEdit = (id: string) => {
+  onEdit = (id: number) => {
     this.props.onEdit?.(id);
     this.props.store.getOne(id);
   };
 
-  onDelete = (id: string) => {
+  onDelete = (id: number) => {
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);

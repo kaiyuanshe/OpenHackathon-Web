@@ -1,15 +1,16 @@
 import { observer } from 'mobx-react';
-import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
+import { compose, JWTProps } from 'next-ssr-middleware';
 import { FC } from 'react';
 
 import { ActivityEditor } from '../../components/Activity/ActivityEditor';
 import { PageHead } from '../../components/layout/PageHead';
 import { ServerSessionBox } from '../../components/User/ServerSessionBox';
 import { i18n } from '../../models/Base/Translation';
+import { githubSigner } from '../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = compose<{}, JWTProps>(jwtVerifier());
+export const getServerSideProps = compose<{}, JWTProps>(githubSigner);
 
 const ActivityCreatePage: FC<JWTProps> = observer(props => (
   <ServerSessionBox className="container my-4" {...props}>

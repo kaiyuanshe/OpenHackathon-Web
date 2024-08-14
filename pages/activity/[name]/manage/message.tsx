@@ -50,7 +50,7 @@ class MessageListEditor extends PureComponent<MessageListPageProps> {
   form = createRef<HTMLFormElement>();
 
   @observable
-  accessor selectedIds: string[] = [];
+  accessor selectedIds: number[] = [];
 
   @observable
   accessor show = false;

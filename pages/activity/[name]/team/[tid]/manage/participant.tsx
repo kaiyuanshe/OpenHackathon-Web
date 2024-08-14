@@ -24,17 +24,19 @@ const { t } = i18n;
 export default class TeamParticipantPage extends PureComponent<TeamManageBaseProps> {
   store = activityStore
     .teamOf(this.props.route.params!.name)
-    .memberOf(this.props.route.params!.tid);
+    .memberOf(+this.props.route.params!.tid);
 
   render() {
     const { store } = this;
     const { resolvedUrl, params } = this.props.route;
+    const { name, tid } = params!;
 
     return (
       <ServerSessionBox {...this.props}>
         <TeamManageFrame
           {...this.props}
-          {...params!}
+          name={name}
+          tid={+tid}
           path={resolvedUrl}
           title={t('team_registration')}
         >

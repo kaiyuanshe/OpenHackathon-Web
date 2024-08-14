@@ -1,15 +1,15 @@
+import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 
-import { Activity } from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
 import platformAdmin from '../../models/User/PlatformAdmin';
 
 const { t } = i18n;
 
 export interface ActivityControlProps
-  extends Pick<Activity, 'name' | 'status'> {
+  extends Pick<Hackathon, 'name' | 'status'> {
   onPublish?: (name: string) => any;
   onDelete?: (name: string) => any;
 }

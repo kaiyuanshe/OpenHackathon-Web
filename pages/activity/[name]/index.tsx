@@ -6,6 +6,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hackathon, Media } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
@@ -33,13 +34,10 @@ import { OrganizationListLayout } from '../../../components/Organization/Organiz
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
-import activityStore, {
-  Activity,
-  ActivityModel,
-} from '../../../models/Activity';
+import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Enrollment } from '../../../models/Activity/Enrollment';
 import { Organization } from '../../../models/Activity/Organization';
-import { isServer, Media } from '../../../models/Base';
+import { isServer } from '../../../models/Base';
 import { i18n } from '../../../models/Base/Translation';
 import sessionStore from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
@@ -51,7 +49,7 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
 });
 
 interface ActivityPageProps {
-  activity: Activity;
+  activity: Hackathon;
   organizationList: Organization[];
 }
 

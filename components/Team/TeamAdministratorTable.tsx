@@ -13,8 +13,8 @@ const { t } = i18n;
 
 export interface TeamAdministratorTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  onUpdateRole?: (userId: string, role: 'admin' | 'member') => any;
-  onPopUpUpdateRoleModal?: (userId: string) => any;
+  onUpdateRole?: (userId: number, role: 'admin' | 'member') => any;
+  onPopUpUpdateRoleModal?: (userId: number) => any;
 }
 
 const TableHeads = () => [

@@ -13,7 +13,9 @@ import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface TeamWorkCardProps extends TeamWork, Omit<CardProps, 'title'> {
+export interface TeamWorkCardProps
+  extends TeamWork,
+    Omit<CardProps, 'id' | 'title'> {
   controls?: boolean;
   onDelete?: (id: TeamWork['id']) => any;
 }
@@ -85,7 +87,7 @@ export interface TeamWorkListLayoutProps
   extends XScrollListProps<TeamWork>,
     Pick<TeamWorkCardProps, 'controls' | 'onDelete'> {
   activity: string;
-  team: string;
+  team: number;
   size?: 'sm' | 'lg';
 }
 
@@ -129,7 +131,7 @@ export const TeamWorkListLayout: FC<TeamWorkListLayoutProps> = observer(
 export class TeamWorkList extends PureComponent<TeamWorkListLayoutProps> {
   store = activityStore.teamOf(this.props.activity).workOf(this.props.team);
 
-  onDelete = (id?: string) =>
+  onDelete = (id?: number) =>
     id && confirm(t('confirm_delete_work')) && this.store.deleteOne(id);
 
   render() {

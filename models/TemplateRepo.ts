@@ -1,6 +1,7 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream, InputData } from './Base';
+import { createListStream, InputData } from './Base';
 import sessionStore from './User/Session';
 
 export interface GitTemplate extends Base {
@@ -41,7 +42,7 @@ export class GitTemplateModal extends Stream<GitTemplate>(ListModel) {
   }
 
   @toggle('uploading')
-  async deleteOne(templateRepoId: string) {
+  async deleteOne(templateRepoId: number) {
     await this.client.delete(`${this.baseURI}/templateRepo/${templateRepoId}`);
     await this.removeOne(templateRepoId);
   }

@@ -36,18 +36,23 @@ export const getServerSideProps = compose<
 
 const { t } = i18n;
 
-const GitPage: FC<TeamManageBaseProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <TeamManageFrame
-      {...props}
-      {...props.route.params!}
-      path={props.route.resolvedUrl}
-      title={t('cloud_development_environment')}
-    >
-      <GitView {...props} />
-    </TeamManageFrame>
-  </ServerSessionBox>
-));
+const GitPage: FC<TeamManageBaseProps> = observer(props => {
+  const { name, tid } = props.route.params!;
+
+  return (
+    <ServerSessionBox {...props}>
+      <TeamManageFrame
+        {...props}
+        name={name}
+        tid={+tid}
+        path={props.route.resolvedUrl}
+        title={t('cloud_development_environment')}
+      >
+        <GitView {...props} />
+      </TeamManageFrame>
+    </ServerSessionBox>
+  );
+});
 
 export default GitPage;
 
@@ -55,9 +60,9 @@ export default GitPage;
 class GitView extends PureComponent<TeamManageBaseProps> {
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
-  memberStore = this.teamStore.memberOf(this.props.route.params!.tid);
-  workStore = this.teamStore.workOf(this.props.route.params!.tid);
-  workspaceStore = this.teamStore.workspaceOf(this.props.route.params!.tid);
+  memberStore = this.teamStore.memberOf(+this.props.route.params!.tid);
+  workStore = this.teamStore.workOf(+this.props.route.params!.tid);
+  workspaceStore = this.teamStore.workspaceOf(+this.props.route.params!.tid);
 
   @observable
   accessor creatorOpen = false;

@@ -26,8 +26,8 @@ export interface TeamAwardCardProps
     | 'id'
   > {
   className?: string;
-  onAssign: (id: string) => any;
-  onDelete?: (id: string) => any;
+  onAssign: (id: number) => any;
+  onDelete?: (id: number) => any;
 }
 
 export class TeamAwardCard extends PureComponent<TeamAwardCardProps> {

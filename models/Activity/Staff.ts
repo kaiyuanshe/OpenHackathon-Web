@@ -1,14 +1,16 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy, mergeStream } from 'web-utility';
 
-import { Base, createListStream, InputData } from '../Base';
+import { createListStream, InputData } from '../Base';
 import { User } from '../User';
 import sessionStore from '../User/Session';
 
 export interface HackathonAdmin
   extends Base,
-    Record<'hackathonName' | 'description' | 'userId', string> {
+    Record<'hackathonName' | 'description', string> {
+  userId: number;
   user: User;
 }
 
@@ -60,7 +62,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne({ type, ...data }: InputData<Staff>, userId: string) {
+  async updateOne({ type, ...data }: InputData<Staff>, userId: number) {
     const { body } = await this.client.put<Staff>(
       `${this.baseURI}/${type}/${userId}`,
       data,
@@ -73,7 +75,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   }
 
   @toggle('uploading')
-  async deleteOne(userId: string) {
+  async deleteOne(userId: number) {
     const { type } =
       this.allItems.find(({ userId: id }) => id === userId) || {};
 

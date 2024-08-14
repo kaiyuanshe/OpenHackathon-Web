@@ -1,5 +1,6 @@
 import { HTTPError } from 'koajax';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { githubOAuth2 } from 'next-ssr-middleware';
 
 export type NextAPI = (
   req: NextApiRequest,
@@ -33,3 +34,9 @@ export function safeAPI(handler: NextAPI): NextAPI {
     }
   };
 }
+
+export const githubSigner = githubOAuth2({
+  client_id: process.env.GITHUB_OAUTH_CLIENT_ID!,
+  client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET!,
+  scopes: ['user:email', 'read:user', 'public_repo', 'read:project'],
+});

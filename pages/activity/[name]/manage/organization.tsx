@@ -49,7 +49,7 @@ class OrganizationEditor extends PureComponent<OrganizationPageProps> {
   store = activityStore.organizationOf(this.props.route.params!.name);
 
   @observable
-  accessor selectedIds: string[] = [];
+  accessor selectedIds: number[] = [];
 
   @observable
   accessor show = false;

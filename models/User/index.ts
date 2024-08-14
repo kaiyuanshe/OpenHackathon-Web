@@ -1,7 +1,8 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { ListModel, Stream } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { Base, createListStream, Filter, ListData } from '../Base';
+import { createListStream, Filter, ListData } from '../Base';
 import sessionStore from './Session';
 
 export interface UserBase {
@@ -17,7 +18,6 @@ export type GitHubUser = UserBase &
   Record<'nickname' | 'photo' | 'company' | 'profile' | 'accessToken', string>;
 
 export interface AuthingUserBase {
-  id?: string;
   _id?: string;
   openid: string;
   unionid?: string;

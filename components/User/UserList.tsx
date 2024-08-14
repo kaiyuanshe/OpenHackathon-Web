@@ -69,10 +69,10 @@ export const UserListLayout: FC<UserListLayoutProps> = ({
                   name="userId"
                   required
                   value={id}
-                  aria-label={id}
+                  aria-label={id + ''}
                   checked={selectedIds?.includes(id!)}
                   onChange={({ currentTarget: { form } }) =>
-                    onSelect?.([formToJSON<{ userId: string }>(form!).userId])
+                    onSelect?.([formToJSON<{ userId: number }>(form!).userId])
                   }
                 />
               </td>

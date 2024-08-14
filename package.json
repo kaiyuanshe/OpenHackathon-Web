@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@giscus/react": "^3.0.0",
+    "@sentry/nextjs": "^8.25.0",
     "array-unique-proposal": "^0.3.4",
     "classnames": "^2.5.1",
     "echarts-jsx": "^0.5.4",
@@ -24,7 +25,7 @@
     "lodash": "^4.17.21",
     "mobx": "^6.13.1",
     "mobx-i18n": "^0.5.0",
-    "mobx-react": "^9.1.0",
+    "mobx-react": "^9.1.1",
     "mobx-react-helper": "^0.3.1",
     "mobx-restful": "^0.7.0-rc.0",
     "mobx-restful-table": "^2.0.0-rc.1",
@@ -36,18 +37,18 @@
     "react-bootstrap-editor": "^2.0.4",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "web-utility": "^4.4.0",
-    "@sentry/nextjs": "^8.24.0"
+    "web-utility": "^4.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
+    "@kaiyuanshe/openhackathon-service": "^0.14.0",
     "@octokit/openapi-types": "^22.2.0",
     "@types/leaflet": "^1.9.12",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^18.19.43",
+    "@types/node": "^18.19.44",
     "@types/react": "^18.3.3",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
@@ -56,7 +57,7 @@
     "husky": "^9.1.4",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
-    "lint-staged": "^15.2.8",
+    "lint-staged": "^15.2.9",
     "next-pwa": "^5.6.0",
     "next-with-less": "^3.0.1",
     "prettier": "^3.3.3",
@@ -79,7 +80,7 @@
     "build": "rm -rf .next  &&  next build",
     "export": "npm run build  &&  next export",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint  &&  tsc --noEmit",
     "test": "lint-staged  &&  npm run lint"
   }
 }

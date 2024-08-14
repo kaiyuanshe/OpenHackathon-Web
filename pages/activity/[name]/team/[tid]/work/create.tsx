@@ -18,11 +18,13 @@ export const getServerSideProps = compose<WorkEditorProps, TeamWorkEditProps>(
 const { t } = i18n;
 
 export default function WorkCreatePage(props: TeamWorkEditProps) {
+  const { name, tid, wid } = props.route.params!;
+
   return (
     <ServerSessionBox {...props}>
       <PageHead title={t('submit_work')} />
 
-      <WorkEditor {...props.route.params!} />
+      <WorkEditor {...{ name, wid }} tid={+tid} />
     </ServerSessionBox>
   );
 }

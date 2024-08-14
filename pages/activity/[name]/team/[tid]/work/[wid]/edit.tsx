@@ -17,7 +17,10 @@ import { i18n } from '../../../../../../../models/Base/Translation';
 
 const { t } = i18n;
 
-export type TeamWorkEditProps = RouteProps<WorkEditorProps> & JWTProps;
+export type TeamWorkEditProps = RouteProps<
+  Record<keyof WorkEditorProps, string>
+> &
+  JWTProps;
 
 export const getServerSideProps = compose<WorkEditorProps, TeamWorkEditProps>(
   router,
@@ -26,11 +29,13 @@ export const getServerSideProps = compose<WorkEditorProps, TeamWorkEditProps>(
 );
 
 export default function WorkCreatePage(props: TeamWorkEditProps) {
+  const { name, tid, wid } = props.route.params!;
+
   return (
     <ServerSessionBox {...props}>
       <PageHead title={t('edit_work')} />
 
-      <WorkEditor {...props.route.params!} />
+      <WorkEditor {...{ name, wid }} tid={+tid} />
     </ServerSessionBox>
   );
 }
