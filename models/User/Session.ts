@@ -25,6 +25,11 @@ export const strapiClient = new HTTPClient({
   return next();
 });
 
+export const ownClient = new HTTPClient({
+  baseURI: process.env.NEXT_PUBLIC_API_HOST,
+  responseType: 'json',
+});
+
 export interface SessionUser
   extends Base,
     Record<'username' | 'email', string>,
@@ -34,11 +39,24 @@ export interface SessionUser
 }
 
 export class SessionModel extends BaseModel {
+  client = ownClient;
+
   constructor() {
     super();
 
     if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
       this.signOut();
+
+    this.client.use(({ request }, next) => {
+      const { token } = this.user || {};
+
+      if (token)
+        request.headers = {
+          ...request.headers,
+          Authorization: `Bearer ${token}`,
+        };
+      return next();
+    });
   }
 
   @observable
@@ -60,20 +78,6 @@ export class SessionModel extends BaseModel {
       identities.map(identity => [identity.provider, identity]),
     ) as Record<AuthingIdentity['provider'], AuthingIdentity>;
   }
-
-  client = new HTTPClient({
-    baseURI: process.env.NEXT_PUBLIC_API_HOST,
-    responseType: 'json',
-  }).use(({ request }, next) => {
-    const { token } = this.user || {};
-
-    if (token)
-      request.headers = {
-        ...request.headers,
-        Authorization: `Bearer ${token}`,
-      };
-    return next();
-  });
 
   @toggle('uploading')
   async signIn(profile: AuthingUserBase, reload = false) {
