@@ -51,7 +51,7 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
               onSelect?.(
                 selectedIds.length === defaultData.length
                   ? []
-                  : defaultData.map(({ id }) => String(id)),
+                  : defaultData.map(({ id }) => id),
               )
             }
           />
@@ -70,13 +70,13 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
               inline
               type="checkbox"
               name="organizationId"
-              checked={selectedIds?.includes(String(id))}
+              checked={selectedIds?.includes(id)}
               onClick={
                 onSelect &&
                 (({ currentTarget: { checked } }) => {
-                  if (checked) return onSelect([...selectedIds, String(id)]);
+                  if (checked) return onSelect([...selectedIds, id]);
 
-                  const index = selectedIds.indexOf(String(id));
+                  const index = selectedIds.indexOf(id);
 
                   onSelect([
                     ...selectedIds.slice(0, index),

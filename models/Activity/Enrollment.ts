@@ -1,8 +1,9 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { computed, observable } from 'mobx';
 import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
-import { Base, createListStream, Filter } from '../Base';
+import { createListStream, Filter } from '../Base';
 import { i18n } from '../Base/Translation';
 import { User } from '../User';
 import sessionStore from '../User/Session';
@@ -69,7 +70,7 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
   }
 
   @toggle('uploading')
-  async verifyOne(userId: string, status: Enrollment['status']) {
+  async verifyOne(userId: number, status: Enrollment['status']) {
     await this.client.post(
       `${this.baseURI}/${userId}/${
         status === 'approved' ? 'approve' : 'reject'

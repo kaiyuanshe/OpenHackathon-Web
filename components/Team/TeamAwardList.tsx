@@ -35,12 +35,12 @@ export type TeamAwardListProps = Pick<ScrollListProps<Team>, 'store'> &
   TeamAwardListLayoutProps;
 
 export class TeamAwardList extends PureComponent<TeamAwardListProps> {
-  onAssign = (id: string) => {
+  onAssign = (id: number) => {
     this.props.onAssign?.(id);
     this.props.store.getOne(id);
   };
 
-  onDelete = (id: string) => {
+  onDelete = (id: number) => {
     if (!confirm(t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);

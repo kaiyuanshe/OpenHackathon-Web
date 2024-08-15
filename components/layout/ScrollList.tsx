@@ -1,8 +1,8 @@
-import { DataObject } from 'mobx-restful';
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { ScrollListProps } from 'mobx-restful-table';
 
-export interface XScrollListProps<T extends DataObject = DataObject>
+export interface XScrollListProps<T extends Base = Base>
   extends Pick<ScrollListProps<T>, 'defaultData'> {
-  selectedIds?: string[];
-  onSelect?: (selectedIds: string[]) => any;
+  selectedIds?: number[];
+  onSelect?: (selectedIds: number[]) => any;
 }

@@ -12,10 +12,10 @@ Open-source [Hackathon][1] Platform with **Git-based Cloud Development Environme
 - [Task kanban](https://github.com/orgs/kaiyuanshe/projects/9/)
 - [UI design](https://www.figma.com/file/HKPV8IB4kxrAVAuuSBZKd1/Open-Hackathon)
 - Web entry
-  - testing: https://open-hackathon.vercel.app/
+  - testing: https://test.hackathon.kaiyuanshe.cn/
   - production: https://hackathon.kaiyuanshe.cn/
 - RESTful API
-  - production: https://hackathon-server.kaiyuanshe.cn/documentation/
+  - production: https://openhackathon-service-server.onrender.com/
 
 ## Technology stack
 

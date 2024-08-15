@@ -1,12 +1,16 @@
+import type {
+  Base,
+  Hackathon,
+  HackathonStatus,
+} from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { Base, createListStream, Filter, InputData, Media } from '../Base';
+import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
 import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
-import sessionStore from '../User/Session';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -15,34 +19,6 @@ import { OrganizationModel } from './Organization';
 import { Extensions, Question } from './Question';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
-
-export interface Activity extends Base {
-  name: string;
-  displayName: string;
-  ribbon: string;
-  summary: string;
-  detail: string;
-  location: string;
-  banners: Media[];
-  readOnly: boolean;
-  status: 'planning' | 'pendingApproval' | 'online' | 'offline';
-  creatorId: string;
-  enrollment: number;
-  maxEnrollment?: number;
-  autoApprove: boolean;
-  tags: string[];
-  eventStartedAt: string;
-  eventEndedAt: string;
-  enrollmentStartedAt: string;
-  enrollmentEndedAt: string;
-  judgeStartedAt: string;
-  judgeEndedAt: string;
-  roles: null | {
-    isAdmin: boolean;
-    isJudge: boolean;
-    isEnrolled: boolean;
-  };
-}
 
 export type ActivityListType =
   | 'online'
@@ -58,13 +34,13 @@ export interface NameAvailability {
   message: string;
 }
 
-export interface ActivityFilter extends Filter<Activity> {
-  userId?: string;
+export interface ActivityFilter extends Filter<Hackathon> {
+  userId?: number;
   listType?: ActivityListType;
   orderby?: 'createdAt' | 'updatedAt' | 'hot';
 }
 
-export interface ActivityLogsFilter extends Filter<Activity> {
+export interface ActivityLogsFilter extends Filter<Hackathon> {
   name: string;
 }
 
@@ -73,8 +49,7 @@ export interface Questionnaire extends Base {
   hackathonName: string;
 }
 
-export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
-  client = sessionStore.client;
+export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   baseURI = 'hackathon';
   indexKey = 'name' as const;
 
@@ -136,7 +111,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     listType = 'online',
     orderby = 'updatedAt',
   }: ActivityFilter) {
-    return createListStream<Activity>(
+    return createListStream<Hackathon>(
       `${this.baseURI}s?${buildURLData({ userId, listType, orderby, top: 6 })}`,
       this.client,
       count => (this.totalCount = count),
@@ -144,21 +119,13 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
   }
 
   @toggle('uploading')
-  async updateOne(data: InputData<Activity>, name?: string) {
+  async updateOne(data: InputData<Hackathon>, name?: string) {
     if (!name) {
-      const { body } = await this.client.post<NameAvailability>(
-        `${this.baseURI}/checkNameAvailability`,
-        { name: data.name },
-      );
-      const { nameAvailable, reason, message } = body!;
+      const [old] = await this.getList({ name: data.name }, 1);
 
-      if (!nameAvailable) throw new ReferenceError(`${reason}\n${message}`);
+      if (old) throw new ReferenceError(`${data.name} is used`);
     }
-    const { body } = await (name
-      ? this.client.patch<Activity>(`${this.baseURI}/${name}`, data)
-      : this.client.put<Activity>(`${this.baseURI}/${data.name}`, data));
-
-    return (this.currentOne = body!);
+    return super.updateOne(data, name);
   }
 
   @action
@@ -237,7 +204,7 @@ export class ActivityModel extends Stream<Activity, ActivityFilter>(ListModel) {
     await this.client.post(
       `hackathon/${name}/${isPlatformAdmin ? 'publish' : 'requestPublish'}`,
     );
-    this.changeOne({ status: 'online' }, name, true);
+    this.changeOne({ status: 'online' as HackathonStatus.Online }, name, true);
   }
 
   @toggle('uploading')

@@ -1,6 +1,7 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { IDType, ListModel, Stream } from 'mobx-restful';
 
-import { Base, createListStream } from '../Base';
+import { createListStream } from '../Base';
 import sessionStore from '../User/Session';
 
 export interface Log extends Base {

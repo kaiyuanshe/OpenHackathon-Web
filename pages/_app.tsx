@@ -44,7 +44,7 @@ const MyApp: FC<AppProps> = observer(
         <footer className="border-top bg-light text-secondary py-5">
           <Container>
             <Row className="align-items-center small text-center g-2">
-              <Col xs={12} sm={8}>
+              <Col xs={12} sm={11}>
                 <Row xs={1} md={2} className="align-items-center">
                   <a
                     href="https://github.com/idea2app/Next-Bootstrap-ts"
@@ -59,7 +59,7 @@ const MyApp: FC<AppProps> = observer(
                   </a>
                 </Row>
               </Col>
-              <Col xs={12} sm={1}>
+              <Col xs={12} sm={1} className="position-relative">
                 <a
                   className="stretched-link"
                   target="_blank"

@@ -1,12 +1,9 @@
+import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import {
-  Activity,
-  ActivityListType,
-  ActivityModel,
-} from '../../models/Activity';
+import { ActivityListType, ActivityModel } from '../../models/Activity';
 import { i18n } from '../../models/Base/Translation';
 import platformAdmin from '../../models/User/PlatformAdmin';
 import sessionStore from '../../models/User/Session';
@@ -16,11 +13,11 @@ import { ActivityCard, ActivityCardProps } from './ActivityCard';
 const { t } = i18n;
 
 export interface ActivityListLayoutProps
-  extends XScrollListProps<Activity>,
+  extends XScrollListProps<Hackathon>,
     Pick<ActivityCardProps, 'onPublish' | 'onDelete'> {
   type?: ActivityListType;
   size?: 'sm' | 'lg';
-  userId?: string;
+  userId?: number;
 }
 
 export const ActivityListLayout: FC<ActivityListLayoutProps> = ({

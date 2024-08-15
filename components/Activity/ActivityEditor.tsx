@@ -1,3 +1,4 @@
+import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
@@ -8,7 +9,7 @@ import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import activityStore, { Activity } from '../../models/Activity';
+import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
 import { i18n } from '../../models/Base/Translation';
 import { DateTimeInput } from '../DateTimeInput';
@@ -16,7 +17,7 @@ import { DateTimeInput } from '../DateTimeInput';
 const { t } = i18n,
   HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
 
-interface ActivityFormData extends Activity {
+interface ActivityFormData extends Hackathon {
   bannerUrls: string[] | string;
 }
 

@@ -1,3 +1,4 @@
+import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -14,10 +15,7 @@ import { PageHead } from '../../../../../components/layout/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
-import activityStore, {
-  Activity,
-  ActivityModel,
-} from '../../../../../models/Activity';
+import activityStore, { ActivityModel } from '../../../../../models/Activity';
 import {
   MembershipStatus,
   Team,
@@ -31,7 +29,7 @@ import sessionStore from '../../../../../models/User/Session';
 const { t } = i18n;
 
 interface TeamPageProps {
-  activity: Activity;
+  activity: Hackathon;
   team: Team;
   teamMemberList: TeamMember[];
   teamWorkList: TeamWork[];
@@ -51,7 +49,7 @@ export const getServerSideProps = compose<
 
     const { currentTeam } = activityStore;
 
-    const team = await currentTeam!.getOne(tid);
+    const team = await currentTeam!.getOne(+tid);
 
     const teamMemberList = await currentTeam!.currentMember!.getList(),
       teamWorkList = await currentTeam!.currentWork!.getList();

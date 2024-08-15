@@ -33,7 +33,7 @@ export type TeamManageBaseParams = Record<'name' | 'tid', string>;
 export type TeamManageBaseProps = RouteProps<TeamManageBaseParams> & JWTProps;
 
 export interface TeamManageFrameProps extends ActivityManageFrameProps {
-  tid: string;
+  tid: number;
 }
 
 @observer

@@ -19,7 +19,7 @@ export interface PlatformAdminModalProps
 @observer
 export class PlatformAdminModal extends PureComponent<PlatformAdminModalProps> {
   @observable
-  accessor userId = '';
+  accessor userId = 0;
 
   increaseId = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

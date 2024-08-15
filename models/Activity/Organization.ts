@@ -1,8 +1,9 @@
+import { Base, Media } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
 import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy } from 'web-utility';
 
-import { Base, createListStream, InputData, Media } from '../Base';
+import { createListStream, InputData } from '../Base';
 import { i18n } from '../Base/Translation';
 import sessionStore from '../User/Session';
 

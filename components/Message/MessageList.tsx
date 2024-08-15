@@ -19,8 +19,8 @@ const { t } = i18n;
 
 export interface MessageListLayoutProps extends XScrollListProps<Message> {
   hideControls?: boolean;
-  onEdit?: (id: string) => any;
-  onDelete?: (id: string) => any;
+  onEdit?: (id: number) => any;
+  onDelete?: (id: number) => any;
 }
 
 export const MessageListLayout: FC<MessageListLayoutProps> = ({
@@ -53,7 +53,7 @@ export const MessageListLayout: FC<MessageListLayoutProps> = ({
               onSelect?.(
                 selectedIds.length === defaultData.length
                   ? []
-                  : defaultData.map(({ id }) => id + ''),
+                  : defaultData.map(({ id }) => id),
               )
             }
           />
@@ -72,13 +72,13 @@ export const MessageListLayout: FC<MessageListLayoutProps> = ({
               inline
               type="checkbox"
               name="announcementId"
-              checked={selectedIds?.includes(id + '')}
+              checked={selectedIds?.includes(id)}
               onClick={
                 onSelect &&
                 (({ currentTarget: { checked } }) => {
-                  if (checked) return onSelect([...selectedIds, id + '']);
+                  if (checked) return onSelect([...selectedIds, id]);
 
-                  const index = selectedIds.indexOf(id + '');
+                  const index = selectedIds.indexOf(id);
 
                   onSelect([
                     ...selectedIds.slice(0, index),
@@ -116,17 +116,17 @@ export type MessageListProps = Pick<ScrollListProps<Message>, 'store'> &
 @observer
 export class MessageList extends PureComponent<MessageListProps> {
   @observable
-  accessor selectedIds: string[] = [];
+  accessor selectedIds: number[] = [];
 
-  onSelect = (list: string[]) =>
+  onSelect = (list: number[]) =>
     (this.selectedIds = list) && this.props.onSelect?.(list);
 
-  onEdit = (id: string) => {
+  onEdit = (id: number) => {
     this.props.onEdit?.(id);
     this.props.store.getOne(id);
   };
 
-  onDelete = (id: string) => {
+  onDelete = (id: number) => {
     if (!confirm(t('sure_delete_this_message'))) return;
 
     this.props.onDelete?.(id);

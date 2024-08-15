@@ -1,13 +1,9 @@
+import { Base, ListChunk } from '@kaiyuanshe/openhackathon-service';
 import { HTTPError } from 'koajax';
-import { Filter as BaseFilter, RESTClient } from 'mobx-restful';
+import { Filter as BaseFilter, ListModel, RESTClient } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
 
-export interface Base {
-  id?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type Media = Record<'name' | 'description' | 'uri', string>;
+import sessionStore from '../User/Session';
 
 export interface UploadUrl
   extends Record<'filename' | 'uploadUrl' | 'url', string> {
@@ -67,3 +63,17 @@ export const integrateError = ({ body }: HTTPError<ErrorData>) => {
     message ? `${title || ''}\n${message}` : detail || '',
   );
 };
+
+export abstract class TableModel<
+  D extends Base,
+  F extends InputData<D> = InputData<D>,
+> extends ListModel<D, F> {
+  client = sessionStore.client;
+
+  async loadPage(pageIndex: number, pageSize: number, filter: F) {
+    const { body } = await this.client.get<ListChunk<D>>(
+      `${this.baseURI}?${buildURLData({ ...filter, pageIndex, pageSize })}`,
+    );
+    return { pageData: body!.list, totalCount: body!.count };
+  }
+}

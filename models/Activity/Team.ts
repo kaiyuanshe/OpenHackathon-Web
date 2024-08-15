@@ -1,14 +1,9 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import {
-  Base,
-  createListStream,
-  Filter,
-  InputData,
-  integrateError,
-} from '../Base';
+import { createListStream, Filter, InputData, integrateError } from '../Base';
 import { WorkspaceModel } from '../Git';
 import { User } from '../User';
 import sessionStore from '../User/Session';
@@ -34,7 +29,6 @@ export interface Team
   extends Base,
     TeamBase,
     Record<'displayName' | 'creatorId', string> {
-  id: string;
   autoApprove: boolean;
   creator: User;
   membersCount: number;
@@ -57,7 +51,7 @@ export interface TeamWork
 export interface TeamMember
   extends Omit<Base, 'id'>,
     Omit<TeamWork, 'type' | 'title' | 'url'> {
-  userId: string;
+  userId: number;
   user: User;
   role: 'admin' | 'member';
   status: MembershipStatus;
@@ -210,14 +204,14 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
   }
 
   @toggle('uploading')
-  async approveOne(userId: string, status: MembershipStatus) {
+  async approveOne(userId: number, status: MembershipStatus) {
     if (status !== MembershipStatus.APPROVED) return;
     await this.client.post<TeamMember>(`${this.baseURI}/${userId}/approve`, {});
     this.changeOne({ status }, userId, true);
   }
 
   @toggle('uploading')
-  async updateRole(userId: string, role: Required<TeamMemberFilter>['role']) {
+  async updateRole(userId: number, role: Required<TeamMemberFilter>['role']) {
     await this.client.post<TeamMember>(`${this.baseURI}/${userId}/updateRole`, {
       role,
     });

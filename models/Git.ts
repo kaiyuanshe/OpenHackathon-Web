@@ -1,3 +1,4 @@
+import { Base } from '@kaiyuanshe/openhackathon-service';
 import { components } from '@octokit/openapi-types';
 import { HTTPClient } from 'koajax';
 import { memoize } from 'lodash';
@@ -5,7 +6,7 @@ import { ListModel, Stream, toggle } from 'mobx-restful';
 import { averageOf } from 'web-utility';
 
 import { TeamWork, TeamWorkType } from './Activity/Team';
-import { Base, createListStream } from './Base';
+import { createListStream } from './Base';
 import sessionStore from './User/Session';
 
 type Repository = components['schemas']['repository'];
@@ -68,7 +69,7 @@ const getGitRepository = memoize(
       .sort(([_, a], [__, b]) => b - a);
 
     return {
-      id: id + '',
+      id,
       createdAt: created_at || '',
       updatedAt: updated_at || '',
       name,

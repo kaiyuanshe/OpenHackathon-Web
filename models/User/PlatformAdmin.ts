@@ -46,7 +46,7 @@ export class PlatformAdminModel extends Stream<
   }
 
   @toggle('uploading')
-  async deleteOne(userId: string) {
+  async deleteOne(userId: IDType) {
     await this.client.delete(`${this.baseURI}/${userId}`);
     await this.removeOne(userId);
   }

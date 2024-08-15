@@ -1,16 +1,15 @@
+import { UserRank } from '@kaiyuanshe/openhackathon-service';
 import { FC } from 'react';
 import { Badge, Col, Image, Row, Table } from 'react-bootstrap';
-import { parseJSON } from 'web-utility';
 
 import { i18n } from '../../models/Base/Translation';
-import { TopUser } from '../../models/User';
 import styles from '../../styles/TopUserList.module.less';
 import { TopUserAddress } from './TopUserAddress';
 
 const { t } = i18n;
 
 export interface TopUserListProps {
-  value: TopUser[];
+  value: UserRank[];
 }
 
 export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
@@ -40,13 +39,8 @@ export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
             >
               <Image
                 className="w-100"
-                src={user?.photo}
-                alt={
-                  user?.nickname ||
-                  user?.name ||
-                  user?.username ||
-                  t('mystery_hacker')
-                }
+                src={user?.avatar}
+                alt={user?.name || t('mystery_hacker')}
               />
             </div>
             <div
@@ -58,16 +52,13 @@ export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
                   className="d-block mb-0 stretched-link"
                   href={`/user/${userId}`}
                 >
-                  {user?.nickname ||
-                    user?.name ||
-                    user?.username ||
-                    t('mystery_hacker')}
+                  {user?.name || t('mystery_hacker')}
                 </a>
                 <strong>{score}</strong>
               </div>
               <TopUserAddress
                 email={user?.email}
-                github={parseJSON(user?.oAuth)?.html_url}
+                // github={parseJSON(user?.oAuth)?.html_url}
               />
             </div>
           </Col>
@@ -93,13 +84,8 @@ export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
                 >
                   <Image
                     className="w-100"
-                    src={user?.photo || parseJSON(user?.oAuth)?.avatar_url}
-                    alt={
-                      user?.nickname ||
-                      user?.name ||
-                      user?.username ||
-                      t('mystery_hacker')
-                    }
+                    src={user?.avatar}
+                    alt={user?.name || t('mystery_hacker')}
                   />
                 </div>
                 <a
@@ -109,17 +95,14 @@ export const TopUserList: FC<TopUserListProps> = ({ value = [] }) => (
                   }}
                   href={`/user/${userId}`}
                 >
-                  {user?.nickname ||
-                    user?.name ||
-                    user?.username ||
-                    t('mystery_hacker')}
+                  {user?.name || t('mystery_hacker')}
                 </a>
               </td>
               <td className="align-middle">{score}</td>
               <td className="align-middle">
                 <TopUserAddress
                   email={user?.email}
-                  github={parseJSON(user?.oAuth)?.html_url}
+                  // github={parseJSON(user?.oAuth)?.html_url}
                 />
               </td>
             </tr>

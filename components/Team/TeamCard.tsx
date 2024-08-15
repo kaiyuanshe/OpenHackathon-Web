@@ -7,10 +7,15 @@ import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 
-export type TeamCardProps = HTMLAttributes<HTMLDivElement> &
+export type TeamCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> &
   Pick<
     Team,
-    'hackathonName' | 'displayName' | 'creatorId' | 'creator' | 'membersCount'
+    | 'id'
+    | 'hackathonName'
+    | 'displayName'
+    | 'creatorId'
+    | 'creator'
+    | 'membersCount'
   >;
 
 export const TeamCard: FC<TeamCardProps> = ({

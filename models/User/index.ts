@@ -1,8 +1,6 @@
-import { ListModel, Stream } from 'mobx-restful';
-import { buildURLData } from 'web-utility';
+import { Base, UserRankListChunk } from '@kaiyuanshe/openhackathon-service';
 
-import { Base, createListStream, Filter, ListData } from '../Base';
-import sessionStore from './Session';
+import { Filter, TableModel } from '../Base';
 
 export interface UserBase {
   username: string;
@@ -17,7 +15,6 @@ export type GitHubUser = UserBase &
   Record<'nickname' | 'photo' | 'company' | 'profile' | 'accessToken', string>;
 
 export interface AuthingUserBase {
-  id?: string;
   _id?: string;
   openid: string;
   unionid?: string;
@@ -122,27 +119,17 @@ export interface TopUser extends Base {
   score: number;
 }
 export interface UserFilter extends Filter<User> {
-  keyword?: string;
+  keywords?: string;
 }
 
-export class UserModel extends Stream<User, UserFilter>(ListModel) {
-  client = sessionStore.client;
+export class UserModel extends TableModel<User, UserFilter> {
   baseURI = 'user';
 
   async getUserTopList() {
-    const { body } = await this.client.get<ListData<TopUser>>(
-      `${this.baseURI}/topUsers`,
+    const { body } = await this.client.get<UserRankListChunk>(
+      `activity-log/user-rank`,
     );
-    return body!.value;
-  }
-
-  openStream({ keyword = 'x' }: UserFilter) {
-    return createListStream<User>(
-      `${this.baseURI}/search?${buildURLData({ keyword })}`,
-      this.client,
-      count => (this.totalCount = count),
-      'POST',
-    );
+    return body!.list;
   }
 }
 

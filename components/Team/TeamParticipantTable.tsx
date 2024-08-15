@@ -11,7 +11,7 @@ const { t } = i18n;
 
 export interface TeamParticipantTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  onApprove?: (userId: string, status: MembershipStatus) => any;
+  onApprove?: (userId: number, status: MembershipStatus) => any;
 }
 
 const StatusName: () => Record<TeamMember['status'], string> = () => ({

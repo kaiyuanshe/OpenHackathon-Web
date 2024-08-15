@@ -37,7 +37,7 @@ class PlatformAdminView extends PureComponent {
   store = new PlatformAdminModel();
 
   @observable
-  accessor selectedIds: string[] = [];
+  accessor selectedIds: number[] = [];
 
   @observable
   accessor show = false;

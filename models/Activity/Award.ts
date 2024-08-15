@@ -1,7 +1,8 @@
 import { User } from '@authing/native-js-ui-components';
+import { Base, Media } from '@kaiyuanshe/openhackathon-service';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
-import { Base, createListStream, InputData, Media } from '../Base';
+import { createListStream, InputData } from '../Base';
 import sessionStore from '../User/Session';
 import { Team } from './Team';
 
@@ -16,7 +17,7 @@ export interface Award
 export interface AwardAssignment
   extends Omit<Base, 'id'>,
     Omit<Award, 'name' | 'quantity' | 'target' | 'pictures'>,
-    Record<'assignmentId' | 'assigneeId' | 'awardId', string> {
+    Record<'assignmentId' | 'assigneeId' | 'awardId', number> {
   user?: User;
   team?: Team;
   award: Award;

@@ -20,7 +20,7 @@ export interface AdministratorModalProps
 @observer
 export class AdministratorModal extends PureComponent<AdministratorModalProps> {
   @observable
-  accessor userId = '';
+  accessor userId = 0;
 
   increaseId = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
