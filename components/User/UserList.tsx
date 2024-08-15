@@ -92,14 +92,14 @@ export type UserListProps = Pick<ScrollListProps<User, UserFilter>, 'store'> &
   UserListLayoutProps;
 
 export class UserList extends PureComponent<UserListProps> {
-  onSearch = async (keyword: string) => {
+  onSearch = async (keywords: string) => {
     const { store, onSearch } = this.props;
 
     store.clear();
 
-    await store.getList({ keyword });
+    await store.getList({ keywords });
 
-    onSearch?.(keyword);
+    onSearch?.(keywords);
   };
 
   render() {

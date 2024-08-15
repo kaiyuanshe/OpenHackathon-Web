@@ -4,14 +4,13 @@ import type {
   HackathonStatus,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import { createListStream, Filter, InputData } from '../Base';
+import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
 import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
-import sessionStore from '../User/Session';
 import { AwardModel } from './Award';
 import { Enrollment, EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -50,10 +49,7 @@ export interface Questionnaire extends Base {
   hackathonName: string;
 }
 
-export class ActivityModel extends Stream<Hackathon, ActivityFilter>(
-  ListModel,
-) {
-  client = sessionStore.client;
+export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   baseURI = 'hackathon';
   indexKey = 'name' as const;
 
@@ -125,19 +121,11 @@ export class ActivityModel extends Stream<Hackathon, ActivityFilter>(
   @toggle('uploading')
   async updateOne(data: InputData<Hackathon>, name?: string) {
     if (!name) {
-      const { body } = await this.client.post<NameAvailability>(
-        `${this.baseURI}/checkNameAvailability`,
-        { name: data.name },
-      );
-      const { nameAvailable, reason, message } = body!;
+      const [old] = await this.getList({ name: data.name }, 1);
 
-      if (!nameAvailable) throw new ReferenceError(`${reason}\n${message}`);
+      if (old) throw new ReferenceError(`${data.name} is used`);
     }
-    const { body } = await (name
-      ? this.client.patch<Hackathon>(`${this.baseURI}/${name}`, data)
-      : this.client.put<Hackathon>(`${this.baseURI}/${data.name}`, data));
-
-    return (this.currentOne = body!);
+    return super.updateOne(data, name);
   }
 
   @action
