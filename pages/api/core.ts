@@ -9,13 +9,8 @@ import {
   JWTProps,
   Middleware,
 } from 'next-ssr-middleware';
-import { ProxyAgent, setGlobalDispatcher } from 'undici';
 
 import { ownClient } from '../../models/User/Session';
-
-const { HTTP_PROXY } = process.env;
-
-if (HTTP_PROXY) setGlobalDispatcher(new ProxyAgent(HTTP_PROXY));
 
 export type NextAPI = (
   req: NextApiRequest,
@@ -83,9 +78,16 @@ export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
   }
 };
 
+const client_id = process.env.GITHUB_OAUTH_CLIENT_ID!,
+  client_secret = process.env.GITHUB_OAUTH_CLIENT_SECRET!,
+  { VERCEL } = process.env;
+
+export const ProxyBaseURL = 'https://test.hackathon.kaiyuanshe.cn/proxy';
+
 export const githubSigner = githubOAuth2({
-  client_id: process.env.GITHUB_OAUTH_CLIENT_ID!,
-  client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET!,
+  rootBaseURL: VERCEL ? undefined : `${ProxyBaseURL}/github.com/`,
+  client_id,
+  client_secret,
   scopes: ['user:email', 'read:user', 'public_repo', 'read:project'],
 });
 

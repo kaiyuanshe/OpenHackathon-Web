@@ -50,7 +50,7 @@ jobs:
           EOF
           cat > .env.local <<EOF
           ${{ secrets.ENV_FILE }}
-          VERCEL_URL=hackathon.kaiyuanshe.cn
+          VERCEL_PROJECT_PRODUCTION_URL=hackathon.kaiyuanshe.cn
           EOF
       - name: Build and Push image
         uses: docker/build-push-action@v3
