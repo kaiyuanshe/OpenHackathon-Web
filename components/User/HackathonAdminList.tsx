@@ -1,9 +1,9 @@
 import 'array-unique-proposal';
 
+import { PlatformAdmin, Staff } from '@kaiyuanshe/openhackathon-service';
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { HackathonAdmin } from '../../models/Activity/Staff';
 import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
@@ -11,32 +11,29 @@ import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-const TableHeads = [
+const TableHeads = () => [
   t('all'),
   t('name'),
   t('mail'),
   t('phone_number'),
   t('role_type'),
   t('status'),
-  t('role_source'),
-  t('last_login_time'),
+  // t('last_login_time'),
   t('create_time'),
   t('remark'),
 ];
 
-export const HackathonAdminList: FC<XScrollListProps<HackathonAdmin>> = ({
-  defaultData = [],
-  selectedIds = [],
-  onSelect,
-}) => (
+export const HackathonAdminList: FC<
+  XScrollListProps<Staff | PlatformAdmin>
+> = ({ defaultData = [], selectedIds = [], onSelect }) => (
   <Table hover responsive="lg" className={styles.table}>
     <thead>
       <tr>
-        {TableHeads.map((data, idx) =>
+        {TableHeads().map((data, idx) =>
           idx ? (
-            <th key={idx + data}>{data}</th>
+            <th key={data}>{data}</th>
           ) : (
-            <th key={idx + data}>
+            <th key={data}>
               <Form.Check
                 inline
                 type="checkbox"
@@ -54,7 +51,7 @@ export const HackathonAdminList: FC<XScrollListProps<HackathonAdmin>> = ({
                   onSelect?.(
                     selectedIds.length === defaultData.length
                       ? []
-                      : defaultData.map(({ userId }) => userId),
+                      : defaultData.map(({ user: { id } }) => id),
                   )
                 }
               />
@@ -67,47 +64,45 @@ export const HackathonAdminList: FC<XScrollListProps<HackathonAdmin>> = ({
       {defaultData.map(
         ({
           createdAt,
-          userId,
           user: {
+            id,
             email,
-            phone,
-            nickname,
-            lastLogin,
-            registerSource: [source],
+            mobilePhone,
+            name,
+            // lastLogin,
           },
           description,
         }) => (
-          <tr key={userId}>
+          <tr key={id}>
             {[
-              userId,
-              nickname,
+              id,
+              name,
               email,
-              phone,
+              mobilePhone,
               description ? t('referee') : t('admin'),
               createdAt ? t('approve') : t('status_pending'),
-              source.split(':')[1],
-              convertDatetime(lastLogin),
+              // convertDatetime(lastLogin),
               convertDatetime(createdAt),
               description,
             ].map((data, idx) =>
               idx ? (
-                <td key={idx + userId + createdAt}>{data}</td>
+                <td key={id + createdAt}>{data}</td>
               ) : (
-                <td key={idx + userId + createdAt}>
+                <td key={id + createdAt}>
                   <Form.Check
                     inline
                     type="checkbox"
                     name="userId"
                     value={data}
                     aria-label={description ? `judge${data}` : `admin${data}`}
-                    checked={selectedIds.includes(userId)}
+                    checked={selectedIds.includes(id)}
                     onChange={
                       onSelect &&
                       (({ currentTarget: { checked } }) => {
                         if (checked)
-                          return onSelect([...selectedIds, userId].uniqueBy());
+                          return onSelect([...selectedIds, id].uniqueBy());
 
-                        const index = selectedIds.indexOf(userId);
+                        const index = selectedIds.indexOf(id);
 
                         onSelect([
                           ...selectedIds.slice(0, index),

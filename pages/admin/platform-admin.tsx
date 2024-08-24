@@ -4,7 +4,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { Component, FC, FormEvent, PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
@@ -33,7 +33,7 @@ const PlatformAdminPage: FC<JWTProps> = observer(props => (
 export default PlatformAdminPage;
 
 @observer
-class PlatformAdminView extends PureComponent {
+class PlatformAdminView extends Component {
   store = new PlatformAdminModel();
 
   @observable

@@ -6,7 +6,6 @@ import { TeamMember } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import styles from '../../styles/Table.module.less';
-import { convertDatetime } from '../../utils/time';
 import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
@@ -19,11 +18,10 @@ export interface TeamAdministratorTableLayoutProps
 
 const TableHeads = () => [
   '#',
-  t('nick_name'),
   t('mail'),
   t('phone_number'),
-  t('contact_address'),
-  t('last_login_time'),
+  // t('contact_address'),
+  // t('last_login_time'),
   t('remark'),
   t('role_type'),
 ];
@@ -49,22 +47,17 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
         <tbody>
           {defaultData.map(
             (
-              {
-                userId,
-                user: { address, email, lastLogin, nickname, phone, username },
-                role,
-                description,
-              },
+              { userId, user: { email, mobilePhone, name }, role, description },
               index,
             ) => (
               <tr key={userId}>
                 {[
                   index + 1,
-                  nickname || username || email || phone || '--',
+                  name || email || mobilePhone || '--',
                   email || '--',
-                  phone || '--',
-                  address || '--',
-                  convertDatetime(lastLogin),
+                  mobilePhone || '--',
+                  // address || '--',
+                  // convertDatetime(lastLogin),
                   description,
                   userId,
                 ].map((data, idx, { length }) =>

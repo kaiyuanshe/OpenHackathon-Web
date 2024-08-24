@@ -1,5 +1,6 @@
-import type {
+import {
   Base,
+  Enrollment,
   Hackathon,
   HackathonStatus,
 } from '@kaiyuanshe/openhackathon-service';
@@ -12,7 +13,7 @@ import { GitModel } from '../Git';
 import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
 import { AwardModel } from './Award';
-import { Enrollment, EnrollmentModel } from './Enrollment';
+import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
 import { MessageModel } from './Message';
 import { OrganizationModel } from './Organization';

@@ -1,11 +1,6 @@
-import {
-  faGithub,
-  faQq,
-  faWeibo,
-  faWeixin,
-} from '@fortawesome/free-brands-svg-icons';
+import { faQq, faWeibo, faWeixin } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
+import { User } from '@kaiyuanshe/openhackathon-service';
 import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
@@ -13,7 +8,7 @@ import { Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import { PageHead } from '../../components/layout/PageHead';
 import { i18n } from '../../models/Base/Translation';
-import userStore, { User } from '../../models/User';
+import userStore from '../../models/User';
 
 const ActivityList = dynamic(
     () => import('../../components/Activity/ActivityList'),
@@ -32,9 +27,8 @@ export const getServerSideProps = compose<{ id?: string }, User>(
 
 const UserDetailPage = ({
   id,
-  nickname,
-  photo,
-  registerSource,
+  name,
+  avatar,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
   <div
     className="py-4"
@@ -50,18 +44,18 @@ const UserDetailPage = ({
         <Col xs={12} lg={3}>
           <Card border="secondery" className="border">
             <Card.Title as="h2" className="m-3">
-              {nickname}
+              {name}
             </Card.Title>
             <Card.Img
               className="mx-3 mb-3"
               style={{ width: '6.5rem' }}
-              src={photo}
+              src={avatar}
               alt=""
             />
             <Card.Body className="text-start border-top p-3">
-              <a
+              {/* <a
                 target="_blank"
-                href={`https://github.com/${nickname}`}
+                href={`https://github.com/${name}`}
                 rel="noreferrer"
               >
                 <FontAwesomeIcon
@@ -73,7 +67,7 @@ const UserDetailPage = ({
                   )}
                   icon={faGithub}
                 />
-              </a>
+              </a> */}
               <FontAwesomeIcon
                 className="text-secondary fa-stack"
                 icon={faQq}

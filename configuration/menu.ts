@@ -1,6 +1,6 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { StaffType } from '@kaiyuanshe/openhackathon-service';
 
-import { Staff } from '../models/Activity/Staff';
 import { i18n } from '../models/Base/Translation';
 
 const { t } = i18n;
@@ -10,7 +10,7 @@ export interface MenuItem {
   href?: string;
   icon?: IconProp;
   list?: MenuItem[];
-  roles?: Staff['type'][];
+  roles?: StaffType[];
 }
 
 export const menus: () => MenuItem[] = () => [
@@ -52,7 +52,7 @@ export const menus: () => MenuItem[] = () => [
         title: t('join_activity_team'),
         href: 'team',
         icon: 'people-group',
-        roles: ['judge'],
+        roles: ['judge' as StaffType.Judge],
       },
       {
         title: t('works_awards'),
@@ -96,13 +96,13 @@ export const activityTeamMenus: () => MenuItem[] = () => [
         title: t('team_registration'),
         href: 'participant',
         icon: 'user',
-        roles: ['admin'],
+        roles: ['admin' as StaffType.Admin],
       },
       {
         title: t('role_management'),
         href: 'role',
         icon: 'user-secret',
-        roles: ['admin'],
+        roles: ['admin' as StaffType.Admin],
       },
       {
         title: t('cloud_development_environment'),

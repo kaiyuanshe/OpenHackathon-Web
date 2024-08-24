@@ -15,6 +15,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { StaffType } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Fragment, PureComponent } from 'react';
@@ -27,7 +28,6 @@ import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
 import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
-import { ServerSessionBox } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -77,7 +77,8 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
 
     return (
       role?.isAdmin ||
-      (role?.isJudge && currentRoute.at(-1)?.roles?.includes('judge'))
+      (role?.isJudge &&
+        currentRoute.at(-1)?.roles?.includes('judge' as StaffType.Judge))
     );
   }
 
@@ -100,7 +101,8 @@ export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps>
               const active = location.pathname === path;
 
               return (
-                (role?.isAdmin || roles?.includes('judge')) && (
+                (role?.isAdmin ||
+                  roles?.includes('judge' as StaffType.Judge)) && (
                   <Nav.Link
                     key={title}
                     className="text-nowrap"

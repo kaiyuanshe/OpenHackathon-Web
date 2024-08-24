@@ -1,21 +1,16 @@
+import { PlatformAdmin } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
+import { IDType, toggle } from 'mobx-restful';
 
-import { HackathonAdmin } from '../Activity/Staff';
-import { createListStream, Filter } from '../Base';
-import sessionStore from './Session';
-
-export type PlatformAdmin = HackathonAdmin;
+import { Filter, TableModel } from '../Base';
 
 export type PlatformAdminFilter = Filter<PlatformAdmin>;
 
-export class PlatformAdminModel extends Stream<
+export class PlatformAdminModel extends TableModel<
   PlatformAdmin,
   PlatformAdminFilter
->(ListModel) {
-  client = sessionStore.client;
+> {
   baseURI = 'platform/admin';
-  indexKey = 'userId' as const;
 
   @observable
   accessor isPlatformAdmin = false;
@@ -27,14 +22,6 @@ export class PlatformAdminModel extends Stream<
     } catch (error: any) {
       return (this.isPlatformAdmin = false);
     }
-  }
-
-  openStream() {
-    return createListStream<PlatformAdmin>(
-      `${this.baseURI}s`,
-      this.client,
-      count => (this.totalCount = count),
-    );
   }
 
   @toggle('uploading')

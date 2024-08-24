@@ -6,7 +6,11 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Hackathon, Media } from '@kaiyuanshe/openhackathon-service';
+import {
+  EnrollmentStatus,
+  Hackathon,
+  Media,
+} from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
@@ -35,7 +39,6 @@ import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { Enrollment } from '../../../models/Activity/Enrollment';
 import { Organization } from '../../../models/Activity/Organization';
 import { isServer } from '../../../models/Base';
 import { i18n } from '../../../models/Base/Translation';
@@ -69,7 +72,7 @@ export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
   },
 );
 
-const StatusName: () => Record<Enrollment['status'], string> = () => ({
+const StatusName: () => Record<EnrollmentStatus, string> = () => ({
   approved: t('sign_up_successfully'),
   rejected: t('rejected'),
   none: t('not_sign_up'),

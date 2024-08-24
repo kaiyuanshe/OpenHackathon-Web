@@ -54,7 +54,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
 
   render() {
     const {
-      city = {},
+      // city = {},
       status = {},
       extensions = {},
     } = this.props.store.statistic;
@@ -69,12 +69,12 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
           <Col>
             <SVGCharts>
               <Title>{t('city_distribution')}</Title>
-              <PieSeries
+              {/* <PieSeries
                 data={Object.entries(city).map(([name, value]) => ({
                   name,
                   value,
                 }))}
-              />
+              /> */}
             </SVGCharts>
           </Col>
           <Col>

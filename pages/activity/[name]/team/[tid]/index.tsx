@@ -173,7 +173,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
         hackathonName,
         displayName,
         description,
-        creator: { photo },
+        creator: { avatar },
       } = this.props.team,
       { teamMemberList, teamWorkList } = this.props,
       {
@@ -198,7 +198,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
               <Card.Header className="bg-white">
                 <Card.Img
                   variant="top"
-                  src={photo}
+                  src={avatar}
                   className="d-block m-auto"
                   style={{ maxWidth: '15rem' }}
                 />

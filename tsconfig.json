@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "checkJs": true,
     "target": "ES6",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
@@ -17,6 +18,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "*.js", "*.mjs", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

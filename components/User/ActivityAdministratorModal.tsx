@@ -1,10 +1,11 @@
+import { Staff } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FormEvent, PureComponent } from 'react';
 import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { Staff, StaffModel } from '../../models/Activity/Staff';
+import { StaffModel } from '../../models/Activity/Staff';
 import { i18n } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { UserList } from './UserList';

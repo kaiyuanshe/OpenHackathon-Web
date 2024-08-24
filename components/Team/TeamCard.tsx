@@ -43,8 +43,8 @@ export const TeamCard: FC<TeamCardProps> = ({
       <span className="pe-2">{t('team_leader')}</span>
 
       <span className="text-primary">
-        <Avatar className="me-3" size={1.5} src={creator.photo} />
-        {creator.nickname}
+        <Avatar className="me-3" size={1.5} src={creator.avatar} />
+        {creator.name}
       </span>
     </a>
   </div>

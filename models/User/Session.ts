@@ -1,11 +1,11 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
+import { Base, User } from '@kaiyuanshe/openhackathon-service';
 import { HTTPClient } from 'koajax';
 import { computed, observable } from 'mobx';
 import { parseCookie, setCookie } from 'mobx-i18n';
 import { BaseModel, toggle } from 'mobx-restful';
 import { buildURLData, sleep } from 'web-utility';
 
-import { AuthingIdentity, AuthingUserBase, User } from '.';
+import { AuthingUserBase } from '.';
 
 const { localStorage, document } = globalThis;
 
@@ -39,56 +39,45 @@ export interface SessionUser
 }
 
 export class SessionModel extends BaseModel {
-  client = ownClient;
+  client = ownClient.use(({ request }, next) => {
+    const { token } = this.user || {};
 
-  constructor() {
-    super();
-
-    if (+new Date(this.user?.tokenExpiredAt || '') <= Date.now())
-      this.signOut();
-
-    this.client.use(({ request }, next) => {
-      const { token } = this.user || {};
-
-      if (token)
-        request.headers = {
-          ...request.headers,
-          Authorization: `Bearer ${token}`,
-        };
-      return next();
-    });
-  }
+    if (token)
+      request.headers = {
+        ...request.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    return next();
+  });
 
   @observable
   accessor user: User | undefined =
     localStorage?.user && JSON.parse(localStorage.user);
 
   @computed
-  get userOAuth() {
-    const { oAuth } = this.user || {};
-
-    return oAuth && JSON.parse(oAuth);
-  }
-
-  @computed
   get metaOAuth() {
-    const { identities = [] } = this.user || {};
+    const { token } = parseCookie(globalThis.document.cookie);
 
-    return Object.fromEntries(
-      identities.map(identity => [identity.provider, identity]),
-    ) as Record<AuthingIdentity['provider'], AuthingIdentity>;
+    return { github: { accessToken: token } };
   }
 
   @toggle('uploading')
   async signIn(profile: AuthingUserBase, reload = false) {
     const { body } = await this.client.post<User>('login', profile);
 
-    setCookie('token', body!.token, { path: '/' });
+    setCookie('token', body!.token!, { path: '/' });
     localStorage.user = JSON.stringify(body);
 
     if (reload) sleep().then(() => location.reload());
 
     return (this.user = body);
+  }
+
+  static async signInWithGitHub(accessToken: string) {
+    const { body } = await ownClient.post<User>('user/OAuth/GitHub', {
+      accessToken,
+    });
+    return body!;
   }
 
   signOut(reload = false) {

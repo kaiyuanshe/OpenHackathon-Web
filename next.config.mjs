@@ -1,6 +1,8 @@
+// @ts-ignore
 import withLess from 'next-with-less';
+// @ts-ignore
 import setPWA from 'next-pwa';
-import webpack from 'webpack';
+import WP from 'webpack';
 
 const { NODE_ENV, CI } = process.env;
 
@@ -11,6 +13,36 @@ const withPWA = setPWA({
   disable: NODE_ENV === 'development',
 });
 
+/**
+ * @type {import('next').NextConfig['webpack']}
+ */
+const webpack = config => {
+  config.plugins.push(
+    new WP.NormalModuleReplacementPlugin(/^node:/, resource => {
+      resource.request = resource.request.replace(/^node:/, '');
+    }),
+  );
+  return config;
+};
+
+/**
+ * @type {import('next').NextConfig['rewrites']}
+ */
+const rewrites = async () => ({
+  beforeFiles: [
+    {
+      source: '/proxy/github.com/:path*',
+      destination: 'https://github.com/:path*',
+    },
+    {
+      source: '/proxy/raw.githubusercontent.com/:path*',
+      destination: 'https://raw.githubusercontent.com/:path*',
+    },
+  ],
+  afterFiles: [],
+  fallback: [],
+});
+
 /** @type {import('next').NextConfig} */
 export default withPWA(
   withLess({
@@ -18,14 +50,7 @@ export default withPWA(
     output: CI && 'standalone',
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     transpilePackages: ['@sentry/browser'],
-
-    webpack: config => {
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(/^node:/, resource => {
-          resource.request = resource.request.replace(/^node:/, '');
-        }),
-      );
-      return config;
-    },
+    webpack,
+    rewrites,
   }),
 );

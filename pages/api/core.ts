@@ -9,13 +9,8 @@ import {
   JWTProps,
   Middleware,
 } from 'next-ssr-middleware';
-import { ProxyAgent, setGlobalDispatcher } from 'undici';
 
-import { ownClient } from '../../models/User/Session';
-
-const { HTTP_PROXY } = process.env;
-
-if (HTTP_PROXY) setGlobalDispatcher(new ProxyAgent(HTTP_PROXY));
+import { SessionModel } from '../../models/User/Session';
 
 export type NextAPI = (
   req: NextApiRequest,
@@ -31,7 +26,8 @@ export function safeAPI(handler: NextAPI): NextAPI {
         console.error(error);
         return res.end(error);
       }
-      let { message, status, body } = error;
+      const { message, response } = error;
+      let { status, body } = response;
 
       res.status(status);
       res.statusMessage = message;
@@ -73,18 +69,24 @@ export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
     )
       return nextResult;
 
-    const { body } = await ownClient.post<User>('user/OAuth/GitHub', {
-      accessToken: token,
-    });
-    res.setHeader('Set-Cookie', `JWT=${body!.token}; Path=/`);
+    const user = await SessionModel.signInWithGitHub(token!);
 
-    return { props: { jwtPayload: body! } };
+    res.setHeader('Set-Cookie', `JWT=${user.token}; Path=/`);
+
+    return { props: { jwtPayload: user } };
   }
 };
 
+const client_id = process.env.GITHUB_OAUTH_CLIENT_ID!,
+  client_secret = process.env.GITHUB_OAUTH_CLIENT_SECRET!,
+  { VERCEL } = process.env;
+
+export const ProxyBaseURL = 'https://test.hackathon.kaiyuanshe.cn/proxy';
+
 export const githubSigner = githubOAuth2({
-  client_id: process.env.GITHUB_OAUTH_CLIENT_ID!,
-  client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET!,
+  rootBaseURL: VERCEL ? undefined : `${ProxyBaseURL}/github.com/`,
+  client_id,
+  client_secret,
   scopes: ['user:email', 'read:user', 'public_repo', 'read:project'],
 });
 

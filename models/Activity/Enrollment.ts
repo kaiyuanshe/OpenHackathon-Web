@@ -1,22 +1,14 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
+import { Enrollment, User } from '@kaiyuanshe/openhackathon-service';
 import { computed, observable } from 'mobx';
-import { ListModel, Statistic, Stream, toggle } from 'mobx-restful';
+import { Statistic, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
-import { createListStream, Filter } from '../Base';
+import { createListStream, Filter, TableModel } from '../Base';
 import { i18n } from '../Base/Translation';
-import { User } from '../User';
 import sessionStore from '../User/Session';
 
 const { t } = i18n;
 
-export interface Enrollment extends Base {
-  hackathonName: string;
-  userId: string;
-  user: User;
-  status: 'none' | 'pendingApproval' | 'approved' | 'rejected';
-  extensions: Record<'name' | 'value', string>[];
-}
 export const statusName: Record<Enrollment['status'], string> = {
   approved: t('approve'),
   rejected: t('status_rejected'),
@@ -32,21 +24,16 @@ export interface EnrollmentStatistic
   extensions?: Record<string, Record<string, number>>;
 }
 
-export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
-  ListModel,
-) {
-  constructor(baseURI: string) {
+export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
+  constructor(public baseURI: string) {
     super();
 
     this.baseURI = `${baseURI}/enrollment`;
   }
 
-  client = sessionStore.client;
-  indexKey = 'userId' as const;
-
   @observable
   accessor sessionOne: Enrollment | undefined;
-
+  // @ts-ignore
   declare statistic: EnrollmentStatistic;
 
   @computed
@@ -101,14 +88,14 @@ export class EnrollmentModel extends Stream<Enrollment, EnrollmentFilter>(
       allItems,
       ({ createdAt }) => createdAt.split('T')[0],
     );
-    const { _, ...city } = countBy(
-      allItems,
-      ({ user: { city } }) => city?.split(/\W+/)[0] || '_',
-    );
+    // const { _, ...city } = countBy(
+    //   allItems,
+    //   ({ createdBy: { city } }) => city?.split(/\W+/)[0] || '_',
+    // );
     return (this.statistic = {
       ...this.statistic,
       createdAt,
-      city,
+      // city,
       extensions,
     });
   }

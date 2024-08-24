@@ -21,10 +21,9 @@ const StatusName: () => Record<TeamMember['status'], string> = () => ({
 
 const TableHeads = () => [
   '#',
-  t('nick_name'),
   t('mail'),
   t('phone_number'),
-  t('contact_address'),
+  // t('contact_address'),
   t('apply_time'),
   t('apply_role'),
   t('remark'),
@@ -50,31 +49,30 @@ export const TeamParticipantTableLayout: FC<
             description,
             role,
             status,
-            user: { address, email, nickname, phone, username },
-            userId,
+            user: { id, email, mobilePhone, name },
           },
           index,
         ) => (
-          <tr key={userId}>
+          <tr key={id}>
             {[
               index + 1,
-              nickname || username || email || phone || '--',
+              name || email || mobilePhone || '--',
               email || '--',
-              phone || '--',
-              address || '--',
+              mobilePhone || '--',
+              // address || '--',
               convertDatetime(createdAt),
               role === 'admin' ? t('admin') : t('member'),
               description,
               status,
             ].map((data, idx, { length }) =>
               idx + 1 === length ? (
-                <td key={idx + userId}>
+                <td key={id}>
                   <Form.Control
                     as="select"
                     className={styles.form}
                     disabled={status === MembershipStatus.APPROVED}
                     onChange={({ currentTarget: { value } }) =>
-                      onApprove?.(userId, value as MembershipStatus)
+                      onApprove?.(id, value as MembershipStatus)
                     }
                     defaultValue={status}
                   >
@@ -86,7 +84,7 @@ export const TeamParticipantTableLayout: FC<
                   </Form.Control>
                 </td>
               ) : (
-                <td key={idx + userId} title={data + ''}>
+                <td key={id} title={data + ''}>
                   {data}
                 </td>
               ),

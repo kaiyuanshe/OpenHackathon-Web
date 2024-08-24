@@ -12,12 +12,12 @@ export const TeamMemberListLayout = ({
   defaultData = [],
 }: Pick<TeamMemberListProps, 'defaultData'>) => (
   <ul className="list-unstyled">
-    {defaultData.map(({ userId, user: { photo, nickname } }) => (
+    {defaultData.map(({ userId, user: { avatar, name } }) => (
       <li key={userId} className="my-3">
-        <Avatar className="me-3" size={1} src={photo} />
+        <Avatar className="me-3" size={1} src={avatar} />
 
         <a href={`/user/${userId}`} className="ms-2 text-primary">
-          {nickname}
+          {name}
         </a>
       </li>
     ))}
