@@ -1,3 +1,4 @@
+import { Extension } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
@@ -14,7 +15,6 @@ import { ActivityManageFrame } from '../../../../../components/Activity/Activity
 import { EnrollmentList } from '../../../../../components/Activity/EnrollmentList';
 import { ServerSessionBox } from '../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../models/Activity';
-import { Enrollment } from '../../../../../models/Activity/Enrollment';
 import { i18n } from '../../../../../models/Base/Translation';
 
 type ParticipantPageProps = RouteProps<{ name: string }> & JWTProps;
@@ -46,7 +46,7 @@ class ParticipantEditor extends PureComponent<ParticipantPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   @observable
-  accessor extensions: Enrollment['extensions'] | undefined;
+  accessor extensions: Extension[] | undefined;
 
   render() {
     const { resolvedUrl, params } = this.props.route,

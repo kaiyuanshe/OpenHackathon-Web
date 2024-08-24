@@ -1,9 +1,10 @@
+import { Enrollment } from '@kaiyuanshe/openhackathon-service';
 import { ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { Enrollment, statusName } from '../../models/Activity/Enrollment';
+import { statusName } from '../../models/Activity/Enrollment';
 import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/participant.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
@@ -27,9 +28,8 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
         <th>#</th>
         <th>{t('user_name')}</th>
         <th>{t('mail')}</th>
-        <th>{t('login_way')}</th>
         <th>{t('phone_number')}</th>
-        <th>{t('contact_address')}</th>
+        {/* <th>{t('contact_address')}</th> */}
         <th>{t('enrollment')}</th>
         <th>{t('status')}</th>
       </tr>
@@ -38,14 +38,12 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
       {defaultData.map(
         (
           {
-            user: {
+            createdBy: {
               id,
-              address,
+              // address,
               email,
-              nickname,
-              phone,
-              username,
-              registerSource,
+              mobilePhone,
+              name,
             },
             status,
             extensions,
@@ -57,13 +55,12 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
             <td>{index + 1}</td>
             <td>
               <Button variant="link" onClick={() => onPopUp?.(extensions)}>
-                {nickname || username || email || phone}
+                {name || email || mobilePhone}
               </Button>
             </td>
             <td>{email}</td>
-            <td>{registerSource[0].split(':')[1]}</td>
-            <td>{phone}</td>
-            <td>{address}</td>
+            <td>{mobilePhone}</td>
+            {/* <td>{address}</td> */}
             <td>{createdAt.split('T')[0]}</td>
             <td>
               <Form.Control

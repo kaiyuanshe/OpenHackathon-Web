@@ -1,27 +1,11 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
+import { Staff } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
-import { groupBy, mergeStream } from 'web-utility';
+import { toggle } from 'mobx-restful';
+import { groupBy } from 'web-utility';
 
-import { createListStream, InputData } from '../Base';
-import { User } from '../User';
-import sessionStore from '../User/Session';
+import { InputData, TableModel } from '../Base';
 
-export interface HackathonAdmin
-  extends Base,
-    Record<'hackathonName' | 'description', string> {
-  userId: number;
-  user: User;
-}
-
-export interface Staff extends HackathonAdmin {
-  type: 'admin' | 'judge' | 'member';
-}
-
-export class StaffModel extends Stream<Staff>(ListModel) {
-  client = sessionStore.client;
-  indexKey = 'userId' as const;
-
+export class StaffModel extends TableModel<Staff> {
   constructor(public baseURI: string) {
     super();
   }
@@ -33,32 +17,6 @@ export class StaffModel extends Stream<Staff>(ListModel) {
         ([type, { length }]) => [type, length],
       ),
     ) as Record<Staff['type'], number>;
-  }
-
-  addCount = (count = 0) =>
-    this.totalCount === undefined || this.totalCount === Infinity
-      ? (this.totalCount = count)
-      : (this.totalCount += count);
-
-  openStream() {
-    return mergeStream<Staff, void, undefined>(
-      async function* (this: StaffModel) {
-        for await (const item of createListStream<Staff>(
-          `${this.baseURI}/admins`,
-          this.client,
-          this.addCount,
-        ))
-          yield { ...item, type: 'admin' as const };
-      }.bind(this),
-      async function* (this: StaffModel) {
-        for await (const item of createListStream<Staff>(
-          `${this.baseURI}/judges`,
-          this.client,
-          this.addCount,
-        ))
-          yield { ...item, type: 'judge' as const };
-      }.bind(this),
-    );
   }
 
   @toggle('uploading')
@@ -77,7 +35,7 @@ export class StaffModel extends Stream<Staff>(ListModel) {
   @toggle('uploading')
   async deleteOne(userId: number) {
     const { type } =
-      this.allItems.find(({ userId: id }) => id === userId) || {};
+      this.allItems.find(({ user: { id } }) => id === userId) || {};
 
     if (!type) return;
 

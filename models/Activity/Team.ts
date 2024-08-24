@@ -1,11 +1,10 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
+import { Base, User } from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { createListStream, Filter, InputData, integrateError } from '../Base';
 import { WorkspaceModel } from '../Git';
-import { User } from '../User';
 import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
 import { NameAvailability } from './index';

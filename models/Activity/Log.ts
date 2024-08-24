@@ -1,8 +1,7 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
-import { IDType, ListModel, Stream } from 'mobx-restful';
+import { ActivityLog, Base } from '@kaiyuanshe/openhackathon-service';
+import { IDType } from 'mobx-restful';
 
-import { createListStream } from '../Base';
-import sessionStore from '../User/Session';
+import { TableModel } from '../Base';
 
 export interface Log extends Base {
   operatorId: IDType;
@@ -11,19 +10,9 @@ export interface Log extends Base {
   activityLogType: string;
 }
 
-export class LogModel extends Stream<Log>(ListModel) {
-  client = sessionStore.client;
-
-  constructor(baseURI: string) {
+export class LogModel extends TableModel<ActivityLog> {
+  constructor(public baseURI: string) {
     super();
     this.baseURI = `${baseURI}/activityLogs`;
-  }
-
-  openStream() {
-    return createListStream<Log>(
-      this.baseURI,
-      this.client,
-      count => (this.totalCount = count),
-    );
   }
 }

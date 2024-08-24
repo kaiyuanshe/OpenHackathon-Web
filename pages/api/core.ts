@@ -10,7 +10,7 @@ import {
   Middleware,
 } from 'next-ssr-middleware';
 
-import { ownClient } from '../../models/User/Session';
+import { SessionModel } from '../../models/User/Session';
 
 export type NextAPI = (
   req: NextApiRequest,
@@ -69,12 +69,11 @@ export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
     )
       return nextResult;
 
-    const { body } = await ownClient.post<User>('user/OAuth/GitHub', {
-      accessToken: token,
-    });
-    res.setHeader('Set-Cookie', `JWT=${body!.token}; Path=/`);
+    const user = await SessionModel.signInWithGitHub(token!);
 
-    return { props: { jwtPayload: body! } };
+    res.setHeader('Set-Cookie', `JWT=${user.token}; Path=/`);
+
+    return { props: { jwtPayload: user } };
   }
 };
 

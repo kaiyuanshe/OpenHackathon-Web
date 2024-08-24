@@ -1,10 +1,11 @@
+import { User } from '@kaiyuanshe/openhackathon-service';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { i18n } from '../../models/Base/Translation';
-import { User, UserFilter } from '../../models/User';
+import { UserFilter } from '../../models/User';
 import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
@@ -54,13 +55,12 @@ export const UserListLayout: FC<UserListLayoutProps> = ({
           <tr>
             <th>#</th>
             <th>{t('user_name')}</th>
-            <th>{t('nick_name')}</th>
             <th>{t('mail')}</th>
             <th>{t('phone_number')}</th>
           </tr>
         </thead>
         <tbody>
-          {defaultData.map(({ username, nickname, email, phone, id }) => (
+          {defaultData.map(({ name, email, mobilePhone, id }) => (
             <tr key={id}>
               <td>
                 <Form.Check
@@ -76,10 +76,9 @@ export const UserListLayout: FC<UserListLayoutProps> = ({
                   }
                 />
               </td>
-              <td>{username}</td>
-              <td>{nickname}</td>
+              <td>{name}</td>
               <td>{email}</td>
-              <td>{phone}</td>
+              <td>{mobilePhone}</td>
             </tr>
           ))}
         </tbody>

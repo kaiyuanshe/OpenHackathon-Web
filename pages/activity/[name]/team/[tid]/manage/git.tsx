@@ -91,19 +91,11 @@ class GitView extends PureComponent<TeamManageBaseProps> {
   async handleAuthorization(URI: string) {
     const members = await this.memberStore.getAll();
 
-    for (const {
-      user: { id, identities, oAuth },
-    } of members) {
-      const isGitHub = (identities || []).some(
-        ({ provider }) => provider === 'github',
-      );
-      if (isGitHub && id !== sessionStore.user?.id)
+    for (const { user } of members)
+      if (user.id !== sessionStore.user?.id)
         try {
-          const { login } = JSON.parse(oAuth);
-
-          await activityStore.currentGit.addCollaborator(URI, login);
+          await activityStore.currentGit.addCollaborator(URI, user.name);
         } catch {}
-    }
   }
 
   renderCreator() {

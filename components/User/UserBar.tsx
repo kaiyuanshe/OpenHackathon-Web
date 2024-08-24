@@ -9,7 +9,7 @@ const UserBar = observer(() => {
   const { t } = i18n;
   const { user } = sessionStore;
 
-  const showName = user ? user.nickname || user.email || user.phone : '';
+  const showName = user?.name || user?.email || user?.mobilePhone || '';
 
   return (
     <>

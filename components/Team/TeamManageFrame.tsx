@@ -6,6 +6,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { StaffType } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -15,7 +16,6 @@ import { Col, Nav } from 'react-bootstrap';
 
 import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { Staff } from '../../models/Activity/Staff';
 import { ErrorBaseData } from '../../models/Base';
 import { i18n } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
@@ -82,7 +82,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
               ({ title, href, icon = 'home', roles }) =>
                 (teamMemberRole === 'admin' ||
                   (teamMemberRole &&
-                    roles?.includes(teamMemberRole as Staff['type']))) && (
+                    roles?.includes(teamMemberRole as StaffType))) && (
                   <Nav.Link
                     key={title}
                     href={`/activity/${name}/team/${tid}/manage/${href}`}
@@ -118,7 +118,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
     return (
       teamMemberRole === 'admin' ||
       (teamMemberRole === 'menber' &&
-        currentRoute.at(-1)?.roles?.includes('member'))
+        currentRoute.at(-1)?.roles?.includes('member' as StaffType.Member))
     );
   }
 
