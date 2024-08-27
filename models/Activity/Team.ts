@@ -1,9 +1,10 @@
 import {
-  Base,
   BaseFilter,
   Team,
   TeamMember,
   TeamMemberFilter,
+  TeamWork,
+  TeamWorkFilter,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
@@ -20,31 +21,11 @@ import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
 import { NameAvailability } from './index';
 
-export enum TeamWorkType {
-  IMAGE = 'image',
-  WEBSITE = 'website',
-  VIDEO = 'video',
-  WORD = 'word',
-  POWERPOINT = 'powerpoint',
-}
-
-export enum MembershipStatus {
-  PENDINGAPPROVAL = 'pendingApproval',
-  APPROVED = 'approved',
-}
-
-type TeamBase = Record<'hackathonName' | 'description', string>;
-
 export type TeamFilter = Filter<Team> & BaseFilter;
 
 export type MemberFilter = Filter<TeamMember> & TeamMemberFilter;
 
-export interface TeamWork
-  extends Base,
-    TeamBase,
-    Record<'teamId' | 'title' | 'url', string> {
-  type: TeamWorkType;
-}
+export type WorkFilter = Filter<TeamWork> & TeamWorkFilter;
 
 export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
   description?: string;
@@ -172,29 +153,10 @@ export class TeamMemberModel extends TableModel<TeamMember, MemberFilter> {
   }
 }
 
-export class TeamWorkModel extends Stream<TeamWork>(ListModel) {
-  client = sessionStore.client;
-
-  constructor(baseURI: string) {
+export class TeamWorkModel extends TableModel<TeamWork, WorkFilter> {
+  constructor(public baseURI: string) {
     super();
     this.baseURI = `${baseURI}/work`;
-  }
-
-  openStream() {
-    return createListStream<TeamWork>(
-      `${this.baseURI}s`,
-      this.client,
-      count => (this.totalCount = count),
-    );
-  }
-
-  @toggle('uploading')
-  async updateOne(data: InputData<TeamWork>, id?: string) {
-    const { body } = await (id
-      ? this.client.patch<TeamWork>(`${this.baseURI}/${id}`, data)
-      : this.client.put<TeamWork>(this.baseURI, data));
-
-    return (this.currentOne = body!);
   }
 }
 
