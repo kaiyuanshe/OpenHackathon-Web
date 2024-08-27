@@ -1,10 +1,8 @@
+import { Organizer } from '@kaiyuanshe/openhackathon-service';
 import { FC } from 'react';
 import { Form, Image, Table } from 'react-bootstrap';
 
-import {
-  Organization,
-  OrganizationTypeName,
-} from '../../models/Activity/Organization';
+import { OrganizerTypeName } from '../../models/Activity/Organization';
 import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
@@ -12,7 +10,7 @@ import { OrganizationCard } from './OrganizationCard';
 
 const { t } = i18n;
 
-export const OrganizationListLayout: FC<XScrollListProps<Organization>> = ({
+export const OrganizationListLayout: FC<XScrollListProps<Organizer>> = ({
   defaultData = [],
 }) => (
   <ul className="list-unstyled">
@@ -24,7 +22,7 @@ export const OrganizationListLayout: FC<XScrollListProps<Organization>> = ({
   </ul>
 );
 
-export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
+export const OrganizationTableLayout: FC<XScrollListProps<Organizer>> = ({
   defaultData = [],
   selectedIds = [],
   onSelect,
@@ -88,7 +86,7 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organization>> = ({
           </td>
           <td>{name}</td>
           <td>{description}</td>
-          <td>{OrganizationTypeName[type]}</td>
+          <td>{OrganizerTypeName[type]}</td>
           <td>
             {logo! && (
               <Image

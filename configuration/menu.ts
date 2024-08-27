@@ -1,5 +1,5 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { StaffType } from '@kaiyuanshe/openhackathon-service';
+import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 
 import { i18n } from '../models/Base/Translation';
 
@@ -10,7 +10,7 @@ export interface MenuItem {
   href?: string;
   icon?: IconProp;
   list?: MenuItem[];
-  roles?: StaffType[];
+  roles?: (StaffType | TeamMemberRole)[];
 }
 
 export const menus: () => MenuItem[] = () => [

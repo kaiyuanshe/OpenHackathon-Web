@@ -1,8 +1,8 @@
+import { Team } from '@kaiyuanshe/openhackathon-service';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { Team } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';

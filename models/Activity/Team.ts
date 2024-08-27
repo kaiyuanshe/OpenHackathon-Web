@@ -1,9 +1,20 @@
-import { Base, User } from '@kaiyuanshe/openhackathon-service';
+import {
+  Base,
+  BaseFilter,
+  Team,
+  TeamMember,
+  TeamMemberFilter,
+} from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
 import { ListModel, Stream, toggle } from 'mobx-restful';
-import { buildURLData } from 'web-utility';
 
-import { createListStream, Filter, InputData, integrateError } from '../Base';
+import {
+  createListStream,
+  Filter,
+  InputData,
+  integrateError,
+  TableModel,
+} from '../Base';
 import { WorkspaceModel } from '../Git';
 import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
@@ -24,21 +35,9 @@ export enum MembershipStatus {
 
 type TeamBase = Record<'hackathonName' | 'description', string>;
 
-export interface Team
-  extends Base,
-    TeamBase,
-    Record<'displayName' | 'creatorId', string> {
-  autoApprove: boolean;
-  creator: User;
-  membersCount: number;
-}
+export type TeamFilter = Filter<Team> & BaseFilter;
 
-export interface TeamFilter extends Filter<Team> {
-  search?: string;
-}
-
-export type TeamMemberFilter = Filter<TeamMember> &
-  Partial<Pick<TeamMember, 'role' | 'status'>>;
+export type MemberFilter = Filter<TeamMember> & TeamMemberFilter;
 
 export interface TeamWork
   extends Base,
@@ -47,27 +46,17 @@ export interface TeamWork
   type: TeamWorkType;
 }
 
-export interface TeamMember
-  extends Omit<Base, 'id'>,
-    Omit<TeamWork, 'type' | 'title' | 'url'> {
-  userId: number;
-  user: User;
-  role: 'admin' | 'member';
-  status: MembershipStatus;
-}
-
 export interface JoinTeamReqBody extends Pick<TeamMember, 'role'> {
   description?: string;
 }
 
-export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
-  constructor(baseURI: string) {
+export class TeamModel extends TableModel<Team, TeamFilter> {
+  constructor(public baseURI: string) {
     super();
 
     this.baseURI = `${baseURI}/team`;
   }
 
-  client = sessionStore.client;
   currentMember?: TeamMemberModel;
   currentWork?: TeamWorkModel;
   currentWorkspace?: WorkspaceModel;
@@ -124,14 +113,6 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
     return (this.sessionOne = body!);
   }
 
-  openStream({ search }: TeamFilter) {
-    return createListStream<Team>(
-      `${this.baseURI}s?${buildURLData({ search })}`,
-      this.client,
-      count => (this.totalCount = count),
-    );
-  }
-
   @toggle('uploading')
   async updateOne(data: InputData<Team>, id?: string) {
     if (!id) {
@@ -167,26 +148,14 @@ export class TeamModel extends Stream<Team, TeamFilter>(ListModel) {
   }
 }
 
-export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
-  ListModel,
-) {
-  constructor(baseURI: string) {
+export class TeamMemberModel extends TableModel<TeamMember, MemberFilter> {
+  constructor(public baseURI: string) {
     super();
     this.baseURI = `${baseURI}/member`;
   }
 
-  client = sessionStore.client;
-
   @observable
   accessor sessionOne: TeamMember | undefined;
-
-  openStream(filter: Filter<TeamMember>) {
-    return createListStream<TeamMember>(
-      `${this.baseURI}s?${buildURLData(filter)}`,
-      this.client,
-      count => (this.totalCount = count),
-    );
-  }
 
   @toggle('uploading')
   async joinTeam(data: JoinTeamReqBody) {
@@ -200,21 +169,6 @@ export class TeamMemberModel extends Stream<TeamMember, Filter<TeamMember>>(
     await this.client.delete(this.baseURI);
 
     this.currentOne = {} as TeamMember;
-  }
-
-  @toggle('uploading')
-  async approveOne(userId: number, status: MembershipStatus) {
-    if (status !== MembershipStatus.APPROVED) return;
-    await this.client.post<TeamMember>(`${this.baseURI}/${userId}/approve`, {});
-    this.changeOne({ status }, userId, true);
-  }
-
-  @toggle('uploading')
-  async updateRole(userId: number, role: Required<TeamMemberFilter>['role']) {
-    await this.client.post<TeamMember>(`${this.baseURI}/${userId}/updateRole`, {
-      role,
-    });
-    this.changeOne({ role }, userId, true);
   }
 }
 

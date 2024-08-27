@@ -1,10 +1,10 @@
+import { Team } from '@kaiyuanshe/openhackathon-service';
 import { NewData } from 'mobx-restful';
 import { FC, FormEvent } from 'react';
 import { Modal } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
-import { Team } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import { TeamEditor } from './TeamEditor';
 

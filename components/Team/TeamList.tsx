@@ -1,7 +1,8 @@
+import { Team } from '@kaiyuanshe/openhackathon-service';
 import { ScrollListProps } from 'mobx-restful-table';
 import { Col, Row } from 'react-bootstrap';
 
-import { Team, TeamModel } from '../../models/Activity/Team';
+import { TeamModel } from '../../models/Activity/Team';
 import { TeamCard } from './TeamCard';
 
 export interface TeamListProps extends ScrollListProps<Team> {

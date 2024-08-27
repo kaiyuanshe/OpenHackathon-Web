@@ -10,6 +10,7 @@ import {
   EnrollmentStatus,
   Hackathon,
   Media,
+  Organizer,
 } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
@@ -39,7 +40,6 @@ import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { Organization } from '../../../models/Activity/Organization';
 import { isServer } from '../../../models/Base';
 import { i18n } from '../../../models/Base/Translation';
 import sessionStore from '../../../models/User/Session';
@@ -53,7 +53,7 @@ const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
 
 interface ActivityPageProps {
   activity: Hackathon;
-  organizationList: Organization[];
+  organizationList: Organizer[];
 }
 
 export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
@@ -81,7 +81,7 @@ const StatusName: () => Record<EnrollmentStatus, string> = () => ({
 
 @observer
 export default class ActivityPage extends PureComponent<ActivityPageProps> {
-  logStore = activityStore.logOf(this.props.activity.name);
+  logStore = activityStore.logOf(this.props.activity.id);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
   messageStore = activityStore.messageOf(this.props.activity.name);

@@ -1,12 +1,12 @@
+import { Organizer } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { Component, createRef, FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import {
-  Organization,
-  OrganizationModel,
-  OrganizationTypeName,
+  OrganizerModel,
+  OrganizerTypeName,
 } from '../../models/Activity/Organization';
 import { i18n } from '../../models/Base/Translation';
 
@@ -14,16 +14,16 @@ const { t } = i18n;
 
 export interface OrganizationModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
-  store: OrganizationModel;
+  store: OrganizerModel;
   onSave?: () => any;
 }
 
-interface OrganizationForm extends Organization {
+interface OrganizerForm extends Organizer {
   logoURI: string;
 }
 
 @observer
-export class OrganizationModal extends PureComponent<OrganizationModalProps> {
+export class OrganizationModal extends Component<OrganizationModalProps> {
   private form = createRef<HTMLFormElement>();
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -33,10 +33,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
     const { store, onSave } = this.props;
 
     const { name, description, type, logoURI, url } = formToJSON<
-      Pick<
-        OrganizationForm,
-        'name' | 'description' | 'type' | 'logoURI' | 'url'
-      >
+      Pick<OrganizerForm, 'name' | 'description' | 'type' | 'logoURI' | 'url'>
     >(event.currentTarget);
 
     await store.updateOne({
@@ -90,7 +87,7 @@ export class OrganizationModal extends PureComponent<OrganizationModalProps> {
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
             <Form.Select name="type">
-              {Object.entries(OrganizationTypeName).map(([key, value]) => (
+              {Object.entries(OrganizerTypeName).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>

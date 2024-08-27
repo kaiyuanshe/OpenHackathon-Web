@@ -6,7 +6,7 @@ import {
   faUserSecret,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StaffType } from '@kaiyuanshe/openhackathon-service';
+import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -39,7 +39,7 @@ export interface TeamManageFrameProps extends ActivityManageFrameProps {
 @observer
 export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
   @observable
-  accessor teamMemberRole = '';
+  accessor teamMemberRole: TeamMemberRole | undefined;
 
   @observable
   accessor isLoading = false;
@@ -57,11 +57,11 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
 
       this.teamMemberRole = currentUserInThisTeam
         ? currentUserInThisTeam.role
-        : '';
+        : undefined;
     } catch (error: any) {
       const { status } = error as ErrorBaseData;
 
-      if (status !== 404) this.teamMemberRole = '';
+      if (status !== 404) this.teamMemberRole = undefined;
     } finally {
       this.isLoading = false;
     }
@@ -81,8 +81,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
             {list?.map(
               ({ title, href, icon = 'home', roles }) =>
                 (teamMemberRole === 'admin' ||
-                  (teamMemberRole &&
-                    roles?.includes(teamMemberRole as StaffType))) && (
+                  (teamMemberRole && roles?.includes(teamMemberRole))) && (
                   <Nav.Link
                     key={title}
                     href={`/activity/${name}/team/${tid}/manage/${href}`}
@@ -117,7 +116,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
 
     return (
       teamMemberRole === 'admin' ||
-      (teamMemberRole === 'menber' &&
+      (teamMemberRole === 'member' &&
         currentRoute.at(-1)?.roles?.includes('member' as StaffType.Member))
     );
   }

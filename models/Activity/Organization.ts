@@ -1,52 +1,24 @@
-import { Base, Media } from '@kaiyuanshe/openhackathon-service';
+import { Organizer, OrganizerType } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
 import { groupBy } from 'web-utility';
 
-import { createListStream, InputData } from '../Base';
+import { TableModel } from '../Base';
 import { i18n } from '../Base/Translation';
-import sessionStore from '../User/Session';
 
 const { t } = i18n;
 
-export enum OrganizationType {
-  Host = 'host',
-  Organizer = 'organizer',
-  Coorganizer = 'coorganizer',
-  Sponsor = 'sponsor',
-  TitleSponsor = 'titleSponsor',
-}
-
-export const OrganizationTypeName = {
-  [OrganizationType.Host]: t('host'),
-  [OrganizationType.Organizer]: t('undertake'),
-  [OrganizationType.Coorganizer]: t('coorganizer'),
-  [OrganizationType.Sponsor]: t('sponsor'),
-  [OrganizationType.TitleSponsor]: t('titlesponsor'),
+export const OrganizerTypeName: Record<OrganizerType, string> = {
+  host: t('host'),
+  organizer: t('undertake'),
+  coorganizer: t('coorganizer'),
+  sponsor: t('sponsor'),
+  titleSponsor: t('titlesponsor'),
 };
 
-export interface Organization extends Base {
-  name: string;
-  description?: string;
-  type: OrganizationType;
-  logo?: Media;
-  url?: string;
-}
-
-export class OrganizationModel extends Stream<Organization>(ListModel) {
-  client = sessionStore.client;
-
+export class OrganizerModel extends TableModel<Organizer> {
   constructor(public baseURI: string) {
     super();
     this.baseURI = `${this.baseURI}/organizer`;
-  }
-
-  openStream() {
-    return createListStream<Organization>(
-      `${this.baseURI}s`,
-      this.client,
-      count => (this.totalCount = count),
-    );
   }
 
   @computed
@@ -55,14 +27,6 @@ export class OrganizationModel extends Stream<Organization>(ListModel) {
       Object.entries(groupBy(this.allItems, 'type')).map(
         ([type, { length }]) => [type, length],
       ),
-    ) as Record<Organization['type'], number>;
-  }
-
-  @toggle('uploading')
-  async updateOne(data: InputData<Organization>, id?: IDType) {
-    const { body } = await (id
-      ? this.client.patch<Organization>(`${this.baseURI}/${id}`, data)
-      : this.client.put<Organization>(this.baseURI, data));
-    return body!;
+    ) as Record<OrganizerType, number>;
   }
 }

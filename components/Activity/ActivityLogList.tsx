@@ -1,5 +1,6 @@
 import { ActivityLog } from '@kaiyuanshe/openhackathon-service';
 import { ScrollListProps } from 'mobx-restful-table';
+import { FC } from 'react';
 import { Badge, ListGroup } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
@@ -15,9 +16,9 @@ export const OperationName = {
   delete: 'Delete',
 };
 
-export const ActivityLogListLayout = ({
-  defaultData = [],
-}: Pick<ActivityLogListProps, 'defaultData'>) => (
+export const ActivityLogListLayout: FC<
+  Pick<ActivityLogListProps, 'defaultData'>
+> = ({ defaultData = [] }) => (
   <ListGroup as="ol" numbered>
     {defaultData.map(
       ({ id, createdAt, createdBy, operation, tableName, recordId }) => (

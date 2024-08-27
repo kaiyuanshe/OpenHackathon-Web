@@ -55,10 +55,10 @@ class TeamManageEditor extends PureComponent<TeamManagePageProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { search } = formToJSON<{ search: string }>(event.currentTarget);
+    const { keywords } = formToJSON<{ keywords: string }>(event.currentTarget);
 
     this.store.clear();
-    return this.store.getList({ search });
+    return this.store.getList({ keywords });
   };
 
   render() {
@@ -68,7 +68,7 @@ class TeamManageEditor extends PureComponent<TeamManagePageProps> {
       <Container fluid>
         <header className="d-flex justify-content-between mb-3">
           <Form className="d-flex" onSubmit={this.onSearch}>
-            <Form.Control type="search" name="search" />
+            <Form.Control type="search" name="keywords" />
 
             <Button type="submit" className="ms-3 text-nowrap">
               {t('search')}
