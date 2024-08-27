@@ -1,3 +1,4 @@
+import { TeamWorkType } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
@@ -25,7 +26,6 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
-import { TeamWorkType } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
 import sessionStore from '../../../../../../models/User/Session';
 
@@ -80,7 +80,7 @@ class GitView extends PureComponent<TeamManageBaseProps> {
       await activityStore.currentGit.createOneFrom(template, repository);
 
     await this.workStore.updateOne({
-      type: TeamWorkType.WEBSITE,
+      type: 'website' as TeamWorkType.Website,
       title: full_name,
       url: html_url,
     });

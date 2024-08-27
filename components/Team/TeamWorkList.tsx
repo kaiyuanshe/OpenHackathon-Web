@@ -1,5 +1,6 @@
 import { faCalendarDay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TeamWork } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { FilePreview, ScrollList } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
@@ -7,7 +8,6 @@ import { Button, Card, CardProps, Col, Container, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
 import activityStore from '../../models/Activity';
-import { TeamWork } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 
@@ -29,8 +29,8 @@ export const TeamWorkCard: FC<TeamWorkCardProps> = observer(
     title,
     url,
     description,
-    hackathonName,
-    teamId,
+    hackathon: { name },
+    team: { id: teamId },
     controls,
     onDelete,
     ...props
@@ -66,7 +66,7 @@ export const TeamWorkCard: FC<TeamWorkCardProps> = observer(
           <Button
             className="flex-fill"
             variant="warning"
-            href={`/activity/${hackathonName}/team/${teamId}/work/${id}/edit`}
+            href={`/activity/${name}/team/${teamId}/work/${id}/edit`}
           >
             {t('edit')}
           </Button>

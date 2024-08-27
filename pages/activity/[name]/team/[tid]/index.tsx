@@ -1,4 +1,9 @@
-import { Hackathon, Team, TeamMember } from '@kaiyuanshe/openhackathon-service';
+import {
+  Hackathon,
+  Team,
+  TeamMember,
+  TeamWork,
+} from '@kaiyuanshe/openhackathon-service';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -16,7 +21,6 @@ import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { ActivityModel } from '../../../../../models/Activity';
-import { TeamWork } from '../../../../../models/Activity/Team';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import { i18n } from '../../../../../models/Base/Translation';
 import sessionStore from '../../../../../models/User/Session';

@@ -1,15 +1,15 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Announcement } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
-import { FC, PureComponent } from 'react';
+import { Component, FC } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 
 import {
-  Message,
-  MessageType,
-  MessageTypeName,
+  AnnouncementType,
+  AnnouncementTypeName,
 } from '../../models/Activity/Message';
 import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/participant.module.less';
@@ -17,13 +17,14 @@ import { XScrollListProps } from '../layout/ScrollList';
 
 const { t } = i18n;
 
-export interface MessageListLayoutProps extends XScrollListProps<Message> {
+export interface AnnouncementListLayoutProps
+  extends XScrollListProps<Announcement> {
   hideControls?: boolean;
   onEdit?: (id: number) => any;
   onDelete?: (id: number) => any;
 }
 
-export const MessageListLayout: FC<MessageListLayoutProps> = ({
+export const AnnouncementListLayout: FC<AnnouncementListLayoutProps> = ({
   defaultData = [],
   selectedIds = [],
   hideControls,
@@ -90,7 +91,7 @@ export const MessageListLayout: FC<MessageListLayoutProps> = ({
           </td>
           <td>{title}</td>
           <td>{content}</td>
-          <td>{MessageTypeName()[MessageType.Hackathon]}</td>
+          <td>{AnnouncementTypeName()[AnnouncementType.Hackathon]}</td>
           <td hidden={hideControls}>
             <Button
               className="me-2"
@@ -110,11 +111,14 @@ export const MessageListLayout: FC<MessageListLayoutProps> = ({
   </Table>
 );
 
-export type MessageListProps = Pick<ScrollListProps<Message>, 'store'> &
-  MessageListLayoutProps;
+export type AnnouncementListProps = Pick<
+  ScrollListProps<Announcement>,
+  'store'
+> &
+  AnnouncementListLayoutProps;
 
 @observer
-export class MessageList extends PureComponent<MessageListProps> {
+export class AnnouncementList extends Component<AnnouncementListProps> {
   @observable
   accessor selectedIds: number[] = [];
 
@@ -141,7 +145,7 @@ export class MessageList extends PureComponent<MessageListProps> {
         translator={i18n}
         store={this.props.store}
         renderList={allItems => (
-          <MessageListLayout
+          <AnnouncementListLayout
             {...{ ...props, ...this }}
             defaultData={allItems}
           />

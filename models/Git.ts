@@ -1,11 +1,10 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
+import { Base, TeamWork } from '@kaiyuanshe/openhackathon-service';
 import { components } from '@octokit/openapi-types';
 import { HTTPClient } from 'koajax';
 import { memoize } from 'lodash';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 import { averageOf } from 'web-utility';
 
-import { TeamWork, TeamWorkType } from './Activity/Team';
 import { createListStream } from './Base';
 import sessionStore from './User/Session';
 
@@ -151,8 +150,7 @@ export class WorkspaceModel extends GitModel {
     )) {
       const { origin, pathname } = new URL(url);
 
-      if (type !== TeamWorkType.WEBSITE || origin !== 'https://github.com')
-        dropCount++;
+      if (type !== 'website' || origin !== 'https://github.com') dropCount++;
       else {
         yield await getGitRepository(pathname.slice(1));
       }

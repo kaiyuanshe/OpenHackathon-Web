@@ -66,7 +66,7 @@ export const menus: () => MenuItem[] = () => [
       },
       {
         title: t('announcement'),
-        href: 'message',
+        href: 'announcement',
         icon: 'bullhorn',
       },
       {

@@ -34,7 +34,7 @@ import {
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
 import { PageHead } from '../../../components/layout/PageHead';
-import { MessageList } from '../../../components/Message/MessageList';
+import { AnnouncementList } from '../../../components/Message/MessageList';
 import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
@@ -84,7 +84,7 @@ export default class ActivityPage extends PureComponent<ActivityPageProps> {
   logStore = activityStore.logOf(this.props.activity.id);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
-  messageStore = activityStore.messageOf(this.props.activity.name);
+  messageStore = activityStore.announcementOf(this.props.activity.name);
 
   @observable
   accessor showCreateTeam = false;
@@ -314,7 +314,7 @@ export default class ActivityPage extends PureComponent<ActivityPageProps> {
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
-                <MessageList store={myMessage} hideControls />
+                <AnnouncementList store={myMessage} hideControls />
               </Tab>
               <Tab eventKey="team" title={t('all_teams')} className="pt-2">
                 <h3>{t('my_team')}</h3>

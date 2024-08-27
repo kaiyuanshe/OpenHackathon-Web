@@ -1,25 +1,26 @@
+import { Announcement } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import { createRef, FormEvent, PureComponent } from 'react';
+import { Component, createRef, FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import {
-  Message,
-  MessageModel,
-  MessageTypeName,
+  AnnouncementModel,
+  AnnouncementTypeName,
 } from '../../models/Activity/Message';
 import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;
 
-export interface MessageModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
-  store: MessageModel;
+export interface AnnouncementModalProps
+  extends Pick<ModalProps, 'show' | 'onHide'> {
+  store: AnnouncementModel;
   onSave?: () => any;
 }
 
 @observer
-export class MessageModal extends PureComponent<MessageModalProps> {
+export class AnnouncementModal extends Component<AnnouncementModalProps> {
   private form = createRef<HTMLFormElement>();
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -31,7 +32,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
 
     if (!store || !form) return;
 
-    const data = formToJSON<NewData<Message>>(form);
+    const data = formToJSON<NewData<Announcement>>(form);
 
     await store.updateOne(data, store.currentOne.id);
     await store.refreshList();
@@ -77,7 +78,7 @@ export class MessageModal extends PureComponent<MessageModalProps> {
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
             <Form.Select name="type">
-              {Object.entries(MessageTypeName()).map(([key, value]) => (
+              {Object.entries(AnnouncementTypeName()).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>
