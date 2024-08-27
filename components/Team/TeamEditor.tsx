@@ -1,7 +1,7 @@
+import { Team } from '@kaiyuanshe/openhackathon-service';
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
-import { Team } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;

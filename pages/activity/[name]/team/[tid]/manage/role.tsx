@@ -1,7 +1,8 @@
+import { TeamMemberStatus } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 
 import { TeamAdministratorTableLayout } from '../../../../../../components/Team/TeamAdministratorTable';
 import {
@@ -11,7 +12,6 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
-import { MembershipStatus } from '../../../../../../models/Activity/Team';
 import { i18n } from '../../../../../../models/Base/Translation';
 
 export const getServerSideProps = compose<
@@ -22,7 +22,7 @@ export const getServerSideProps = compose<
 const { t } = i18n;
 
 @observer
-export default class TeamAdministratorPage extends PureComponent<TeamManageBaseProps> {
+export default class TeamAdministratorPage extends Component<TeamManageBaseProps> {
   store = activityStore
     .teamOf(this.props.route.params!.name)
     .memberOf(+this.props.route.params!.tid);
@@ -44,12 +44,14 @@ export default class TeamAdministratorPage extends PureComponent<TeamManageBaseP
           <ScrollList
             translator={i18n}
             store={store}
-            filter={{ status: MembershipStatus.APPROVED }}
+            filter={{ status: 'approved' as TeamMemberStatus.Approved }}
             renderList={allItems => (
               <TeamAdministratorTableLayout
                 {...props}
                 defaultData={allItems}
-                onUpdateRole={(userId, role) => store.updateRole(userId, role)}
+                onUpdateRole={(userId, role) =>
+                  store.updateOne({ role }, userId)
+                }
               />
             )}
           />

@@ -81,10 +81,10 @@ class EvalationEditor extends PureComponent<EvaluationPageProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { search } = formToJSON<{ search: string }>(event.currentTarget);
+    const { keywords } = formToJSON<{ keywords: string }>(event.currentTarget);
 
     this.store.clear();
-    return this.store.getList({ search });
+    return this.store.getList({ keywords });
   };
 
   renderForm = () => {
@@ -142,7 +142,7 @@ class EvalationEditor extends PureComponent<EvaluationPageProps> {
           <Form onSubmit={this.onSearch}>
             <InputGroup>
               <Form.Control
-                type="search"
+                type="keywords"
                 id="teamSearch"
                 name="teamSearch"
                 required

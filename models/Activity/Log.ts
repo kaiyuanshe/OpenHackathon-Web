@@ -1,18 +1,12 @@
-import { ActivityLog, Base } from '@kaiyuanshe/openhackathon-service';
-import { IDType } from 'mobx-restful';
+import { ActivityLog } from '@kaiyuanshe/openhackathon-service';
 
 import { TableModel } from '../Base';
 
-export interface Log extends Base {
-  operatorId: IDType;
-  message: string;
-  messageFormat: string;
-  activityLogType: string;
-}
-
 export class LogModel extends TableModel<ActivityLog> {
-  constructor(public baseURI: string) {
+  baseURI = 'activity-log';
+
+  constructor(path: string) {
     super();
-    this.baseURI = `${baseURI}/activityLogs`;
+    this.baseURI += `/${path}`;
   }
 }

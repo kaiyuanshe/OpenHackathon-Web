@@ -1,10 +1,9 @@
 import { User } from '@authing/native-js-ui-components';
-import { Base, Media } from '@kaiyuanshe/openhackathon-service';
+import { Base, Media, Team } from '@kaiyuanshe/openhackathon-service';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 
 import { createListStream, InputData } from '../Base';
 import sessionStore from '../User/Session';
-import { Team } from './Team';
 
 export interface Award
   extends Record<'hackathonName' | 'name' | 'description', string>,

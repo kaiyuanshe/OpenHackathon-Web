@@ -1,7 +1,10 @@
+import {
+  TeamMember,
+  TeamMemberStatus,
+} from '@kaiyuanshe/openhackathon-service';
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { MembershipStatus, TeamMember } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { convertDatetime } from '../../utils/time';
@@ -11,10 +14,10 @@ const { t } = i18n;
 
 export interface TeamParticipantTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  onApprove?: (userId: number, status: MembershipStatus) => any;
+  onApprove?: (userId: number, status: TeamMemberStatus) => any;
 }
 
-const StatusName: () => Record<TeamMember['status'], string> = () => ({
+const StatusName: () => Record<TeamMemberStatus, string> = () => ({
   approved: t('status_approved'),
   pendingApproval: t('status_pending'),
 });
@@ -70,9 +73,9 @@ export const TeamParticipantTableLayout: FC<
                   <Form.Control
                     as="select"
                     className={styles.form}
-                    disabled={status === MembershipStatus.APPROVED}
+                    disabled={status === 'approved'}
                     onChange={({ currentTarget: { value } }) =>
-                      onApprove?.(id, value as MembershipStatus)
+                      onApprove?.(id, value as TeamMemberStatus)
                     }
                     defaultValue={status}
                   >

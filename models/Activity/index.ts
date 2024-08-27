@@ -16,7 +16,7 @@ import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
 import { MessageModel } from './Message';
-import { OrganizationModel } from './Organization';
+import { OrganizerModel } from './Organization';
 import { Extensions, Question } from './Question';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
@@ -67,7 +67,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   accessor currentTeam: TeamModel | undefined;
 
   currentLog?: LogModel;
-  currentOrganization?: OrganizationModel;
+  currentOrganization?: OrganizerModel;
   currentTemplate?: GitTemplateModal;
 
   templateOf(name = this.currentOne.name) {
@@ -97,14 +97,12 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     return (this.currentTeam = new TeamModel(`hackathon/${name}`));
   }
 
-  logOf(name = this.currentOne.name) {
-    return (this.currentLog = new LogModel(`hackathon/${name}`));
+  logOf(id = this.currentOne.id) {
+    return (this.currentLog = new LogModel(`Hackathon/${id}`));
   }
 
   organizationOf(name = this.currentOne.name) {
-    return (this.currentOrganization = new OrganizationModel(
-      `hackathon/${name}`,
-    ));
+    return (this.currentOrganization = new OrganizerModel(`hackathon/${name}`));
   }
 
   openStream({

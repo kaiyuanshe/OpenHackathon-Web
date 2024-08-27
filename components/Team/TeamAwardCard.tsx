@@ -1,5 +1,6 @@
 import { faAward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Base, Team } from '@kaiyuanshe/openhackathon-service';
 import classNames from 'classnames';
 import { Avatar } from 'idea-react';
 import { ScrollList } from 'mobx-restful-table';
@@ -7,7 +8,6 @@ import { PureComponent } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { Team } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import { TeamAwardAssignmentLayout } from './TeamAwardAssignment';
 import { TeamMemberListLayout } from './TeamMemberList';
@@ -16,15 +16,7 @@ import { SimpleTeamWorkListLayout } from './TeamWork';
 const { t } = i18n;
 
 export interface TeamAwardCardProps
-  extends Pick<
-    Team,
-    | 'hackathonName'
-    | 'displayName'
-    | 'creatorId'
-    | 'creator'
-    | 'membersCount'
-    | 'id'
-  > {
+  extends Omit<Team, Exclude<keyof Base, 'id'>> {
   className?: string;
   onAssign: (id: number) => any;
   onDelete?: (id: number) => any;
@@ -32,19 +24,19 @@ export interface TeamAwardCardProps
 
 export class TeamAwardCard extends PureComponent<TeamAwardCardProps> {
   memberStore = activityStore
-    .teamOf(this.props.hackathonName)
+    .teamOf(this.props.hackathon.name)
     .memberOf(this.props.id);
 
   workStore = activityStore
-    .teamOf(this.props.hackathonName)
+    .teamOf(this.props.hackathon.name)
     .workOf(this.props.id);
 
   assignmentStore = activityStore
-    .teamOf(this.props.hackathonName)
+    .teamOf(this.props.hackathon.name)
     .assignmentOf(this.props.id);
 
   renderDetail() {
-    const { id, hackathonName, membersCount } = this.props;
+    const { membersCount } = this.props;
 
     return (
       <Accordion className="my-3" flush>
@@ -100,10 +92,9 @@ export class TeamAwardCard extends PureComponent<TeamAwardCardProps> {
     const {
       className,
       id,
-      hackathonName,
+      hackathon: { name },
       displayName,
-      creatorId,
-      creator,
+      createdBy,
       onAssign,
     } = this.props;
 
@@ -111,16 +102,16 @@ export class TeamAwardCard extends PureComponent<TeamAwardCardProps> {
       <div className={classNames('border p-2', className)}>
         <a
           className="fs-4 text-primary text-truncate"
-          href={`/activity/${hackathonName}/team/${id}/`}
+          href={`/activity/${name}/team/${id}/`}
         >
           {displayName}
         </a>
-        <a className="d-flex my-3" href={`/user/${creatorId}`}>
+        <a className="d-flex my-3" href={`/user/${createdBy.id}`}>
           <span className="pe-2">{t('team_leader')}</span>
 
           <span className="text-primary">
-            <Avatar className="me-3" size={1.5} src={creator.avatar} />
-            {creator.name}
+            <Avatar className="me-3" size={1.5} src={createdBy.avatar} />
+            {createdBy.name}
           </span>
         </a>
         {this.renderDetail()}

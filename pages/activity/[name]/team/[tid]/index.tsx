@@ -1,4 +1,4 @@
-import { Hackathon } from '@kaiyuanshe/openhackathon-service';
+import { Hackathon, Team, TeamMember } from '@kaiyuanshe/openhackathon-service';
 import { Icon } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
@@ -16,12 +16,7 @@ import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { ActivityModel } from '../../../../../models/Activity';
-import {
-  MembershipStatus,
-  Team,
-  TeamMember,
-  TeamWork,
-} from '../../../../../models/Activity/Team';
+import { TeamWork } from '../../../../../models/Activity/Team';
 import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import { i18n } from '../../../../../models/Base/Translation';
 import sessionStore from '../../../../../models/User/Session';
@@ -83,14 +78,14 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
   @computed
   get currentRoute() {
     const {
-      activity: { displayName: hackathonDisplayName },
-      team: { hackathonName, displayName },
+      activity: { name, displayName: hackathonDisplayName },
+      team: { displayName },
     } = this.observedProps;
 
     return [
       {
         title: hackathonDisplayName,
-        href: `/activity/${hackathonName}`,
+        href: `/activity/${name}`,
       },
       { title: displayName },
     ];
@@ -155,7 +150,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
 
   handleLeaveTeam = async () => {
     const operation =
-      this.currentUserInThisTeam?.status === MembershipStatus.APPROVED
+      this.currentUserInThisTeam?.status === 'approved'
         ? t('leave_team')
         : t('cancel_application');
 
@@ -167,13 +162,12 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
   };
 
   render() {
-    const hackathonDisplayName = this.props.activity.displayName,
+    const { name, displayName: hackathonDisplayName } = this.props.activity,
       {
         id,
-        hackathonName,
         displayName,
         description,
-        creator: { avatar },
+        createdBy: { avatar },
       } = this.props.team,
       { teamMemberList, teamWorkList } = this.props,
       {
@@ -215,7 +209,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
                 {teamMemberRole === 'admin' && (
                   <Button
                     className="w-100 mt-2"
-                    href={`/activity/${hackathonName}/team/${id}/manage/participant`}
+                    href={`/activity/${name}/team/${id}/manage/participant`}
                   >
                     {t('manage_team')}
                   </Button>
@@ -226,7 +220,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
                     variant="danger"
                     onClick={this.handleLeaveTeam}
                   >
-                    {currentUserInThisTeam?.status === MembershipStatus.APPROVED
+                    {currentUserInThisTeam?.status === 'approved'
                       ? t('leave_team')
                       : t('cancel_application')}
                   </Button>
@@ -254,7 +248,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
               </Tab>
               <Tab eventKey="teamWork" title={t('team_works')} className="pt-2">
                 <TeamWorkList
-                  activity={hackathonName}
+                  activity={name}
                   team={id}
                   defaultData={teamWorkList}
                   controls={!!currentUserInThisTeam}

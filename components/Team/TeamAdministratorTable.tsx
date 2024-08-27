@@ -1,8 +1,8 @@
+import { TeamMember, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { FC } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { TeamMember } from '../../models/Activity/Team';
 import { i18n } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import styles from '../../styles/Table.module.less';
@@ -12,7 +12,7 @@ const { t } = i18n;
 
 export interface TeamAdministratorTableLayoutProps
   extends XScrollListProps<TeamMember> {
-  onUpdateRole?: (userId: number, role: 'admin' | 'member') => any;
+  onUpdateRole?: (userId: number, role: TeamMemberRole) => any;
   onPopUpUpdateRoleModal?: (userId: number) => any;
 }
 
@@ -47,10 +47,10 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
         <tbody>
           {defaultData.map(
             (
-              { userId, user: { email, mobilePhone, name }, role, description },
+              { user: { id, email, mobilePhone, name }, role, description },
               index,
             ) => (
-              <tr key={userId}>
+              <tr key={id}>
                 {[
                   index + 1,
                   name || email || mobilePhone || '--',
@@ -59,16 +59,16 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
                   // address || '--',
                   // convertDatetime(lastLogin),
                   description,
-                  userId,
+                  id,
                 ].map((data, idx, { length }) =>
                   idx + 1 === length ? (
-                    <td key={idx + userId}>
+                    <td key={idx + id}>
                       <Form.Control
                         as="select"
                         className={styles.form}
-                        disabled={currentUserId === userId}
+                        disabled={currentUserId === id}
                         onChange={({ currentTarget: { value } }) =>
-                          onUpdateRole?.(userId, value as TeamMember['role'])
+                          onUpdateRole?.(id, value as TeamMemberRole)
                         }
                         defaultValue={role}
                       >
@@ -80,7 +80,7 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
                       </Form.Control>
                     </td>
                   ) : (
-                    <td key={idx + userId} title={data + ''}>
+                    <td key={idx + id} title={data + ''}>
                       {data}
                     </td>
                   ),

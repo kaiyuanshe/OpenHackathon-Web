@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 
 import {
   TeamManageBaseParams,
@@ -21,7 +21,7 @@ export const getServerSideProps = compose<
 const { t } = i18n;
 
 @observer
-export default class TeamParticipantPage extends PureComponent<TeamManageBaseProps> {
+export default class TeamParticipantPage extends Component<TeamManageBaseProps> {
   store = activityStore
     .teamOf(this.props.route.params!.name)
     .memberOf(+this.props.route.params!.tid);
@@ -46,7 +46,9 @@ export default class TeamParticipantPage extends PureComponent<TeamManageBasePro
             renderList={allItems => (
               <TeamParticipantTableLayout
                 defaultData={allItems}
-                onApprove={(userId, status) => store.approveOne(userId, status)}
+                onApprove={(userId, status) =>
+                  store.updateOne({ status }, userId)
+                }
               />
             )}
           />
