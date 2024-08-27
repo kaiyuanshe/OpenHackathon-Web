@@ -1,49 +1,26 @@
-import { Base } from '@kaiyuanshe/openhackathon-service';
-import { IDType, ListModel, Stream, toggle } from 'mobx-restful';
-import { buildURLData } from 'web-utility';
+import { Announcement, BaseFilter } from '@kaiyuanshe/openhackathon-service';
 
-import { createListStream, Filter, InputData } from '../Base';
+import { Filter, TableModel } from '../Base';
 import { i18n } from '../Base/Translation';
-import sessionStore from '../User/Session';
 
 const { t } = i18n;
 
-export enum MessageType {
+export enum AnnouncementType {
   Hackathon = 'hackathon',
 }
 
-export const MessageTypeName = () => ({
-  [MessageType.Hackathon]: t('hackathon_message'),
+export const AnnouncementTypeName = () => ({
+  [AnnouncementType.Hackathon]: t('hackathon_message'),
 });
 
-export interface Message extends Base {
-  title: string;
-  content: string;
-}
+export type AnnouncementFilter = Filter<Announcement> & BaseFilter;
 
-export type MessageFilter = Filter<Message>;
-
-export class MessageModel extends Stream<Message, MessageFilter>(ListModel) {
-  client = sessionStore.client;
-
-  constructor(baseURI: string) {
+export class AnnouncementModel extends TableModel<
+  Announcement,
+  AnnouncementFilter
+> {
+  constructor(public baseURI: string) {
     super();
     this.baseURI = `${baseURI}/announcement`;
-  }
-
-  openStream(filter: MessageFilter) {
-    return createListStream<Message>(
-      `${this.baseURI}s?${buildURLData(filter)}`,
-      this.client,
-      count => (this.totalCount = count),
-    );
-  }
-
-  @toggle('uploading')
-  async updateOne(data: InputData<Message>, id?: IDType) {
-    const { body } = await (id
-      ? this.client.patch<Message>(`${this.baseURI}/${id}`, data)
-      : this.client.put<Message>(this.baseURI, data));
-    return (this.currentOne = body!);
   }
 }

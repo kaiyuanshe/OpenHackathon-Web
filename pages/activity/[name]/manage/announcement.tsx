@@ -13,8 +13,8 @@ import { createRef, FC, FormEvent, PureComponent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { MessageList } from '../../../../components/Message/MessageList';
-import { MessageModal } from '../../../../components/Message/MessageModal';
+import { AnnouncementList } from '../../../../components/Message/MessageList';
+import { AnnouncementModal } from '../../../../components/Message/MessageModal';
 import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
@@ -45,7 +45,7 @@ export default MessageListPage;
 
 @observer
 class MessageListEditor extends PureComponent<MessageListPageProps> {
-  store = activityStore.messageOf(this.props.route.params!.name);
+  store = activityStore.announcementOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();
 
@@ -96,14 +96,14 @@ class MessageListEditor extends PureComponent<MessageListPageProps> {
           </Button>
         </Form>
 
-        <MessageList
+        <AnnouncementList
           store={store}
           hideControls={false}
           onSelect={list => (this.selectedIds = list)}
           onEdit={() => (this.show = true)}
           onDelete={this.handleReset}
         />
-        <MessageModal
+        <AnnouncementModal
           store={store}
           show={show}
           onHide={() => (this.show = false)}

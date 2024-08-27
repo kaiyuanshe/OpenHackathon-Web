@@ -15,7 +15,7 @@ import platformAdmin from '../User/PlatformAdmin';
 import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
-import { MessageModel } from './Message';
+import { AnnouncementModel } from './Message';
 import { OrganizerModel } from './Organization';
 import { Extensions, Question } from './Question';
 import { StaffModel } from './Staff';
@@ -61,7 +61,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   @observable
   accessor currentEnrollment: EnrollmentModel | undefined;
 
-  currentMessage?: MessageModel;
+  currentAnnouncement?: AnnouncementModel;
 
   @observable
   accessor currentTeam: TeamModel | undefined;
@@ -89,8 +89,10 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     return (this.currentEnrollment = new EnrollmentModel(`hackathon/${name}`));
   }
 
-  messageOf(name = this.currentOne.name) {
-    return (this.currentMessage = new MessageModel(`hackathon/${name}`));
+  announcementOf(name = this.currentOne.name) {
+    return (this.currentAnnouncement = new AnnouncementModel(
+      `hackathon/${name}`,
+    ));
   }
 
   teamOf(name = this.currentOne.name) {
@@ -137,7 +139,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     this.enrollmentOf(name);
     this.teamOf(name);
     this.organizationOf(name);
-    this.messageOf(name);
+    this.announcementOf(name);
     this.templateOf(name);
 
     return (this.currentOne = {
