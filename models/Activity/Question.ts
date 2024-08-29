@@ -11,10 +11,6 @@ export interface Question {
   required?: boolean;
 }
 
-export interface Extensions {
-  name: string;
-  value: string;
-}
 export const questions: Question[] = [
   {
     title: t('what_is_your_occupation'),

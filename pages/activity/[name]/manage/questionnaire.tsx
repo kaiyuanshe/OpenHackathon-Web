@@ -1,3 +1,4 @@
+import { Extension } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
@@ -16,7 +17,7 @@ import { QuestionnaireForm } from '../../../../components/Activity/Questionnaire
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
 import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
-import { Extensions, Question } from '../../../../models/Activity/Question';
+import { Question } from '../../../../models/Activity/Question';
 import { isServer } from '../../../../models/Base';
 import { i18n } from '../../../../models/Base/Translation';
 
@@ -68,7 +69,7 @@ class ActivityQuestionnaireEditor extends PureComponent<ActivityQuestionnairePag
 
     if (!questionnaire[0]) return self.alert(t('please_add_question'));
 
-    const questions: Extensions[] = questionnaire.map(v => ({
+    const questions: Extension[] = questionnaire.map(v => ({
       name: v.id || v.title,
       value: JSON.stringify(v),
     }));
@@ -78,13 +79,11 @@ class ActivityQuestionnaireEditor extends PureComponent<ActivityQuestionnairePag
     } else {
       await activityStore.updateQuestionnaire(questions, this.activity);
     }
-
     self.alert(
       this.isCreate
         ? t('create_questionnaire_success')
         : t('update_questionnaire_success'),
     );
-
     this.isCreate = false;
   };
 

@@ -1,8 +1,9 @@
 import {
-  Base,
   Enrollment,
+  Extension,
   Hackathon,
   HackathonStatus,
+  Questionnaire,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
 import { toggle } from 'mobx-restful';
@@ -16,7 +17,7 @@ import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
 import { AnnouncementModel } from './Message';
 import { OrganizerModel } from './Organization';
-import { Extensions, Question } from './Question';
+import { Question } from './Question';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
 
@@ -42,11 +43,6 @@ export interface ActivityFilter extends Filter<Hackathon> {
 
 export interface ActivityLogsFilter extends Filter<Hackathon> {
   name: string;
-}
-
-export interface Questionnaire extends Base {
-  extensions: Extensions[];
-  hackathonName: string;
 }
 
 export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
@@ -171,7 +167,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
   @toggle('uploading')
   createQuestionnaire(
-    extensions: Extensions[],
+    extensions: Extension[],
     activity = this.currentOne.name,
   ) {
     return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
@@ -181,7 +177,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
   @toggle('uploading')
   updateQuestionnaire(
-    extensions: Extensions[],
+    extensions: Extension[],
     activity = this.currentOne.name,
   ) {
     return this.client.patch(`${this.baseURI}/${activity}/questionnaire`, {
