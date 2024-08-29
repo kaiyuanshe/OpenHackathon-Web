@@ -10,7 +10,6 @@ import { buildURLData } from 'web-utility';
 
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
-import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
 import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
@@ -55,7 +54,6 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   indexKey = 'name' as const;
 
   currentStaff?: StaffModel;
-  currentGit = new GitModel();
   currentAward?: AwardModel;
 
   @observable
@@ -68,10 +66,10 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
   currentLog?: LogModel;
   currentOrganization?: OrganizerModel;
-  currentTemplate?: GitTemplateModal;
+  currentTemplate?: GitModel;
 
   templateOf(name = this.currentOne.name) {
-    return (this.currentTemplate = new GitTemplateModal(`hackathon/${name}`));
+    return (this.currentTemplate = new GitModel(`hackathon/${name}`));
   }
 
   @observable

@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import {
   Button,
   Col,
@@ -13,18 +13,18 @@ import {
 import { formToJSON } from 'web-utility';
 
 import { i18n } from '../../models/Base/Translation';
-import { GitTemplateModal } from '../../models/TemplateRepo';
+import { GitModel } from '../../models/Git';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   name?: string;
-  store: GitTemplateModal;
+  store: GitModel;
   onSave?: () => any;
 }
 
 const { t } = i18n;
 
 @observer
-export class GitModal extends PureComponent<GitModalProps> {
+export class GitModal extends Component<GitModalProps> {
   @observable
   accessor value = '';
 
@@ -74,7 +74,7 @@ export class GitModal extends PureComponent<GitModalProps> {
               <Col sm={10}>
                 <Form.Control
                   type="url"
-                  name={t('url')}
+                  name="html_url"
                   value={value}
                   required
                   placeholder={t(
