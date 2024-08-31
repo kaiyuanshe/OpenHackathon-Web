@@ -1,12 +1,12 @@
+import { GitTemplate } from '@kaiyuanshe/openhackathon-service';
 import { ScrollListProps } from 'mobx-restful-table';
 import { FC } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { GitRepository } from '../../models/Git';
 import { GitTeamCard, GitTeamCardProps } from './GitTeamCard';
 
 export type TeamGitListLayoutProps = Pick<
-  ScrollListProps<GitRepository>,
+  ScrollListProps<GitTemplate>,
   'defaultData'
 > &
   Pick<GitTeamCardProps, 'renderController'>;

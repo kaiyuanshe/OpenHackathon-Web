@@ -3,7 +3,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { Component, FC, FormEvent } from 'react';
 import {
   Button,
   Container,
@@ -57,7 +57,7 @@ const GitPage: FC<TeamManageBaseProps> = observer(props => {
 export default GitPage;
 
 @observer
-class GitView extends PureComponent<TeamManageBaseProps> {
+class GitView extends Component<TeamManageBaseProps> {
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(+this.props.route.params!.tid);
@@ -77,7 +77,7 @@ class GitView extends PureComponent<TeamManageBaseProps> {
     }>(event.currentTarget);
 
     const { full_name, html_url } =
-      await activityStore.currentGit.createOneFrom(template, repository);
+      await activityStore.currentTemplate!.createOneFrom(template, repository);
 
     await this.workStore.updateOne({
       type: 'website' as TeamWorkType.Website,
@@ -94,13 +94,13 @@ class GitView extends PureComponent<TeamManageBaseProps> {
     for (const { user } of members)
       if (user.id !== sessionStore.user?.id)
         try {
-          await activityStore.currentGit.addCollaborator(URI, user.name);
+          await activityStore.currentTemplate!.addCollaborator(URI, user.name);
         } catch {}
   }
 
   renderCreator() {
-    const { currentGit } = activityStore;
-    const uploading = currentGit.uploading || this.workStore.uploading;
+    const { currentTemplate } = activityStore;
+    const uploading = currentTemplate!.uploading || this.workStore.uploading;
 
     return (
       <Modal show={this.creatorOpen} onHide={() => (this.creatorOpen = false)}>
@@ -194,7 +194,7 @@ class GitView extends PureComponent<TeamManageBaseProps> {
           store={this.workspaceStore}
           renderList={allItems => (
             <TeamGitListLayout
-              defaultData={allItems}
+              defaultData={allItems.map(({ gitRepository }) => gitRepository!)}
               renderController={this.renderController}
             />
           )}

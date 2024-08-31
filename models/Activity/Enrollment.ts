@@ -21,7 +21,7 @@ export type EnrollmentFilter = Filter<Enrollment>;
 export interface EnrollmentStatistic
   extends Statistic<Enrollment>,
     Statistic<Required<User>> {
-  extensions?: Record<string, Record<string, number>>;
+  answers?: Record<string, Record<string, number>>;
 }
 
 export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
@@ -73,13 +73,13 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
     const { allItems } = this;
 
     const questionGroup = groupBy(
-      allItems.map(({ extensions }) => extensions).flat(),
-      ({ name }) => name,
+      allItems.map(({ form }) => form).flat(),
+      ({ title }) => title,
     );
-    const extensions = Object.fromEntries(
+    const answers = Object.fromEntries(
       Object.entries(questionGroup).map(([title, answers]) => {
-        const { _, ...data } = countBy(answers, ({ value }) =>
-          /https?:\/\//.test(value) ? '_' : value.split(','),
+        const { _, ...data } = countBy(answers, ({ content }) =>
+          /https?:\/\//.test(content) ? '_' : content.split(','),
         );
         return [title, data];
       }),
@@ -96,7 +96,7 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
       ...this.statistic,
       createdAt,
       // city,
-      extensions,
+      answers,
     });
   }
 }

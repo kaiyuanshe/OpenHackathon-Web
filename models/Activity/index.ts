@@ -1,8 +1,9 @@
 import {
-  Base,
   Enrollment,
   Hackathon,
   HackathonStatus,
+  Question,
+  Questionnaire,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
 import { toggle } from 'mobx-restful';
@@ -10,14 +11,12 @@ import { buildURLData } from 'web-utility';
 
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
-import { GitTemplateModal } from '../TemplateRepo';
 import platformAdmin from '../User/PlatformAdmin';
 import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
 import { AnnouncementModel } from './Message';
 import { OrganizerModel } from './Organization';
-import { Extensions, Question } from './Question';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
 
@@ -28,26 +27,10 @@ export type ActivityListType =
   | 'fresh'
   | 'created';
 
-export interface NameAvailability {
-  name: string;
-  nameAvailable: boolean;
-  reason: string;
-  message: string;
-}
-
 export interface ActivityFilter extends Filter<Hackathon> {
   userId?: number;
   listType?: ActivityListType;
   orderby?: 'createdAt' | 'updatedAt' | 'hot';
-}
-
-export interface ActivityLogsFilter extends Filter<Hackathon> {
-  name: string;
-}
-
-export interface Questionnaire extends Base {
-  extensions: Extensions[];
-  hackathonName: string;
 }
 
 export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
@@ -55,7 +38,6 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   indexKey = 'name' as const;
 
   currentStaff?: StaffModel;
-  currentGit = new GitModel();
   currentAward?: AwardModel;
 
   @observable
@@ -68,10 +50,10 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
   currentLog?: LogModel;
   currentOrganization?: OrganizerModel;
-  currentTemplate?: GitTemplateModal;
+  currentTemplate?: GitModel;
 
   templateOf(name = this.currentOne.name) {
-    return (this.currentTemplate = new GitTemplateModal(`hackathon/${name}`));
+    return (this.currentTemplate = new GitModel(`hackathon/${name}`));
   }
 
   @observable
@@ -160,59 +142,31 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     const { body } = await this.client.get<Questionnaire>(
       `${this.baseURI}/${activity}/questionnaire`,
     );
-    const questionnaire = body!.extensions.map(
-      v =>
-        ({
-          ...JSON.parse(v.value),
-          id: v.name,
-        }) as Question,
-    );
-
-    return (this.questionnaire = questionnaire);
+    return (this.questionnaire = body!.questions);
   }
 
   @toggle('uploading')
-  createQuestionnaire(
-    extensions: Extensions[],
-    activity = this.currentOne.name,
-  ) {
+  updateQuestionnaire(questions: Question[], activity = this.currentOne.name) {
     return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
-      extensions,
+      questions,
     });
-  }
-
-  @toggle('uploading')
-  updateQuestionnaire(
-    extensions: Extensions[],
-    activity = this.currentOne.name,
-  ) {
-    return this.client.patch(`${this.baseURI}/${activity}/questionnaire`, {
-      extensions,
-    });
-  }
-
-  @toggle('uploading')
-  async deleteQuestionnaire(name: string) {
-    await this.client.delete(`${this.baseURI}/${name}/questionnaire`);
-
-    return (this.questionnaire = []);
   }
 
   @toggle('uploading')
   async publishOne(name: string) {
-    const isPlatformAdmin = await platformAdmin.checkAuthorization();
+    const isPlatformAdmin = await platformAdmin.checkAuthorization(),
+      status = (
+        isPlatformAdmin ? 'online' : 'pendingApproval'
+      ) as HackathonStatus;
 
-    await this.client.post(
-      `hackathon/${name}/${isPlatformAdmin ? 'publish' : 'requestPublish'}`,
-    );
-    this.changeOne({ status: 'online' as HackathonStatus.Online }, name, true);
+    await this.client.patch(`hackathon/${name}`, { status });
+
+    this.changeOne({ status }, name, true);
   }
 
   @toggle('uploading')
-  async signOne(name: string, extensions: Enrollment['extensions'] = []) {
-    await this.client.put(`${this.baseURI}/${name}/enrollment`, {
-      extensions,
-    });
+  async signOne(name: string, form: Enrollment['form'] = []) {
+    await this.client.put(`${this.baseURI}/${name}/enrollment`, { form });
 
     return this.currentEnrollment?.getSessionOne();
   }

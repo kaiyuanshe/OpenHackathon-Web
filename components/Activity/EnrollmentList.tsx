@@ -13,7 +13,7 @@ const { t } = i18n;
 
 export interface EnrollmentListLayoutProps
   extends XScrollListProps<Enrollment> {
-  onPopUp?: (extensions: Enrollment['extensions']) => any;
+  onPopUp?: (extensions: Enrollment['form']) => any;
   onVerify?: (userId: number, status: Enrollment['status']) => any;
 }
 
@@ -46,7 +46,7 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
               name,
             },
             status,
-            extensions,
+            form,
             createdAt,
           },
           index,
@@ -54,7 +54,7 @@ export const EnrollmentListLayout: FC<EnrollmentListLayoutProps> = ({
           <tr key={id}>
             <td>{index + 1}</td>
             <td>
-              <Button variant="link" onClick={() => onPopUp?.(extensions)}>
+              <Button variant="link" onClick={() => onPopUp?.(form)}>
                 {name || email || mobilePhone}
               </Button>
             </td>

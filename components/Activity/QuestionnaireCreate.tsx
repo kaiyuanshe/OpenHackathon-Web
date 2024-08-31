@@ -1,10 +1,10 @@
+import { Question } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { BadgeInput } from 'mobx-restful-table';
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { Question } from '../../models/Activity/Question';
 import { i18n } from '../../models/Base/Translation';
 
 const { t } = i18n;

@@ -56,7 +56,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
     const {
       // city = {},
       status = {},
-      extensions = {},
+      answers = {},
     } = this.props.store.statistic;
 
     return (
@@ -93,7 +93,7 @@ export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentS
         <h2 className="my-4">{t('custom_questionnaire')}</h2>
 
         <Row sm={1} md={2}>
-          {Object.entries(extensions).map(
+          {Object.entries(answers).map(
             ([title, answers]) =>
               !isEmpty(answers) && (
                 <Col as="section" key={title}>

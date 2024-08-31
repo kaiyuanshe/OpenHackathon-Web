@@ -74,6 +74,7 @@ export default {
   success: '成功',
   cancel: '取消',
   edit_profile: '編輯用戶資料',
+  edit_profile_tips: '在 GitHub 編輯用戶資料後，下次登錄時會自動同步。',
   hackathons: '黑客鬆活動',
   more_events: '更多活動',
   registration_deadline: '距報名截止還有',

@@ -74,6 +74,8 @@ export default {
   success: 'Success',
   cancel: 'Cancel',
   edit_profile: 'Edit Profile',
+  edit_profile_tips:
+    "After editing profile in GitHub, it'll be reloaded at next sign-in.",
   hackathons: 'Hackathons',
   more_events: 'More events',
   registration_deadline: 'Registration closing in',
