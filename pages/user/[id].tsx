@@ -1,9 +1,14 @@
-import { faQq, faWeibo, faWeixin } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGithub,
+  faQq,
+  faWeibo,
+  faWeixin,
+} from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '@kaiyuanshe/openhackathon-service';
-import { InferGetServerSidePropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
+import { FC } from 'react';
 import { Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import { PageHead } from '../../components/layout/PageHead';
@@ -25,11 +30,7 @@ export const getServerSideProps = compose<{ id?: string }, User>(
   }),
 );
 
-const UserDetailPage = ({
-  id,
-  name,
-  avatar,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => (
+const UserDetailPage: FC<User> = ({ id, name, avatar }) => (
   <div
     className="py-4"
     style={{
@@ -53,21 +54,16 @@ const UserDetailPage = ({
               alt=""
             />
             <Card.Body className="text-start border-top p-3">
-              {/* <a
+              <a
                 target="_blank"
                 href={`https://github.com/${name}`}
                 rel="noreferrer"
               >
                 <FontAwesomeIcon
-                  className={classNames(
-                    'fa-stack',
-                    registerSource.includes(`social:github`)
-                      ? 'text-success'
-                      : 'text-secondary',
-                  )}
+                  className="fa-stack text-success"
                   icon={faGithub}
                 />
-              </a> */}
+              </a>
               <FontAwesomeIcon
                 className="text-secondary fa-stack"
                 icon={faQq}

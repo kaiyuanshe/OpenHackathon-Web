@@ -25,8 +25,10 @@ const UserBar = observer(() => {
               {t('home_page')}
             </Dropdown.Item>
             <Dropdown.Item
+              title={t('edit_profile_tips')}
               target="_blank"
-              href="https://ophapiv2-demo.authing.cn/u"
+              href="https://github.com/settings/profile"
+              onClick={() => sessionStore.signOut(true)}
             >
               {t('edit_profile')}
             </Dropdown.Item>

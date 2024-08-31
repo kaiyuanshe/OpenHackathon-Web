@@ -82,6 +82,7 @@ export class SessionModel extends BaseModel {
 
   signOut(reload = false) {
     setCookie('token', '', { path: '/', expires: new Date() });
+    setCookie('JWT', '', { path: '/', expires: new Date() });
     localStorage?.clear();
 
     this.user = undefined;
