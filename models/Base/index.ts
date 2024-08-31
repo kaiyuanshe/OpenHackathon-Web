@@ -56,14 +56,6 @@ export async function* createListStream<T>(
   }
 }
 
-export const integrateError = ({ response }: HTTPError<ErrorData>) => {
-  const { title, errors, detail } = response.body || {};
-  const message = errors?.name?.join('');
-  return new ReferenceError(
-    message ? `${title || ''}\n${message}` : detail || '',
-  );
-};
-
 export abstract class TableModel<
   D extends Base,
   F extends InputData<D> = InputData<D>,

@@ -1,8 +1,8 @@
 import {
   Enrollment,
-  Extension,
   Hackathon,
   HackathonStatus,
+  Question,
   Questionnaire,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
@@ -17,7 +17,6 @@ import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
 import { AnnouncementModel } from './Message';
 import { OrganizerModel } from './Organization';
-import { Question } from './Question';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
 
@@ -28,21 +27,10 @@ export type ActivityListType =
   | 'fresh'
   | 'created';
 
-export interface NameAvailability {
-  name: string;
-  nameAvailable: boolean;
-  reason: string;
-  message: string;
-}
-
 export interface ActivityFilter extends Filter<Hackathon> {
   userId?: number;
   listType?: ActivityListType;
   orderby?: 'createdAt' | 'updatedAt' | 'hot';
-}
-
-export interface ActivityLogsFilter extends Filter<Hackathon> {
-  name: string;
 }
 
 export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
@@ -154,59 +142,31 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     const { body } = await this.client.get<Questionnaire>(
       `${this.baseURI}/${activity}/questionnaire`,
     );
-    const questionnaire = body!.extensions.map(
-      v =>
-        ({
-          ...JSON.parse(v.value),
-          id: v.name,
-        }) as Question,
-    );
-
-    return (this.questionnaire = questionnaire);
+    return (this.questionnaire = body!.questions);
   }
 
   @toggle('uploading')
-  createQuestionnaire(
-    extensions: Extension[],
-    activity = this.currentOne.name,
-  ) {
+  updateQuestionnaire(questions: Question[], activity = this.currentOne.name) {
     return this.client.put(`${this.baseURI}/${activity}/questionnaire`, {
-      extensions,
+      questions,
     });
-  }
-
-  @toggle('uploading')
-  updateQuestionnaire(
-    extensions: Extension[],
-    activity = this.currentOne.name,
-  ) {
-    return this.client.patch(`${this.baseURI}/${activity}/questionnaire`, {
-      extensions,
-    });
-  }
-
-  @toggle('uploading')
-  async deleteQuestionnaire(name: string) {
-    await this.client.delete(`${this.baseURI}/${name}/questionnaire`);
-
-    return (this.questionnaire = []);
   }
 
   @toggle('uploading')
   async publishOne(name: string) {
-    const isPlatformAdmin = await platformAdmin.checkAuthorization();
+    const isPlatformAdmin = await platformAdmin.checkAuthorization(),
+      status = (
+        isPlatformAdmin ? 'online' : 'pendingApproval'
+      ) as HackathonStatus;
 
-    await this.client.post(
-      `hackathon/${name}/${isPlatformAdmin ? 'publish' : 'requestPublish'}`,
-    );
-    this.changeOne({ status: 'online' as HackathonStatus.Online }, name, true);
+    await this.client.patch(`hackathon/${name}`, { status });
+
+    this.changeOne({ status }, name, true);
   }
 
   @toggle('uploading')
-  async signOne(name: string, extensions: Enrollment['extensions'] = []) {
-    await this.client.put(`${this.baseURI}/${name}/enrollment`, {
-      extensions,
-    });
+  async signOne(name: string, form: Enrollment['form'] = []) {
+    await this.client.put(`${this.baseURI}/${name}/enrollment`, { form });
 
     return this.currentEnrollment?.getSessionOne();
   }

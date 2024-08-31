@@ -1,4 +1,4 @@
-import { Extension } from '@kaiyuanshe/openhackathon-service';
+import { Answer } from '@kaiyuanshe/openhackathon-service';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import {
@@ -53,11 +53,11 @@ export default class RegisterPage extends PureComponent<RegisterPageProps> {
     const { activity } = this.props,
       data = formToJSON(event.target as HTMLFormElement);
 
-    const extensions = Object.entries(data)
-      .map(([name, value]) => value && { name, value: value + '' })
-      .filter(Boolean) as Extension[];
+    const answers = Object.entries(data)
+      .map(([title, content]) => content && { title, content: content + '' })
+      .filter(Boolean) as Answer[];
 
-    await activityStore.signOne(activity, extensions);
+    await activityStore.signOne(activity, answers);
 
     self.alert(
       textJoin(t('hackathons'), activity, t('registration_needs_review')),

@@ -1,4 +1,4 @@
-import { Extension } from '@kaiyuanshe/openhackathon-service';
+import { Answer } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import {
@@ -46,11 +46,11 @@ class ParticipantEditor extends PureComponent<ParticipantPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   @observable
-  accessor extensions: Extension[] | undefined;
+  accessor answers: Answer[] | undefined;
 
   render() {
     const { resolvedUrl, params } = this.props.route,
-      { extensions } = this;
+      { answers } = this;
 
     return (
       <>
@@ -62,20 +62,20 @@ class ParticipantEditor extends PureComponent<ParticipantPageProps> {
 
         <EnrollmentList
           activity={params!.name}
-          onPopUp={extensions => (this.extensions = extensions)}
+          onPopUp={answers => (this.answers = answers)}
         />
-        <Modal show={!!extensions} onHide={() => (this.extensions = undefined)}>
+        <Modal show={!!answers} onHide={() => (this.answers = undefined)}>
           <Modal.Header closeButton>
             <Modal.Title>{t('questionnaire')}</Modal.Title>
           </Modal.Header>
           <Modal.Body as="ul">
-            {extensions?.map(({ name, value }) => (
-              <li key={name}>
-                <strong>{name}</strong>
-                <div>{value}</div>
+            {answers?.map(({ title, content }) => (
+              <li key={title}>
+                <strong>{title}</strong>
+                <div>{content}</div>
               </li>
             ))}
-            {extensions?.[0] && t('no_news_yet')}
+            {answers?.[0] && t('no_news_yet')}
           </Modal.Body>
         </Modal>
       </>
