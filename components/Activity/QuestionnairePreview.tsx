@@ -50,8 +50,9 @@ export class QuestionnaireForm extends PureComponent<QuestionnaireFormProps> {
           {t('please_complete_all_mandatory_fields_before_you_proceed')}
           <a
             className="text-primary ms-2"
+            title={t('edit_profile_tips')}
             target="_blank"
-            href="https://ophapiv2-demo.authing.cn/u"
+            href="https://github.com/settings/profile"
             rel="noreferrer"
           >
             {t('personal_profile')}

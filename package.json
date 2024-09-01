@@ -7,7 +7,6 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^3.1.31",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
