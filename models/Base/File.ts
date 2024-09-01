@@ -26,11 +26,12 @@ export class AzureFileModel extends FileModel {
 
     const { status, title, detail } = data as unknown as ErrorBaseData;
 
-    throw new HTTPError(
-      detail || title,
-      { method, path: fullPath, headers, body },
-      { status, statusText: title, headers: header, body: data },
-    );
+    throw new HTTPError(detail || title, {
+      status,
+      statusText: title,
+      headers: header,
+      body: data,
+    });
   }
 
   @toggle('uploading')

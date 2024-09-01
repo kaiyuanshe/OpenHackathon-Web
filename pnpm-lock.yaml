@@ -48,8 +48,8 @@ importers:
         specifier: ^9.0.2
         version: 9.0.2
       koajax:
-        specifier: ^2.0.0
-        version: 2.0.0(typescript@5.5.4)
+        specifier: ^1.1.2
+        version: 1.1.2(typescript@5.5.4)
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -3027,11 +3027,6 @@ packages:
     peerDependencies:
       jsdom: '>=21'
 
-  koajax@2.0.0:
-    resolution: {integrity: sha512-05kjwLO43jb9/dLZfIBjkMvGRQd2j9lRnyR+ijin33tmqzSQIrSzYo9pfn/jdbrlcMHOHoHJGZbQLt8zuGGuqA==}
-    peerDependencies:
-      jsdom: '>=21'
-
   language-subtag-registry@0.3.23:
     resolution: {integrity: sha512-0K65Lea881pHotoGEa5gDlMxt3pctLi2RplBb7Ezh4rRdLEOtgi7n4EwK9lamnUCkKBqaeKRVebTq6BAxSkpXQ==}
 
@@ -4610,10 +4605,6 @@ packages:
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
-    engines: {node: '>= 8'}
-
-  web-streams-polyfill@4.0.0:
-    resolution: {integrity: sha512-0zJXHRAYEjM2tUfZ2DiSOHAa2aw1tisnnhU3ufD57R8iefL+DcdJyRBRyJpG+NUimDgbTI/lH+gAE1PAvV3Cgw==}
     engines: {node: '>= 8'}
 
   web-utility@4.4.0:
@@ -8404,16 +8395,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  koajax@2.0.0(typescript@5.5.4):
-    dependencies:
-      '@swc/helpers': 0.5.12
-      iterable-observer: 1.1.0
-      regenerator-runtime: 0.14.1
-      web-streams-polyfill: 4.0.0
-      web-utility: 4.4.0(typescript@5.5.4)
-    transitivePeerDependencies:
-      - typescript
-
   language-subtag-registry@0.3.23: {}
 
   language-tags@1.0.9:
@@ -10153,8 +10134,6 @@ snapshots:
       graceful-fs: 4.2.11
 
   web-streams-polyfill@3.3.3: {}
-
-  web-streams-polyfill@4.0.0: {}
 
   web-utility@4.4.0(typescript@5.5.4):
     dependencies:

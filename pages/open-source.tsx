@@ -3,7 +3,7 @@ import { Contributor, GitRepository } from 'mobx-github';
 import { observer } from 'mobx-react';
 import { cache, compose, translator } from 'next-ssr-middleware';
 import { FC } from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 
 import { GitCard, SimpleRepository } from '../components/Git/Card';
 import { PageHead } from '../components/layout/PageHead';
@@ -35,26 +35,32 @@ const OpenSourcePage: FC<OpenSourcePageProps> = observer(
   ({ repositories, contributors }) => (
     <Container>
       <PageHead title={t('open_source_code')} />
-      <h1 className="text-center">{t('open_source_code')}</h1>
+      <h1 className="my-5 text-center">{t('open_source_code')}</h1>
 
-      {SourceRepository.map((list, index) => (
+      {[...SourceRepository].reverse().map((list, index, { length }) => (
         <section key={index}>
-          <h2>v{index + 1}</h2>
+          <h2 className="my-4">v{length - index}</h2>
 
-          <ul className="list-unstyled d-flex flex-wrap gap-3 justify-content-around align-items-center">
+          <Row as="ul" className="list-unstyled g-3">
             {list.map(name => {
               const repository = repositories.find(
                 ({ full_name }) => full_name === name,
               );
               return (
-                <GitCard key={name} {...(repository as SimpleRepository)} />
+                <Col key={name}>
+                  <GitCard
+                    className="h-100"
+                    {...(repository as SimpleRepository)}
+                    renderController={() => <></>}
+                  />
+                </Col>
               );
             })}
-          </ul>
+          </Row>
         </section>
       ))}
 
-      <h2>{t('team_members')}</h2>
+      <h2 className="my-4">{t('team_members')}</h2>
       <TopUserList
         value={contributors.map(
           ({ id, login, avatar_url, contributions }, index) => ({

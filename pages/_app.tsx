@@ -20,9 +20,9 @@ enableStaticRendering(isServer());
 const { t } = i18n;
 
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
-  const { message, response } = (reason || {}) as HTTPError<ErrorBaseData>;
+  const { message, body } = (reason || {}) as HTTPError<ErrorBaseData>;
 
-  const tips = response.body?.detail || message;
+  const tips = body?.detail || message;
 
   if (tips) alert(tips);
 });

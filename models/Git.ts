@@ -75,9 +75,13 @@ export class SourceRepositoryModel extends RepositoryModel {
       .uniqueBy()
       .slice((page - 1) * per_page, page * per_page);
 
-    const pageData = await Promise.all(
-      list.map(full_name => this.getOne(full_name, relation)),
-    );
+    const pageData: Awaited<ReturnType<RepositoryModel['getOne']>>[] = [];
+
+    for (const full_name of list) {
+      const item = await this.getOne(full_name, relation);
+
+      pageData.push(item);
+    }
     return { pageData, totalCount: list.length };
   }
 }

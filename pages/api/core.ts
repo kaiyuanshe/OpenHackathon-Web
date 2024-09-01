@@ -26,8 +26,7 @@ export function safeAPI(handler: NextAPI): NextAPI {
         console.error(error);
         return res.end(error);
       }
-      const { message, response } = error;
-      let { status, body } = response;
+      let { message, status, body } = error;
 
       res.status(status);
       res.statusMessage = message;
