@@ -31,12 +31,7 @@ export const MainNavigation = () => (
             >
               {t('get_started')}
             </Nav.Link>
-            <Nav.Link
-              target="_blank"
-              href="https://github.com/kaiyuanshe/OpenHackathon-Web"
-            >
-              {t('open_source_code')}
-            </Nav.Link>
+            <Nav.Link href="/open-source">{t('open_source_code')}</Nav.Link>
           </Nav>
 
           <UserBar />

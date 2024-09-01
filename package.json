@@ -24,6 +24,7 @@
     "leaflet": "^1.9.4",
     "leaflet.chinatmsproviders": "^3.0.6",
     "mobx": "^6.13.1",
+    "mobx-github": "^0.3.2",
     "mobx-i18n": "^0.5.0",
     "mobx-react": "^9.1.1",
     "mobx-react-helper": "^0.3.1",
