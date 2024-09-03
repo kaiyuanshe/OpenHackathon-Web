@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+overrides:
+  native-file-system-adapter: npm:@tech_query/native-file-system-adapter@3.0.1
+  koajax: ^3.0.0
+  mobx-restful: ^1.0.0
+
 importers:
 
   .:
@@ -45,8 +50,8 @@ importers:
         specifier: ^9.0.2
         version: 9.0.2
       koajax:
-        specifier: ^1.1.2
-        version: 1.1.2(typescript@5.5.4)
+        specifier: ^3.0.0
+        version: 3.0.0(typescript@5.5.4)
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -69,11 +74,11 @@ importers:
         specifier: ^0.3.1
         version: 0.3.1(mobx@6.13.1)(react@18.3.1)
       mobx-restful:
-        specifier: ^0.7.0-rc.0
-        version: 0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4)
+        specifier: ^1.0.0
+        version: 1.0.0(mobx@6.13.1)(typescript@5.5.4)
       mobx-restful-table:
         specifier: ^2.0.0-rc.1
-        version: 2.0.0-rc.1(@types/react@18.3.5)(mobx-i18n@0.5.0(mobx@6.13.1))(mobx-react@9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx-restful@0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4))(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
+        version: 2.0.0-rc.1(@types/react@18.3.5)(mobx-i18n@0.5.0(mobx@6.13.1))(mobx-react@9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx-restful@1.0.0(mobx@6.13.1)(typescript@5.5.4))(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4)
       next:
         specifier: ^14.2.7
         version: 14.2.7(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -127,8 +132,8 @@ importers:
         specifier: ^1.9.12
         version: 1.9.12
       '@types/node':
-        specifier: ^20.16.2
-        version: 20.16.2
+        specifier: ^20.16.3
+        version: 20.16.3
       '@types/react':
         specifier: ^18.3.5
         version: 18.3.5
@@ -143,7 +148,7 @@ importers:
         version: 12.1.1(eslint@8.57.0)
       get-git-folder:
         specifier: ^0.1.2
-        version: 0.1.2(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2)
+        version: 0.1.2(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3)
       husky:
         specifier: ^9.1.5
         version: 9.1.5
@@ -154,8 +159,8 @@ importers:
         specifier: ^12.2.0
         version: 12.2.0(less@4.2.0)(webpack@5.94.0)
       lint-staged:
-        specifier: ^15.2.9
-        version: 15.2.9
+        specifier: ^15.2.10
+        version: 15.2.10
       next-pwa:
         specifier: ^5.6.0
         version: 5.6.0(@babel/core@7.25.2)(next@14.2.7(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(webpack@5.94.0)
@@ -1410,6 +1415,10 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
+  '@tech_query/native-file-system-adapter@3.0.1':
+    resolution: {integrity: sha512-BzIB9L2QEkVdgnMiBwnnRlI9oY1onukmufig7NYifOZNhA6n4kuLsKXLL5oNE9Bvek42kmzjsBHTRyQ6+k62cw==}
+    engines: {node: '>=14.8.0'}
+
   '@tech_query/node-toolkit@1.2.1':
     resolution: {integrity: sha512-XFw0EVc8LCcC+CNo+lCxi+5iiPzQyubz41rP4iNuMueN+kjn/KMliaHKLZ5kAnCi+HxmuJPmzrSi6vZtuP07Hg==}
     peerDependencies:
@@ -1507,8 +1516,8 @@ packages:
   '@types/node@18.19.45':
     resolution: {integrity: sha512-VZxPKNNhjKmaC1SUYowuXSRSMGyQGmQjvvA1xE4QZ0xce2kLtEhPDS+kqpCPBZYgqblCLQ2DAjSzmgCM5auvhA==}
 
-  '@types/node@20.16.2':
-    resolution: {integrity: sha512-91s/n4qUPV/wg8eE9KHYW1kouTfDk2FPGjXbBMfRWP/2vg1rCXNQL1OCabwGs0XSdukuK+MwCDXE30QpSeMUhQ==}
+  '@types/node@20.16.3':
+    resolution: {integrity: sha512-/wdGiWRkMOm53gAsSyFMXFZHbVg7C6CbkrzHNpaHoYfsUWPg7m6ZRKtvQjgvQ9i8WT540a3ydRlRQbxjY30XxQ==}
 
   '@types/pg-pool@2.0.4':
     resolution: {integrity: sha512-qZAvkv1K3QbmHHFYSNRYPkRjOWRLBYrL4B9c+wG0GSVGBw0NtJwPcgx/DSddeDJvRGMHCEQ4VMEVfuJ/0gZ3XQ==}
@@ -1954,6 +1963,9 @@ packages:
 
   core-js-compat@3.38.0:
     resolution: {integrity: sha512-75LAicdLa4OJVwFxFbQR3NdnZjNgX6ILpVcVzcC4T2smerB5lELMrJQQQoWV6TiuC/vlaFqgU2tKQx9w5s0e0A==}
+
+  core-js@3.38.1:
+    resolution: {integrity: sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -2542,6 +2554,9 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
+  idb-keyval@6.2.1:
+    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
 
@@ -2864,15 +2879,8 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
-  koajax@0.9.6:
-    resolution: {integrity: sha512-Cv5HH7igfN7HEGLwRzu4TEzXLTm3QSpbR48Gif9dhPPBNKZ8ELS1bbh3Dik1s83vpKnnjC+DcFU8ql+LwNg3tQ==}
-    deprecated: Don't use versions with old API & bugs
-    peerDependencies:
-      jsdom: '>=21'
-
-  koajax@1.1.2:
-    resolution: {integrity: sha512-TGWJhGpojfSYdqGIKK8CWwMhUY1LYDyvodt6LywHVYEH6qq38/3DgW+FKTCV88O59G0J4W2XFbBTF8nvZ/J/nw==}
-    deprecated: Don't use versions with old API & bugs
+  koajax@3.0.0:
+    resolution: {integrity: sha512-xpO3ecZPayDY3RHmej2IzIyrnWscLAQEz/dsGjCpb134NJMdyPrmatDG4M/nxOgC6LBKhQAMus6s4VksVFKxWQ==}
     peerDependencies:
       jsdom: '>=21'
 
@@ -2919,8 +2927,8 @@ packages:
     resolution: {integrity: sha512-eop+wDAvpItUys0FWkHIKeC9ybYrTGbU41U5K7+bttZZeohvnY7M9dZ5kB21GNWiFT2q1OoPTvncPCgSOVO5ow==}
     engines: {node: '>=14'}
 
-  lint-staged@15.2.9:
-    resolution: {integrity: sha512-BZAt8Lk3sEnxw7tfxM7jeZlPRuT4M68O0/CwZhhaw6eeWu0Lz5eERE3m386InivXB64fp/mDID452h48tvKlRQ==}
+  lint-staged@15.2.10:
+    resolution: {integrity: sha512-5dY5t743e1byO19P9I4b3x8HJwalIznL5E1FWYnU6OWw33KxNBSLAc6Cy7F2PsFEO8FKnLwjwm5hx7aMF0jzZg==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -3045,6 +3053,10 @@ packages:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
     engines: {node: '>=8.6'}
 
+  micromatch@4.0.8:
+    resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
+    engines: {node: '>=8.6'}
+
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -3147,12 +3159,11 @@ packages:
       mobx: '>=6.11'
       mobx-i18n: ^0.5
       mobx-react: '>=9.1'
-      mobx-restful: ^0.7.0-rc.0
+      mobx-restful: ^1.0.0
       react: '>=16.8'
 
-  mobx-restful@0.7.0-rc.0:
-    resolution: {integrity: sha512-fM2ymsA+u8N0sCK8d1sb26Zja9G4PxKMWuRzFJzVzvKX0ba1pViRCeC4qiH8ITzhAw/vIySNeGZ8iObxAZN5ww==}
-    deprecated: Don't use versions with old API & bugs
+  mobx-restful@1.0.0:
+    resolution: {integrity: sha512-b+3eAVusZdTvrK/ET8SU9Ih8NUA3PrBmtQDRIoGAEm5R8WqmcBTQyuM61SX7shsWTbTtL0T1Qe7m7x4fL6llLA==}
     peerDependencies:
       mobx: '>=6.11'
 
@@ -4107,6 +4118,10 @@ packages:
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
+    engines: {node: '>= 8'}
+
+  web-streams-polyfill@4.0.0:
+    resolution: {integrity: sha512-0zJXHRAYEjM2tUfZ2DiSOHAa2aw1tisnnhU3ufD57R8iefL+DcdJyRBRyJpG+NUimDgbTI/lH+gAE1PAvV3Cgw==}
     engines: {node: '>= 8'}
 
   web-utility@4.4.0:
@@ -5248,7 +5263,7 @@ snapshots:
       '@types/jsonwebtoken': 9.0.6
       '@types/koa': 2.15.0
       mobx-github: 0.3.2(typescript@5.5.4)
-      mobx-restful: 0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4)
+      mobx-restful: 1.0.0(mobx@6.13.1)(typescript@5.5.4)
     transitivePeerDependencies:
       - jsdom
       - mobx
@@ -5858,12 +5873,16 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.3
 
-  '@tech_query/node-toolkit@1.2.1(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2)':
+  '@tech_query/native-file-system-adapter@3.0.1':
+    optionalDependencies:
+      fetch-blob: 3.2.0
+
+  '@tech_query/node-toolkit@1.2.1(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3)':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-modules-commonjs': 7.24.8(@babel/core@7.25.2)
       '@babel/preset-env': 7.25.3(@babel/core@7.25.2)
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       cross-spawn: 7.0.3
       file-type: 16.5.4
       fs-extra: 11.2.0
@@ -5880,20 +5899,20 @@ snapshots:
 
   '@types/accepts@1.3.7':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/connect@3.4.36':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/content-disposition@0.5.8': {}
 
@@ -5902,7 +5921,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 4.17.21
       '@types/keygrip': 1.0.6
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/estree@0.0.39': {}
 
@@ -5910,7 +5929,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -5925,14 +5944,14 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/geojson@7946.0.14': {}
 
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/http-assert@1.5.5': {}
 
@@ -5944,11 +5963,11 @@ snapshots:
 
   '@types/jsonfile@6.1.4':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/jsonwebtoken@9.0.6':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/keygrip@1.0.6': {}
 
@@ -5965,7 +5984,7 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.8
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/leaflet@1.9.12':
     dependencies:
@@ -5981,13 +6000,13 @@ snapshots:
 
   '@types/mysql@2.15.22':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/node@18.19.45':
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.16.2':
+  '@types/node@20.16.3':
     dependencies:
       undici-types: 6.19.8
 
@@ -5997,7 +6016,7 @@ snapshots:
 
   '@types/pg@8.6.1':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       pg-protocol: 1.6.1
       pg-types: 2.2.0
 
@@ -6020,17 +6039,17 @@ snapshots:
 
   '@types/resolve@1.17.1':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       '@types/send': 0.17.4
 
   '@types/shimmer@1.2.0': {}
@@ -6481,9 +6500,9 @@ snapshots:
 
   colorette@2.0.20: {}
 
-  commander-jsx@0.6.9(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2):
+  commander-jsx@0.6.9(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3):
     dependencies:
-      '@tech_query/node-toolkit': 1.2.1(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2)
+      '@tech_query/node-toolkit': 1.2.1(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3)
       tslib: 2.6.3
     transitivePeerDependencies:
       - '@babel/plugin-transform-modules-commonjs'
@@ -6510,6 +6529,8 @@ snapshots:
   core-js-compat@3.38.0:
     dependencies:
       browserslist: 4.23.3
+
+  core-js@3.38.1: {}
 
   cross-spawn@7.0.3:
     dependencies:
@@ -7153,9 +7174,9 @@ snapshots:
 
   get-east-asian-width@1.2.0: {}
 
-  get-git-folder@0.1.2(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2):
+  get-git-folder@0.1.2(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3):
     dependencies:
-      commander-jsx: 0.6.9(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.2)
+      commander-jsx: 0.6.9(@babel/plugin-transform-modules-commonjs@7.24.8(@babel/core@7.25.2))(@babel/preset-env@7.25.3(@babel/core@7.25.2))(@types/node@20.16.3)
       zx: 7.2.3
     transitivePeerDependencies:
       - '@babel/plugin-transform-modules-commonjs'
@@ -7322,6 +7343,8 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
     optional: true
+
+  idb-keyval@6.2.1: {}
 
   idb@7.1.1: {}
 
@@ -7577,13 +7600,13 @@ snapshots:
 
   jest-worker@26.6.2:
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       merge-stream: 2.0.0
       supports-color: 7.2.0
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 20.16.3
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -7660,20 +7683,12 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  koajax@0.9.6(typescript@5.5.4):
+  koajax@3.0.0(typescript@5.5.4):
     dependencies:
       '@swc/helpers': 0.5.12
-      iterable-observer: 1.1.0
+      core-js: 3.38.1
       regenerator-runtime: 0.14.1
-      web-utility: 4.4.0(typescript@5.5.4)
-    transitivePeerDependencies:
-      - typescript
-
-  koajax@1.1.2(typescript@5.5.4):
-    dependencies:
-      '@swc/helpers': 0.5.12
-      iterable-observer: 1.1.0
-      regenerator-runtime: 0.14.1
+      web-streams-polyfill: 4.0.0
       web-utility: 4.4.0(typescript@5.5.4)
     transitivePeerDependencies:
       - typescript
@@ -7717,7 +7732,7 @@ snapshots:
 
   lilconfig@3.1.2: {}
 
-  lint-staged@15.2.9:
+  lint-staged@15.2.10:
     dependencies:
       chalk: 5.3.0
       commander: 12.1.0
@@ -7725,7 +7740,7 @@ snapshots:
       execa: 8.0.1
       lilconfig: 3.1.2
       listr2: 8.2.4
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pidtree: 0.6.0
       string-argv: 0.3.2
       yaml: 2.5.0
@@ -7852,6 +7867,11 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
+  micromatch@4.0.8:
+    dependencies:
+      braces: 3.0.3
+      picomatch: 2.3.1
+
   mime-db@1.52.0: {}
 
   mime-types@2.1.35:
@@ -7898,10 +7918,10 @@ snapshots:
       '@octokit/openapi-types': 22.2.0
       '@swc/helpers': 0.5.12
       '@types/lodash': 4.17.7
-      koajax: 1.1.2(typescript@5.5.4)
+      koajax: 3.0.0(typescript@5.5.4)
       lodash: 4.17.21
       mobx: 6.13.1
-      mobx-restful: 0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4)
+      mobx-restful: 1.0.0(mobx@6.13.1)(typescript@5.5.4)
       web-utility: 4.4.0(typescript@5.5.4)
     transitivePeerDependencies:
       - jsdom
@@ -7936,7 +7956,7 @@ snapshots:
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-  mobx-restful-table@2.0.0-rc.1(@types/react@18.3.5)(mobx-i18n@0.5.0(mobx@6.13.1))(mobx-react@9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx-restful@0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4))(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
+  mobx-restful-table@2.0.0-rc.1(@types/react@18.3.5)(mobx-i18n@0.5.0(mobx@6.13.1))(mobx-react@9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(mobx-restful@1.0.0(mobx@6.13.1)(typescript@5.5.4))(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.4):
     dependencies:
       '@swc/helpers': 0.5.12
       classnames: 2.5.1
@@ -7945,7 +7965,7 @@ snapshots:
       mobx-i18n: 0.5.0(mobx@6.13.1)
       mobx-react: 9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       mobx-react-helper: 0.3.1(mobx@6.13.1)(react@18.3.1)
-      mobx-restful: 0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4)
+      mobx-restful: 1.0.0(mobx@6.13.1)(typescript@5.5.4)
       react: 18.3.1
       react-bootstrap: 2.10.4(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       regenerator-runtime: 0.14.1
@@ -7955,12 +7975,15 @@ snapshots:
       - react-dom
       - typescript
 
-  mobx-restful@0.7.0-rc.0(mobx@6.13.1)(typescript@5.5.4):
+  mobx-restful@1.0.0(mobx@6.13.1)(typescript@5.5.4):
     dependencies:
       '@swc/helpers': 0.5.12
-      koajax: 0.9.6(typescript@5.5.4)
+      idb-keyval: 6.2.1
+      koajax: 3.0.0(typescript@5.5.4)
       mobx: 6.13.1
+      native-file-system-adapter: '@tech_query/native-file-system-adapter@3.0.1'
       regenerator-runtime: 0.14.1
+      web-streams-polyfill: 4.0.0
       web-utility: 4.4.0(typescript@5.5.4)
     transitivePeerDependencies:
       - jsdom
@@ -8127,7 +8150,7 @@ snapshots:
     dependencies:
       '@swc/helpers': 0.5.12
       '@types/leaflet': 1.9.12
-      koajax: 0.9.6(typescript@5.5.4)
+      koajax: 3.0.0(typescript@5.5.4)
       leaflet: 1.9.4
       mobx: 6.13.1
       mobx-react: 9.1.1(mobx@6.13.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8957,6 +8980,8 @@ snapshots:
       graceful-fs: 4.2.11
 
   web-streams-polyfill@3.3.3: {}
+
+  web-streams-polyfill@4.0.0: {}
 
   web-utility@4.4.0(typescript@5.5.4):
     dependencies:

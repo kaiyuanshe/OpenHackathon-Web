@@ -12,7 +12,8 @@ import sessionStore from './User/Session';
 type Repository = components['schemas']['repository'];
 
 githubClient.use(({ request }, next) => {
-  const { accessToken } = sessionStore.metaOAuth.github || {};
+  const { accessToken = process.env.GITHUB_PAT } =
+    sessionStore.metaOAuth.github || {};
 
   if (accessToken)
     request.headers = {

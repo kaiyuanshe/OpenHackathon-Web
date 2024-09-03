@@ -23,7 +23,7 @@ export const getServerSideProps = compose<{}, OpenSourcePageProps>(
     const repositoryStore = new SourceRepositoryModel();
 
     const contributors = await repositoryStore.getAllContributors(),
-      repositories = repositoryStore.allItems;
+      repositories = JSON.parse(JSON.stringify(repositoryStore.allItems));
 
     return { props: { repositories, contributors } };
   },
