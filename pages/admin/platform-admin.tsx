@@ -3,31 +3,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, JWTProps, jwtVerifier } from 'next-ssr-middleware';
-import { Component, FC, FormEvent, PureComponent } from 'react';
+import { Component, FC, FormEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { HackathonAdminList } from '../../components/User/HackathonAdminList';
-import { ServerSessionBox } from '../../components/User/ServerSessionBox';
 import { i18n } from '../../models/Base/Translation';
 import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
+import { sessionGuard } from '../api/core';
 
 const { t } = i18n;
 
-export const getServerSideProps = compose<{}, JWTProps>(jwtVerifier());
+export const getServerSideProps = sessionGuard;
 
-const PlatformAdminPage: FC<JWTProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <PlatformAdminFrame
-      {...props}
-      title={t('admin_management')}
-      path="platform-admin"
-    >
-      <PlatformAdminView />
-    </PlatformAdminFrame>
-  </ServerSessionBox>
+const PlatformAdminPage: FC = observer(() => (
+  <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
+    <PlatformAdminView />
+  </PlatformAdminFrame>
 ));
 
 export default PlatformAdminPage;

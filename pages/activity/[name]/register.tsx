@@ -6,19 +6,18 @@ import {
   compose,
   errorLogger,
   JWTProps,
-  jwtVerifier,
   translator,
 } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Component, FormEvent } from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePreview';
 import { PageHead } from '../../../components/layout/PageHead';
-import { ServerSessionBox } from '../../../components/User/ServerSessionBox';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Question } from '../../../models/Activity/Question';
 import { i18n } from '../../../models/Base/Translation';
+import { sessionGuard } from '../../api/core';
 
 const { t } = i18n;
 
@@ -27,8 +26,8 @@ interface RegisterPageProps extends JWTProps {
   questionnaire: Question[];
 }
 
-export const getServerSideProps = compose<{ name: string }, RegisterPageProps>(
-  jwtVerifier(),
+export const getServerSideProps = compose<{ name: string }>(
+  sessionGuard,
   cache(),
   errorLogger,
   translator(i18n),
@@ -45,7 +44,7 @@ export const getServerSideProps = compose<{ name: string }, RegisterPageProps>(
 );
 
 @observer
-export default class RegisterPage extends PureComponent<RegisterPageProps> {
+export default class RegisterPage extends Component<RegisterPageProps> {
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -70,7 +69,7 @@ export default class RegisterPage extends PureComponent<RegisterPageProps> {
       { uploading } = activityStore;
 
     return (
-      <ServerSessionBox className="container" {...this.props}>
+      <Container>
         <PageHead title={`${activity} ${t('questionnaire')}`} />
 
         <Form onSubmit={this.handleSubmit}>
@@ -87,7 +86,7 @@ export default class RegisterPage extends PureComponent<RegisterPageProps> {
             </Button>
           </footer>
         </Form>
-      </ServerSessionBox>
+      </Container>
     );
   }
 }

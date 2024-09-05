@@ -1,48 +1,40 @@
 import { Answer } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import { EnrollmentList } from '../../../../../components/Activity/EnrollmentList';
-import { ServerSessionBox } from '../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../models/Activity';
 import { i18n } from '../../../../../models/Base/Translation';
+import { sessionGuard } from '../../../../api/core';
 
-type ParticipantPageProps = RouteProps<{ name: string }> & JWTProps;
+type ParticipantPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  ParticipantPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const { t } = i18n;
 
 const ParticipantPage: FC<ParticipantPageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      {...props}
-      name={props.route.params!.name}
-      path={props.route.resolvedUrl}
-      title={t('sign_up_user')}
-    >
-      <ParticipantEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    {...props}
+    name={props.route.params!.name}
+    path={props.route.resolvedUrl}
+    title={t('sign_up_user')}
+  >
+    <ParticipantEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default ParticipantPage;
 
 @observer
-class ParticipantEditor extends PureComponent<ParticipantPageProps> {
+class ParticipantEditor extends Component<ParticipantPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   @observable

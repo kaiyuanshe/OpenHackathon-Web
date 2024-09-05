@@ -1,29 +1,22 @@
 import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  cache,
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
+import { cache, compose, RouteProps, router } from 'next-ssr-middleware';
 import { Component } from 'react';
 
 import { ActivityLogListLayout } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore, { ActivityModel } from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
-interface LogPageProps extends RouteProps<{ name: string }>, JWTProps {
+interface LogPageProps extends RouteProps<{ name: string }> {
   activity: Hackathon;
 }
 
-export const getServerSideProps = compose<{ name: string }, LogPageProps>(
+export const getServerSideProps = compose<{ name: string }>(
   router,
-  jwtVerifier(),
+  sessionGuard,
   cache(),
   async ({ params }) => {
     const activity = await new ActivityModel().getOne(params!.name);
@@ -42,22 +35,20 @@ export default class LogPage extends Component<LogPageProps> {
     const { resolvedUrl, params } = this.props.route;
 
     return (
-      <ServerSessionBox {...this.props}>
-        <ActivityManageFrame
-          {...this.props}
-          path={resolvedUrl}
-          name={params!.name}
-          title={t('log')}
-        >
-          <ScrollList
-            translator={i18n}
-            store={this.store}
-            renderList={allItems => (
-              <ActivityLogListLayout defaultData={allItems} />
-            )}
-          />
-        </ActivityManageFrame>
-      </ServerSessionBox>
+      <ActivityManageFrame
+        {...this.props}
+        path={resolvedUrl}
+        name={params!.name}
+        title={t('log')}
+      >
+        <ScrollList
+          translator={i18n}
+          store={this.store}
+          renderList={allItems => (
+            <ActivityLogListLayout defaultData={allItems} />
+          )}
+        />
+      </ActivityManageFrame>
     );
   }
 }

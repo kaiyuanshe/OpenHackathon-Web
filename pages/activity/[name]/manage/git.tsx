@@ -3,50 +3,42 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { CardList } from '../../../../components/Git/CardList';
 import { GitModal } from '../../../../components/Git/Modal';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
 const { t } = i18n;
 
-type ActivityManageGitPageProps = RouteProps<{ name: string }> & JWTProps;
+type ActivityManageGitPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  ActivityManageGitPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const ActivityManageGitPage: FC<ActivityManageGitPageProps> = observer(
   props => (
-    <ServerSessionBox {...props}>
-      <ActivityManageFrame
-        {...props}
-        path={props.route.resolvedUrl}
-        name={props.route.params!.name}
-        title={t('cloud_development_environment')}
-      >
-        <ActivityManageGitEditor {...props} />
-      </ActivityManageFrame>
-    </ServerSessionBox>
+    <ActivityManageFrame
+      {...props}
+      path={props.route.resolvedUrl}
+      name={props.route.params!.name}
+      title={t('cloud_development_environment')}
+    >
+      <ActivityManageGitEditor {...props} />
+    </ActivityManageFrame>
   ),
 );
 export default ActivityManageGitPage;
 
 @observer
-class ActivityManageGitEditor extends PureComponent<ActivityManageGitPageProps> {
+class ActivityManageGitEditor extends Component<ActivityManageGitPageProps> {
   store = activityStore.templateOf(this.props.route.params!.name + '');
 
   @observable

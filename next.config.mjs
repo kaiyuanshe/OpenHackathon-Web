@@ -1,6 +1,5 @@
 // @ts-ignore
 import withLess from 'next-with-less';
-// @ts-ignore
 import setPWA from 'next-pwa';
 import WP from 'webpack';
 
@@ -44,10 +43,10 @@ const rewrites = async () => ({
 });
 
 /** @type {import('next').NextConfig} */
-export default withPWA(
-  withLess({
+export default withLess(
+  withPWA({
     reactStrictMode: true,
-    output: CI && 'standalone',
+    output: CI ? 'standalone' : undefined,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     transpilePackages: ['@sentry/browser'],
     webpack,

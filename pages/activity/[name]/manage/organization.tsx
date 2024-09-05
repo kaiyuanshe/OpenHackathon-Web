@@ -3,49 +3,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
-type OrganizationPageProps = RouteProps<{ name: string }> & JWTProps;
+type OrganizationPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  OrganizationPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const { t } = i18n;
 
 const OrganizationPage: FC<OrganizationPageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      {...props}
-      name={props.route.params!.name}
-      path={props.route.resolvedUrl}
-      title={t('organizer_manage')}
-    >
-      <OrganizationEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    {...props}
+    name={props.route.params!.name}
+    path={props.route.resolvedUrl}
+    title={t('organizer_manage')}
+  >
+    <OrganizationEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default OrganizationPage;
 
 @observer
-class OrganizationEditor extends PureComponent<OrganizationPageProps> {
+class OrganizationEditor extends Component<OrganizationPageProps> {
   store = activityStore.organizationOf(this.props.route.params!.name);
 
   @observable

@@ -1,53 +1,45 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { AwardAssignment } from '../../../../models/Activity/Award';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
 const { t } = i18n;
 
-type EvaluationPageProps = RouteProps<{ name: string }> & JWTProps;
+type EvaluationPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  EvaluationPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const EvaluationPage: FC<EvaluationPageProps> = observer(props => {
   const { resolvedUrl, params } = props.route;
 
   return (
-    <ServerSessionBox {...props}>
-      <ActivityManageFrame
-        {...props}
-        path={resolvedUrl}
-        name={params!.name}
-        title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
-      >
-        <EvalationEditor {...props} />
-      </ActivityManageFrame>
-    </ServerSessionBox>
+    <ActivityManageFrame
+      {...props}
+      path={resolvedUrl}
+      name={params!.name}
+      title={`${params!.name} ${t('activity_manage')} ${t('works_awards')}`}
+    >
+      <EvalationEditor {...props} />
+    </ActivityManageFrame>
   );
 });
 
 export default EvaluationPage;
 
 @observer
-class EvalationEditor extends PureComponent<EvaluationPageProps> {
+class EvalationEditor extends Component<EvaluationPageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
 
