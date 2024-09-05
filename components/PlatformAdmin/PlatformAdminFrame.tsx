@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Fragment, PureComponent } from 'react';
+import { Component, Fragment, PropsWithChildren } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { adminMenus } from '../../configuration/menu';
@@ -25,7 +25,6 @@ import platformAdminStore from '../../models/User/PlatformAdmin';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
-import { ServerSessionBoxProps } from '../User/ServerSessionBox';
 
 const { t } = i18n;
 
@@ -43,13 +42,13 @@ library.add(
   faDesktop,
 );
 
-export interface PlatformAdminFrameProps extends ServerSessionBoxProps {
+export type PlatformAdminFrameProps = PropsWithChildren<{
   title: string;
   path?: string;
-}
+}>;
 
 @observer
-export class PlatformAdminFrame extends PureComponent<PlatformAdminFrameProps> {
+export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
   @observable
   accessor loading = false;
 

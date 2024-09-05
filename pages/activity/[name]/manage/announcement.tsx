@@ -2,49 +2,41 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { createRef, FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, createRef, FC, FormEvent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AnnouncementList } from '../../../../components/Message/MessageList';
 import { AnnouncementModal } from '../../../../components/Message/MessageModal';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
 const { t } = i18n;
 
-type MessageListPageProps = RouteProps<{ name: string }> & JWTProps;
+type MessageListPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  MessageListPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const MessageListPage: FC<MessageListPageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      {...props}
-      name={props.route.params!.name}
-      path={props.route.resolvedUrl}
-      title={t('announcement_manage')}
-    >
-      <MessageListEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    {...props}
+    name={props.route.params!.name}
+    path={props.route.resolvedUrl}
+    title={t('announcement_manage')}
+  >
+    <MessageListEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default MessageListPage;
 
 @observer
-class MessageListEditor extends PureComponent<MessageListPageProps> {
+class MessageListEditor extends Component<MessageListPageProps> {
   store = activityStore.announcementOf(this.props.route.params!.name);
 
   form = createRef<HTMLFormElement>();

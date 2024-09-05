@@ -56,7 +56,7 @@ export class SessionModel extends BaseModel {
 
   @computed
   get metaOAuth() {
-    const { token } = parseCookie(globalThis.document.cookie);
+    const { token } = parseCookie(globalThis.document?.cookie || '');
 
     return { github: { accessToken: token } };
   }

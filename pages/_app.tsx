@@ -20,11 +20,12 @@ enableStaticRendering(isServer());
 const { t } = i18n;
 
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
-  const { message, response } = (reason || {}) as HTTPError<ErrorBaseData>;
+  var { message, response } = reason as HTTPError;
+  const { statusText, body } = response || {};
 
-  const tips = response.body?.detail || message;
+  message = body?.message || message || statusText;
 
-  if (tips) alert(tips);
+  if (message) alert(message);
 });
 
 const MyApp: FC<AppProps> = observer(

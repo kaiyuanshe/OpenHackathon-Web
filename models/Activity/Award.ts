@@ -1,4 +1,4 @@
-import { User } from '@authing/native-js-ui-components';
+import { User } from '@kaiyuanshe/openhackathon-service';
 import { Base, Media, Team } from '@kaiyuanshe/openhackathon-service';
 import { ListModel, Stream, toggle } from 'mobx-restful';
 

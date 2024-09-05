@@ -1,52 +1,44 @@
-import { Answer, Question } from '@kaiyuanshe/openhackathon-service';
+import { Question } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { QuestionnaireCreate } from '../../../../components/Activity/QuestionnaireCreate';
 import { QuestionnaireForm } from '../../../../components/Activity/QuestionnairePreview';
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { isServer } from '../../../../models/Base';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
 const { t } = i18n;
 
-type ActivityQuestionnairePageProps = RouteProps<{ name: string }> & JWTProps;
+type ActivityQuestionnairePageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  ActivityQuestionnairePageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const ActivityQuestionnairePage: FC<ActivityQuestionnairePageProps> = observer(
   props => (
-    <ServerSessionBox {...props}>
-      <ActivityManageFrame
-        {...props}
-        name={props.route.params!.name}
-        path={props.route.resolvedUrl}
-        title={t('edit_questionnaire')}
-      >
-        <ActivityQuestionnaireEditor {...props} />
-      </ActivityManageFrame>
-    </ServerSessionBox>
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('edit_questionnaire')}
+    >
+      <ActivityQuestionnaireEditor {...props} />
+    </ActivityManageFrame>
   ),
 );
 export default ActivityQuestionnairePage;
 
 @observer
-class ActivityQuestionnaireEditor extends PureComponent<ActivityQuestionnairePageProps> {
+class ActivityQuestionnaireEditor extends Component<ActivityQuestionnairePageProps> {
   activity = this.props.route.params!.name;
 
   @observable

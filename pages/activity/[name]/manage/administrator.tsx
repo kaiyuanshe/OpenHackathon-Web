@@ -3,48 +3,40 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
-type AdministratorPageProps = RouteProps<{ name: string }> & JWTProps;
+type AdministratorPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  AdministratorPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const { t } = i18n;
 
 const AdministratorPage: FC<AdministratorPageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      name={props.route.params!.name}
-      path={props.route.resolvedUrl}
-      title={t('admin')}
-    >
-      <AdministratorEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    name={props.route.params!.name}
+    path={props.route.resolvedUrl}
+    title={t('admin')}
+  >
+    <AdministratorEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default AdministratorPage;
 
 @observer
-class AdministratorEditor extends PureComponent<AdministratorPageProps> {
+class AdministratorEditor extends Component<AdministratorPageProps> {
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
   @observable

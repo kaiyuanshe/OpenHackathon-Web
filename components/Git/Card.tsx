@@ -1,4 +1,4 @@
-import { GitTemplate } from '@kaiyuanshe/openhackathon-service';
+import { GitTemplate, HackathonBase } from '@kaiyuanshe/openhackathon-service';
 import { text2color } from 'idea-react';
 import { observer } from 'mobx-react';
 import { FC, ReactNode } from 'react';
@@ -9,9 +9,14 @@ import { GitLogo } from './Logo';
 
 const { t } = i18n;
 
-export interface GitCardProps extends GitTemplate {
+export type SimpleRepository = Omit<
+  GitTemplate,
+  Exclude<keyof HackathonBase, 'id'>
+>;
+
+export interface GitCardProps extends SimpleRepository {
   className?: string;
-  renderController?: (item: GitTemplate) => ReactNode;
+  renderController?: (item: SimpleRepository) => ReactNode;
 }
 
 export const GitCard: FC<GitCardProps> = observer(

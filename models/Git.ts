@@ -1,6 +1,8 @@
+import 'array-unique-proposal';
+
 import { GitTemplate } from '@kaiyuanshe/openhackathon-service';
 import { components } from '@octokit/openapi-types';
-import { HTTPClient } from 'koajax';
+import { githubClient, RepositoryFilter, RepositoryModel } from 'mobx-github';
 import { toggle } from 'mobx-restful';
 
 import { TeamWorkModel } from './Activity/Team';
@@ -9,11 +11,9 @@ import sessionStore from './User/Session';
 
 type Repository = components['schemas']['repository'];
 
-const gitClient = new HTTPClient({
-  baseURI: 'https://api.github.com/',
-  responseType: 'json',
-}).use(({ request }, next) => {
-  const { accessToken } = sessionStore.metaOAuth.github || {};
+githubClient.use(({ request }, next) => {
+  const { accessToken = process.env.GITHUB_PAT } =
+    sessionStore.metaOAuth.github || {};
 
   if (accessToken)
     request.headers = {
@@ -31,7 +31,7 @@ export class GitModel extends TableModel<GitTemplate> {
 
   @toggle('uploading')
   async createOneFrom(templateURI: string, name: string) {
-    const { body } = await gitClient.post<Repository>(
+    const { body } = await githubClient.post<Repository>(
       `repos/${templateURI}/generate`,
       { name },
     );
@@ -40,7 +40,7 @@ export class GitModel extends TableModel<GitTemplate> {
 
   @toggle('uploading')
   addCollaborator(URI: string, user: string) {
-    return gitClient.put(`repos/${URI}/collaborators/${user}`);
+    return githubClient.put(`repos/${URI}/collaborators/${user}`);
   }
 }
 
@@ -48,5 +48,41 @@ export class WorkspaceModel extends TeamWorkModel {
   constructor(baseURI: string) {
     super(baseURI);
     this.baseURI = `${baseURI}/work/git-repository`;
+  }
+}
+
+export const SourceRepository = [
+  ['kaiyuanshe/open-hackathon'],
+  [
+    'kaiyuanshe/OpenHackathon-Web',
+    'kaiyuanshe/open-hackathon-api',
+    'kaiyuanshe/open-hackathon-guacamole',
+    'kaiyuanshe/cloudengine',
+  ],
+  [
+    'kaiyuanshe/OpenHackathon-Web',
+    'kaiyuanshe/OpenHackathon-service',
+    'kaiyuanshe/OpenHackathon-server',
+  ],
+];
+
+export class SourceRepositoryModel extends RepositoryModel {
+  async loadPage(
+    page: number,
+    per_page: number,
+    { relation }: RepositoryFilter,
+  ) {
+    const list = SourceRepository.flat()
+      .uniqueBy()
+      .slice((page - 1) * per_page, page * per_page);
+
+    const pageData: Awaited<ReturnType<RepositoryModel['getOne']>>[] = [];
+
+    for (const full_name of list) {
+      const item = await this.getOne(full_name, relation);
+
+      pageData.push(item);
+    }
+    return { pageData, totalCount: list.length };
   }
 }

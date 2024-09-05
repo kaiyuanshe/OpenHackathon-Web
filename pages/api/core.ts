@@ -73,7 +73,7 @@ export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
 
     res.setHeader('Set-Cookie', `JWT=${user.token}; Path=/`);
 
-    return { props: { jwtPayload: user } };
+    return { props: { jwtPayload: JSON.parse(JSON.stringify(user)) } };
   }
 };
 

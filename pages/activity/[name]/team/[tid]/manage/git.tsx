@@ -2,7 +2,7 @@ import { TeamWorkType } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, jwtVerifier, router, translator } from 'next-ssr-middleware';
+import { compose, router, translator } from 'next-ssr-middleware';
 import { Component, FC, FormEvent } from 'react';
 import {
   Button,
@@ -24,15 +24,16 @@ import {
   TeamManageBaseProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
-import { ServerSessionBox } from '../../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../../models/Activity';
 import { i18n } from '../../../../../../models/Base/Translation';
 import sessionStore from '../../../../../../models/User/Session';
+import { sessionGuard } from '../../../../../api/core';
 
-export const getServerSideProps = compose<
-  TeamManageBaseParams,
-  TeamManageBaseProps
->(router, jwtVerifier(), translator(i18n));
+export const getServerSideProps = compose<TeamManageBaseParams>(
+  router,
+  sessionGuard,
+  translator(i18n),
+);
 
 const { t } = i18n;
 
@@ -40,17 +41,15 @@ const GitPage: FC<TeamManageBaseProps> = observer(props => {
   const { name, tid } = props.route.params!;
 
   return (
-    <ServerSessionBox {...props}>
-      <TeamManageFrame
-        {...props}
-        name={name}
-        tid={+tid}
-        path={props.route.resolvedUrl}
-        title={t('cloud_development_environment')}
-      >
-        <GitView {...props} />
-      </TeamManageFrame>
-    </ServerSessionBox>
+    <TeamManageFrame
+      {...props}
+      name={name}
+      tid={+tid}
+      path={props.route.resolvedUrl}
+      title={t('cloud_development_environment')}
+    >
+      <GitView {...props} />
+    </TeamManageFrame>
   );
 });
 

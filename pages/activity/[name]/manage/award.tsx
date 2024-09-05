@@ -1,13 +1,7 @@
 import { observer } from 'mobx-react';
 import { NewData } from 'mobx-restful';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -16,36 +10,34 @@ import {
   AwardList,
   AwardTargetName,
 } from '../../../../components/Activity/AwardList';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Activity/Award';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
-type AwardPageProps = RouteProps<{ name: string }> & JWTProps;
+type AwardPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }, AwardPageProps>(
+export const getServerSideProps = compose<{ name: string }>(
   router,
-  jwtVerifier(),
+  sessionGuard,
 );
 
 const { t } = i18n;
 
 const AwardPage: FC<AwardPageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      name={props.route.params!.name}
-      path={props.route.resolvedUrl}
-      title={t('prize_settings')}
-    >
-      <AwardEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    name={props.route.params!.name}
+    path={props.route.resolvedUrl}
+    title={t('prize_settings')}
+  >
+    <AwardEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default AwardPage;
 
 @observer
-class AwardEditor extends PureComponent<AwardPageProps> {
+class AwardEditor extends Component<AwardPageProps> {
   store = activityStore.awardOf(this.props.route.params!.name);
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

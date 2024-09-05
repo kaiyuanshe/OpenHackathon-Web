@@ -1,20 +1,14 @@
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
-import { ServerSessionBox } from '../../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../../models/Activity';
 import { i18n } from '../../../../../models/Base/Translation';
+import { sessionGuard } from '../../../../api/core';
 
 const { t } = i18n;
 
@@ -23,31 +17,29 @@ const EnrollmentStatisticCharts = dynamic(
   { ssr: false },
 );
 
-type EnrollmentStatisticPageProps = RouteProps<{ name: string }> & JWTProps;
+type EnrollmentStatisticPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  EnrollmentStatisticPageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const EnrollmentStatisticPage: FC<EnrollmentStatisticPageProps> = observer(
   props => (
-    <ServerSessionBox>
-      <ActivityManageFrame
-        {...props}
-        name={props.route.params!.name}
-        path={props.route.resolvedUrl}
-        title={t('registration_statistics')}
-      >
-        <EnrollmentStatisticView {...props} />
-      </ActivityManageFrame>
-    </ServerSessionBox>
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('registration_statistics')}
+    >
+      <EnrollmentStatisticView {...props} />
+    </ActivityManageFrame>
   ),
 );
 export default EnrollmentStatisticPage;
 
 @observer
-class EnrollmentStatisticView extends PureComponent<EnrollmentStatisticPageProps> {
+class EnrollmentStatisticView extends Component<EnrollmentStatisticPageProps> {
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   render() {

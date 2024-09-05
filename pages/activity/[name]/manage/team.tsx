@@ -1,13 +1,7 @@
 import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import {
-  compose,
-  JWTProps,
-  jwtVerifier,
-  RouteProps,
-  router,
-} from 'next-ssr-middleware';
-import { FC, FormEvent, PureComponent } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { Component, FC, FormEvent } from 'react';
 import {
   Button,
   Container,
@@ -19,36 +13,34 @@ import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamListLayout } from '../../../../components/Team/TeamList';
-import { ServerSessionBox } from '../../../../components/User/ServerSessionBox';
 import activityStore from '../../../../models/Activity';
 import { i18n } from '../../../../models/Base/Translation';
+import { sessionGuard } from '../../../api/core';
 
-type TeamManagePageProps = RouteProps<{ name: string }> & JWTProps;
+type TeamManagePageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<
-  { name: string },
-  TeamManagePageProps
->(router, jwtVerifier());
+export const getServerSideProps = compose<{ name: string }>(
+  router,
+  sessionGuard,
+);
 
 const { t } = i18n;
 
 const TeamManagePage: FC<TeamManagePageProps> = observer(props => (
-  <ServerSessionBox {...props}>
-    <ActivityManageFrame
-      {...props}
-      path={props.route.resolvedUrl}
-      name={props.route.params!.name}
-      title={t('team_manage')}
-    >
-      <TeamManageEditor {...props} />
-    </ActivityManageFrame>
-  </ServerSessionBox>
+  <ActivityManageFrame
+    {...props}
+    path={props.route.resolvedUrl}
+    name={props.route.params!.name}
+    title={t('team_manage')}
+  >
+    <TeamManageEditor {...props} />
+  </ActivityManageFrame>
 ));
 
 export default TeamManagePage;
 
 @observer
-class TeamManageEditor extends PureComponent<TeamManagePageProps> {
+class TeamManageEditor extends Component<TeamManagePageProps> {
   store = activityStore.teamOf(this.props.route.params!.name);
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
