@@ -5,6 +5,7 @@ import {
   TeamWork,
 } from '@kaiyuanshe/openhackathon-service';
 import { Icon } from 'idea-react';
+import { HTTPError } from 'koajax';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { observePropsState } from 'mobx-react-helper';
@@ -21,9 +22,8 @@ import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { ActivityModel } from '../../../../../models/Activity';
-import { ErrorBaseData, isServer } from '../../../../../models/Base';
 import { i18n } from '../../../../../models/Base/Translation';
-import sessionStore from '../../../../../models/User/Session';
+import sessionStore, { isServer } from '../../../../../models/User/Session';
 
 const { t } = i18n;
 
@@ -132,7 +132,7 @@ export default class TeamPage extends PureComponent<TeamPageProps> {
         : undefined;
       this.teamMemberRole = this.currentUserInThisTeam?.role || '';
     } catch (error: any) {
-      const { status } = error as ErrorBaseData;
+      const { status } = (error as HTTPError).response;
 
       if (status !== 404) this.teamMemberRole = '';
     }

@@ -2,14 +2,6 @@ import { User, UserRankListChunk } from '@kaiyuanshe/openhackathon-service';
 
 import { Filter, TableModel } from '../Base';
 
-export interface AuthingUserBase {
-  _id?: string;
-  openid: string;
-  unionid?: string;
-  userId: string;
-  userPoolId: string;
-}
-
 export interface UserFilter extends Filter<User> {
   keywords?: string;
 }

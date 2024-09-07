@@ -6,12 +6,13 @@ import {
   Questionnaire,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
-import { toggle } from 'mobx-restful';
+import { persist, restore, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
 import platformAdmin from '../User/PlatformAdmin';
+import { isServer } from '../User/Session';
 import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -36,6 +37,12 @@ export interface ActivityFilter extends Filter<Hackathon> {
 export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   baseURI = 'hackathon';
   indexKey = 'name' as const;
+
+  restored = !isServer() && restore(this, 'Activity');
+
+  @persist()
+  @observable
+  accessor currentOne = {} as Hackathon;
 
   currentStaff?: StaffModel;
   currentAward?: AwardModel;
@@ -114,6 +121,10 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   @action
   @toggle('downloading')
   async getOne(name: string) {
+    await this.restored;
+
+    if (this.currentOne.name === name) return this.currentOne;
+
     const { detail, ...data } = await super.getOne(name);
 
     this.staffOf(name);

@@ -1,9 +1,8 @@
 import { Base, ListChunk } from '@kaiyuanshe/openhackathon-service';
-import { HTTPError } from 'koajax';
 import { Filter as BaseFilter, ListModel, RESTClient } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-import sessionStore from '../User/Session';
+import { ownClient } from '../User/Session';
 
 export interface UploadUrl
   extends Record<'filename' | 'uploadUrl' | 'url', string> {
@@ -29,8 +28,6 @@ export interface ListData<T> {
   nextLink: string;
   value: T[];
 }
-
-export const isServer = () => typeof window === 'undefined';
 
 export async function* createListStream<T>(
   path: string,
@@ -60,7 +57,7 @@ export abstract class TableModel<
   D extends Base,
   F extends InputData<D> = InputData<D>,
 > extends ListModel<D, F> {
-  client = sessionStore.client;
+  client = ownClient;
 
   async loadPage(pageIndex: number, pageSize: number, filter: F) {
     const { body } = await this.client.get<ListChunk<D>>(

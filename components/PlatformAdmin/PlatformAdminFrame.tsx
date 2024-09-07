@@ -14,14 +14,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { Component, Fragment, PropsWithChildren } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { adminMenus } from '../../configuration/menu';
 import { i18n } from '../../models/Base/Translation';
-import platformAdminStore from '../../models/User/PlatformAdmin';
+import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
@@ -49,13 +48,8 @@ export type PlatformAdminFrameProps = PropsWithChildren<{
 
 @observer
 export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
-  @observable
-  accessor loading = false;
-
-  async componentDidMount() {
-    this.loading = true;
-    await platformAdminStore.checkAuthorization();
-    this.loading = false;
+  componentDidMount() {
+    sessionStore.getProfile();
   }
 
   get currentRoute() {
@@ -106,9 +100,9 @@ export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
   }
 
   render() {
-    const { currentRoute, loading } = this,
+    const { currentRoute } = this,
       { children, title } = this.props,
-      { isPlatformAdmin } = platformAdminStore;
+      { downloading, isPlatformAdmin } = sessionStore;
 
     return (
       <div
@@ -117,7 +111,7 @@ export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
       >
         <PageHead title={`${title} - ${t('platform_management')}`} />
 
-        {loading ? (
+        {downloading > 0 ? (
           <Loading />
         ) : isPlatformAdmin ? (
           <>

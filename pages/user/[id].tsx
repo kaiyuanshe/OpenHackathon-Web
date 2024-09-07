@@ -25,9 +25,8 @@ export const getServerSideProps = compose<{ id?: string }, User>(
   cache(),
   errorLogger,
   translator(i18n),
-  async ({ params: { id = '' } = {} }) => ({
-    props: await userStore.getOne(id),
-  }),
+  async ({ params: { id = '' } = {} }) =>
+    JSON.parse(JSON.stringify({ props: await userStore.getOne(id) })),
 );
 
 const UserDetailPage: FC<User> = ({ id, name, avatar }) => (

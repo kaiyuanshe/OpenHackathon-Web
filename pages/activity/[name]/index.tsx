@@ -40,9 +40,8 @@ import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { isServer } from '../../../models/Base';
 import { i18n } from '../../../models/Base/Translation';
-import sessionStore from '../../../models/User/Session';
+import sessionStore, { isServer } from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
 
 const { t } = i18n;
