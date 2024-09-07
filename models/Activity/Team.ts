@@ -7,12 +7,12 @@ import {
   TeamWorkFilter,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
-import { ListModel, Stream, toggle } from 'mobx-restful';
+import { ListModel, persist, restore, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { WorkspaceModel } from '../Git';
-import sessionStore from '../User/Session';
+import sessionStore, { isServer } from '../User/Session';
 import { AwardAssignment } from './Award';
 
 export type TeamFilter = Filter<Team> & BaseFilter;
@@ -110,8 +110,18 @@ export class TeamMemberModel extends TableModel<TeamMember, MemberFilter> {
     this.baseURI = `${baseURI}/member`;
   }
 
+  restored = !isServer() && restore(this, 'TeamMember');
+
+  @persist()
   @observable
-  accessor sessionOne: TeamMember | undefined;
+  accessor currentOne = {} as TeamMember;
+
+  @toggle('downloading')
+  async getOne(id: number) {
+    await this.restored;
+
+    return this.currentOne.id === id ? this.currentOne : super.getOne(id);
+  }
 
   @toggle('uploading')
   async joinTeam(data: JoinTeamReqBody) {

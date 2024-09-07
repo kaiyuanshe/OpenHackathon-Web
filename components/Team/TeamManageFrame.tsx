@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
+import { HTTPError } from 'koajax';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { JWTProps, RouteProps } from 'next-ssr-middleware';
@@ -16,7 +17,6 @@ import { Col, Nav } from 'react-bootstrap';
 
 import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { ErrorBaseData } from '../../models/Base';
 import { i18n } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
@@ -59,7 +59,7 @@ export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
         ? currentUserInThisTeam.role
         : undefined;
     } catch (error: any) {
-      const { status } = error as ErrorBaseData;
+      const { status } = (error as HTTPError).response;
 
       if (status !== 404) this.teamMemberRole = undefined;
     } finally {

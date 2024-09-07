@@ -1,6 +1,6 @@
-import type { InferGetServerSidePropsType } from 'next';
+import { Hackathon, UserRank } from '@kaiyuanshe/openhackathon-service';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
 import { ActivityListLayout } from '../components/Activity/ActivityList';
@@ -23,14 +23,14 @@ export const getServerSideProps = compose(
       new UserModel().getUserTopList(),
     ]);
 
-    return { props: { activities, topUsers } };
+    return { props: JSON.parse(JSON.stringify({ activities, topUsers })) };
   },
 );
 
-const HomePage = ({
+const HomePage: FC<{ activities: Hackathon[]; topUsers: UserRank[] }> = ({
   activities,
   topUsers,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => (
+}) => (
   <>
     <PageHead />
 

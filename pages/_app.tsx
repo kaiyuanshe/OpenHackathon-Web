@@ -10,8 +10,8 @@ import { FC } from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
-import { ErrorBaseData, isServer } from '../models/Base';
 import { i18n } from '../models/Base/Translation';
+import { isServer } from '../models/User/Session';
 
 configure({ enforceActions: 'never' });
 

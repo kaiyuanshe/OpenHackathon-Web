@@ -2,32 +2,24 @@ import { Base, User } from '@kaiyuanshe/openhackathon-service';
 import { HTTPClient } from 'koajax';
 import { computed, observable } from 'mobx';
 import { parseCookie, setCookie } from 'mobx-i18n';
-import { BaseModel, toggle } from 'mobx-restful';
-import { buildURLData, sleep } from 'web-utility';
+import { BaseModel, persist, restore, toggle } from 'mobx-restful';
+import { buildURLData } from 'web-utility';
 
-import { AuthingUserBase } from '.';
+export const isServer = () => typeof window === 'undefined';
 
-const { localStorage, document } = globalThis;
-
-const { token } = (document ? parseCookie() : {}) as { token: string };
-
-export const strapiClient = new HTTPClient({
-  baseURI: `${
-    process.env.NODE_ENV === 'development'
-      ? 'http://127.0.0.1:1337'
-      : 'https://hackathon-server.kaiyuanshe.cn'
-  }/api/`,
-  responseType: 'json',
-}).use(({ request }, next) => {
-  if (token)
-    request.headers = { ...request.headers, Authorization: `Bearer ${token}` };
-
-  return next();
-});
+const { token, JWT } = (globalThis.document ? parseCookie() : {}) as Record<
+  'token' | 'JWT',
+  string
+>;
 
 export const ownClient = new HTTPClient({
   baseURI: process.env.NEXT_PUBLIC_API_HOST,
   responseType: 'json',
+}).use(({ request }, next) => {
+  if (JWT)
+    request.headers = { ...request.headers, Authorization: `Bearer ${JWT}` };
+
+  return next();
 });
 
 export interface SessionUser
@@ -39,36 +31,31 @@ export interface SessionUser
 }
 
 export class SessionModel extends BaseModel {
-  client = ownClient.use(({ request }, next) => {
-    const { token } = this.user || {};
+  client = ownClient;
 
-    if (token)
-      request.headers = {
-        ...request.headers,
-        Authorization: `Bearer ${token}`,
-      };
-    return next();
-  });
+  restored = !isServer() && restore(this, 'Session');
 
+  @persist()
   @observable
-  accessor user: User | undefined =
-    localStorage?.user && JSON.parse(localStorage.user);
+  accessor user: User | undefined;
 
   @computed
   get metaOAuth() {
-    const { token } = parseCookie(globalThis.document?.cookie || '');
-
     return { github: { accessToken: token } };
   }
 
-  @toggle('uploading')
-  async signIn(profile: AuthingUserBase, reload = false) {
-    const { body } = await this.client.post<User>('login', profile);
+  @computed
+  get isPlatformAdmin() {
+    return !!this.user?.roles.includes(0);
+  }
 
-    setCookie('token', body!.token!, { path: '/' });
-    localStorage.user = JSON.stringify(body);
+  @toggle('downloading')
+  async getProfile() {
+    await this.restored;
 
-    if (reload) sleep().then(() => location.reload());
+    if (this.user) return this.user;
+
+    const { body } = await this.client.get<User>('user/session');
 
     return (this.user = body);
   }
@@ -83,7 +70,6 @@ export class SessionModel extends BaseModel {
   signOut(reload = false) {
     setCookie('token', '', { path: '/', expires: new Date() });
     setCookie('JWT', '', { path: '/', expires: new Date() });
-    localStorage?.clear();
 
     this.user = undefined;
 
