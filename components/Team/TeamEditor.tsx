@@ -2,9 +2,7 @@ import { Team } from '@kaiyuanshe/openhackathon-service';
 import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface TeamEditorProps {
   team?: Team;

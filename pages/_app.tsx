@@ -10,14 +10,12 @@ import { FC } from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 
 import { MainNavigation } from '../components/layout/MainNavigation';
-import { i18n } from '../models/Base/Translation';
+import { t } from '../models/Base/Translation';
 import { isServer } from '../models/User/Session';
 
 configure({ enforceActions: 'never' });
 
 enableStaticRendering(isServer());
-
-const { t } = i18n;
 
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
   var { message, response } = reason as HTTPError;

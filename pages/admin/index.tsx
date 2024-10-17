@@ -3,11 +3,9 @@ import { FC } from 'react';
 
 import ActivityList from '../../components/Activity/ActivityList';
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import { sessionGuard } from '../api/core';
-
-const { t } = i18n;
 
 export const getServerSideProps = sessionGuard;
 

@@ -3,17 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Base, Team } from '@kaiyuanshe/openhackathon-service';
 import classNames from 'classnames';
 import { Avatar } from 'idea-react';
+import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 
 import activityStore from '../../models/Activity';
-import { i18n } from '../../models/Base/Translation';
+import { i18n, t } from '../../models/Base/Translation';
 import { TeamAwardAssignmentLayout } from './TeamAwardAssignment';
 import { TeamMemberListLayout } from './TeamMemberList';
 import { SimpleTeamWorkListLayout } from './TeamWork';
-
-const { t } = i18n;
 
 export interface TeamAwardCardProps
   extends Omit<Team, Exclude<keyof Base, 'id'>> {
@@ -22,7 +21,8 @@ export interface TeamAwardCardProps
   onDelete?: (id: number) => any;
 }
 
-export class TeamAwardCard extends PureComponent<TeamAwardCardProps> {
+@observer
+export class TeamAwardCard extends Component<TeamAwardCardProps> {
   memberStore = activityStore
     .teamOf(this.props.hackathon.name)
     .memberOf(this.props.id);

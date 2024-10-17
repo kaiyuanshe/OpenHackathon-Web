@@ -4,10 +4,8 @@ import { FC } from 'react';
 
 import { ActivityEditor } from '../../../../components/Activity/ActivityEditor';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { i18n } from '../../../../models/Base/Translation';
+import { t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
-
-const { t } = i18n;
 
 type ActivityEditPageProps = RouteProps<{ name: string }>;
 

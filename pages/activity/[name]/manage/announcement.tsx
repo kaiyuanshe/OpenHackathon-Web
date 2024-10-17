@@ -10,10 +10,8 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { AnnouncementList } from '../../../../components/Message/MessageList';
 import { AnnouncementModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
-
-const { t } = i18n;
 
 type MessageListPageProps = RouteProps<{ name: string }>;
 

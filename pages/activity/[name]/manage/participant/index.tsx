@@ -8,7 +8,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import { EnrollmentList } from '../../../../../components/Activity/EnrollmentList';
 import activityStore from '../../../../../models/Activity';
-import { i18n } from '../../../../../models/Base/Translation';
+import { t } from '../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../api/core';
 
 type ParticipantPageProps = RouteProps<{ name: string }>;
@@ -17,8 +17,6 @@ export const getServerSideProps = compose<{ name: string }>(
   router,
   sessionGuard,
 );
-
-const { t } = i18n;
 
 const ParticipantPage: FC<ParticipantPageProps> = observer(props => (
   <ActivityManageFrame

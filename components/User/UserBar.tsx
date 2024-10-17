@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react';
 import { Button, Dropdown } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import LanguageMenu from './LanguageMenu';
 
 const UserBar = observer(() => {
-  const { t } = i18n;
   const { user } = sessionStore;
 
   const showName = user?.name || user?.email || user?.mobilePhone || '';

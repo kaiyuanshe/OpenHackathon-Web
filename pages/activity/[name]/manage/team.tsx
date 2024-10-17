@@ -14,7 +14,7 @@ import { formToJSON } from 'web-utility';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamListLayout } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { i18n, t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type TeamManagePageProps = RouteProps<{ name: string }>;
@@ -23,8 +23,6 @@ export const getServerSideProps = compose<{ name: string }>(
   router,
   sessionGuard,
 );
-
-const { t } = i18n;
 
 const TeamManagePage: FC<TeamManagePageProps> = observer(props => (
   <ActivityManageFrame

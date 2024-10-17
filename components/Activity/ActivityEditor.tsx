@@ -5,17 +5,16 @@ import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { BadgeInput, FileUploader } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { DateTimeInput } from '../DateTimeInput';
 
-const { t } = i18n,
-  HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
+const HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
 
 interface ActivityFormData extends Hackathon {
   bannerUrls: string[] | string;
@@ -26,7 +25,7 @@ export interface ActivityEditorProps {
 }
 
 @observer
-export class ActivityEditor extends PureComponent<ActivityEditorProps> {
+export class ActivityEditor extends Component<ActivityEditorProps> {
   @observable
   accessor detailHTML = '';
 

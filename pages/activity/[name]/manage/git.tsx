@@ -11,10 +11,8 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { CardList } from '../../../../components/Git/CardList';
 import { GitModal } from '../../../../components/Git/Modal';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { i18n, t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
-
-const { t } = i18n;
 
 type ActivityManageGitPageProps = RouteProps<{ name: string }>;
 

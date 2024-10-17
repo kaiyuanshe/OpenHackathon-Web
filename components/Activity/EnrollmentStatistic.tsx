@@ -7,21 +7,19 @@ import {
   YAxis,
 } from 'echarts-jsx';
 import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { isEmpty } from 'web-utility';
 
 import { EnrollmentModel } from '../../models/Activity/Enrollment';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface EnrollmentStatisticChartsProps {
   store: EnrollmentModel;
 }
 
 @observer
-export default class EnrollmentStatisticCharts extends PureComponent<EnrollmentStatisticChartsProps> {
+export default class EnrollmentStatisticCharts extends Component<EnrollmentStatisticChartsProps> {
   componentDidMount() {
     this.props.store.getStatistic();
   }

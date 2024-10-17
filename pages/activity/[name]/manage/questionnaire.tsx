@@ -10,11 +10,9 @@ import { QuestionnaireCreate } from '../../../../components/Activity/Questionnai
 import { QuestionnaireForm } from '../../../../components/Activity/QuestionnairePreview';
 import { QuestionnaireTable } from '../../../../components/Activity/QuestionnaireTable';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { t } from '../../../../models/Base/Translation';
 import { isServer } from '../../../../models/User/Session';
 import { sessionGuard } from '../../../api/core';
-
-const { t } = i18n;
 
 type ActivityQuestionnairePageProps = RouteProps<{ name: string }>;
 

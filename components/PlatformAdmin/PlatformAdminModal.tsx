@@ -1,14 +1,12 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 import { UserList } from '../User/UserList';
-
-const { t } = i18n;
 
 export interface PlatformAdminModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
@@ -17,7 +15,7 @@ export interface PlatformAdminModalProps
 }
 
 @observer
-export class PlatformAdminModal extends PureComponent<PlatformAdminModalProps> {
+export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
   @observable
   accessor userId = 0;
 

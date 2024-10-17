@@ -9,10 +9,8 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
 import { AwardAssignment } from '../../../../models/Activity/Award';
-import { i18n } from '../../../../models/Base/Translation';
+import { t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
-
-const { t } = i18n;
 
 type EvaluationPageProps = RouteProps<{ name: string }>;
 

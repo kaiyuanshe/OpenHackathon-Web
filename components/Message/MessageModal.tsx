@@ -9,9 +9,7 @@ import {
   AnnouncementModel,
   AnnouncementTypeName,
 } from '../../models/Activity/Message';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface AnnouncementModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

@@ -7,8 +7,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import { GitCard, SimpleRepository } from '../components/Git/Card';
 import { PageHead } from '../components/layout/PageHead';
-import { TopUserList } from '../components/User/TopUserList';
-import { i18n } from '../models/Base/Translation';
+import { UserRankView } from '../components/User/TopUserList';
+import { i18n, t } from '../models/Base/Translation';
 import { SourceRepository, SourceRepositoryModel } from '../models/Git';
 
 interface OpenSourcePageProps {
@@ -28,8 +28,6 @@ export const getServerSideProps = compose<{}, OpenSourcePageProps>(
     return { props: { repositories, contributors } };
   },
 );
-
-const { t } = i18n;
 
 const OpenSourcePage: FC<OpenSourcePageProps> = observer(
   ({ repositories, contributors }) => (
@@ -61,7 +59,7 @@ const OpenSourcePage: FC<OpenSourcePageProps> = observer(
       ))}
 
       <h2 className="my-4">{t('team_members')}</h2>
-      <TopUserList
+      <UserRankView
         value={contributors.map(
           ({ id, login, avatar_url, contributions }, index) => ({
             userId: id!,

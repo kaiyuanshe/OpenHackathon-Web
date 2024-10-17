@@ -1,12 +1,10 @@
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { ChangeEvent, PureComponent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
-import { i18n } from '../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../models/Base/Translation';
 
 export interface DateTimeInputProps {
   id?: string;
@@ -18,7 +16,7 @@ export interface DateTimeInputProps {
 }
 
 @observer
-export class DateTimeInput extends PureComponent<DateTimeInputProps> {
+export class DateTimeInput extends Component<DateTimeInputProps> {
   @observable
   accessor start = '';
 

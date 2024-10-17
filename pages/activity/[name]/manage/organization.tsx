@@ -11,7 +11,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { i18n, t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type OrganizationPageProps = RouteProps<{ name: string }>;
@@ -20,8 +20,6 @@ export const getServerSideProps = compose<{ name: string }>(
   router,
   sessionGuard,
 );
-
-const { t } = i18n;
 
 const OrganizationPage: FC<OrganizationPageProps> = observer(props => (
   <ActivityManageFrame

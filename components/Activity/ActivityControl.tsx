@@ -3,10 +3,8 @@ import { observer } from 'mobx-react';
 import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import platformAdmin from '../../models/User/PlatformAdmin';
-
-const { t } = i18n;
 
 export interface ActivityControlProps
   extends Pick<Hackathon, 'name' | 'status'> {

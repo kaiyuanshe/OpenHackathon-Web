@@ -8,10 +8,8 @@ import { Button, Card, CardProps, Col, Container, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
 import activityStore from '../../models/Activity';
-import { i18n } from '../../models/Base/Translation';
+import { i18n, t } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
-
-const { t } = i18n;
 
 export interface TeamWorkCardProps
   extends TeamWork,

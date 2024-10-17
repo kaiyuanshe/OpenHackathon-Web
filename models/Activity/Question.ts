@@ -1,6 +1,4 @@
-import { i18n } from '../Base/Translation';
-
-const { t } = i18n;
+import { t } from '../Base/Translation';
 
 export interface Question {
   id?: string;

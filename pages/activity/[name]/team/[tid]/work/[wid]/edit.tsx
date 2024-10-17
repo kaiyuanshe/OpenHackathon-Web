@@ -1,14 +1,14 @@
+import { observer } from 'mobx-react';
 import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
+import { FC } from 'react';
 
 import { PageHead } from '../../../../../../../components/layout/PageHead';
 import {
   WorkEditor,
   WorkEditorProps,
 } from '../../../../../../../components/Team/WorkEditor';
-import { i18n } from '../../../../../../../models/Base/Translation';
+import { i18n, t } from '../../../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../../../api/core';
-
-const { t } = i18n;
 
 export type TeamWorkEditProps = RouteProps<
   Record<keyof WorkEditorProps, string>
@@ -20,7 +20,7 @@ export const getServerSideProps = compose<WorkEditorProps>(
   translator(i18n),
 );
 
-export default function WorkCreatePage(props: TeamWorkEditProps) {
+const WorkCreatePage: FC<TeamWorkEditProps> = observer(props => {
   const { name, tid, wid } = props.route.params!;
 
   return (
@@ -30,4 +30,5 @@ export default function WorkCreatePage(props: TeamWorkEditProps) {
       <WorkEditor {...{ name, wid }} tid={+tid} />
     </>
   );
-}
+});
+export default WorkCreatePage;

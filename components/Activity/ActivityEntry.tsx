@@ -3,9 +3,7 @@ import { FC } from 'react';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export type ActivityStatusMeta = Pick<
   Hackathon,
