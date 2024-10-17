@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  kys-ows:
+    image: kaiyuanshe/kys-hackathon
+      - 3003:3000
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    labels:
+      - 'autoheal=true'
+    restart: always
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
