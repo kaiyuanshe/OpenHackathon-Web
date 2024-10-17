@@ -1,19 +1,23 @@
 import { Hackathon, UserRank } from '@kaiyuanshe/openhackathon-service';
+import { observer } from 'mobx-react';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FC, Fragment } from 'react';
 import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
 import { ActivityListLayout } from '../components/Activity/ActivityList';
 import { PageHead } from '../components/layout/PageHead';
-import { TopUserList } from '../components/User/TopUserList';
+import { UserRankView } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
-import { i18n } from '../models/Base/Translation';
+import { i18n, t } from '../models/Base/Translation';
 import { UserModel } from '../models/User';
 import { OrganizationType, OrganizationTypeName, partner } from './api/home';
 
-const { t } = i18n;
+interface HomePageProps {
+  activities: Hackathon[];
+  topUsers: UserRank[];
+}
 
-export const getServerSideProps = compose(
+export const getServerSideProps = compose<{}, HomePageProps>(
   cache(),
   errorLogger,
   translator(i18n),
@@ -27,10 +31,7 @@ export const getServerSideProps = compose(
   },
 );
 
-const HomePage: FC<{ activities: Hackathon[]; topUsers: UserRank[] }> = ({
-  activities,
-  topUsers,
-}) => (
+const HomePage: FC<HomePageProps> = observer(({ activities, topUsers }) => (
   <>
     <PageHead />
 
@@ -85,7 +86,7 @@ const HomePage: FC<{ activities: Hackathon[]; topUsers: UserRank[] }> = ({
       }}
     >
       <Container className="text-start">
-        <TopUserList value={topUsers} />
+        <UserRankView value={topUsers} />
       </Container>
     </div>
 
@@ -115,6 +116,6 @@ const HomePage: FC<{ activities: Hackathon[]; topUsers: UserRank[] }> = ({
       ))}
     </Container>
   </>
-);
+));
 
 export default HomePage;

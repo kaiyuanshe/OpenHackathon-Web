@@ -18,18 +18,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StaffType } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import { Fragment, PureComponent } from 'react';
+import { Component, Fragment } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { menus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
 import { PlatformAdminFrameProps } from '../PlatformAdmin/PlatformAdminFrame';
-
-const { t } = i18n;
 
 library.add(
   faBullhorn,
@@ -52,7 +50,7 @@ export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
 }
 
 @observer
-export class ActivityManageFrame extends PureComponent<ActivityManageFrameProps> {
+export class ActivityManageFrame extends Component<ActivityManageFrameProps> {
   componentDidMount() {
     activityStore.getOne(this.props.name);
   }

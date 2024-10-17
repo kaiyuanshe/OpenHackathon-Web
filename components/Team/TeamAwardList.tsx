@@ -3,11 +3,9 @@ import { ScrollList, ScrollListProps } from 'mobx-restful-table';
 import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { i18n, t } from '../../models/Base/Translation';
 import { XScrollListProps } from '../layout/ScrollList';
 import { TeamAwardCard } from './TeamAwardCard';
-
-const { t } = i18n;
 
 export interface TeamAwardListLayoutProps extends XScrollListProps<Team> {
   onAssign?: (id: Team['id']) => any;

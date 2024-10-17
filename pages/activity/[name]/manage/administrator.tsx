@@ -11,7 +11,7 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { i18n, t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type AdministratorPageProps = RouteProps<{ name: string }>;
@@ -20,8 +20,6 @@ export const getServerSideProps = compose<{ name: string }>(
   router,
   sessionGuard,
 );
-
-const { t } = i18n;
 
 const AdministratorPage: FC<AdministratorPageProps> = observer(props => (
   <ActivityManageFrame

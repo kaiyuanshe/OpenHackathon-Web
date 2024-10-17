@@ -3,9 +3,7 @@ import { FC } from 'react';
 import { Button, Container, Table } from 'react-bootstrap';
 
 import { Question } from '../../models/Activity/Question';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface QuestionnaireTableProps {
   questionnaire: Question[];

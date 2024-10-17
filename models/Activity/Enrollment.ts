@@ -4,10 +4,8 @@ import { Statistic, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
 import { createListStream, Filter, TableModel } from '../Base';
-import { i18n } from '../Base/Translation';
+import { t } from '../Base/Translation';
 import sessionStore from '../User/Session';
-
-const { t } = i18n;
 
 export const statusName: Record<Enrollment['status'], string> = {
   approved: t('approve'),

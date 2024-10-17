@@ -1,9 +1,7 @@
 import { FC, FormEventHandler } from 'react';
 import { Button, Col, Form, Modal, ModalProps } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface JoinTeamModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

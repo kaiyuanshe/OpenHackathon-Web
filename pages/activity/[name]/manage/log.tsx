@@ -7,7 +7,7 @@ import { Component } from 'react';
 import { ActivityLogListLayout } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import activityStore, { ActivityModel } from '../../../../models/Activity';
-import { i18n } from '../../../../models/Base/Translation';
+import { i18n, t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 interface LogPageProps extends RouteProps<{ name: string }> {
@@ -24,8 +24,6 @@ export const getServerSideProps = compose<{ name: string }>(
     return { props: { activity } as LogPageProps };
   },
 );
-
-const { t } = i18n;
 
 @observer
 export default class LogPage extends Component<LogPageProps> {

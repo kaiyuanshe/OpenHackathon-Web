@@ -1,18 +1,16 @@
 import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import { Container, Form, Row } from 'react-bootstrap';
 
 import { Question } from '../../models/Activity/Question';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface QuestionnaireFormProps {
   fields: Question[];
 }
 
 @observer
-export class QuestionnaireForm extends PureComponent<QuestionnaireFormProps> {
+export class QuestionnaireForm extends Component<QuestionnaireFormProps> {
   renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
       <Form.Group as="li" className="mb-3" key={title}>

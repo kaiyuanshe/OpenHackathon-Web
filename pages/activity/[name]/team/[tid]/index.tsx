@@ -11,7 +11,7 @@ import { observer } from 'mobx-react';
 import { observePropsState } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -22,10 +22,8 @@ import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
 import activityStore, { ActivityModel } from '../../../../../models/Activity';
-import { i18n } from '../../../../../models/Base/Translation';
+import { i18n, t } from '../../../../../models/Base/Translation';
 import sessionStore, { isServer } from '../../../../../models/User/Session';
-
-const { t } = i18n;
 
 interface TeamPageProps {
   activity: Hackathon;
@@ -65,7 +63,7 @@ export default interface TeamPage {
 
 @observer
 @observePropsState
-export default class TeamPage extends PureComponent<TeamPageProps> {
+export default class TeamPage extends Component<TeamPageProps> {
   store = activityStore
     .teamOf(this.props.activity.name)
     .memberOf(this.props.team.id);

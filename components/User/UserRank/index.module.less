@@ -61,8 +61,12 @@
       letter-spacing: 0.4rem;
       width: 10rem;
       cursor: default;
-      text-shadow: 0px 1px 0px #c0c0c0, 0px 2px 0px #b0b0b0, 0px 3px 0px #a0a0a0,
-        0px 4px 0px #909090, 0px 5px 10px rgba(0, 0, 0, 0.6);
+      text-shadow:
+        0px 1px 0px #c0c0c0,
+        0px 2px 0px #b0b0b0,
+        0px 3px 0px #a0a0a0,
+        0px 4px 0px #909090,
+        0px 5px 10px rgba(0, 0, 0, 0.6);
       color: transparent;
       font-family: "'book antiqua', palatino, serif";
       &::after {
@@ -90,7 +94,8 @@
     li {
       text-align: center;
       cursor: default;
-      &:first-child {
+      &:nth-child(2) {
+        order: 1;
         padding-top: 1rem;
         .showBox {
           color: #d8d8d8;
@@ -105,12 +110,15 @@
           animation-delay: 1.4s;
         }
       }
-      &:last-child {
+      &:nth-child(3) {
+        order: 3;
         padding-top: 1.5rem;
         .showBox {
           border-bottom: 1rem solid #fab36e;
           color: #fab36e;
-          text-shadow: 0px 1px 0px #aa8865, 0px 2px 5px rgba(167, 129, 67, 0.4);
+          text-shadow:
+            0px 1px 0px #aa8865,
+            0px 2px 5px rgba(167, 129, 67, 0.4);
           i {
             background-image: url(@logo-img), linear-gradient(#fab36e, #fbe7d3);
           }
@@ -127,23 +135,33 @@
     .showBox {
       min-height: 6rem;
       letter-spacing: 1px;
-      border-bottom: 1.5rem solid #ffd83a;
       z-index: 3;
+    }
+    li:nth-child(1) {
+      order: 2;
       padding-top: 0.3rem;
-      color: #ffd83a;
-      text-shadow: 0px 1px 0px #969653, 0px 2px 5px rgba(240, 219, 100, 0.4);
-      i {
-        width: 2.5rem;
-        height: 2.6rem;
-        background-image: url(@logo-img), linear-gradient(#ffd83a, #fdeba0);
-        background-blend-mode: lighten;
-        background-position: center;
-        background-size: 2.5rem auto;
-        background-repeat: no-repeat;
+      .showBox {
+        color: #ffd83a;
+        border-bottom: 1.5rem solid #ffd83a;
+        text-shadow:
+          0px 1px 0px #969653,
+          0px 2px 5px rgba(240, 219, 100, 0.4);
+        i {
+          width: 2.5rem;
+          height: 2.6rem;
+          background-image: url(@logo-img), linear-gradient(#ffd83a, #fdeba0);
+          background-blend-mode: lighten;
+          background-position: center;
+          background-size: 2.5rem auto;
+          background-repeat: no-repeat;
+        }
+      }
+      .imgBox {
+        width: 6.4rem;
+        animation-delay: 3.5s;
       }
     }
     .imgBox {
-      width: 6.4rem;
       z-index: 2;
       animation: 3.5s suspension ease-in-out infinite;
       transition: all 0.6s;

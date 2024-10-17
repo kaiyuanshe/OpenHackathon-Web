@@ -1,16 +1,14 @@
 import { Staff } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { StaffModel } from '../../models/Activity/Staff';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { UserList } from './UserList';
-
-const { t } = i18n;
 
 export interface AdministratorModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {
@@ -19,7 +17,7 @@ export interface AdministratorModalProps
 }
 
 @observer
-export class AdministratorModal extends PureComponent<AdministratorModalProps> {
+export class AdministratorModal extends Component<AdministratorModalProps> {
   @observable
   accessor userId = 0;
 

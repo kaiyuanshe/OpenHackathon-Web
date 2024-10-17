@@ -3,9 +3,7 @@ import classNames from 'classnames';
 import { Avatar } from 'idea-react';
 import { FC, HTMLAttributes } from 'react';
 
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export type TeamCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'> &
   Omit<Team, Exclude<keyof Base, 'id'>>;

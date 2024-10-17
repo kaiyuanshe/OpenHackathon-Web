@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { GitModel } from '../../models/Git';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
@@ -20,8 +20,6 @@ export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: GitModel;
   onSave?: () => any;
 }
-
-const { t } = i18n;
 
 @observer
 export class GitModal extends Component<GitModalProps> {

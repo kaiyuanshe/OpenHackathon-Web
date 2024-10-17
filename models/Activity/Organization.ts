@@ -3,9 +3,7 @@ import { computed } from 'mobx';
 import { groupBy } from 'web-utility';
 
 import { TableModel } from '../Base';
-import { i18n } from '../Base/Translation';
-
-const { t } = i18n;
+import { t } from '../Base/Translation';
 
 export const OrganizerTypeName: Record<OrganizerType, string> = {
   host: t('host'),

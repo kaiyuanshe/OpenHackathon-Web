@@ -12,7 +12,7 @@ import {
 } from '../../../../components/Activity/AwardList';
 import activityStore from '../../../../models/Activity';
 import { Award } from '../../../../models/Activity/Award';
-import { i18n } from '../../../../models/Base/Translation';
+import { t } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type AwardPageProps = RouteProps<{ name: string }>;
@@ -21,8 +21,6 @@ export const getServerSideProps = compose<{ name: string }>(
   router,
   sessionGuard,
 );
-
-const { t } = i18n;
 
 const AwardPage: FC<AwardPageProps> = observer(props => (
   <ActivityManageFrame

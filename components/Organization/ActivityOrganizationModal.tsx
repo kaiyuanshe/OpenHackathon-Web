@@ -8,9 +8,7 @@ import {
   OrganizerModel,
   OrganizerTypeName,
 } from '../../models/Activity/Organization';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface OrganizationModalProps
   extends Pick<ModalProps, 'show' | 'onHide'> {

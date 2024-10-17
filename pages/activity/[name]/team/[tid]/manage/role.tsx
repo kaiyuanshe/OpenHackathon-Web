@@ -11,7 +11,7 @@ import {
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
-import { i18n } from '../../../../../../models/Base/Translation';
+import { i18n, t } from '../../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../../api/core';
 
 export const getServerSideProps = compose<TeamManageBaseParams>(
@@ -19,8 +19,6 @@ export const getServerSideProps = compose<TeamManageBaseParams>(
   sessionGuard,
   translator(i18n),
 );
-
-const { t } = i18n;
 
 @observer
 export default class TeamAdministratorPage extends Component<TeamManageBaseProps> {

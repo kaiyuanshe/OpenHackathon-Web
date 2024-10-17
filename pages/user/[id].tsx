@@ -6,20 +6,20 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '@kaiyuanshe/openhackathon-service';
+import { observer } from 'mobx-react';
 import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FC } from 'react';
 import { Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 import { PageHead } from '../../components/layout/PageHead';
-import { i18n } from '../../models/Base/Translation';
+import { i18n, t } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 
 const ActivityList = dynamic(
-    () => import('../../components/Activity/ActivityList'),
-    { ssr: false },
-  ),
-  { t } = i18n;
+  () => import('../../components/Activity/ActivityList'),
+  { ssr: false },
+);
 
 export const getServerSideProps = compose<{ id?: string }, User>(
   cache(),
@@ -29,7 +29,7 @@ export const getServerSideProps = compose<{ id?: string }, User>(
     JSON.parse(JSON.stringify({ props: await userStore.getOne(id) })),
 );
 
-const UserDetailPage: FC<User> = ({ id, name, avatar }) => (
+const UserDetailPage: FC<User> = observer(({ id, name, avatar }) => (
   <div
     className="py-4"
     style={{
@@ -97,6 +97,6 @@ const UserDetailPage: FC<User> = ({ id, name, avatar }) => (
       </Row>
     </Container>
   </div>
-);
+));
 
 export default UserDetailPage;

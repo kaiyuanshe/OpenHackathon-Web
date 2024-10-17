@@ -4,10 +4,8 @@ import { observer } from 'mobx-react';
 import { FC, ReactNode } from 'react';
 import { Badge, Button, Card, Col, Form, Row } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { GitLogo } from './Logo';
-
-const { t } = i18n;
 
 export type SimpleRepository = Omit<
   GitTemplate,

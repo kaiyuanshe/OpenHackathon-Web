@@ -5,10 +5,8 @@ import { Modal } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { TeamEditor } from './TeamEditor';
-
-const { t } = i18n;
 
 export interface TeamCreateModalProps {
   hackathonName: string;

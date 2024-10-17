@@ -3,12 +3,10 @@ import { FC } from 'react';
 import { Form, Image, Table } from 'react-bootstrap';
 
 import { OrganizerTypeName } from '../../models/Activity/Organization';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 import { OrganizationCard } from './OrganizationCard';
-
-const { t } = i18n;
 
 export const OrganizationListLayout: FC<XScrollListProps<Organizer>> = ({
   defaultData = [],

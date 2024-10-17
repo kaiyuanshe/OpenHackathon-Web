@@ -12,19 +12,17 @@ import { HTTPError } from 'koajax';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { JWTProps, RouteProps } from 'next-ssr-middleware';
-import { Fragment, PureComponent } from 'react';
+import { Component, Fragment } from 'react';
 import { Col, Nav } from 'react-bootstrap';
 
 import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
-
-const { t } = i18n;
 
 library.add(faTrophy, faUser, faUserSecret, faCloud);
 
@@ -37,7 +35,7 @@ export interface TeamManageFrameProps extends ActivityManageFrameProps {
 }
 
 @observer
-export class TeamManageFrame extends PureComponent<TeamManageFrameProps> {
+export class TeamManageFrame extends Component<TeamManageFrameProps> {
   @observable
   accessor teamMemberRole: TeamMemberRole | undefined;
 

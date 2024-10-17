@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import { Image } from 'react-bootstrap';
 
 export interface GitLogoProps {
@@ -8,7 +8,7 @@ export interface GitLogoProps {
 }
 
 @observer
-export class GitLogo extends PureComponent<GitLogoProps> {
+export class GitLogo extends Component<GitLogoProps> {
   @observable
   accessor path = '';
 

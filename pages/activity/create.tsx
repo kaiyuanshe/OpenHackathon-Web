@@ -5,10 +5,8 @@ import { Container } from 'react-bootstrap';
 
 import { ActivityEditor } from '../../components/Activity/ActivityEditor';
 import { PageHead } from '../../components/layout/PageHead';
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { sessionGuard } from '../api/core';
-
-const { t } = i18n;
 
 export const getServerSideProps = sessionGuard;
 

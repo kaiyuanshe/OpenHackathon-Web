@@ -1,9 +1,7 @@
 import { Announcement, BaseFilter } from '@kaiyuanshe/openhackathon-service';
 
 import { Filter, TableModel } from '../Base';
-import { i18n } from '../Base/Translation';
-
-const { t } = i18n;
+import { t } from '../Base/Translation';
 
 export enum AnnouncementType {
   Hackathon = 'hackathon',

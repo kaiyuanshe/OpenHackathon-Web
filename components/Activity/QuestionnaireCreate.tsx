@@ -5,9 +5,7 @@ import { FC, FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 interface QuestionnaireCreateForm extends Omit<Question, 'options'> {
   options?: string | string[];

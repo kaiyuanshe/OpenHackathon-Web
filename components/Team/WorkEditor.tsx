@@ -2,15 +2,13 @@ import { SpinnerButton } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { FileUploader } from 'mobx-restful-table';
-import { FormEvent, PureComponent } from 'react';
+import { Component, FormEvent } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
-import { i18n } from '../../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../../models/Base/Translation';
 
 export interface WorkEditorProps {
   name: string;
@@ -19,7 +17,7 @@ export interface WorkEditorProps {
 }
 
 @observer
-export class WorkEditor extends PureComponent<WorkEditorProps> {
+export class WorkEditor extends Component<WorkEditorProps> {
   store = activityStore.teamOf(this.props.name).workOf(this.props.tid);
 
   @computed

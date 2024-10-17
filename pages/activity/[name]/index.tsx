@@ -19,7 +19,7 @@ import { observer } from 'mobx-react';
 import { ScrollList } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { PureComponent } from 'react';
+import { Component } from 'react';
 import {
   Button,
   Carousel,
@@ -40,11 +40,9 @@ import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { i18n } from '../../../models/Base/Translation';
+import { i18n, t } from '../../../models/Base/Translation';
 import sessionStore, { isServer } from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
-
-const { t } = i18n;
 
 const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
   ssr: false,
@@ -79,7 +77,7 @@ const StatusName: () => Record<EnrollmentStatus, string> = () => ({
 });
 
 @observer
-export default class ActivityPage extends PureComponent<ActivityPageProps> {
+export default class ActivityPage extends Component<ActivityPageProps> {
   logStore = activityStore.logOf(this.props.activity.id);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);

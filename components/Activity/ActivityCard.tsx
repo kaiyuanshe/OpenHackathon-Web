@@ -8,12 +8,10 @@ import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import classNames from 'classnames';
 import { Card, Col, Row } from 'react-bootstrap';
 
-import { i18n } from '../../models/Base/Translation';
+import { t } from '../../models/Base/Translation';
 import { convertDatetime } from '../../utils/time';
 import { ActivityControl, ActivityControlProps } from './ActivityControl';
 import { ActivityEntry } from './ActivityEntry';
-
-const { t } = i18n;
 
 export interface ActivityCardProps extends Hackathon, ActivityControlProps {
   className?: string;

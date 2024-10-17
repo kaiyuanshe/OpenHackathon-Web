@@ -16,10 +16,8 @@ import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePre
 import { PageHead } from '../../../components/layout/PageHead';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Question } from '../../../models/Activity/Question';
-import { i18n } from '../../../models/Base/Translation';
+import { i18n, t } from '../../../models/Base/Translation';
 import { sessionGuard } from '../../api/core';
-
-const { t } = i18n;
 
 interface RegisterPageProps extends JWTProps {
   activity: string;

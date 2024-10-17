@@ -1,9 +1,7 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 
-import { i18n } from '../models/Base/Translation';
-
-const { t } = i18n;
+import { t } from '../models/Base/Translation';
 
 export interface MenuItem {
   title: string;
