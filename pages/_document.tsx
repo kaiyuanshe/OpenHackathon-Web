@@ -13,11 +13,15 @@ export default function Document() {
 
         <link
           rel="stylesheet"
-          href="https://npm.onmicrosoft.cn/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          href="https://npm.onmicrosoft.cn/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         />
         <link
           rel="stylesheet"
-          href="https://npm.onmicrosoft.cn/bootstrap-icons@1.11.2/font/bootstrap-icons.css"
+          href="https://npm.onmicrosoft.cn/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://npm.onmicrosoft.cn/idea-react@2.0.0-rc.7/dist/index.css"
         />
         <link
           rel="stylesheet"

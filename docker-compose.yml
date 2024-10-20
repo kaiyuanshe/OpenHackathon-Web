@@ -2,7 +2,8 @@ version: '3'
 
 services:
   open-hackathon-web:
-    image: kaiyuanshe/open-hackathon-web
+    image: kaiyuanshe/openhackathon-web
+    ports:
       - 3003:3000
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:3000/ || exit 1']
@@ -16,3 +17,7 @@ services:
       driver: 'json-file'
       options:
         max-size: '10m'
+    deploy:
+      resources:
+        limits:
+          memory: 4000M

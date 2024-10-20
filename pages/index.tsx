@@ -1,4 +1,5 @@
 import { Hackathon, UserRank } from '@kaiyuanshe/openhackathon-service';
+import { UserRankView } from 'idea-react';
 import { observer } from 'mobx-react';
 import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
 import { FC, Fragment } from 'react';
@@ -6,7 +7,6 @@ import { Button, Carousel, Col, Container, Image, Row } from 'react-bootstrap';
 
 import { ActivityListLayout } from '../components/Activity/ActivityList';
 import { PageHead } from '../components/layout/PageHead';
-import { UserRankView } from '../components/User/TopUserList';
 import { ActivityModel } from '../models/Activity';
 import { i18n, t } from '../models/Base/Translation';
 import { UserModel } from '../models/User';
@@ -86,7 +86,24 @@ const HomePage: FC<HomePageProps> = observer(({ activities, topUsers }) => (
       }}
     >
       <Container className="text-start">
-        <UserRankView value={topUsers} />
+        <UserRankView
+          style={{
+            // @ts-expect-error remove in React 19
+            '--logo-image':
+              'url(https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg)',
+          }}
+          title={t('hacker_pavilion')}
+          rank={topUsers.map(
+            ({ userId, user: { name, avatar, email }, score }) => ({
+              id: userId,
+              name,
+              avatar,
+              email,
+              score,
+            }),
+          )}
+          linkOf={({ id }) => `/user/${id}`}
+        />
       </Container>
     </div>
 

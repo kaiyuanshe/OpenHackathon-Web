@@ -1,4 +1,4 @@
-import { User } from '@kaiyuanshe/openhackathon-service';
+import { UserRankView } from 'idea-react';
 import { Contributor, GitRepository } from 'mobx-github';
 import { observer } from 'mobx-react';
 import { cache, compose, translator } from 'next-ssr-middleware';
@@ -7,7 +7,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import { GitCard, SimpleRepository } from '../components/Git/Card';
 import { PageHead } from '../components/layout/PageHead';
-import { UserRankView } from '../components/User/TopUserList';
 import { i18n, t } from '../models/Base/Translation';
 import { SourceRepository, SourceRepositoryModel } from '../models/Git';
 
@@ -60,14 +59,23 @@ const OpenSourcePage: FC<OpenSourcePageProps> = observer(
 
       <h2 className="my-4">{t('team_members')}</h2>
       <UserRankView
-        value={contributors.map(
-          ({ id, login, avatar_url, contributions }, index) => ({
-            userId: id!,
-            user: { id, name: login, avatar: avatar_url } as User,
+        style={{
+          // @ts-expect-error remove in React 19
+          '--logo-image':
+            'url(https://hackathon-api.static.kaiyuanshe.cn/6342619375fa1817e0f56ce1/2022/10/09/logo22.jpg)',
+        }}
+        title={t('hacker_pavilion')}
+        rank={contributors.map(
+          ({ id, login, avatar_url, email, html_url, contributions }) => ({
+            id: id!,
+            name: login!,
+            avatar: avatar_url,
+            email,
+            website: html_url,
             score: contributions,
-            rank: index + 1,
           }),
         )}
+        linkOf={({ website }) => website!}
       />
     </Container>
   ),
