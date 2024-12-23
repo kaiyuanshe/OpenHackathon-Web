@@ -5,9 +5,8 @@ RUN apk add --no-cache libc6-compat curl
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc .env ./
-
-RUN export $(cat /app/.env | xargs) && echo $MY_VAR > /output.txt
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml*  .env ./
+COPY /etc/secrets/.npmrc  ./
 
 
 
