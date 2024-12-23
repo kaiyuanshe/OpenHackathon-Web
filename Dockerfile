@@ -7,14 +7,8 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc .env ./
 
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN=$NPM_TOKEN
+RUN export $(cat /app/.env | xargs) && echo $MY_VAR > /output.txt
 
-RUN echo "GITHUB_TOKEN" ${GITHUB_TOKEN} "--"  ${NPM_TOKEN}
-
-RUN echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc && \
-    echo "@kaiyuanshe:registry=https://npm.pkg.github.com" >> ~/.npmrc && \
-    echo "always-auth=true" >> ~/.npmrc
 
 
 
