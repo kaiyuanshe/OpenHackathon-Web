@@ -54,7 +54,7 @@ export const GitCard: FC<GitCardProps> = observer(
         <Row as="ul" className="list-unstyled g-4" xs={4}>
           {languages &&
             Object.keys(languages).map(language => (
-              <Col as="li" key={language}>
+              <Col key={language} as="li">
                 <GitLogo name={language} />
               </Col>
             ))}

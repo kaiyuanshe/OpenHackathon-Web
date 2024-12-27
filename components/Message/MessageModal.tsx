@@ -50,13 +50,13 @@ export class AnnouncementModal extends Component<AnnouncementModalProps> {
       loading = store.uploading > 0;
 
     return (
-      <Modal show={show} onHide={onHide} centered>
+      <Modal show={show} centered onHide={onHide}>
         <Modal.Header closeButton>
           <Modal.Title>{t('publish_announcement')}</Modal.Title>
         </Modal.Header>
         <Modal.Body
-          as="form"
           ref={this.form}
+          as="form"
           onSubmit={this.handleSubmit}
           onReset={this.handleReset}
         >

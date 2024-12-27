@@ -68,7 +68,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
         uri: bannerUrl,
       };
     });
-    // @ts-ignore
+    // @ts-expect-error Type compatibility issue
     await activityStore.updateOne(data, name);
 
     if (!name && confirm(t('create_work_success'))) {
@@ -199,25 +199,25 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
         </Form.Group>
 
         <DateTimeInput
+          key="enrollment"
           label={t('enrollment')}
           name="enrollment"
-          key="enrollment"
           startAt={enrollmentStartedAt}
           endAt={enrollmentEndedAt}
           required
         />
         <DateTimeInput
+          key="event"
           label={t('activity_time')}
           name="event"
-          key="event"
           startAt={eventStartedAt}
           endAt={eventEndedAt}
           required
         />
         <DateTimeInput
+          key="judge"
           label={t('judge_time')}
           name="judge"
-          key="judge"
           startAt={judgeStartedAt}
           endAt={judgeEndedAt}
           required

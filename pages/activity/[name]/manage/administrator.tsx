@@ -129,7 +129,10 @@ class AdministratorEditor extends Component<AdministratorPageProps> {
           store={store}
           show={show}
           onHide={() => (this.show = false)}
-          onSave={() => (this.show = false) || this.store.refreshList()}
+          onSave={() => {
+            this.show = false;
+            this.store.refreshList();
+          }}
         />
       </Form>
     );

@@ -22,7 +22,7 @@ export const CardList: FC<XScrollListProps<GitTemplate>> = ({
         description,
         name = html_url.replace('https://github.com/', ''),
       }) => (
-        <Col as="li" key={id}>
+        <Col key={id} as="li">
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column gap-3">
               <Card.Title as="h3" className="h5">
@@ -48,7 +48,7 @@ export const CardList: FC<XScrollListProps<GitTemplate>> = ({
               <Row as="ul" className="list-unstyled g-4" xs={4}>
                 {languages &&
                   Object.keys(languages).map(language => (
-                    <Col as="li" key={language}>
+                    <Col key={language} as="li">
                       <GitLogo name={language} />
                     </Col>
                   ))}

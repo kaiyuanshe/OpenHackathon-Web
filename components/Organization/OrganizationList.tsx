@@ -13,7 +13,7 @@ export const OrganizationListLayout: FC<XScrollListProps<Organizer>> = ({
 }) => (
   <ul className="list-unstyled">
     {defaultData.map(item => (
-      <li className="mb-2" key={item.id}>
+      <li key={item.id} className="mb-2">
         <OrganizationCard {...item} />
       </li>
     ))}
@@ -30,6 +30,12 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organizer>> = ({
       <tr>
         <th>
           <Form.Check
+            ref={(input: HTMLInputElement | null) => {
+              if (input)
+                input.indeterminate =
+                  !!selectedIds?.length &&
+                  selectedIds.length < defaultData.length;
+            }}
             inline
             type="checkbox"
             name="organizationId"
@@ -37,12 +43,6 @@ export const OrganizationTableLayout: FC<XScrollListProps<Organizer>> = ({
               selectedIds?.length > 0 &&
               selectedIds?.length === defaultData?.length
             }
-            ref={(input: HTMLInputElement | null) => {
-              if (input)
-                input.indeterminate =
-                  !!selectedIds?.length &&
-                  selectedIds.length < defaultData.length;
-            }}
             onChange={() =>
               onSelect?.(
                 selectedIds.length === defaultData.length

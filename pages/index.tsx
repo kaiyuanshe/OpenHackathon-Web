@@ -122,7 +122,7 @@ const HomePage: FC<HomePageProps> = observer(({ activities, topUsers }) => (
             xl={6}
           >
             {list.map(({ name, url, logo }) => (
-              <Col as="li" key={name} title={name}>
+              <Col key={name} as="li" title={name}>
                 <a target="_blank" href={url} rel="noreferrer">
                   <Image fluid src={logo} alt={name} />
                 </a>

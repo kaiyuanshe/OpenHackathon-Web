@@ -115,13 +115,13 @@ export class WorkEditor extends Component<WorkEditorProps> {
             <Col sm={10}>
               {workTypes.map(({ title, value }) => (
                 <Form.Check
+                  key={value}
                   type="radio"
                   inline
                   label={title}
                   name="type"
                   value={value}
                   id={value}
-                  key={value}
                   checked={currentType === value}
                   onClick={() => (this.currentType = value)}
                 />
