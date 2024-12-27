@@ -72,10 +72,10 @@ export const TeamParticipantTableLayout: FC<
                     as="select"
                     className={styles.form}
                     disabled={status === 'approved'}
+                    defaultValue={status}
                     onChange={({ currentTarget: { value } }) =>
                       onApprove?.(id, value as TeamMemberStatus)
                     }
-                    defaultValue={status}
                   >
                     {Object.entries(StatusName()).map(([key, value]) => (
                       <option key={key} value={key}>

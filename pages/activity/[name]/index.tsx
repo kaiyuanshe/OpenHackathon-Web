@@ -230,7 +230,7 @@ export default class ActivityPage extends Component<ActivityPageProps> {
               {t('register_now')}
             </Button>
           ) : (
-            <Button onClick={this.registerNow} disabled={isDisableSignupBtn}>
+            <Button disabled={isDisableSignupBtn} onClick={this.registerNow}>
               {t('register_now')}
             </Button>
           ))}
@@ -276,7 +276,7 @@ export default class ActivityPage extends Component<ActivityPageProps> {
                   style={{ height: '45vh' }}
                 >
                   <Image
-                    className=" w-100 h-100 object-fit-cover"
+                    className="w-100 h-100 object-fit-cover"
                     src={uri}
                     alt={name}
                   />

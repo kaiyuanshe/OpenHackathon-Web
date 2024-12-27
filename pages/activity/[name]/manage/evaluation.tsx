@@ -97,8 +97,8 @@ class EvalationEditor extends Component<EvaluationPageProps> {
                 <li key={id} className="d-flex mx-2 my-3">
                   {awardTeamId ? (
                     <Form.Check
-                      type="radio"
                       key={id}
+                      type="radio"
                       label={name}
                       name="awardId"
                       value={id}

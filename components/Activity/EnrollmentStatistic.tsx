@@ -94,7 +94,7 @@ export default class EnrollmentStatisticCharts extends Component<EnrollmentStati
           {Object.entries(answers).map(
             ([title, answers]) =>
               !isEmpty(answers) && (
-                <Col as="section" key={title}>
+                <Col key={title} as="section">
                   <SVGCharts>
                     <Title>{title}</Title>
                     <PieSeries

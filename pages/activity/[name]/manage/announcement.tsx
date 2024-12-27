@@ -97,7 +97,10 @@ class MessageListEditor extends Component<MessageListPageProps> {
           store={store}
           show={show}
           onHide={() => (this.show = false)}
-          onSave={() => (this.show = false) || store.refreshList()}
+          onSave={() => {
+            this.show = false;
+            store.refreshList();
+          }}
         />
       </Container>
     );

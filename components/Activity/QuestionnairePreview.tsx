@@ -13,23 +13,23 @@ export interface QuestionnaireFormProps {
 export class QuestionnaireForm extends Component<QuestionnaireFormProps> {
   renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
-      <Form.Group as="li" className="mb-3" key={title}>
+      <Form.Group key={title} as="li" className="mb-3">
         {title}
         <Row xs={1} sm={3} lg={4} className="mt-2">
           {options.map(value => (
             <Form.Check
+              key={value}
               type={multiple ? 'checkbox' : 'radio'}
               label={value}
               name={title}
               value={value}
               id={value}
-              key={value}
             />
           ))}
         </Row>
       </Form.Group>
     ) : (
-      <Form.Group as="li" className="mb-3 mt-2" key={title} controlId={title}>
+      <Form.Group key={title} as="li" className="mb-3 mt-2" controlId={title}>
         {title}
         <Row>
           <Form.Label />

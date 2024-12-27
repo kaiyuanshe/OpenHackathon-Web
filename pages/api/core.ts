@@ -27,9 +27,9 @@ export function safeAPI(handler: NextAPI): NextAPI {
         return res.end(error);
       }
       const { message, response } = error;
-      let { status, body } = response;
+      let { body } = response;
 
-      res.status(status);
+      res.status(response.status);
       res.statusMessage = message;
 
       if (body instanceof ArrayBuffer)

@@ -17,7 +17,7 @@ export const TeamGitListLayout: FC<TeamGitListLayoutProps> = ({
 }) => (
   <Row as="ul" className="list-unstyled g-4" xs={1} sm={2}>
     {defaultData?.map(item => (
-      <Col as="li" key={item.id}>
+      <Col key={item.id} as="li">
         <GitTeamCard
           className="h-100 shadow-sm"
           {...item}

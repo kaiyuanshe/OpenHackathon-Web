@@ -65,10 +65,10 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
                         as="select"
                         className={styles.form}
                         disabled={currentUserId === id}
+                        defaultValue={role}
                         onChange={({ currentTarget: { value } }) =>
                           onUpdateRole?.(id, value as TeamMemberRole)
                         }
-                        defaultValue={role}
                       >
                         {Object.entries(RoleName()).map(([key, value]) => (
                           <option key={key} value={key}>

@@ -121,6 +121,7 @@ export default class TeamPage extends Component<TeamPageProps> {
       { user } = sessionStore;
 
     try {
+      // eslint-disable-next-line no-var
       var { status } = await activityStore.enrollmentOf(name).getSessionOne();
     } catch {}
 
@@ -134,7 +135,7 @@ export default class TeamPage extends Component<TeamPageProps> {
 
       if (status !== 404) this.teamMemberRole = '';
     }
-    // @ts-ignore
+    // @ts-expect-error Type compatibility issue
     if (status === 'approved')
       try {
         await activityStore.teamOf(name).getSessionOne();
@@ -229,7 +230,7 @@ export default class TeamPage extends Component<TeamPageProps> {
                 )}
               </Card.Header>
               <Card.Body>
-                <h2 className="text-dark fw-bold h6 ">
+                <h2 className="text-dark fw-bold h6">
                   <Icon name="people-fill" /> {t('team_members')}
                 </h2>
                 <ScrollList

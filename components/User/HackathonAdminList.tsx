@@ -33,11 +33,6 @@ export const HackathonAdminList: FC<
           ) : (
             <th key={data}>
               <Form.Check
-                inline
-                type="checkbox"
-                name="selectAll"
-                aria-label="selectAll"
-                checked={selectedIds.length === defaultData.length}
                 // https://github.com/facebook/react/issues/1798
                 ref={(input: HTMLInputElement | null) => {
                   if (input)
@@ -45,6 +40,11 @@ export const HackathonAdminList: FC<
                       !!selectedIds.length &&
                       selectedIds.length < defaultData.length;
                 }}
+                inline
+                type="checkbox"
+                name="selectAll"
+                aria-label="selectAll"
+                checked={selectedIds.length === defaultData.length}
                 onChange={() =>
                   onSelect?.(
                     selectedIds.length === defaultData.length

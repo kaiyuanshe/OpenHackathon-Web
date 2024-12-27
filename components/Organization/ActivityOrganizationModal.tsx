@@ -38,7 +38,7 @@ export class OrganizationModal extends Component<OrganizationModalProps> {
       name,
       description,
       type,
-      // @ts-ignore
+      // @ts-expect-error Type compatibility issue
       logo: { name, description, uri: logoURI },
       url: url,
     });
@@ -56,13 +56,13 @@ export class OrganizationModal extends Component<OrganizationModalProps> {
     const loading = store.uploading > 0;
 
     return (
-      <Modal show={show} onHide={onHide} centered>
+      <Modal show={show} centered onHide={onHide}>
         <Modal.Header closeButton>
           <Modal.Title>{t('add_sponsor_information')}</Modal.Title>
         </Modal.Header>
         <Modal.Body
-          as="form"
           ref={this.form}
+          as="form"
           onSubmit={this.handleSubmit}
           onReset={this.handleReset}
         >

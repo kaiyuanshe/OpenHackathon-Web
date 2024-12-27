@@ -20,7 +20,7 @@ Open-source [Hackathon][1] Platform with **Git-based Cloud Development Environme
 ## Technology stack
 
 - Language: [TypeScript v5][5]
-- Component engine: [Next.js v14][6]
+- Component engine: [Next.js v15][6]
 - Component suite: [Bootstrap v5][7]
 - State management: [MobX v6][8]
 - PWA framework: [Workbox v6][9]

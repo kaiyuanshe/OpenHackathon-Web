@@ -43,7 +43,7 @@ export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
     const loading = store.uploading > 0;
 
     return (
-      <Modal show={show} onHide={this.handleReset} centered>
+      <Modal show={show} centered onHide={this.handleReset}>
         <Modal.Header closeButton>
           <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
