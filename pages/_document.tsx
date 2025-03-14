@@ -9,7 +9,7 @@ export default function Document() {
           href="https://hackathon-api.static.kaiyuanshe.cn/static/logo.jpg"
         />
         <link rel="manifest" href="/manifest.json" />
-        <script src="https://polyfill.kaiyuanshe.cn/feature/PWAManifest.js"></script>
+        <script src="https://polyfill.kaiyuanshe.cn/feature/PWAManifest.js" />
 
         <link
           rel="stylesheet"

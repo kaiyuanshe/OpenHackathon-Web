@@ -104,12 +104,18 @@ export default class ActivityPage extends Component<ActivityPageProps> {
       if (status === 'approved')
         try {
           await this.teamStore.getSessionOne();
-        } catch {}
-    } catch {}
+        } catch {
+          //
+        }
+    } catch {
+      //
+    }
 
     try {
       await activityStore.getQuestionnaire(this.props.activity.name);
-    } catch {}
+    } catch {
+      //
+    }
   }
 
   registerNow = async () => {

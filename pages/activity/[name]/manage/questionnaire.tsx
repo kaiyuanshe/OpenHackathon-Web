@@ -50,7 +50,9 @@ class ActivityQuestionnaireEditor extends Component<ActivityQuestionnairePagePro
       const { length } = await activityStore.getQuestionnaire(this.activity);
 
       this.isCreate = !length;
-    } catch {}
+    } catch {
+      //
+    }
   }
 
   createRegister = async () => {
@@ -99,6 +101,7 @@ class ActivityQuestionnaireEditor extends Component<ActivityQuestionnairePagePro
 
   handleMoveQuestionnaireItem = (id: string, direction: number) => {
     const curQuestionnaire = [...activityStore.questionnaire];
+    /* eslint "prefer-destructuring": ["off"] */
     const index = curQuestionnaire.findIndex(v => v.id === id);
 
     curQuestionnaire[index] = curQuestionnaire.splice(

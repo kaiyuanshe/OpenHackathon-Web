@@ -92,7 +92,9 @@ class GitView extends Component<TeamManageBaseProps> {
       if (user.id !== sessionStore.user?.id)
         try {
           await activityStore.currentTemplate!.addCollaborator(URI, user.name);
-        } catch {}
+        } catch {
+          //
+        }
   }
 
   renderCreator() {

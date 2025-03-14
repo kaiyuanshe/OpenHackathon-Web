@@ -58,7 +58,7 @@ export class TeamAwardCard extends Component<TeamAwardCardProps> {
         </Accordion.Item>
         <Accordion.Item eventKey="rating">
           <Accordion.Header>{t('score')}</Accordion.Header>
-          <Accordion.Body></Accordion.Body>
+          <Accordion.Body />
         </Accordion.Item>
         <Accordion.Item eventKey="work">
           <Accordion.Header>{t('work_list')}</Accordion.Header>
