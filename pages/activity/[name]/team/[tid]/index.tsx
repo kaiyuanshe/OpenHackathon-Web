@@ -123,7 +123,9 @@ export default class TeamPage extends Component<TeamPageProps> {
     try {
       // eslint-disable-next-line no-var
       var { status } = await activityStore.enrollmentOf(name).getSessionOne();
-    } catch {}
+    } catch {
+      //
+    }
 
     try {
       this.currentUserInThisTeam = user?.id
@@ -139,7 +141,9 @@ export default class TeamPage extends Component<TeamPageProps> {
     if (status === 'approved')
       try {
         await activityStore.teamOf(name).getSessionOne();
-      } catch {}
+      } catch {
+        //
+      }
   }
 
   handleJoinTeam = async (event: FormEvent<HTMLFormElement>) => {

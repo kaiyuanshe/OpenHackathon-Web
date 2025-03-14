@@ -60,7 +60,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
     data.detail = (data.detail || '') + '';
 
     data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
-      const name = bannerUrl.split('/').slice(-1)[0];
+      const [name] = bannerUrl.split('/').slice(-1);
 
       return {
         name,

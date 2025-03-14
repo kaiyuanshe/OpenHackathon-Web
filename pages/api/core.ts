@@ -39,7 +39,9 @@ export function safeAPI(handler: NextAPI): NextAPI {
 
           body = JSON.parse(body);
           console.error(body);
-        } catch {}
+        } catch {
+          //
+        }
 
       res.send(body);
     }
