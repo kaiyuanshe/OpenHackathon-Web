@@ -43,6 +43,7 @@ const OpenSourcePage: FC<OpenSourcePageProps> = observer(
               const repository = repositories.find(
                 ({ full_name }) => full_name === name,
               );
+
               return (
                 <Col key={name}>
                   <GitCard

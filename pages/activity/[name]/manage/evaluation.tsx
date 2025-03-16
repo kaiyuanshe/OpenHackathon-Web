@@ -74,6 +74,7 @@ class EvalationEditor extends Component<EvaluationPageProps> {
     const { keywords } = formToJSON<{ keywords: string }>(event.currentTarget);
 
     this.store.clear();
+
     return this.store.getList({ keywords });
   };
 

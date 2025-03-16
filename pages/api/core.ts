@@ -24,6 +24,7 @@ export function safeAPI(handler: NextAPI): NextAPI {
     } catch (error) {
       if (!(error instanceof HTTPError)) {
         console.error(error);
+
         return res.end(error);
       }
       const { message, response } = error;

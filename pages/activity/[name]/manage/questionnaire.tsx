@@ -96,6 +96,7 @@ class ActivityQuestionnaireEditor extends Component<ActivityQuestionnairePagePro
     const curQuestionnaire = activityStore.questionnaire.filter(
       v => v.id !== id,
     );
+
     return activityStore.editQuestionnaireStatus(curQuestionnaire);
   };
 
@@ -109,6 +110,7 @@ class ActivityQuestionnaireEditor extends Component<ActivityQuestionnairePagePro
       1,
       curQuestionnaire[index],
     )[0];
+
     return activityStore.editQuestionnaireStatus(curQuestionnaire);
   };
 
