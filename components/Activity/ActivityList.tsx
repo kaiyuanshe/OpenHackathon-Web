@@ -4,7 +4,7 @@ import { FC, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 
 import { ActivityListType, ActivityModel } from '../../models/Activity';
-import { i18n, t } from '../../models/Base/Translation';
+import { i18n } from '../../models/Base/Translation';
 import platformAdmin from '../../models/User/PlatformAdmin';
 import sessionStore from '../../models/User/Session';
 import { XScrollListProps } from '../layout/ScrollList';
@@ -36,9 +36,7 @@ export const ActivityListLayout: FC<ActivityListLayoutProps> = ({
         <ActivityCard
           className="h-100"
           controls={
-            !!userId &&
-            userId === sessionStore.user?.id &&
-            (type === 'admin' || type === 'created')
+            !!userId && userId === sessionStore.user?.id && (type === 'admin' || type === 'created')
           }
           {...item}
           {...props}
@@ -59,7 +57,7 @@ export default class ActivityList extends PureComponent<ActivityListProps> {
   }
 
   onPublish = async (name: string) => {
-    if (!confirm(t('sure_publish', { name }))) return;
+    if (!confirm(i18n.t('sure_publish', { name }))) return;
 
     await this.store.publishOne(name);
 
@@ -67,7 +65,7 @@ export default class ActivityList extends PureComponent<ActivityListProps> {
   };
 
   onDelete = async (name: string) => {
-    if (!confirm(t('sure_offline', { name }))) return;
+    if (!confirm(i18n.t('sure_offline', { name }))) return;
 
     await this.store.deleteOne(name);
     this.props.onDelete?.(name);

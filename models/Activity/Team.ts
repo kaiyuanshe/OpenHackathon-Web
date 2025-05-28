@@ -10,9 +10,10 @@ import { action, computed, observable } from 'mobx';
 import { ListModel, persist, restore, Stream, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
+import { isServer } from '../../configuration';
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { WorkspaceModel } from '../Git';
-import sessionStore, { isServer } from '../User/Session';
+import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
 
 export type TeamFilter = Filter<Team> & BaseFilter;
@@ -59,15 +60,11 @@ export class TeamModel extends TableModel<Team, TeamFilter> {
   }
 
   workspaceOf(tid = this.currentOne.id) {
-    return (this.currentWorkspace = new WorkspaceModel(
-      `${this.baseURI}/${tid}`,
-    ));
+    return (this.currentWorkspace = new WorkspaceModel(`${this.baseURI}/${tid}`));
   }
 
   assignmentOf(tid = this.currentOne.id) {
-    return (this.currentAssignment = new TeamAssignmentModel(
-      `${this.baseURI}/${tid}`,
-    ));
+    return (this.currentAssignment = new TeamAssignmentModel(`${this.baseURI}/${tid}`));
   }
 
   @action

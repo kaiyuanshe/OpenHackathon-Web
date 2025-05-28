@@ -1,31 +1,30 @@
-import {
-  LineSeries,
-  PieSeries,
-  SVGCharts,
-  Title,
-  XAxis,
-  YAxis,
-} from 'echarts-jsx';
+import { LineSeries, PieSeries, SVGCharts, Title, XAxis, YAxis } from 'echarts-jsx';
 import { observer } from 'mobx-react';
-import { Component } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { Col, Container, Row } from 'react-bootstrap';
 import { isEmpty } from 'web-utility';
 
 import { EnrollmentModel } from '../../models/Activity/Enrollment';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
 export interface EnrollmentStatisticChartsProps {
   store: EnrollmentModel;
 }
 
 @observer
-export default class EnrollmentStatisticCharts extends Component<EnrollmentStatisticChartsProps> {
+export default class EnrollmentStatisticCharts extends ObservedComponent<
+  EnrollmentStatisticChartsProps,
+  typeof i18n
+> {
+  static contextType = I18nContext;
+
   componentDidMount() {
     this.props.store.getStatistic();
   }
 
   renderTimeline() {
-    const { createdAt = {} } = this.props.store.statistic;
+    const { t } = this.observedContext,
+      { createdAt = {} } = this.props.store.statistic;
 
     const [date, count] = Object.entries(createdAt)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -51,11 +50,8 @@ export default class EnrollmentStatisticCharts extends Component<EnrollmentStati
   }
 
   render() {
-    const {
-      // city = {},
-      status = {},
-      answers = {},
-    } = this.props.store.statistic;
+    const { t } = this.observedContext,
+      { status = {}, answers = {} } = this.props.store.statistic;
 
     return (
       <Container fluid>

@@ -1,64 +1,73 @@
 import { User } from '@kaiyuanshe/openhackathon-service';
 import { JsonWebTokenError, verify } from 'jsonwebtoken';
+import { Context, Middleware, ParameterizedContext } from 'koa';
+import JWT from 'koa-jwt';
 import { HTTPError } from 'koajax';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { DataObject } from 'mobx-restful';
 import {
   compose,
-  DataObject,
   githubOAuth2,
   JWTProps,
-  Middleware,
+  KoaOption,
+  Middleware as SSRM,
+  withKoa,
 } from 'next-ssr-middleware';
 
+import { JWT_SECRET } from '../../configuration';
+import { VERCEL } from '../../configuration';
 import { SessionModel } from '../../models/User/Session';
 
-export type NextAPI = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-) => Promise<any>;
+export type JWTContext = ParameterizedContext<
+  { jwtOriginalError: JsonWebTokenError } | { user: { email: string } }
+>;
 
-export function safeAPI(handler: NextAPI): NextAPI {
-  return async (req, res) => {
-    try {
-      return await handler(req, res);
-    } catch (error) {
-      if (!(error instanceof HTTPError)) {
-        console.error(error);
+export const parseJWT = JWT({
+  secret: JWT_SECRET!,
+  cookie: 'token',
+  passthrough: true,
+});
 
-        return res.end(error);
-      }
-      const { message, response } = error;
-      let { body } = response;
+export const verifyJWT = JWT({ secret: JWT_SECRET!, cookie: 'token' });
 
-      res.status(response.status);
-      res.statusMessage = message;
+export const safeAPI: Middleware<any, any> = async (context: Context, next) => {
+  try {
+    return await next();
+  } catch (error) {
+    if (!(error instanceof HTTPError)) {
+      console.error(error);
 
-      if (body instanceof ArrayBuffer)
-        try {
-          body = new TextDecoder().decode(new Uint8Array(body));
-          console.error(body);
+      context.status = 400;
 
-          body = JSON.parse(body);
-          console.error(body);
-        } catch {
-          //
-        }
-
-      res.send(body);
+      return (context.body = { message: (error as Error).message });
     }
-  };
-}
+    const { message, response } = error;
+    let { body } = response;
 
-const { JWT_SECRET = '' } = process.env;
+    context.status = response.status;
+    context.statusMessage = message;
 
-export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
-  { req, res },
-  next,
-) => {
+    if (body instanceof ArrayBuffer)
+      try {
+        body = new TextDecoder().decode(new Uint8Array(body));
+
+        body = JSON.parse(body);
+      } catch {
+        //
+      }
+    console.error(JSON.stringify(body, null, 2));
+
+    context.body = body;
+  }
+};
+
+export const withSafeKoa = <S, C>(...middlewares: Middleware<S, C>[]) =>
+  withKoa<S, C>({} as KoaOption, safeAPI, ...middlewares);
+
+export const jwtSigner: SSRM<DataObject, JWTProps<User>> = async ({ req, res }, next) => {
   const { token, JWT = '' } = req.cookies;
 
   try {
-    const jwtPayload = verify(JWT, JWT_SECRET) as User;
+    const jwtPayload = verify(JWT, JWT_SECRET!) as User;
 
     return { props: { jwtPayload } };
   } catch (error) {
@@ -81,8 +90,7 @@ export const jwtSigner: Middleware<DataObject, JWTProps<User>> = async (
 };
 
 const client_id = process.env.GITHUB_OAUTH_CLIENT_ID!,
-  client_secret = process.env.GITHUB_OAUTH_CLIENT_SECRET!,
-  { VERCEL } = process.env;
+  client_secret = process.env.GITHUB_OAUTH_CLIENT_SECRET!;
 
 export const ProxyBaseURL = 'https://test.hackathon.kaiyuanshe.cn/proxy';
 
@@ -93,7 +101,4 @@ export const githubSigner = githubOAuth2({
   scopes: ['user:email', 'read:user', 'public_repo', 'read:project'],
 });
 
-export const sessionGuard = compose<DataObject, JWTProps<User>>(
-  jwtSigner,
-  githubSigner,
-);
+export const sessionGuard = compose<DataObject, JWTProps<User>>(jwtSigner, githubSigner);

@@ -1,8 +1,8 @@
 import { TeamMemberStatus } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, router, translator } from 'next-ssr-middleware';
-import { Component } from 'react';
+import { compose, router } from 'next-ssr-middleware';
 
 import { TeamAdministratorTableLayout } from '../../../../../../components/Team/TeamAdministratorTable';
 import {
@@ -11,23 +11,25 @@ import {
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
-import { i18n, t } from '../../../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../../api/core';
 
-export const getServerSideProps = compose<TeamManageBaseParams>(
-  router,
-  sessionGuard,
-  translator(i18n),
-);
+export const getServerSideProps = compose<TeamManageBaseParams>(router, sessionGuard);
 
 @observer
-export default class TeamAdministratorPage extends Component<TeamManageBaseProps> {
+export default class TeamAdministratorPage extends ObservedComponent<
+  TeamManageBaseProps,
+  typeof i18n
+> {
+  static contextType = I18nContext;
+
   store = activityStore
     .teamOf(this.props.route.params!.name)
     .memberOf(+this.props.route.params!.tid);
 
   render() {
-    const { props, store } = this;
+    const { props, store } = this,
+      { t } = this.observedContext;
     const { resolvedUrl, params } = this.props.route;
     const { name, tid } = params!;
 

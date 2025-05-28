@@ -1,16 +1,18 @@
 import { observer } from 'mobx-react';
-import { Component } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { Container, Form, Row } from 'react-bootstrap';
 
 import { Question } from '../../models/Activity/Question';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
 export interface QuestionnaireFormProps {
   fields: Question[];
 }
 
 @observer
-export class QuestionnaireForm extends Component<QuestionnaireFormProps> {
+export class QuestionnaireForm extends ObservedComponent<QuestionnaireFormProps, typeof i18n> {
+  static contextType = I18nContext;
+
   renderField = ({ options, multiple, title, ...props }: Question) =>
     options ? (
       <Form.Group key={title} as="li" className="mb-3">
@@ -39,7 +41,8 @@ export class QuestionnaireForm extends Component<QuestionnaireFormProps> {
     );
 
   render() {
-    const { fields } = this.props;
+    const { t } = this.observedContext,
+      { fields } = this.props;
 
     return (
       <Container fluid as="fieldset">

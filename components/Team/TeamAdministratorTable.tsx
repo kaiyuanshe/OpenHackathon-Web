@@ -1,20 +1,19 @@
 import { TeamMember, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Form, Table } from 'react-bootstrap';
 
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 
-export interface TeamAdministratorTableLayoutProps
-  extends XScrollListProps<TeamMember> {
+export interface TeamAdministratorTableLayoutProps extends XScrollListProps<TeamMember> {
   onUpdateRole?: (userId: number, role: TeamMemberRole) => any;
   onPopUpUpdateRoleModal?: (userId: number) => any;
 }
 
-const TableHeads = () => [
+const TableHeads = ({ t }: typeof i18n) => [
   '#',
   t('mail'),
   t('phone_number'),
@@ -23,31 +22,25 @@ const TableHeads = () => [
   t('remark'),
   t('role_type'),
 ];
+const RoleName = ({ t }: typeof i18n) => ({ member: t('member'), admin: t('admin') });
 
-const RoleName = () => ({
-  member: t('member'),
-  admin: t('admin'),
-});
-
-export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps> =
-  observer(({ defaultData = [], onUpdateRole }) => {
-    const { id: currentUserId } = sessionStore?.user || {};
+export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps> = observer(
+  ({ defaultData = [], onUpdateRole }) => {
+    const i18n = useContext(I18nContext),
+      { id: currentUserId } = sessionStore?.user || {};
 
     return (
       <Table hover responsive="lg" className={styles.table}>
         <thead>
           <tr>
-            {TableHeads().map((data, idx) => (
+            {TableHeads(i18n).map((data, idx) => (
               <th key={idx + data}>{data}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {defaultData.map(
-            (
-              { user: { id, email, mobilePhone, name }, role, description },
-              index,
-            ) => (
+            ({ user: { id, email, mobilePhone, name }, role, description }, index) => (
               <tr key={id}>
                 {[
                   index + 1,
@@ -70,7 +63,7 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
                           onUpdateRole?.(id, value as TeamMemberRole)
                         }
                       >
-                        {Object.entries(RoleName()).map(([key, value]) => (
+                        {Object.entries(RoleName(i18n)).map(([key, value]) => (
                           <option key={key} value={key}>
                             {value}
                           </option>
@@ -89,4 +82,5 @@ export const TeamAdministratorTableLayout: FC<TeamAdministratorTableLayoutProps>
         </tbody>
       </Table>
     );
-  });
+  },
+);

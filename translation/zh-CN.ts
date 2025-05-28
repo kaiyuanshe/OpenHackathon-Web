@@ -130,14 +130,12 @@ export default {
   social_media_account_or_twitter_or_weibo: '社交媒体账号/推特/微博',
   which_of_these_particular_areas_are_you_interested_in_going_into_this_event:
     '本次比赛您感兴趣的赛题是什么？',
-  what_do_you_hope_to_learn_from_the_workshops:
-    '您希望从系列工作坊/讲座中听到哪方面内容',
+  what_do_you_hope_to_learn_from_the_workshops: '您希望从系列工作坊/讲座中听到哪方面内容',
   do_you_plan__on_hacking_solo_or_with_a_team: '您是否愿意进行组队？',
   yes: '是',
   no_i_prefer_solo: '否，喜欢个人',
   no_i_have_a_team: '否，已有队伍',
-  would_you_be_open_to_having_a_beginner_join_your_team:
-    '您介意新手加入您的团队？',
+  would_you_be_open_to_having_a_beginner_join_your_team: '您介意新手加入您的团队？',
   no: '否',
   anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate:
     '关于队友，您还有什么其他需求吗? 我们会尽全力帮助您找到合适人选，助力您的黑客松之旅。',
@@ -223,7 +221,7 @@ export default {
   please_enter_name: '请输入名称',
   activity_id: '活动 ID',
   activity_name: '活动名称',
-  disaplay_name: '显示名称',
+  display_name: '显示名称',
   tag: '标签',
   tag_placeholder: '按回车键以添加一个标签',
   bannerUrls: '头图（最多10张）',
@@ -239,10 +237,8 @@ export default {
   apply_publish: '申请上线',
   publish: '上线',
   offline: '下线',
-  sure_publish: ({ name }: { name: string }) =>
-    textJoin('确认让', name, '上线？'),
-  sure_offline: ({ name }: { name: string }) =>
-    textJoin('确认让', name, '下线？'),
+  sure_publish: ({ name }: { name: string }) => textJoin('确认让', name, '上线？'),
+  sure_offline: ({ name }: { name: string }) => textJoin('确认让', name, '下线？'),
   activity_manage: '活动管理',
   no_permission: '暂无权限',
   sign_up_trends: '报名趋势',

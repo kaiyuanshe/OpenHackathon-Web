@@ -1,13 +1,14 @@
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import dynamic from 'next/dynamic';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, FC } from 'react';
+import { FC, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../../components/Activity/ActivityManageFrame';
 import activityStore from '../../../../../models/Activity';
-import { t } from '../../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../api/core';
 
 const EnrollmentStatisticCharts = dynamic(
@@ -17,13 +18,12 @@ const EnrollmentStatisticCharts = dynamic(
 
 type EnrollmentStatisticPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }>(
-  router,
-  sessionGuard,
-);
+export const getServerSideProps = compose<{ name: string }>(router, sessionGuard);
 
-const EnrollmentStatisticPage: FC<EnrollmentStatisticPageProps> = observer(
-  props => (
+const EnrollmentStatisticPage: FC<EnrollmentStatisticPageProps> = observer(props => {
+  const { t } = useContext(I18nContext);
+
+  return (
     <ActivityManageFrame
       {...props}
       name={props.route.params!.name}
@@ -32,16 +32,19 @@ const EnrollmentStatisticPage: FC<EnrollmentStatisticPageProps> = observer(
     >
       <EnrollmentStatisticView {...props} />
     </ActivityManageFrame>
-  ),
-);
+  );
+});
 export default EnrollmentStatisticPage;
 
 @observer
-class EnrollmentStatisticView extends Component<EnrollmentStatisticPageProps> {
+class EnrollmentStatisticView extends ObservedComponent<EnrollmentStatisticPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.enrollmentOf(this.props.route.params!.name);
 
   render() {
-    const { downloading, allItems, exportURL } = this.store;
+    const { t } = this.observedContext,
+      { downloading, allItems, exportURL } = this.store;
 
     return (
       <>

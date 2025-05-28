@@ -1,23 +1,25 @@
 import { Staff } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Component, FormEvent } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { FormEvent } from 'react';
 import { Button, Col, Form, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { StaffModel } from '../../models/Activity/Staff';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { UserList } from './UserList';
 
-export interface AdministratorModalProps
-  extends Pick<ModalProps, 'show' | 'onHide'> {
+export interface AdministratorModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: StaffModel;
   onSave?: () => any;
 }
 
 @observer
-export class AdministratorModal extends Component<AdministratorModalProps> {
+export class AdministratorModal extends ObservedComponent<AdministratorModalProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor userId = 0;
 
@@ -25,11 +27,11 @@ export class AdministratorModal extends Component<AdministratorModalProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { currentTarget } = event,
+    const { t } = this.observedContext,
+      { currentTarget } = event,
       { store, onSave } = this.props,
       { userId } = this;
-    const { type, description } =
-      formToJSON<Pick<Staff, 'type' | 'description'>>(currentTarget);
+    const { type, description } = formToJSON<Pick<Staff, 'type' | 'description'>>(currentTarget);
 
     if (!userId) return alert(t('search_an_user'));
 
@@ -44,7 +46,8 @@ export class AdministratorModal extends Component<AdministratorModalProps> {
   };
 
   render() {
-    const { show, store } = this.props;
+    const { t } = this.observedContext,
+      { show, store } = this.props;
     const loading = store.uploading > 0;
 
     return (
@@ -53,10 +56,7 @@ export class AdministratorModal extends Component<AdministratorModalProps> {
           <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UserList
-            store={userStore}
-            onSelect={([userId]) => (this.userId = userId)}
-          />
+          <UserList store={userStore} onSelect={([userId]) => (this.userId = userId)} />
           <Form onSubmit={this.increaseId} onReset={this.handleReset}>
             <Form.Group as={Row} className="mt-3 py-3 ps-2">
               <Col>

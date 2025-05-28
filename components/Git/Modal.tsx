@@ -1,18 +1,11 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Component, FormEvent } from 'react';
-import {
-  Button,
-  Col,
-  Form,
-  FormGroup,
-  Modal,
-  ModalProps,
-  Row,
-} from 'react-bootstrap';
+import { ObservedComponent } from 'mobx-react-helper';
+import { FormEvent } from 'react';
+import { Button, Col, Form, FormGroup, Modal, ModalProps, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import { GitModel } from '../../models/Git';
 
 export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
@@ -22,7 +15,9 @@ export interface GitModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
 }
 
 @observer
-export class GitModal extends Component<GitModalProps> {
+export class GitModal extends ObservedComponent<GitModalProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor value = '';
 
@@ -49,7 +44,8 @@ export class GitModal extends Component<GitModalProps> {
   };
 
   render() {
-    const { show, onHide } = this.props;
+    const { t } = this.observedContext,
+      { show, onHide } = this.props;
     const { value } = this;
 
     return (
@@ -79,9 +75,7 @@ export class GitModal extends Component<GitModalProps> {
                     'for_example',
                     'https://github.com/idea2app/React-MobX-Bootstrap-ts',
                   )}
-                  onChange={({ currentTarget: { value } }) =>
-                    (this.value = value)
-                  }
+                  onChange={({ currentTarget: { value } }) => (this.value = value)}
                 />
               </Col>
             </FormGroup>

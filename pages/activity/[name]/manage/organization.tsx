@@ -2,40 +2,43 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, FC, FormEvent } from 'react';
+import { Component, Context, FC, FormEvent, useContext } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
 import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
-import { i18n, t } from '../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type OrganizationPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }>(
-  router,
-  sessionGuard,
-);
+export const getServerSideProps = compose<{ name: string }>(router, sessionGuard);
 
-const OrganizationPage: FC<OrganizationPageProps> = observer(props => (
-  <ActivityManageFrame
-    {...props}
-    name={props.route.params!.name}
-    path={props.route.resolvedUrl}
-    title={t('organizer_manage')}
-  >
-    <OrganizationEditor {...props} />
-  </ActivityManageFrame>
-));
+const OrganizationPage: FC<OrganizationPageProps> = observer(props => {
+  const { t } = useContext(I18nContext);
 
+  return (
+    <ActivityManageFrame
+      {...props}
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('organizer_manage')}
+    >
+      <OrganizationEditor {...props} />
+    </ActivityManageFrame>
+  );
+});
 export default OrganizationPage;
 
 @observer
-class OrganizationEditor extends Component<OrganizationPageProps> {
+class OrganizationEditor extends ObservedComponent<OrganizationPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.organizationOf(this.props.route.params!.name);
 
   @observable
@@ -48,7 +51,8 @@ class OrganizationEditor extends Component<OrganizationPageProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { selectedIds } = this;
+    const { t } = this.observedContext,
+      { selectedIds } = this;
 
     if (!selectedIds[0]) return alert(t('please_select_at_least_one_partner'));
 
@@ -58,7 +62,8 @@ class OrganizationEditor extends Component<OrganizationPageProps> {
   };
 
   renderList() {
-    const { allItems, typeCount } = this.store;
+    const { t } = this.observedContext,
+      { allItems, typeCount } = this.store;
 
     return (
       <ListGroup>
@@ -85,8 +90,10 @@ class OrganizationEditor extends Component<OrganizationPageProps> {
   }
 
   render() {
-    const { store, show } = this;
-    const loading = store.uploading > 0;
+    const i18n = this.observedContext,
+      { store, show } = this;
+    const { t } = i18n,
+      loading = store.uploading > 0;
 
     return (
       <Form onSubmit={this.handleSubmit}>

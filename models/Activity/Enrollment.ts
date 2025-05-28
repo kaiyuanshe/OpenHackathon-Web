@@ -4,28 +4,25 @@ import { Statistic, toggle } from 'mobx-restful';
 import { buildURLData, countBy, groupBy } from 'web-utility';
 
 import { createListStream, Filter, TableModel } from '../Base';
-import { t } from '../Base/Translation';
+import { i18n } from '../Base/Translation';
 import sessionStore from '../User/Session';
 
-export const statusName: Record<Enrollment['status'], string> = {
+export const statusName = ({ t }: typeof i18n): Record<Enrollment['status'], string> => ({
   approved: t('approve'),
   rejected: t('status_rejected'),
   none: t('status_none'),
   pendingApproval: t('status_pending'),
-};
+});
 
 export type EnrollmentFilter = Filter<Enrollment>;
 
-export interface EnrollmentStatistic
-  extends Statistic<Enrollment>,
-    Statistic<Required<User>> {
+export interface EnrollmentStatistic extends Statistic<Enrollment>, Statistic<Required<User>> {
   answers?: Record<string, Record<string, number>>;
 }
 
 export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
   constructor(public baseURI: string) {
     super();
-
     this.baseURI = `${baseURI}/enrollment`;
   }
 
@@ -57,9 +54,7 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
   @toggle('uploading')
   async verifyOne(userId: number, status: Enrollment['status']) {
     await this.client.post(
-      `${this.baseURI}/${userId}/${
-        status === 'approved' ? 'approve' : 'reject'
-      }`,
+      `${this.baseURI}/${userId}/${status === 'approved' ? 'approve' : 'reject'}`,
       {},
     );
     this.changeOne({ status }, userId, true);
@@ -70,10 +65,7 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
 
     const { allItems } = this;
 
-    const questionGroup = groupBy(
-      allItems.map(({ form }) => form).flat(),
-      ({ title }) => title,
-    );
+    const questionGroup = groupBy(allItems.map(({ form }) => form).flat(), ({ title }) => title);
     const answers = Object.fromEntries(
       Object.entries(questionGroup).map(([title, answers]) => {
         const { _, ...data } = countBy(answers, ({ content }) =>
@@ -82,10 +74,7 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
         return [title, data];
       }),
     );
-    const createdAt = countBy(
-      allItems,
-      ({ createdAt }) => createdAt.split('T')[0],
-    );
+    const createdAt = countBy(allItems, ({ createdAt }) => createdAt.split('T')[0]);
     // const { _, ...city } = countBy(
     //   allItems,
     //   ({ createdBy: { city } }) => city?.split(/\W+/)[0] || '_',

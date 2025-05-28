@@ -1,21 +1,23 @@
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Component, FormEvent } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import userStore from '../../models/User';
 import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 import { UserList } from '../User/UserList';
 
-export interface PlatformAdminModalProps
-  extends Pick<ModalProps, 'show' | 'onHide'> {
+export interface PlatformAdminModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: PlatformAdminModel;
   onSave?: () => any;
 }
 
 @observer
-export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
+export class PlatformAdminModal extends ObservedComponent<PlatformAdminModalProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor userId = 0;
 
@@ -23,7 +25,8 @@ export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { store, onSave } = this.props,
+    const { t } = this.observedContext,
+      { store, onSave } = this.props,
       { userId } = this;
 
     if (!userId) return alert(t('search_an_user'));
@@ -39,7 +42,8 @@ export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
   };
 
   render() {
-    const { show, store } = this.props;
+    const { t } = this.observedContext,
+      { show, store } = this.props;
     const loading = store.uploading > 0;
 
     return (
@@ -48,10 +52,7 @@ export class PlatformAdminModal extends Component<PlatformAdminModalProps> {
           <Modal.Title>{t('add_manager')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UserList
-            store={userStore}
-            onSelect={([userId]) => (this.userId = userId)}
-          />
+          <UserList store={userStore} onSelect={([userId]) => (this.userId = userId)} />
           <Form onSubmit={this.increaseId} onReset={this.handleReset}>
             <Modal.Footer>
               <Button variant="secondary" type="reset" disabled={loading}>

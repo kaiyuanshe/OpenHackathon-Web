@@ -1,4 +1,4 @@
-import { t } from '../Base/Translation';
+import { i18n } from '../Base/Translation';
 
 export interface Question {
   id?: string;
@@ -9,7 +9,7 @@ export interface Question {
   required?: boolean;
 }
 
-export const questions: Question[] = [
+export const questions = ({ t }: typeof i18n): Question[] => [
   {
     title: t('what_is_your_occupation'),
     options: [
@@ -55,9 +55,7 @@ export const questions: Question[] = [
     type: 'url',
   },
   {
-    title: t(
-      'which_of_these_particular_areas_are_you_interested_in_going_into_this_event',
-    ),
+    title: t('which_of_these_particular_areas_are_you_interested_in_going_into_this_event'),
     type: 'text',
   },
   {
@@ -73,9 +71,7 @@ export const questions: Question[] = [
     options: [t('yes'), t('no')],
   },
   {
-    title: t(
-      'anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate',
-    ),
+    title: t('anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate'),
     type: 'text',
   },
 ];

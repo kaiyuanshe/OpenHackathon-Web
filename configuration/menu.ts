@@ -1,7 +1,7 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 
-import { t } from '../models/Base/Translation';
+import { i18n } from '../models/Base/Translation';
 
 export interface MenuItem {
   title: string;
@@ -11,7 +11,7 @@ export interface MenuItem {
   roles?: (StaffType | TeamMemberRole)[];
 }
 
-export const menus: () => MenuItem[] = () => [
+export const menus = ({ t }: typeof i18n): MenuItem[] => [
   {
     title: t('basic_settings'),
     list: [
@@ -86,7 +86,7 @@ export const menus: () => MenuItem[] = () => [
   },
 ];
 
-export const activityTeamMenus: () => MenuItem[] = () => [
+export const activityTeamMenus = ({ t }: typeof i18n): MenuItem[] => [
   {
     title: t('team_manage'),
     list: [
@@ -111,7 +111,7 @@ export const activityTeamMenus: () => MenuItem[] = () => [
   },
 ];
 
-export const adminMenus: () => MenuItem[] = () => [
+export const adminMenus = ({ t }: typeof i18n): MenuItem[] => [
   {
     title: t('platform_management'),
     list: [

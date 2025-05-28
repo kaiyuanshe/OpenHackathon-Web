@@ -15,11 +15,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
-import { Component, Fragment, PropsWithChildren } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { Fragment, PropsWithChildren } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { adminMenus } from '../../configuration/menu';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
@@ -45,28 +46,26 @@ export type PlatformAdminFrameProps = PropsWithChildren<{
 }>;
 
 @observer
-export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
+export class PlatformAdminFrame extends ObservedComponent<PlatformAdminFrameProps, typeof i18n> {
+  static contextType = I18nContext;
+
   componentDidMount() {
     sessionStore.getProfile();
   }
 
   get currentRoute() {
-    const { path = '' } = this.props;
+    const i18n = this.observedContext,
+      { path = '' } = this.props;
 
-    return findDeep(
-      adminMenus(),
-      'list',
-      ({ href }) => !!href && path.endsWith(href),
-    );
+    return findDeep(adminMenus(i18n), 'list', ({ href }) => !!href && path.endsWith(href));
   }
 
   renderNav() {
+    const i18n = this.observedContext;
+
     return (
-      <Nav
-        className="h-100 flex-column px-2 border-end flex-nowrap"
-        variant="pills"
-      >
-        {adminMenus().map(({ title, list }) => (
+      <Nav className="h-100 flex-column px-2 border-end flex-nowrap" variant="pills">
+        {adminMenus(i18n).map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-none d-lg-inline" disabled>
               {title}
@@ -76,12 +75,7 @@ export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
               const active = globalThis.location?.pathname === path;
 
               return (
-                <Nav.Link
-                  key={title}
-                  className="text-nowrap"
-                  href={path}
-                  active={active}
-                >
+                <Nav.Link key={title} className="text-nowrap" href={path} active={active}>
                   <FontAwesomeIcon
                     className="ms-3 me-3"
                     icon={icon}
@@ -98,7 +92,8 @@ export class PlatformAdminFrame extends Component<PlatformAdminFrameProps> {
   }
 
   render() {
-    const { currentRoute } = this,
+    const { t } = this.observedContext,
+      { currentRoute } = this,
       { children, title } = this.props,
       { downloading, isPlatformAdmin } = sessionStore;
 

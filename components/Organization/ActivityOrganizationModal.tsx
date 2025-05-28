@@ -1,17 +1,14 @@
 import { Organizer } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
-import { Component, createRef, FormEvent } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { createRef, FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import {
-  OrganizerModel,
-  OrganizerTypeName,
-} from '../../models/Activity/Organization';
-import { t } from '../../models/Base/Translation';
+import { OrganizerModel, OrganizerTypeName } from '../../models/Activity/Organization';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
-export interface OrganizationModalProps
-  extends Pick<ModalProps, 'show' | 'onHide'> {
+export interface OrganizationModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: OrganizerModel;
   onSave?: () => any;
 }
@@ -21,7 +18,9 @@ interface OrganizerForm extends Organizer {
 }
 
 @observer
-export class OrganizationModal extends Component<OrganizationModalProps> {
+export class OrganizationModal extends ObservedComponent<OrganizationModalProps, typeof i18n> {
+  static contextType = I18nContext;
+
   private form = createRef<HTMLFormElement>();
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -52,7 +51,8 @@ export class OrganizationModal extends Component<OrganizationModalProps> {
   };
 
   render() {
-    const { show, onHide, store } = this.props;
+    const { t } = this.observedContext,
+      { show, onHide, store } = this.props;
     const loading = store.uploading > 0;
 
     return (
@@ -68,19 +68,11 @@ export class OrganizationModal extends Component<OrganizationModalProps> {
         >
           <Form.Group className="mt-2" controlId="name">
             <Form.Label>{t('name')}</Form.Label>
-            <Form.Control
-              name="name"
-              placeholder={t('please_enter_name')}
-              required
-            />
+            <Form.Control name="name" placeholder={t('please_enter_name')} required />
           </Form.Group>
           <Form.Group className="mt-2" controlId="description">
             <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              name="description"
-              placeholder={t('please_enter_description')}
-              required
-            />
+            <Form.Control name="description" placeholder={t('please_enter_description')} required />
           </Form.Group>
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
@@ -103,12 +95,7 @@ export class OrganizationModal extends Component<OrganizationModalProps> {
           </Form.Group>
           <Form.Group className="mt-2" controlId="url">
             <Form.Label>{t('url')}</Form.Label>
-            <Form.Control
-              type="url"
-              name="url"
-              placeholder={t('please_enter_url')}
-              required
-            />
+            <Form.Control type="url" name="url" placeholder={t('please_enter_url')} required />
           </Form.Group>
           <Modal.Footer>
             <Button variant="secondary" type="reset" disabled={loading}>

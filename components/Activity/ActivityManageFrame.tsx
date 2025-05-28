@@ -18,12 +18,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StaffType } from '@kaiyuanshe/openhackathon-service';
 import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import { Component, Fragment } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { Fragment } from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
 import { menus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import { findDeep } from '../../utils/data';
 import { MainBreadcrumb } from '../layout/MainBreadcrumb';
 import { PageHead } from '../layout/PageHead';
@@ -50,15 +51,19 @@ export interface ActivityManageFrameProps extends PlatformAdminFrameProps {
 }
 
 @observer
-export class ActivityManageFrame extends Component<ActivityManageFrameProps> {
+export class ActivityManageFrame extends ObservedComponent<ActivityManageFrameProps, typeof i18n> {
+  static contextType = I18nContext;
+
   componentDidMount() {
     activityStore.getOne(this.props.name);
   }
 
   get currentRoute() {
-    const { path = '', name } = this.props;
+    const i18n = this.observedContext,
+      { path = '', name } = this.props;
+
     const breadcrumbRoute = findDeep(
-      menus(),
+      menus(i18n),
       'list',
       ({ href }) => !!href && path.endsWith(href),
     );
@@ -75,21 +80,18 @@ export class ActivityManageFrame extends Component<ActivityManageFrameProps> {
 
     return (
       role?.isAdmin ||
-      (role?.isJudge &&
-        currentRoute.at(-1)?.roles?.includes('judge' as StaffType.Judge))
+      (role?.isJudge && currentRoute.at(-1)?.roles?.includes('judge' as StaffType.Judge))
     );
   }
 
   renderNav() {
-    const { name } = this.props,
+    const i18n = this.observedContext,
+      { name } = this.observedProps,
       { roles: role } = activityStore.currentOne;
 
     return (
-      <Nav
-        className="h-100 flex-column px-2 border-end flex-nowrap"
-        variant="pills"
-      >
-        {menus().map(({ title, list }) => (
+      <Nav className="h-100 flex-column px-2 border-end flex-nowrap" variant="pills">
+        {menus(i18n).map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
               {title}
@@ -99,14 +101,8 @@ export class ActivityManageFrame extends Component<ActivityManageFrameProps> {
               const active = location.pathname === path;
 
               return (
-                (role?.isAdmin ||
-                  roles?.includes('judge' as StaffType.Judge)) && (
-                  <Nav.Link
-                    key={title}
-                    className="text-nowrap"
-                    href={path}
-                    active={active}
-                  >
+                (role?.isAdmin || roles?.includes('judge' as StaffType.Judge)) && (
+                  <Nav.Link key={title} className="text-nowrap" href={path} active={active}>
                     <FontAwesomeIcon
                       className="mx-3"
                       style={{ height: '1rem', width: '1rem' }}
@@ -125,7 +121,8 @@ export class ActivityManageFrame extends Component<ActivityManageFrameProps> {
   }
 
   render() {
-    const { authorized, currentRoute } = this,
+    const { t } = this.observedContext,
+      { authorized, currentRoute } = this,
       { children, name, title } = this.props;
 
     return (

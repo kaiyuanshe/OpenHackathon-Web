@@ -74,8 +74,7 @@ export default {
   success: 'Success',
   cancel: 'Cancel',
   edit_profile: 'Edit Profile',
-  edit_profile_tips:
-    "After editing profile in GitHub, it'll be reloaded at next sign-in.",
+  edit_profile_tips: "After editing profile in GitHub, it'll be reloaded at next sign-in.",
   hackathons: 'Hackathons',
   more_events: 'More events',
   registration_deadline: 'Registration closing in',
@@ -130,19 +129,16 @@ export default {
   personal_profile: 'Personal Profile',
   enter_for: 'Sign Up',
   linkein_or_cv: 'LinkedIn/CV/Blog',
-  social_media_account_or_twitter_or_weibo:
-    'Social Media Account/Twitter/Weibo',
+  social_media_account_or_twitter_or_weibo: 'Social Media Account/Twitter/Weibo',
   which_of_these_particular_areas_are_you_interested_in_going_into_this_event:
     'Which topics of event interests you ?',
-  what_do_you_hope_to_learn_from_the_workshops:
-    'What do you want to learn from workshops',
+  what_do_you_hope_to_learn_from_the_workshops: 'What do you want to learn from workshops',
   do_you_plan__on_hacking_solo_or_with_a_team:
     'Are you planning to participate in the hackathon solo or as part of a team?',
   yes: 'Yes',
   no_i_prefer_solo: 'No, I prefer Solo',
   no_i_have_a_team: 'No, I have a team',
-  would_you_be_open_to_having_a_beginner_join_your_team:
-    'Do you mind beginners join your team?',
+  would_you_be_open_to_having_a_beginner_join_your_team: 'Do you mind beginners join your team?',
   no: 'No',
   anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate:
     'Regarding teammates, do you have any other specific requirements? We will do our best to help you find suitable candidates and support you throughout your hackathon journey.',
@@ -159,8 +155,7 @@ export default {
   project_manager: 'Project manager',
   student: 'Student',
   others: 'Others',
-  what_are_your_commonly_used_programming_languages:
-    'Commonly used programming languages',
+  what_are_your_commonly_used_programming_languages: 'Commonly used programming languages',
   approve: 'Approve',
   status_none: 'None',
   status_approved: 'Approved',
@@ -171,10 +166,8 @@ export default {
   admin: 'Admin',
   member: 'Member',
   please_select_at_least_one_user: 'Please select at least one user',
-  confirm_to_delete_admin_or_referee:
-    'Confirm to delete the selected admin/referee?',
-  please_select_at_least_one_partner:
-    'Please select at least one sponsor/partner!',
+  confirm_to_delete_admin_or_referee: 'Confirm to delete the selected admin/referee?',
+  please_select_at_least_one_partner: 'Please select at least one sponsor/partner!',
   confirm_to_delete_partner: 'Confirm to delete the selected sponsor/partner?',
   add: 'Add',
   search: 'Search',
@@ -225,14 +218,13 @@ export default {
   search_an_user: 'Please search and select a user first',
   add_manager: 'Add administrator',
   create_work_success: 'Event created successfully, apply for publishing?',
-  has_published:
-    'An publishing application has been made, please wait for review',
+  has_published: 'An publishing application has been made, please wait for review',
   edited_success: 'Modified Successfully ',
   name_placeholder: 'ID, letters and numbers only',
   please_enter_name: 'Please enter a name',
   activity_id: 'Activity ID',
   activity_name: 'Activity Name',
-  disaplay_name: 'Display Name',
+  display_name: 'Display Name',
   tag: 'Tag',
   tag_placeholder: 'press Enter key to add a tag',
   bannerUrls: 'Head picture (up to 10)',
@@ -248,10 +240,8 @@ export default {
   apply_publish: 'Apply online',
   publish: 'Publish',
   offline: 'Offline',
-  sure_publish: ({ name }: { name: string }) =>
-    textJoin('Are you sure to publish', name, '?'),
-  sure_offline: ({ name }: { name: string }) =>
-    textJoin('do you want to go offline', name, '?'),
+  sure_publish: ({ name }: { name: string }) => textJoin('Are you sure to publish', name, '?'),
+  sure_offline: ({ name }: { name: string }) => textJoin('do you want to go offline', name, '?'),
   activity_manage: 'Manage Activity',
   no_permission: 'No permission yet',
   sign_up_trends: 'Sign-up trends',
@@ -264,21 +254,17 @@ export default {
   content: 'Content',
   sure_delete_this_message: 'Are you sure to delete this message?',
   admin_management: 'Admin management',
-  confirm_to_delete_platform_admin:
-    'Confirm to delete the selected platform admin',
+  confirm_to_delete_platform_admin: 'Confirm to delete the selected platform admin',
   profile: 'profile',
   add_template_repository: 'Add template repository',
   stay_tuned: 'Stay tuned',
-  confirm_to_delete_announcement:
-    'Confirm to delete the selected announcement?',
-  please_select_at_least_one_announcement:
-    'Please select at least one announcement',
+  confirm_to_delete_announcement: 'Confirm to delete the selected announcement?',
+  please_select_at_least_one_announcement: 'Please select at least one announcement',
   announcement_manage: 'Announcement management',
   publish_announcement: 'Publish announcement',
   sign_up_successfully: 'Sign up successfully',
   rejected: 'rejected',
-  already_registered_waiting_for_approval:
-    'Already registered, waiting for approval',
+  already_registered_waiting_for_approval: 'Already registered, waiting for approval',
   not_sign_up: 'Not enrolled',
   please_use_github_login: 'Please use login via GitHub',
   score: 'Score',
@@ -311,8 +297,7 @@ export default {
   start_time_earlier_end_time: 'Start time must be earlier than end time',
   address: 'Address',
   confirm_delete_repo: 'Confirm to delete the Github repository template',
-  choose_at_least_one_repo:
-    'Please choose at least one Github repository template',
+  choose_at_least_one_repo: 'Please choose at least one Github repository template',
   survey: 'Questionnaire',
   edit_questionnaire: 'Edit Questionnaire',
   text: 'text',
@@ -332,13 +317,10 @@ export default {
   please_add_question: 'Please add questions',
   create_questionnaire: 'Create a questionnaire',
   update_questionnaire: 'Update the questionnaire',
-  create_questionnaire_success:
-    'A questionnaire has been created successfully!',
-  update_questionnaire_success:
-    'The questionnaire has been updated successfully!',
+  create_questionnaire_success: 'A questionnaire has been created successfully!',
+  update_questionnaire_success: 'The questionnaire has been updated successfully!',
   delete_questionnaire: 'Delete the questionnaire',
-  delete_questionnaire_success:
-    'The questionnaire has been deleted successfully!',
+  delete_questionnaire_success: 'The questionnaire has been deleted successfully!',
   preview_questionnaire: 'Preview the questionnaire',
   confirm_to_delete_questionnaire: 'Confirm to delete the questionnaire?',
   for_example: (example: string) => 'E.g., ' + example,

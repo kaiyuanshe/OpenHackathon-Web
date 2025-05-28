@@ -1,14 +1,11 @@
-import {
-  faCalendarDay,
-  faMapLocationDot,
-  faTags,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faMapLocationDot, faTags } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import classNames from 'classnames';
+import { FC, useContext } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 
-import { t } from '../../models/Base/Translation';
+import { I18nContext } from '../../models/Base/Translation';
 import { convertDatetime } from '../../utils/time';
 import { ActivityControl, ActivityControlProps } from './ActivityControl';
 import { ActivityEntry } from './ActivityEntry';
@@ -18,7 +15,7 @@ export interface ActivityCardProps extends Hackathon, ActivityControlProps {
   controls?: boolean;
 }
 
-export function ActivityCard({
+export const ActivityCard: FC<ActivityCardProps> = ({
   className,
   controls,
   name,
@@ -32,8 +29,9 @@ export function ActivityCard({
   onPublish,
   onDelete,
   ...rest
-}: ActivityCardProps) {
-  const eventStartedAtText = convertDatetime(eventStartedAt);
+}) => {
+  const { t } = useContext(I18nContext),
+    eventStartedAtText = convertDatetime(eventStartedAt);
 
   return (
     <Card className={classNames('border-success', className)}>
@@ -47,16 +45,11 @@ export function ActivityCard({
           {displayName}
         </Card.Title>
         <Row as="small" className="g-4" xs={1}>
-          <Col
-            className="text-truncate border-bottom pb-2"
-            title={eventStartedAtText}
-          >
-            <FontAwesomeIcon className="text-success" icon={faCalendarDay} />{' '}
-            {eventStartedAtText}
+          <Col className="text-truncate border-bottom pb-2" title={eventStartedAtText}>
+            <FontAwesomeIcon className="text-success" icon={faCalendarDay} /> {eventStartedAtText}
           </Col>
           <Col className="text-truncate border-bottom pb-2" title={location}>
-            <FontAwesomeIcon className="text-success" icon={faMapLocationDot} />{' '}
-            {location}
+            <FontAwesomeIcon className="text-success" icon={faMapLocationDot} /> {location}
           </Col>
         </Row>
         <Card.Text className="text-success mt-2">
@@ -80,11 +73,9 @@ export function ActivityCard({
         {controls ? (
           <ActivityControl {...{ name, status, onPublish, onDelete }} />
         ) : (
-          <ActivityEntry
-            {...{ ...rest, status, eventStartedAt, href: `/activity/${name}` }}
-          />
+          <ActivityEntry {...{ ...rest, status, eventStartedAt, href: `/activity/${name}` }} />
         )}
       </Card.Footer>
     </Card>
   );
-}
+};

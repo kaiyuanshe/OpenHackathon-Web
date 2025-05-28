@@ -1,14 +1,9 @@
 import { Answer } from '@kaiyuanshe/openhackathon-service';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
-import {
-  cache,
-  compose,
-  errorLogger,
-  JWTProps,
-  translator,
-} from 'next-ssr-middleware';
-import { Component, FormEvent } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { cache, compose, errorLogger, JWTProps } from 'next-ssr-middleware';
+import { FormEvent } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -16,7 +11,7 @@ import { QuestionnaireForm } from '../../../components/Activity/QuestionnairePre
 import { PageHead } from '../../../components/layout/PageHead';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { Question } from '../../../models/Activity/Question';
-import { i18n, t } from '../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../models/Base/Translation';
 import { sessionGuard } from '../../api/core';
 
 interface RegisterPageProps extends JWTProps {
@@ -28,7 +23,6 @@ export const getServerSideProps = compose<{ name: string }>(
   sessionGuard,
   cache(),
   errorLogger,
-  translator(i18n),
   async ({ params: { name } = {} }) => {
     const activityStore = new ActivityModel();
     const { status } = await activityStore.getOne(name!),
@@ -42,12 +36,15 @@ export const getServerSideProps = compose<{ name: string }>(
 );
 
 @observer
-export default class RegisterPage extends Component<RegisterPageProps> {
+export default class RegisterPage extends ObservedComponent<RegisterPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const { activity } = this.props,
+    const { t } = this.observedContext,
+      { activity } = this.props,
       data = formToJSON(event.target as HTMLFormElement);
 
     const answers = Object.entries(data)
@@ -56,14 +53,14 @@ export default class RegisterPage extends Component<RegisterPageProps> {
 
     await activityStore.signOne(activity, answers);
 
-    self.alert(
-      textJoin(t('hackathons'), activity, t('registration_needs_review')),
-    );
+    alert(textJoin(t('hackathons'), activity, t('registration_needs_review')));
+
     location.href = `/activity/${activity}`;
   };
 
   render() {
-    const { activity, questionnaire } = this.props,
+    const { t } = this.observedContext,
+      { activity, questionnaire } = this.props,
       { uploading } = activityStore;
 
     return (
@@ -74,12 +71,7 @@ export default class RegisterPage extends Component<RegisterPageProps> {
           <QuestionnaireForm fields={questionnaire} />
 
           <footer className="text-center my-2">
-            <Button
-              className="px-5"
-              type="submit"
-              variant="success"
-              disabled={uploading > 0}
-            >
+            <Button className="px-5" type="submit" variant="success" disabled={uploading > 0}>
               {t('enter_for')}
             </Button>
           </footer>
