@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, router, translator } from 'next-ssr-middleware';
-import { Component } from 'react';
+import { compose, router } from 'next-ssr-middleware';
 
 import {
   TeamManageBaseParams,
@@ -10,23 +10,25 @@ import {
 } from '../../../../../../components/Team/TeamManageFrame';
 import { TeamParticipantTableLayout } from '../../../../../../components/Team/TeamParticipantTable';
 import activityStore from '../../../../../../models/Activity';
-import { i18n, t } from '../../../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../../api/core';
 
-export const getServerSideProps = compose<TeamManageBaseParams>(
-  router,
-  sessionGuard,
-  translator(i18n),
-);
+export const getServerSideProps = compose<TeamManageBaseParams>(router, sessionGuard);
 
 @observer
-export default class TeamParticipantPage extends Component<TeamManageBaseProps> {
+export default class TeamParticipantPage extends ObservedComponent<
+  TeamManageBaseProps,
+  typeof i18n
+> {
+  static contextType = I18nContext;
+
   store = activityStore
     .teamOf(this.props.route.params!.name)
     .memberOf(+this.props.route.params!.tid);
 
   render() {
-    const { store } = this;
+    const { store } = this,
+      { t } = this.observedContext;
     const { resolvedUrl, params } = this.props.route;
     const { name, tid } = params!;
 
@@ -44,9 +46,7 @@ export default class TeamParticipantPage extends Component<TeamManageBaseProps> 
           renderList={allItems => (
             <TeamParticipantTableLayout
               defaultData={allItems}
-              onApprove={(userId, status) =>
-                store.updateOne({ status }, userId)
-              }
+              onApprove={(userId, status) => store.updateOne({ status }, userId)}
             />
           )}
         />

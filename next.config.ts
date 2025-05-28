@@ -1,4 +1,5 @@
-// @ts-ignore
+import { NextConfig } from 'next';
+// @ts-expect-error Upstream has no type package
 import withLess from 'next-with-less';
 import setPWA from 'next-pwa';
 import WP from 'webpack';
@@ -12,10 +13,7 @@ const withPWA = setPWA({
   disable: NODE_ENV === 'development',
 });
 
-/**
- * @type {import('next').NextConfig['webpack']}
- */
-const webpack = config => {
+const webpack: NextConfig['webpack'] = config => {
   config.plugins.push(
     new WP.NormalModuleReplacementPlugin(/^node:/, resource => {
       resource.request = resource.request.replace(/^node:/, '');
@@ -24,10 +22,7 @@ const webpack = config => {
   return config;
 };
 
-/**
- * @type {import('next').NextConfig['rewrites']}
- */
-const rewrites = async () => ({
+const rewrites: NextConfig['rewrites'] = async () => ({
   beforeFiles: [
     {
       source: '/proxy/github.com/:path*',

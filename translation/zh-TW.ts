@@ -130,14 +130,12 @@ export default {
   social_media_account_or_twitter_or_weibo: '社交媒體帳號/推特/微博',
   which_of_these_particular_areas_are_you_interested_in_going_into_this_event:
     '本次比賽您感興趣的賽題是什麼？',
-  what_do_you_hope_to_learn_from_the_workshops:
-    '您希望從系列工作坊/講座中學習到那方面的內容',
+  what_do_you_hope_to_learn_from_the_workshops: '您希望從系列工作坊/講座中學習到那方面的內容',
   do_you_plan__on_hacking_solo_or_with_a_team: '您是否願意組隊？',
   yes: '是',
   no_i_prefer_solo: '否，喜歡個人',
   no_i_have_a_team: '否，已經組隊',
-  would_you_be_open_to_having_a_beginner_join_your_team:
-    '您是否建議新手加入您的團隊',
+  would_you_be_open_to_having_a_beginner_join_your_team: '您是否建議新手加入您的團隊',
   no: '否',
   anything_else_we_should_know_about_what_youre_looking_for_in_a_team_or_teammate:
     '關於隊友您還有其他什麼要求麼？我們會盡力幫您找到合適成員，助力您的黑客鬆之旅。',
@@ -223,7 +221,7 @@ export default {
   please_enter_name: '請輸入名稱',
   activity_id: '活動 ID',
   activity_name: '活動名稱',
-  disaplay_name: '顯示名稱',
+  display_name: '顯示名稱',
   tag: '標籤',
   tag_placeholder: '按回車鍵以添加一個標籤',
   bannerUrls: '頭圖（最多10張）',
@@ -239,10 +237,8 @@ export default {
   apply_publish: '申請上線',
   publish: '上線',
   offline: '下線',
-  sure_publish: ({ name }: { name: string }) =>
-    textJoin('確定讓', name, '上線？'),
-  sure_offline: ({ name }: { name: string }) =>
-    textJoin('確定讓', name, '下線？'),
+  sure_publish: ({ name }: { name: string }) => textJoin('確定讓', name, '上線？'),
+  sure_offline: ({ name }: { name: string }) => textJoin('確定讓', name, '下線？'),
   activity_manage: '活動管理',
   no_permission: '暫無權限',
   sign_up_trends: '報名趨勢',

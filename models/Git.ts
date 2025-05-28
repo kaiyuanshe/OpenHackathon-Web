@@ -5,6 +5,7 @@ import { components } from '@octokit/openapi-types';
 import { githubClient, RepositoryFilter, RepositoryModel } from 'mobx-github';
 import { toggle } from 'mobx-restful';
 
+import { GITHUB_PAT } from '../configuration';
 import { TeamWorkModel } from './Activity/Team';
 import { TableModel } from './Base';
 import sessionStore from './User/Session';
@@ -12,14 +13,10 @@ import sessionStore from './User/Session';
 type Repository = components['schemas']['repository'];
 
 githubClient.use(({ request }, next) => {
-  const { accessToken = process.env.GITHUB_PAT } =
-    sessionStore.metaOAuth.github || {};
+  const { accessToken = GITHUB_PAT } = sessionStore.metaOAuth.github || {};
 
-  if (accessToken)
-    request.headers = {
-      ...request.headers,
-      Authorization: `Bearer ${accessToken}`,
-    };
+  if (accessToken) request.headers = { ...request.headers, Authorization: `Bearer ${accessToken}` };
+
   return next();
 });
 
@@ -31,10 +28,8 @@ export class GitModel extends TableModel<GitTemplate> {
 
   @toggle('uploading')
   async createOneFrom(templateURI: string, name: string) {
-    const { body } = await githubClient.post<Repository>(
-      `repos/${templateURI}/generate`,
-      { name },
-    );
+    const { body } = await githubClient.post<Repository>(`repos/${templateURI}/generate`, { name });
+
     return body!;
   }
 
@@ -67,11 +62,7 @@ export const SourceRepository = [
 ];
 
 export class SourceRepositoryModel extends RepositoryModel {
-  async loadPage(
-    page: number,
-    per_page: number,
-    { relation }: RepositoryFilter,
-  ) {
+  async loadPage(page: number, per_page: number, { relation }: RepositoryFilter) {
     const list = SourceRepository.flat()
       .uniqueBy()
       .slice((page - 1) * per_page, page * per_page);

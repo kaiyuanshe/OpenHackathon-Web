@@ -1,17 +1,12 @@
-import {
-  Hackathon,
-  Team,
-  TeamMember,
-  TeamWork,
-} from '@kaiyuanshe/openhackathon-service';
+import { Hackathon, Team, TeamMember, TeamWork } from '@kaiyuanshe/openhackathon-service';
 import { Icon } from 'idea-react';
 import { HTTPError } from 'koajax';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { observePropsState } from 'mobx-react-helper';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { Component, FormEvent } from 'react';
+import { cache, compose, errorLogger } from 'next-ssr-middleware';
+import { FormEvent } from 'react';
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -21,9 +16,10 @@ import { PageHead } from '../../../../../components/layout/PageHead';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
+import { isServer } from '../../../../../configuration';
 import activityStore, { ActivityModel } from '../../../../../models/Activity';
-import { i18n, t } from '../../../../../models/Base/Translation';
-import sessionStore, { isServer } from '../../../../../models/User/Session';
+import { i18n, I18nContext } from '../../../../../models/Base/Translation';
+import sessionStore from '../../../../../models/User/Session';
 
 interface TeamPageProps {
   activity: Hackathon;
@@ -32,13 +28,9 @@ interface TeamPageProps {
   teamWorkList: TeamWork[];
 }
 
-export const getServerSideProps = compose<
-  Partial<Record<'name' | 'tid', string>>,
-  TeamPageProps
->(
+export const getServerSideProps = compose<Partial<Record<'name' | 'tid', string>>, TeamPageProps>(
   cache(),
   errorLogger,
-  translator(i18n),
   async ({ params: { name = '', tid = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
@@ -51,22 +43,15 @@ export const getServerSideProps = compose<
     const teamMemberList = await currentTeam!.currentMember!.getList(),
       teamWorkList = await currentTeam!.currentWork!.getList();
 
-    return {
-      props: { activity, team, teamMemberList, teamWorkList },
-    };
+    return { props: { activity, team, teamMemberList, teamWorkList } };
   },
 );
 
-export default interface TeamPage {
-  observedProps: TeamPageProps;
-}
-
 @observer
-@observePropsState
-export default class TeamPage extends Component<TeamPageProps> {
-  store = activityStore
-    .teamOf(this.props.activity.name)
-    .memberOf(this.props.team.id);
+export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
+  store = activityStore.teamOf(this.props.activity.name).memberOf(this.props.team.id);
 
   @observable
   accessor currentUserInThisTeam: TeamMember | undefined;
@@ -84,13 +69,7 @@ export default class TeamPage extends Component<TeamPageProps> {
       team: { displayName },
     } = this.observedProps;
 
-    return [
-      {
-        title: hackathonDisplayName,
-        href: `/activity/${name}`,
-      },
-      { title: displayName },
-    ];
+    return [{ title: hackathonDisplayName, href: `/activity/${name}` }, { title: displayName }];
   }
 
   @computed
@@ -109,9 +88,7 @@ export default class TeamPage extends Component<TeamPageProps> {
 
   @computed
   get isShowLeaveTeamBtn() {
-    return (
-      activityStore.currentTeam?.sessionOne?.id === this.observedProps.team.id
-    );
+    return activityStore.currentTeam?.sessionOne?.id === this.observedProps.team.id;
   }
 
   async componentDidMount() {
@@ -128,9 +105,8 @@ export default class TeamPage extends Component<TeamPageProps> {
     }
 
     try {
-      this.currentUserInThisTeam = user?.id
-        ? await this.store.getOne(user.id)
-        : undefined;
+      this.currentUserInThisTeam = user?.id ? await this.store.getOne(user.id) : undefined;
+
       this.teamMemberRole = this.currentUserInThisTeam?.role || '';
     } catch (error: any) {
       const { status } = (error as HTTPError).response;
@@ -156,10 +132,9 @@ export default class TeamPage extends Component<TeamPageProps> {
   };
 
   handleLeaveTeam = async () => {
+    const { t } = this.observedContext;
     const operation =
-      this.currentUserInThisTeam?.status === 'approved'
-        ? t('leave_team')
-        : t('cancel_application');
+      this.currentUserInThisTeam?.status === 'approved' ? t('leave_team') : t('cancel_application');
 
     if (!confirm(`${t('please_make_sure')}${operation}`)) return;
 
@@ -169,7 +144,8 @@ export default class TeamPage extends Component<TeamPageProps> {
   };
 
   render() {
-    const { name, displayName: hackathonDisplayName } = this.props.activity,
+    const { t } = this.observedContext,
+      { name, displayName: hackathonDisplayName } = this.props.activity,
       {
         id,
         displayName,
@@ -206,10 +182,7 @@ export default class TeamPage extends Component<TeamPageProps> {
                 <h1 className="h3 my-2">{displayName}</h1>
                 <p className="text-muted">{description}</p>
                 {isShowJoinTeamBtn && (
-                  <Button
-                    className="w-100"
-                    onClick={() => (this.isShowJoinReqModal = true)}
-                  >
+                  <Button className="w-100" onClick={() => (this.isShowJoinReqModal = true)}>
                     {t('join_team')}
                   </Button>
                 )}
@@ -222,11 +195,7 @@ export default class TeamPage extends Component<TeamPageProps> {
                   </Button>
                 )}
                 {isShowLeaveTeamBtn && (
-                  <Button
-                    className="w-100 mt-2"
-                    variant="danger"
-                    onClick={this.handleLeaveTeam}
-                  >
+                  <Button className="w-100 mt-2" variant="danger" onClick={this.handleLeaveTeam}>
                     {currentUserInThisTeam?.status === 'approved'
                       ? t('leave_team')
                       : t('cancel_application')}
@@ -240,9 +209,7 @@ export default class TeamPage extends Component<TeamPageProps> {
                 <ScrollList
                   translator={i18n}
                   store={this.store}
-                  renderList={allItems => (
-                    <TeamMemberListLayout defaultData={allItems} />
-                  )}
+                  renderList={allItems => <TeamMemberListLayout defaultData={allItems} />}
                   defaultData={teamMemberList}
                 />
               </Card.Body>

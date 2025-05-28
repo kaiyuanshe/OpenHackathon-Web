@@ -3,15 +3,16 @@ import { Loading } from 'idea-react';
 import { observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { BadgeInput, FileUploader } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
-import { Component, FormEvent } from 'react';
+import { FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import { DateTimeInput } from '../DateTimeInput';
 
 const HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
@@ -25,7 +26,9 @@ export interface ActivityEditorProps {
 }
 
 @observer
-export class ActivityEditor extends Component<ActivityEditorProps> {
+export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor detailHTML = '';
 
@@ -54,7 +57,8 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
 
     if (!form.checkValidity()) return (this.validated = true);
 
-    const { name } = this.props,
+    const { t } = this.observedContext,
+      { name } = this.props,
       data = formToJSON<ActivityFormData>(form);
 
     data.detail = (data.detail || '') + '';
@@ -80,7 +84,8 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
   };
 
   render() {
-    const {
+    const { t } = this.observedContext,
+      {
         name,
         displayName,
         tags = [],
@@ -137,12 +142,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="displayName"
-              type="text"
-              required
-              defaultValue={displayName}
-            />
+            <Form.Control name="displayName" type="text" required defaultValue={displayName} />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_name'))}
             </Form.Control.Feedback>
@@ -154,11 +154,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
             {t('tag')}
           </Form.Label>
           <Col sm={10}>
-            <BadgeInput
-              name="tags"
-              placeholder={t('tag_placeholder')}
-              defaultValue={tags}
-            />
+            <BadgeInput name="tags" placeholder={t('tag_placeholder')} defaultValue={tags} />
           </Col>
         </Form.Group>
 
@@ -186,12 +182,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="location"
-              type="text"
-              required
-              defaultValue={location}
-            />
+            <Form.Control name="location" type="text" required defaultValue={location} />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_address'))}
             </Form.Control.Feedback>
@@ -254,12 +245,7 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              name="summary"
-              type="text"
-              defaultValue={summary}
-              required
-            />
+            <Form.Control name="summary" type="text" defaultValue={summary} required />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_introduction'))}
             </Form.Control.Feedback>
@@ -272,16 +258,8 @@ export class ActivityEditor extends Component<ActivityEditorProps> {
             <span className="text-danger"> *</span>
           </Form.Label>
           <Col sm={10}>
-            <HTMLEditor
-              defaultValue={detail}
-              onChange={code => (this.detailHTML = code)}
-            />
-            <Form.Control
-              hidden
-              name="detail"
-              required
-              value={this.detailHTML}
-            />
+            <HTMLEditor defaultValue={detail} onChange={code => (this.detailHTML = code)} />
+            <Form.Control hidden name="detail" required value={this.detailHTML} />
             <Form.Control.Feedback type="invalid">
               {textJoin(t('please_enter'), t('activity_detail'))}
             </Form.Control.Feedback>

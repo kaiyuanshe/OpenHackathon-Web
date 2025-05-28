@@ -1,10 +1,11 @@
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { ChangeEvent, Component } from 'react';
+import { ObservedComponent } from 'mobx-react-helper';
+import { ChangeEvent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
-import { t } from '../models/Base/Translation';
+import { i18n } from '../models/Base/Translation';
 
 export interface DateTimeInputProps {
   id?: string;
@@ -16,7 +17,7 @@ export interface DateTimeInputProps {
 }
 
 @observer
-export class DateTimeInput extends Component<DateTimeInputProps> {
+export class DateTimeInput extends ObservedComponent<DateTimeInputProps, typeof i18n> {
   @observable
   accessor start = '';
 
@@ -28,9 +29,7 @@ export class DateTimeInput extends Component<DateTimeInputProps> {
     return +new Date(this.start) > +new Date(this.end);
   }
 
-  handleInputChange = ({
-    currentTarget: { name, value },
-  }: ChangeEvent<HTMLInputElement>) => {
+  handleInputChange = ({ currentTarget: { name, value } }: ChangeEvent<HTMLInputElement>) => {
     if (/StartedAt/.test(name)) {
       this.start = value;
     } else {
@@ -39,7 +38,8 @@ export class DateTimeInput extends Component<DateTimeInputProps> {
   };
 
   render() {
-    const { id, label, name, required, startAt, endAt } = this.props,
+    const { t } = this.observedContext,
+      { id, label, name, required, startAt, endAt } = this.props,
       { isInvalid } = this;
 
     return (
@@ -54,9 +54,7 @@ export class DateTimeInput extends Component<DateTimeInputProps> {
             <Form.Control
               name={`${name}StartedAt`}
               type="datetime-local"
-              defaultValue={
-                startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')
-              }
+              defaultValue={startAt && formatDate(startAt, 'YYYY-MM-DDTHH:mm:ss')}
               {...{ required, isInvalid }}
               onChange={this.handleInputChange}
             />

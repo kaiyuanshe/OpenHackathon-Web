@@ -1,17 +1,11 @@
 import { TeamWorkType } from '@kaiyuanshe/openhackathon-service';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import { compose, router, translator } from 'next-ssr-middleware';
-import { Component, FC, FormEvent } from 'react';
-import {
-  Button,
-  Container,
-  Dropdown,
-  DropdownButton,
-  Form,
-  Modal,
-} from 'react-bootstrap';
+import { compose, router } from 'next-ssr-middleware';
+import { FC, FormEvent, useContext } from 'react';
+import { Button, Container, Dropdown, DropdownButton, Form, Modal } from 'react-bootstrap';
 import { buildURLData, formToJSON } from 'web-utility';
 
 import { GitListLayout } from '../../../../../../components/Git/List';
@@ -25,18 +19,15 @@ import {
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
 import activityStore from '../../../../../../models/Activity';
-import { i18n, t } from '../../../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../../../models/Base/Translation';
 import sessionStore from '../../../../../../models/User/Session';
 import { sessionGuard } from '../../../../../api/core';
 
-export const getServerSideProps = compose<TeamManageBaseParams>(
-  router,
-  sessionGuard,
-  translator(i18n),
-);
+export const getServerSideProps = compose<TeamManageBaseParams>(router, sessionGuard);
 
 const GitPage: FC<TeamManageBaseProps> = observer(props => {
-  const { name, tid } = props.route.params!;
+  const { t } = useContext(I18nContext),
+    { name, tid } = props.route.params!;
 
   return (
     <TeamManageFrame
@@ -54,7 +45,9 @@ const GitPage: FC<TeamManageBaseProps> = observer(props => {
 export default GitPage;
 
 @observer
-class GitView extends Component<TeamManageBaseProps> {
+class GitView extends ObservedComponent<TeamManageBaseProps, typeof i18n> {
+  static contextType = I18nContext;
+
   teamStore = activityStore.teamOf(this.props.route.params!.name);
   gitTemplateStore = activityStore.templateOf(this.props.route.params!.name);
   memberStore = this.teamStore.memberOf(+this.props.route.params!.tid);
@@ -73,9 +66,10 @@ class GitView extends Component<TeamManageBaseProps> {
       repository: string;
     }>(event.currentTarget);
 
-    const { full_name, html_url } =
-      await activityStore.currentTemplate!.createOneFrom(template, repository);
-
+    const { full_name, html_url } = await activityStore.currentTemplate!.createOneFrom(
+      template,
+      repository,
+    );
     await this.workStore.updateOne({
       type: 'website' as TeamWorkType.Website,
       title: full_name,
@@ -98,23 +92,17 @@ class GitView extends Component<TeamManageBaseProps> {
   }
 
   renderCreator() {
-    const { currentTemplate } = activityStore;
-    const uploading = currentTemplate!.uploading || this.workStore.uploading;
+    const i18n = this.observedContext,
+      { currentTemplate } = activityStore;
+    const { t } = i18n,
+      uploading = currentTemplate!.uploading || this.workStore.uploading;
 
     return (
       <Modal show={this.creatorOpen} onHide={() => (this.creatorOpen = false)}>
         <Modal.Body as="form" onSubmit={this.handleCreate}>
           <div className="d-flex mb-3">
-            <Form.Control
-              name="repository"
-              required
-              placeholder={t('repository_name')}
-            />
-            <Button
-              className="text-nowrap ms-3"
-              type="submit"
-              disabled={uploading > 0}
-            >
+            <Form.Control name="repository" required placeholder={t('repository_name')} />
+            <Button className="text-nowrap ms-3" type="submit" disabled={uploading > 0}>
               {t('create')}
             </Button>
           </div>
@@ -134,27 +122,18 @@ class GitView extends Component<TeamManageBaseProps> {
     default_branch,
     html_url,
   }) => {
-    const { github } = sessionStore.metaOAuth;
+    const { t } = this.observedContext,
+      { github } = sessionStore.metaOAuth;
 
     return (
       <>
-        <Button
-          variant="danger"
-          disabled={!github}
-          onClick={() => this.handleAuthorization(name!)}
-        >
+        <Button variant="danger" disabled={!github} onClick={() => this.handleAuthorization(name!)}>
           {t('authorize_all_teammates')}
           {github ? '' : t('please_use_github_login')}
         </Button>
 
-        <DropdownButton
-          variant="warning"
-          title={t('instant_cloud_development')}
-        >
-          <Dropdown.Item
-            target="_blank"
-            href={`https://gitpod.io/#${html_url}`}
-          >
+        <DropdownButton variant="warning" title={t('instant_cloud_development')}>
+          <Dropdown.Item target="_blank" href={`https://gitpod.io/#${html_url}`}>
             GitPod
           </Dropdown.Item>
           <Dropdown.Item
@@ -173,16 +152,14 @@ class GitView extends Component<TeamManageBaseProps> {
   };
 
   render() {
-    const { github } = sessionStore.metaOAuth;
+    const i18n = this.observedContext,
+      { github } = sessionStore.metaOAuth;
+    const { t } = i18n;
 
     return (
       <Container fluid>
         <header className="d-flex justify-content-end mb-3">
-          <Button
-            variant="success"
-            disabled={!github}
-            onClick={() => (this.creatorOpen = true)}
-          >
+          <Button variant="success" disabled={!github} onClick={() => (this.creatorOpen = true)}>
             {t('create_cloud_environment')}
             {github ? '' : t('please_use_github_login')}
           </Button>

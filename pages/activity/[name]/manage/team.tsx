@@ -1,44 +1,41 @@
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, FC, FormEvent } from 'react';
-import {
-  Button,
-  Container,
-  Dropdown,
-  DropdownButton,
-  Form,
-} from 'react-bootstrap';
+import { FC, FormEvent, useContext } from 'react';
+import { Button, Container, Dropdown, DropdownButton, Form } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { TeamListLayout } from '../../../../components/Team/TeamList';
 import activityStore from '../../../../models/Activity';
-import { i18n, t } from '../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type TeamManagePageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }>(
-  router,
-  sessionGuard,
-);
+export const getServerSideProps = compose<{ name: string }>(router, sessionGuard);
 
-const TeamManagePage: FC<TeamManagePageProps> = observer(props => (
-  <ActivityManageFrame
-    {...props}
-    path={props.route.resolvedUrl}
-    name={props.route.params!.name}
-    title={t('team_manage')}
-  >
-    <TeamManageEditor {...props} />
-  </ActivityManageFrame>
-));
+const TeamManagePage: FC<TeamManagePageProps> = observer(props => {
+  const { t } = useContext(I18nContext);
 
+  return (
+    <ActivityManageFrame
+      {...props}
+      path={props.route.resolvedUrl}
+      name={props.route.params!.name}
+      title={t('team_manage')}
+    >
+      <TeamManageEditor {...props} />
+    </ActivityManageFrame>
+  );
+});
 export default TeamManagePage;
 
 @observer
-class TeamManageEditor extends Component<TeamManagePageProps> {
+class TeamManageEditor extends ObservedComponent<TeamManagePageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.teamOf(this.props.route.params!.name);
 
   onSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -53,7 +50,9 @@ class TeamManageEditor extends Component<TeamManagePageProps> {
   };
 
   render() {
-    const { exportURL, workExportURL } = this.store;
+    const i18n = this.observedContext,
+      { exportURL, workExportURL } = this.store;
+    const { t } = i18n;
 
     return (
       <Container fluid>

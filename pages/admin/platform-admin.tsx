@@ -2,29 +2,35 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
-import { Component, FC, FormEvent } from 'react';
+import { FC, FormEvent, useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
 import { PlatformAdminFrame } from '../../components/PlatformAdmin/PlatformAdminFrame';
 import { PlatformAdminModal } from '../../components/PlatformAdmin/PlatformAdminModal';
 import { HackathonAdminList } from '../../components/User/HackathonAdminList';
-import { i18n, t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import { PlatformAdminModel } from '../../models/User/PlatformAdmin';
 import { sessionGuard } from '../api/core';
 
 export const getServerSideProps = sessionGuard;
 
-const PlatformAdminPage: FC = observer(() => (
-  <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
-    <PlatformAdminView />
-  </PlatformAdminFrame>
-));
+const PlatformAdminPage: FC = observer(() => {
+  const { t } = useContext(I18nContext);
 
+  return (
+    <PlatformAdminFrame title={t('admin_management')} path="platform-admin">
+      <PlatformAdminView />
+    </PlatformAdminFrame>
+  );
+});
 export default PlatformAdminPage;
 
 @observer
-class PlatformAdminView extends Component {
+class PlatformAdminView extends ObservedComponent<{}, typeof i18n> {
+  static contextType = I18nContext;
+
   store = new PlatformAdminModel();
 
   @observable
@@ -37,7 +43,8 @@ class PlatformAdminView extends Component {
     event.preventDefault();
     event.stopPropagation();
 
-    const { selectedIds } = this;
+    const { t } = this.observedContext,
+      { selectedIds } = this;
 
     if (!selectedIds[0]) return alert(t('please_select_at_least_one_user'));
 
@@ -47,8 +54,10 @@ class PlatformAdminView extends Component {
   };
 
   render() {
-    const { store, show } = this;
-    const loading = store.uploading > 0;
+    const i18n = this.observedContext,
+      { store, show } = this;
+    const { t } = i18n,
+      loading = store.uploading > 0;
 
     return (
       <Form onSubmit={this.handleSubmit}>

@@ -1,26 +1,19 @@
 import { Base, User } from '@kaiyuanshe/openhackathon-service';
 import { HTTPClient } from 'koajax';
 import { computed, observable } from 'mobx';
-import { parseCookie, setCookie } from 'mobx-i18n';
+import { setCookie } from 'mobx-i18n';
 import { BaseModel, persist, restore, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
-export const isServer = () => typeof window === 'undefined';
+import { API_HOST, isServer, JWT, token } from '../../configuration';
 
-const { token, JWT } = (globalThis.document ? parseCookie() : {}) as Record<
-  'token' | 'JWT',
-  string
->;
+export const ownClient = new HTTPClient({ baseURI: API_HOST, responseType: 'json' }).use(
+  ({ request }, next) => {
+    if (JWT) request.headers = { ...request.headers, Authorization: `Bearer ${JWT}` };
 
-export const ownClient = new HTTPClient({
-  baseURI: process.env.NEXT_PUBLIC_API_HOST,
-  responseType: 'json',
-}).use(({ request }, next) => {
-  if (JWT)
-    request.headers = { ...request.headers, Authorization: `Bearer ${JWT}` };
-
-  return next();
-});
+    return next();
+  },
+);
 
 export interface SessionUser
   extends Base,
@@ -76,10 +69,7 @@ export class SessionModel extends BaseModel {
     if (reload) location.reload();
   }
 
-  exportURLOf(
-    reportType: 'enrollments' | 'teams' | 'teamWorks',
-    baseURI: string,
-  ) {
+  exportURLOf(reportType: 'enrollments' | 'teams' | 'teamWorks', baseURI: string) {
     const { client, user } = this;
 
     return (

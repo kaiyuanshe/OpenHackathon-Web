@@ -1,24 +1,23 @@
 import { Announcement } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { NewData } from 'mobx-restful';
-import { Component, createRef, FormEvent } from 'react';
+import { createRef, FormEvent } from 'react';
 import { Button, Form, Modal, ModalProps } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
-import {
-  AnnouncementModel,
-  AnnouncementTypeName,
-} from '../../models/Activity/Message';
-import { t } from '../../models/Base/Translation';
+import { AnnouncementModel, AnnouncementTypeName } from '../../models/Activity/Message';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
-export interface AnnouncementModalProps
-  extends Pick<ModalProps, 'show' | 'onHide'> {
+export interface AnnouncementModalProps extends Pick<ModalProps, 'show' | 'onHide'> {
   store: AnnouncementModel;
   onSave?: () => any;
 }
 
 @observer
-export class AnnouncementModal extends Component<AnnouncementModalProps> {
+export class AnnouncementModal extends ObservedComponent<AnnouncementModalProps, typeof i18n> {
+  static contextType = I18nContext;
+
   private form = createRef<HTMLFormElement>();
 
   handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -45,8 +44,10 @@ export class AnnouncementModal extends Component<AnnouncementModalProps> {
   };
 
   render() {
-    const { show, onHide, store } = this.props;
-    const { content, title } = store.currentOne,
+    const i18n = this.observedContext,
+      { show, onHide, store } = this.props;
+    const { t } = i18n,
+      { content, title } = store.currentOne,
       loading = store.uploading > 0;
 
     return (
@@ -66,17 +67,12 @@ export class AnnouncementModal extends Component<AnnouncementModalProps> {
           </Form.Group>
           <Form.Group className="mt-2" controlId="content">
             <Form.Label>{t('content')}</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="content"
-              required
-              defaultValue={content}
-            />
+            <Form.Control as="textarea" name="content" required defaultValue={content} />
           </Form.Group>
           <Form.Group className="mt-2" controlId="type">
             <Form.Label>{t('type')}</Form.Label>
             <Form.Select name="type">
-              {Object.entries(AnnouncementTypeName()).map(([key, value]) => (
+              {Object.entries(AnnouncementTypeName(i18n)).map(([key, value]) => (
                 <option key={key} value={key}>
                   {value}
                 </option>

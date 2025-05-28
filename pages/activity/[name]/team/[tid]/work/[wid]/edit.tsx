@@ -1,27 +1,19 @@
 import { observer } from 'mobx-react';
-import { compose, RouteProps, router, translator } from 'next-ssr-middleware';
-import { FC } from 'react';
+import { compose, RouteProps, router } from 'next-ssr-middleware';
+import { FC, useContext } from 'react';
 
 import { PageHead } from '../../../../../../../components/layout/PageHead';
-import {
-  WorkEditor,
-  WorkEditorProps,
-} from '../../../../../../../components/Team/WorkEditor';
-import { i18n, t } from '../../../../../../../models/Base/Translation';
+import { WorkEditor, WorkEditorProps } from '../../../../../../../components/Team/WorkEditor';
+import { I18nContext } from '../../../../../../../models/Base/Translation';
 import { sessionGuard } from '../../../../../../api/core';
 
-export type TeamWorkEditProps = RouteProps<
-  Record<keyof WorkEditorProps, string>
->;
+export type TeamWorkEditProps = RouteProps<Record<keyof WorkEditorProps, string>>;
 
-export const getServerSideProps = compose<WorkEditorProps>(
-  router,
-  sessionGuard,
-  translator(i18n),
-);
+export const getServerSideProps = compose<WorkEditorProps>(router, sessionGuard);
 
 const WorkCreatePage: FC<TeamWorkEditProps> = observer(props => {
-  const { name, tid, wid } = props.route.params!;
+  const { t } = useContext(I18nContext),
+    { name, tid, wid } = props.route.params!;
 
   return (
     <>

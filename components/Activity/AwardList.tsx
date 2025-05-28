@@ -2,11 +2,11 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { ScrollList, ScrollListProps } from 'mobx-restful-table';
-import { FC, PureComponent } from 'react';
+import { FC, PureComponent, useContext } from 'react';
 import { Button, Image, Table } from 'react-bootstrap';
 
 import { Award } from '../../models/Activity/Award';
-import { i18n, t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import styles from '../../styles/Table.module.less';
 import { XScrollListProps } from '../layout/ScrollList';
 
@@ -15,12 +15,12 @@ export interface AwardListLayoutProps extends XScrollListProps<Award> {
   onDelete?: (id: number) => any;
 }
 
-export const AwardTargetName = () => ({
+export const AwardTargetName = ({ t }: typeof i18n) => ({
   individual: t('personal'),
   team: t('team'),
 });
 
-const AwardTableHead = () => [
+const AwardTableHead = ({ t }: typeof i18n) => [
   t('quantity'),
   t('type'),
   t('photo'),
@@ -30,28 +30,26 @@ const AwardTableHead = () => [
 ];
 
 export const AwardListLayout: FC<AwardListLayoutProps> = observer(
-  ({ defaultData = [], onEdit, onDelete }) => (
-    <Table hover responsive="lg" className={styles.table}>
-      <thead>
-        <tr>
-          {AwardTableHead().map((data, idx) => (
-            <th key={idx}>{data}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {defaultData.map(
-          ({ quantity, target, pictures, name, description, id }) => (
+  ({ defaultData = [], onEdit, onDelete }) => {
+    const i18n = useContext(I18nContext);
+    const { t } = i18n;
+
+    return (
+      <Table hover responsive="lg" className={styles.table}>
+        <thead>
+          <tr>
+            {AwardTableHead(i18n).map((data, idx) => (
+              <th key={idx}>{data}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {defaultData.map(({ quantity, target, pictures, name, description, id }) => (
             <tr key={id}>
               <td>{quantity}</td>
-              <td>{AwardTargetName()[target]}</td>
+              <td>{AwardTargetName(i18n)[target]}</td>
               <td>
-                {pictures! && (
-                  <Image
-                    src={pictures?.[0].uri}
-                    alt={pictures?.[0].description}
-                  />
-                )}
+                {pictures! && <Image src={pictures?.[0].uri} alt={pictures?.[0].description} />}
               </td>
               <td>
                 <Button variant="link" onClick={() => onEdit?.(id!)}>
@@ -60,25 +58,20 @@ export const AwardListLayout: FC<AwardListLayoutProps> = observer(
               </td>
               <td>{description}</td>
               <td>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => onDelete?.(id!)}
-                >
+                <Button variant="danger" size="sm" onClick={() => onDelete?.(id!)}>
                   <FontAwesomeIcon icon={faTrash} className="me-2" />
                   {t('delete')}
                 </Button>
               </td>
             </tr>
-          ),
-        )}
-      </tbody>
-    </Table>
-  ),
+          ))}
+        </tbody>
+      </Table>
+    );
+  },
 );
 
-export type AwardListProps = Pick<ScrollListProps<Award>, 'store'> &
-  AwardListLayoutProps;
+export type AwardListProps = Pick<ScrollListProps<Award>, 'store'> & AwardListLayoutProps;
 
 export class AwardList extends PureComponent<AwardListProps> {
   onEdit = (id: number) => {
@@ -87,7 +80,7 @@ export class AwardList extends PureComponent<AwardListProps> {
   };
 
   onDelete = (id: number) => {
-    if (!confirm(t('sure_delete_this_work'))) return;
+    if (!confirm(i18n.t('sure_delete_this_work'))) return;
 
     this.props.onDelete?.(id);
     this.props.store.deleteOne(id);
@@ -99,11 +92,7 @@ export class AwardList extends PureComponent<AwardListProps> {
         translator={i18n}
         store={this.props.store}
         renderList={allItems => (
-          <AwardListLayout
-            defaultData={allItems}
-            onEdit={this.onEdit}
-            onDelete={this.onDelete}
-          />
+          <AwardListLayout defaultData={allItems} onEdit={this.onEdit} onDelete={this.onDelete} />
         )}
       />
     );

@@ -1,4 +1,4 @@
-import { t } from '../../models/Base/Translation';
+import { i18n } from '../../models/Base/Translation';
 
 export interface Organization {
   name: string;
@@ -11,12 +11,12 @@ export enum OrganizationType {
   host,
 }
 
-export const OrganizationTypeName = () => ({
+export const OrganizationTypeName = ({ t }: typeof i18n) => ({
   [OrganizationType.sponsor]: t('sponsors'),
   [OrganizationType.host]: t('partners'),
 });
 
-export const partner: () => Record<OrganizationType, Organization[]> = () => ({
+export const partner = ({ t }: typeof i18n): Record<OrganizationType, Organization[]> => ({
   [OrganizationType.sponsor]: [
     {
       name: t('huaweicloud'),

@@ -9,10 +9,10 @@ import { action, observable } from 'mobx';
 import { persist, restore, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
+import { isServer } from '../../configuration';
 import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
 import platformAdmin from '../User/PlatformAdmin';
-import { isServer } from '../User/Session';
 import { AwardModel } from './Award';
 import { EnrollmentModel } from './Enrollment';
 import { LogModel } from './Log';
@@ -21,12 +21,7 @@ import { OrganizerModel } from './Organization';
 import { StaffModel } from './Staff';
 import { TeamModel } from './Team';
 
-export type ActivityListType =
-  | 'online'
-  | 'admin'
-  | 'enrolled'
-  | 'fresh'
-  | 'created';
+export type ActivityListType = 'online' | 'admin' | 'enrolled' | 'fresh' | 'created';
 
 export interface ActivityFilter extends Filter<Hackathon> {
   userId?: number;
@@ -79,9 +74,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   }
 
   announcementOf(name = this.currentOne.name) {
-    return (this.currentAnnouncement = new AnnouncementModel(
-      `hackathon/${name}`,
-    ));
+    return (this.currentAnnouncement = new AnnouncementModel(`hackathon/${name}`));
   }
 
   teamOf(name = this.currentOne.name) {
@@ -96,11 +89,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     return (this.currentOrganization = new OrganizerModel(`hackathon/${name}`));
   }
 
-  openStream({
-    userId,
-    listType = 'online',
-    orderby = 'updatedAt',
-  }: ActivityFilter) {
+  openStream({ userId, listType = 'online', orderby = 'updatedAt' }: ActivityFilter) {
     return createListStream<Hackathon>(
       `${this.baseURI}s?${buildURLData({ userId, listType, orderby, top: 6 })}`,
       this.client,
@@ -137,10 +126,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
     return (this.currentOne = {
       ...data,
-      detail: detail
-        ?.replace(/\\+n/g, '\n')
-        .replace(/\\+t/g, ' ')
-        .replace(/\\+"/g, '"'),
+      detail: detail?.replace(/\\+n/g, '\n').replace(/\\+t/g, ' ').replace(/\\+"/g, '"'),
     });
   }
 
@@ -166,9 +152,7 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
   @toggle('uploading')
   async publishOne(name: string) {
     const isPlatformAdmin = await platformAdmin.checkAuthorization(),
-      status = (
-        isPlatformAdmin ? 'online' : 'pendingApproval'
-      ) as HackathonStatus;
+      status = (isPlatformAdmin ? 'online' : 'pendingApproval') as HackathonStatus;
 
     await this.client.patch(`hackathon/${name}`, { status });
 

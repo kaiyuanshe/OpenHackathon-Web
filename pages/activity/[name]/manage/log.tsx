@@ -1,13 +1,13 @@
 import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import { cache, compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component } from 'react';
 
 import { ActivityLogListLayout } from '../../../../components/Activity/ActivityLogList';
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import activityStore, { ActivityModel } from '../../../../models/Activity';
-import { i18n, t } from '../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 interface LogPageProps extends RouteProps<{ name: string }> {
@@ -26,25 +26,22 @@ export const getServerSideProps = compose<{ name: string }>(
 );
 
 @observer
-export default class LogPage extends Component<LogPageProps> {
+export default class LogPage extends ObservedComponent<LogPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.logOf(this.props.activity.id);
 
   render() {
-    const { resolvedUrl, params } = this.props.route;
+    const i18n = this.observedContext,
+      { resolvedUrl, params } = this.props.route;
+    const { t } = i18n;
 
     return (
-      <ActivityManageFrame
-        {...this.props}
-        path={resolvedUrl}
-        name={params!.name}
-        title={t('log')}
-      >
+      <ActivityManageFrame {...this.props} path={resolvedUrl} name={params!.name} title={t('log')}>
         <ScrollList
           translator={i18n}
           store={this.store}
-          renderList={allItems => (
-            <ActivityLogListLayout defaultData={allItems} />
-          )}
+          renderList={allItems => <ActivityLogListLayout defaultData={allItems} />}
         />
       </ActivityManageFrame>
     );

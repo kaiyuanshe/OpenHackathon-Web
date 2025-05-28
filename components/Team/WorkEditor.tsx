@@ -1,14 +1,15 @@
 import { SpinnerButton } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { FileUploader } from 'mobx-restful-table';
-import { Component, FormEvent } from 'react';
+import { FormEvent } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
 export interface WorkEditorProps {
   name: string;
@@ -17,11 +18,15 @@ export interface WorkEditorProps {
 }
 
 @observer
-export class WorkEditor extends Component<WorkEditorProps> {
+export class WorkEditor extends ObservedComponent<WorkEditorProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.teamOf(this.props.name).workOf(this.props.tid);
 
   @computed
   get workTypes() {
+    const { t } = this.observedContext;
+
     return [
       { title: t('website'), value: 'website' },
       { title: t('image'), value: 'image', accept: 'image/*' },
@@ -68,7 +73,8 @@ export class WorkEditor extends Component<WorkEditorProps> {
   };
 
   render() {
-    const { workTypes, currentType } = this,
+    const { t } = this.observedContext,
+      { workTypes, currentType } = this,
       { uploading, currentOne } = this.store;
     const loading = uploading > 0 || fileStore.uploading > 0;
 
@@ -152,9 +158,7 @@ export class WorkEditor extends Component<WorkEditorProps> {
                 <FileUploader
                   store={fileStore}
                   name="url"
-                  accept={
-                    workTypes.find(({ value }) => value === currentType)?.accept
-                  }
+                  accept={workTypes.find(({ value }) => value === currentType)?.accept}
                   max={1}
                   required
                   defaultValue={currentOne?.url ? [currentOne.url] : []}
@@ -162,12 +166,7 @@ export class WorkEditor extends Component<WorkEditorProps> {
               </Col>
             </Form.Group>
           )}
-          <SpinnerButton
-            className="mb-3"
-            variant="primary"
-            type="submit"
-            loading={loading}
-          >
+          <SpinnerButton className="mb-3" variant="primary" type="submit" loading={loading}>
             {t('submit')}
           </SpinnerButton>
         </Form>

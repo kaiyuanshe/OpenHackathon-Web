@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { NewData } from 'mobx-restful';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, FC, FormEvent } from 'react';
+import { FC, FormEvent, useContext } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formToJSON } from 'web-utility';
 
@@ -9,18 +10,16 @@ import { ActivityManageFrame } from '../../../../components/Activity/ActivityMan
 import { TeamAwardList } from '../../../../components/Team/TeamAwardList';
 import activityStore from '../../../../models/Activity';
 import { AwardAssignment } from '../../../../models/Activity/Award';
-import { t } from '../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type EvaluationPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }>(
-  router,
-  sessionGuard,
-);
+export const getServerSideProps = compose<{ name: string }>(router, sessionGuard);
 
 const EvaluationPage: FC<EvaluationPageProps> = observer(props => {
-  const { resolvedUrl, params } = props.route;
+  const { resolvedUrl, params } = props.route,
+    { t } = useContext(I18nContext);
 
   return (
     <ActivityManageFrame
@@ -33,11 +32,12 @@ const EvaluationPage: FC<EvaluationPageProps> = observer(props => {
     </ActivityManageFrame>
   );
 });
-
 export default EvaluationPage;
 
 @observer
-class EvalationEditor extends Component<EvaluationPageProps> {
+class EvalationEditor extends ObservedComponent<EvaluationPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.teamOf(this.props.route.params!.name);
   awardStore = activityStore.awardOf(this.props.route.params!.name);
 
@@ -79,7 +79,8 @@ class EvalationEditor extends Component<EvaluationPageProps> {
   };
 
   renderForm = () => {
-    const { allItems } = this.awardStore,
+    const { t } = this.observedContext,
+      { allItems } = this.awardStore,
       { id: awardTeamId, displayName: awardTeamName } = this.store.currentOne;
 
     return (
@@ -88,9 +89,7 @@ class EvalationEditor extends Component<EvaluationPageProps> {
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
       >
-        <h2>
-          {awardTeamId ? `${t('grant')} ${awardTeamName}` : t('all_prize')}
-        </h2>
+        <h2>{awardTeamId ? `${t('grant')} ${awardTeamName}` : t('all_prize')}</h2>
         <ul className="list-unstyled">
           {allItems.map(
             ({ id, name, quantity, target }) =>
@@ -127,6 +126,8 @@ class EvalationEditor extends Component<EvaluationPageProps> {
   };
 
   render() {
+    const { t } = this.observedContext;
+
     return (
       <Row xs={1} md={2}>
         <Col md={8} className="ms-2 p-2">

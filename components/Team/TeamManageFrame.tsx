@@ -1,23 +1,19 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faCloud,
-  faTrophy,
-  faUser,
-  faUserSecret,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCloud, faTrophy, faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StaffType, TeamMemberRole } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { HTTPError } from 'koajax';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { JWTProps, RouteProps } from 'next-ssr-middleware';
-import { Component, Fragment } from 'react';
+import { Fragment } from 'react';
 import { Col, Nav } from 'react-bootstrap';
 
 import { activityTeamMenus } from '../../configuration/menu';
 import activityStore from '../../models/Activity';
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 import sessionStore from '../../models/User/Session';
 import { findDeep } from '../../utils/data';
 import { ActivityManageFrameProps } from '../Activity/ActivityManageFrame';
@@ -35,7 +31,9 @@ export interface TeamManageFrameProps extends ActivityManageFrameProps {
 }
 
 @observer
-export class TeamManageFrame extends Component<TeamManageFrameProps> {
+export class TeamManageFrame extends ObservedComponent<TeamManageFrameProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor teamMemberRole: TeamMemberRole | undefined;
 
@@ -50,12 +48,9 @@ export class TeamManageFrame extends Component<TeamManageFrameProps> {
       this.isLoading = true;
 
       const currentUserInThisTeam =
-        user?.id &&
-        (await activityStore.teamOf(name).memberOf(tid).getOne(user.id));
+        user?.id && (await activityStore.teamOf(name).memberOf(tid).getOne(user.id));
 
-      this.teamMemberRole = currentUserInThisTeam
-        ? currentUserInThisTeam.role
-        : undefined;
+      this.teamMemberRole = currentUserInThisTeam ? currentUserInThisTeam.role : undefined;
     } catch (error: any) {
       const { status } = (error as HTTPError).response;
 
@@ -66,12 +61,13 @@ export class TeamManageFrame extends Component<TeamManageFrameProps> {
   }
 
   renderNav() {
-    const { name, tid } = this.props,
+    const i18n = this.observedContext,
+      { name, tid } = this.observedProps,
       { teamMemberRole } = this;
 
     return (
       <Nav className="flex-column px-2 border-end flex-nowrap" variant="pills">
-        {activityTeamMenus().map(({ title, list }) => (
+        {activityTeamMenus(i18n).map(({ title, list }) => (
           <Fragment key={title}>
             <Nav.Link className="text-muted d-md-none d-lg-inline" disabled>
               {title}
@@ -80,14 +76,8 @@ export class TeamManageFrame extends Component<TeamManageFrameProps> {
               ({ title, href, icon = 'home', roles }) =>
                 (teamMemberRole === 'admin' ||
                   (teamMemberRole && roles?.includes(teamMemberRole))) && (
-                  <Nav.Link
-                    key={title}
-                    href={`/activity/${name}/team/${tid}/manage/${href}`}
-                  >
-                    <FontAwesomeIcon
-                      icon={icon}
-                      className="text-primary ms-3 me-3"
-                    />
+                  <Nav.Link key={title} href={`/activity/${name}/team/${tid}/manage/${href}`}>
+                    <FontAwesomeIcon icon={icon} className="text-primary ms-3 me-3" />
                     <span className="d-md-none d-lg-inline">{title}</span>
                   </Nav.Link>
                 ),
@@ -99,13 +89,10 @@ export class TeamManageFrame extends Component<TeamManageFrameProps> {
   }
 
   get currentRoute() {
-    const { path = '' } = this.props;
+    const i18n = this.observedContext,
+      { path = '' } = this.props;
 
-    return findDeep(
-      activityTeamMenus(),
-      'list',
-      ({ href }) => !!href && path.includes(href),
-    );
+    return findDeep(activityTeamMenus(i18n), 'list', ({ href }) => !!href && path.includes(href));
   }
 
   @computed
@@ -120,7 +107,8 @@ export class TeamManageFrame extends Component<TeamManageFrameProps> {
   }
 
   render() {
-    const { authorized, currentRoute, isLoading } = this,
+    const { t } = this.observedContext,
+      { authorized, currentRoute, isLoading } = this,
       { children, name, title, tid } = this.props;
 
     return (

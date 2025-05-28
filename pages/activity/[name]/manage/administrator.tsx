@@ -2,39 +2,42 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, FC, FormEvent } from 'react';
+import { FC, FormEvent, useContext } from 'react';
 import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
 import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../models/Activity';
-import { i18n, t } from '../../../../models/Base/Translation';
+import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
 type AdministratorPageProps = RouteProps<{ name: string }>;
 
-export const getServerSideProps = compose<{ name: string }>(
-  router,
-  sessionGuard,
-);
+export const getServerSideProps = compose<{ name: string }>(router, sessionGuard);
 
-const AdministratorPage: FC<AdministratorPageProps> = observer(props => (
-  <ActivityManageFrame
-    name={props.route.params!.name}
-    path={props.route.resolvedUrl}
-    title={t('admin')}
-  >
-    <AdministratorEditor {...props} />
-  </ActivityManageFrame>
-));
+const AdministratorPage: FC<AdministratorPageProps> = observer(props => {
+  const { t } = useContext(I18nContext);
 
+  return (
+    <ActivityManageFrame
+      name={props.route.params!.name}
+      path={props.route.resolvedUrl}
+      title={t('admin')}
+    >
+      <AdministratorEditor {...props} />
+    </ActivityManageFrame>
+  );
+});
 export default AdministratorPage;
 
 @observer
-class AdministratorEditor extends Component<AdministratorPageProps> {
+class AdministratorEditor extends ObservedComponent<AdministratorPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
   @observable
@@ -48,7 +51,8 @@ class AdministratorEditor extends Component<AdministratorPageProps> {
     event.preventDefault();
     event.stopPropagation();
 
-    const { selectedIds } = this;
+    const { t } = this.observedContext,
+      { selectedIds } = this;
 
     if (!selectedIds[0]) return alert(t('please_select_at_least_one_user'));
 
@@ -58,7 +62,8 @@ class AdministratorEditor extends Component<AdministratorPageProps> {
   };
 
   renderList() {
-    const { allItems, typeCount } = this.store;
+    const { t } = this.observedContext,
+      { allItems, typeCount } = this.store;
 
     return (
       <ListGroup>
@@ -85,8 +90,10 @@ class AdministratorEditor extends Component<AdministratorPageProps> {
   }
 
   render() {
-    const { store, show } = this;
-    const loading = store.uploading > 0;
+    const i18n = this.observedContext,
+      { store, show } = this;
+    const { t } = i18n,
+      loading = store.uploading > 0;
 
     return (
       <Form onSubmit={this.handleSubmit}>

@@ -6,30 +6,16 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  EnrollmentStatus,
-  Hackathon,
-  Media,
-  Organizer,
-} from '@kaiyuanshe/openhackathon-service';
+import { EnrollmentStatus, Hackathon, Media, Organizer } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed, observable } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
+import { ObservedComponent } from 'mobx-react-helper';
 import { ScrollList } from 'mobx-restful-table';
 import dynamic from 'next/dynamic';
-import { cache, compose, errorLogger, translator } from 'next-ssr-middleware';
-import { Component } from 'react';
-import {
-  Button,
-  Carousel,
-  Col,
-  Container,
-  Image,
-  Row,
-  Tab,
-  Tabs,
-} from 'react-bootstrap';
+import { cache, compose, errorLogger } from 'next-ssr-middleware';
+import { Button, Carousel, Col, Container, Image, Row, Tab, Tabs } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
 import { CommentBox } from '../../../components/CommentBox';
@@ -39,14 +25,13 @@ import { OrganizationListLayout } from '../../../components/Organization/Organiz
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
+import { isServer } from '../../../configuration';
 import activityStore, { ActivityModel } from '../../../models/Activity';
-import { i18n, t } from '../../../models/Base/Translation';
-import sessionStore, { isServer } from '../../../models/User/Session';
+import { i18n, I18nContext } from '../../../models/Base/Translation';
+import sessionStore from '../../../models/User/Session';
 import { convertDatetime } from '../../../utils/time';
 
-const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), {
-  ssr: false,
-});
+const ChinaMap = dynamic(() => import('../../../components/ChinaMap'), { ssr: false });
 
 interface ActivityPageProps {
   activity: Hackathon;
@@ -56,7 +41,6 @@ interface ActivityPageProps {
 export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
   cache(),
   errorLogger,
-  translator(i18n),
   async ({ params: { name = '' } = {} }) => {
     const activityStore = new ActivityModel();
 
@@ -69,7 +53,7 @@ export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
   },
 );
 
-const StatusName: () => Record<EnrollmentStatus, string> = () => ({
+const StatusName = ({ t }: typeof i18n): Record<EnrollmentStatus, string> => ({
   approved: t('sign_up_successfully'),
   rejected: t('rejected'),
   none: t('not_sign_up'),
@@ -77,7 +61,9 @@ const StatusName: () => Record<EnrollmentStatus, string> = () => ({
 });
 
 @observer
-export default class ActivityPage extends Component<ActivityPageProps> {
+export default class ActivityPage extends ObservedComponent<ActivityPageProps, typeof i18n> {
+  static contextType = I18nContext;
+
   logStore = activityStore.logOf(this.props.activity.id);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
@@ -119,7 +105,8 @@ export default class ActivityPage extends Component<ActivityPageProps> {
   }
 
   registerNow = async () => {
-    const { name } = this.props.activity;
+    const { t } = this.observedContext,
+      { name } = this.props.activity;
 
     await activityStore.signOne(name);
 
@@ -140,9 +127,11 @@ export default class ActivityPage extends Component<ActivityPageProps> {
         eventStartedAt,
         eventEndedAt,
         ...rest
-      } = this.props.activity;
+      } = this.props.activity,
+      i18n = this.observedContext;
 
-    const now = Date.now(),
+    const { t } = i18n,
+      now = Date.now(),
       enrollmentEnd = new Date(enrollmentEndedAt),
       enrollmentStart = new Date(enrollmentStartedAt),
       eventEnded = new Date(eventEndedAt),
@@ -153,46 +142,32 @@ export default class ActivityPage extends Component<ActivityPageProps> {
       (!status || ['none', 'reject'].includes(status));
     const isDisableSignupBtn = now < +enrollmentStart;
     const isShowCreateTeamBtn =
-      now > +eventStarted &&
-      now < +eventEnded &&
-      status === 'approved' &&
-      !myTeam;
+      now > +eventStarted && now < +eventEnded && status === 'approved' && !myTeam;
 
     return (
       <>
         <ul className="list-unstyled">
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
-              <FontAwesomeIcon
-                className="text-success me-2"
-                icon={faCalendarDay}
-              />
+              <FontAwesomeIcon className="text-success me-2" icon={faCalendarDay} />
               {t('registration_period')}
             </Col>
             <Col>
-              {convertDatetime(enrollmentStartedAt)} ~{' '}
-              {convertDatetime(enrollmentEndedAt)}
+              {convertDatetime(enrollmentStartedAt)} ~ {convertDatetime(enrollmentEndedAt)}
             </Col>
           </Row>
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
-              <FontAwesomeIcon
-                className="text-success me-2"
-                icon={faCalendarDay}
-              />
+              <FontAwesomeIcon className="text-success me-2" icon={faCalendarDay} />
               {t('activity_period')}
             </Col>
             <Col>
-              {convertDatetime(eventStartedAt)} ~{' '}
-              {convertDatetime(eventEndedAt)}
+              {convertDatetime(eventStartedAt)} ~ {convertDatetime(eventEndedAt)}
             </Col>
           </Row>
           <Row as="li" className="my-2">
             <Col md={4} lg={3}>
-              <FontAwesomeIcon
-                className="text-success me-2"
-                icon={faLocationDot}
-              />
+              <FontAwesomeIcon className="text-success me-2" icon={faLocationDot} />
               {t('activity_address')}
             </Col>
             <Col>{location}</Col>
@@ -210,7 +185,7 @@ export default class ActivityPage extends Component<ActivityPageProps> {
               {t('activity_status')}
             </Col>
             <Col>
-              {getActivityStatusText({
+              {getActivityStatusText(i18n, {
                 ...rest,
                 enrollmentStartedAt,
                 enrollmentEndedAt,
@@ -224,15 +199,12 @@ export default class ActivityPage extends Component<ActivityPageProps> {
               <FontAwesomeIcon className="text-success me-2" icon={faSignIn} />
               {t('registration_status')}
             </Col>
-            <Col>{StatusName()[status || 'none']}</Col>
+            <Col>{StatusName(i18n)[status || 'none']}</Col>
           </Row>
         </ul>
         {isShowSignupBtn &&
           (questionnaire.length ? (
-            <Button
-              href={`/activity/${name}/register`}
-              disabled={isDisableSignupBtn}
-            >
+            <Button href={`/activity/${name}/register`} disabled={isDisableSignupBtn}>
               {t('register_now')}
             </Button>
           ) : (
@@ -241,9 +213,7 @@ export default class ActivityPage extends Component<ActivityPageProps> {
             </Button>
           ))}
         {isShowCreateTeamBtn && (
-          <Button onClick={() => (this.showCreateTeam = true)}>
-            {t('create_team')}
-          </Button>
+          <Button onClick={() => (this.showCreateTeam = true)}>{t('create_team')}</Button>
         )}
         {myTeam && (
           <Button
@@ -260,8 +230,8 @@ export default class ActivityPage extends Component<ActivityPageProps> {
   }
 
   render() {
-    const { name, displayName, tags, banners, location, detail } =
-        this.props.activity,
+    const { t } = this.observedContext,
+      { name, displayName, tags, banners, location, detail } = this.props.activity,
       { showCreateTeam, loading } = this,
       { organizationList } = this.props,
       myTeam = activityStore.currentTeam?.sessionOne,
@@ -277,15 +247,8 @@ export default class ActivityPage extends Component<ActivityPageProps> {
           <Carousel>
             {((banners || []) as Media[]).map(({ uri }) => (
               <Carousel.Item key={uri}>
-                <div
-                  className="d-flex align-items-center"
-                  style={{ height: '45vh' }}
-                >
-                  <Image
-                    className="w-100 h-100 object-fit-cover"
-                    src={uri}
-                    alt={name}
-                  />
+                <div className="d-flex align-items-center" style={{ height: '45vh' }}>
+                  <Image className="w-100 h-100 object-fit-cover" src={uri} alt={name} />
                 </div>
               </Carousel.Item>
             ))}
@@ -335,9 +298,7 @@ export default class ActivityPage extends Component<ActivityPageProps> {
                 <ScrollList
                   translator={i18n}
                   store={this.teamStore}
-                  renderList={allItems => (
-                    <TeamListLayout defaultData={allItems} />
-                  )}
+                  renderList={allItems => <TeamListLayout defaultData={allItems} />}
                 />
               </Tab>
             </Tabs>

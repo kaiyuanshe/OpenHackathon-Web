@@ -1,9 +1,9 @@
 import { Hackathon } from '@kaiyuanshe/openhackathon-service';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { diffTime } from 'web-utility';
 
-import { t } from '../../models/Base/Translation';
+import { i18n, I18nContext } from '../../models/Base/Translation';
 
 export type ActivityStatusMeta = Pick<
   Hackathon,
@@ -16,15 +16,18 @@ export type ActivityStatusMeta = Pick<
   | 'judgeEndedAt'
 >;
 
-export const getActivityStatusText = ({
-  status,
-  enrollmentStartedAt,
-  enrollmentEndedAt,
-  eventStartedAt,
-  eventEndedAt,
-  judgeStartedAt,
-  judgeEndedAt,
-}: ActivityStatusMeta) => {
+export const getActivityStatusText = (
+  { t }: typeof i18n,
+  {
+    status,
+    enrollmentStartedAt,
+    enrollmentEndedAt,
+    eventStartedAt,
+    eventEndedAt,
+    judgeStartedAt,
+    judgeEndedAt,
+  }: ActivityStatusMeta,
+) => {
   const now = Date.now(),
     isOnline = status === 'online',
     enrollmentStart = new Date(enrollmentStartedAt),
@@ -66,20 +69,16 @@ export const ActivityEntry: FC<ActivityEntryProps> = ({
   judgeEndedAt,
   href,
 }) => {
-  const now = Date.now(),
+  const i18n = useContext(I18nContext),
+    now = Date.now(),
     isOnline = status === 'online',
     enrollmentStart = new Date(enrollmentStartedAt),
     enrollmentEnd = new Date(enrollmentEndedAt),
     enrolling = isOnline && +enrollmentStart < now && now < +enrollmentEnd;
 
   return (
-    <Button
-      className="my-2 w-100"
-      variant="primary"
-      href={href}
-      disabled={!enrolling}
-    >
-      {getActivityStatusText({
+    <Button className="my-2 w-100" variant="primary" href={href} disabled={!enrolling}>
+      {getActivityStatusText(i18n, {
         status,
         enrollmentStartedAt,
         enrollmentEndedAt,
