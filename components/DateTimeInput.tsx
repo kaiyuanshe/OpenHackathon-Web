@@ -5,7 +5,7 @@ import { ChangeEvent } from 'react';
 import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { formatDate } from 'web-utility';
 
-import { i18n } from '../models/Base/Translation';
+import { i18n, I18nContext } from '../models/Base/Translation';
 
 export interface DateTimeInputProps {
   id?: string;
@@ -18,6 +18,8 @@ export interface DateTimeInputProps {
 
 @observer
 export class DateTimeInput extends ObservedComponent<DateTimeInputProps, typeof i18n> {
+  static contextType = I18nContext;
+
   @observable
   accessor start = '';
 
@@ -43,7 +45,7 @@ export class DateTimeInput extends ObservedComponent<DateTimeInputProps, typeof 
       { isInvalid } = this;
 
     return (
-      <Form.Group as={Row} className="mb-3" controlId={id}>
+      <Form.Group as={Row} controlId={id}>
         <Form.Label column sm={2}>
           {label}
           <span className="text-danger"> *</span>

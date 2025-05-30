@@ -1,9 +1,9 @@
 import { Enrollment, User } from '@kaiyuanshe/openhackathon-service';
 import { computed, observable } from 'mobx';
 import { Statistic, toggle } from 'mobx-restful';
-import { buildURLData, countBy, groupBy } from 'web-utility';
+import { countBy, groupBy } from 'web-utility';
 
-import { createListStream, Filter, TableModel } from '../Base';
+import { Filter, TableModel } from '../Base';
 import { i18n } from '../Base/Translation';
 import sessionStore from '../User/Session';
 
@@ -34,14 +34,6 @@ export class EnrollmentModel extends TableModel<Enrollment, EnrollmentFilter> {
   @computed
   get exportURL() {
     return sessionStore.exportURLOf('enrollments', this.baseURI);
-  }
-
-  openStream(filter: EnrollmentFilter) {
-    return createListStream<Enrollment>(
-      `${this.baseURI}s?${buildURLData(filter)}`,
-      this.client,
-      count => (this.totalCount = count),
-    );
   }
 
   @toggle('downloading')

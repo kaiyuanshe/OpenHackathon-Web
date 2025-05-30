@@ -1,8 +1,8 @@
 import { GitTemplate } from '@kaiyuanshe/openhackathon-service';
-import { text2color } from 'idea-react';
 import { observer } from 'mobx-react';
+import { BadgeBar } from 'mobx-restful-table';
 import { FC, ReactNode, useContext } from 'react';
-import { Badge, Card, Col, Form, Row } from 'react-bootstrap';
+import { Card, Col, Form, Row } from 'react-bootstrap';
 
 import { I18nContext } from '../../models/Base/Translation';
 import { GitLogo } from './Logo';
@@ -34,20 +34,10 @@ export const GitTeamCard: FC<GitTeamCardProps> = observer(
             </a>
           </Card.Title>
 
-          <nav className="flex-fill">
-            {topics?.map(topic => (
-              <Badge
-                key={topic}
-                className="me-1"
-                bg={text2color(topic, ['light'])}
-                as="a"
-                target="_blank"
-                href={`https://github.com/topics/${topic}`}
-              >
-                {topic}
-              </Badge>
-            ))}
-          </nav>
+          <BadgeBar
+            className="flex-fill"
+            list={(topics || []).map(text => ({ text, link: `https://github.com/topics/${text}` }))}
+          />
           <Row as="ul" className="list-unstyled g-4" xs={4}>
             {languages.map(language => (
               <Col key={language} as="li">

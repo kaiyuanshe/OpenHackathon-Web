@@ -7,10 +7,9 @@ import {
 } from '@kaiyuanshe/openhackathon-service';
 import { action, observable } from 'mobx';
 import { persist, restore, toggle } from 'mobx-restful';
-import { buildURLData } from 'web-utility';
 
 import { isServer } from '../../configuration';
-import { createListStream, Filter, InputData, TableModel } from '../Base';
+import { Filter, InputData, TableModel } from '../Base';
 import { GitModel } from '../Git';
 import platformAdmin from '../User/PlatformAdmin';
 import { AwardModel } from './Award';
@@ -87,14 +86,6 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
 
   organizationOf(name = this.currentOne.name) {
     return (this.currentOrganization = new OrganizerModel(`hackathon/${name}`));
-  }
-
-  openStream({ userId, listType = 'online', orderby = 'updatedAt' }: ActivityFilter) {
-    return createListStream<Hackathon>(
-      `${this.baseURI}s?${buildURLData({ userId, listType, orderby, top: 6 })}`,
-      this.client,
-      count => (this.totalCount = count),
-    );
   }
 
   @toggle('uploading')

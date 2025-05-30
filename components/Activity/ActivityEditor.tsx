@@ -1,25 +1,16 @@
 import { Hackathon } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
-import { observable } from 'mobx';
+import { computed } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
-import { BadgeInput, FileUploader } from 'mobx-restful-table';
-import dynamic from 'next/dynamic';
-import { FormEvent } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { formToJSON } from 'web-utility';
+import { BadgeInput, Field, FileUploader, RestForm } from 'mobx-restful-table';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
 import { i18n, I18nContext } from '../../models/Base/Translation';
 import { DateTimeInput } from '../DateTimeInput';
-
-const HTMLEditor = dynamic(() => import('../HTMLEditor'), { ssr: false });
-
-interface ActivityFormData extends Hackathon {
-  bannerUrls: string[] | string;
-}
+import { CustomTools } from '../HTMLEditor';
 
 export interface ActivityEditorProps {
   name?: string;
@@ -29,249 +20,152 @@ export interface ActivityEditorProps {
 export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeof i18n> {
   static contextType = I18nContext;
 
-  @observable
-  accessor detailHTML = '';
-
-  @observable
-  accessor validated = false;
-
-  async componentDidMount() {
-    const { name } = this.props;
-
-    if (!name) return;
-
-    const { detail } = await activityStore.getOne(name);
-
-    this.detailHTML = detail || '';
-  }
-
-  componentWillUnmount() {
-    activityStore.clearCurrent();
-  }
-
-  submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const form = event.currentTarget;
-
-    if (!form.checkValidity()) return (this.validated = true);
-
-    const { t } = this.observedContext,
-      { name } = this.props,
-      data = formToJSON<ActivityFormData>(form);
-
-    data.detail = (data.detail || '') + '';
-
-    data.banners = [data.bannerUrls ?? []].flat().map(bannerUrl => {
-      const [name] = bannerUrl.split('/').slice(-1);
-
-      return {
-        name,
-        description: name,
-        uri: bannerUrl,
-      };
-    });
-    // @ts-expect-error Type compatibility issue
-    await activityStore.updateOne(data, name);
+  submitHandler = async ({ name }: Hackathon) => {
+    const { t } = this.observedContext;
 
     if (!name && confirm(t('create_work_success'))) {
-      await activityStore.publishOne(data.name);
+      await activityStore.publishOne(name);
 
       alert(t('has_published'));
     }
     location.pathname = name ? `/activity/${name}` : `/`;
   };
 
-  render() {
-    const { t } = this.observedContext,
+  @computed
+  get fields(): Field<Hackathon>[] {
+    const { t } = this.observedContext;
+
+    return [
       {
-        name,
-        displayName,
-        tags = [],
-        banners,
-        location,
-        enrollmentStartedAt,
-        enrollmentEndedAt,
-        eventStartedAt,
-        eventEndedAt,
-        judgeStartedAt,
-        judgeEndedAt,
-        ribbon,
-        maxEnrollment,
-        summary,
-        detail,
-      } = activityStore.currentOne,
+        key: 'name',
+        renderLabel: t('activity_id'),
+        // @ts-expect-error Upstream Type issue
+        pattern: '[a-zA-Z0-9]+',
+        required: true,
+        invalidMessage: t('name_placeholder'),
+      },
+      {
+        key: 'displayName',
+        renderLabel: t('activity_name'),
+        required: true,
+        invalidMessage: textJoin(t('please_enter'), t('activity_name')),
+      },
+      {
+        key: 'tags',
+        renderLabel: t('tag'),
+        renderInput: ({ tags }, { key, ...meta }) => (
+          <RestForm.FieldBox name={key} {...meta}>
+            <BadgeInput name={key} placeholder={t('tag_placeholder')} defaultValue={tags} />
+          </RestForm.FieldBox>
+        ),
+      },
+      {
+        key: 'banners',
+        renderLabel: t('bannerUrls'),
+        accept: 'image/*',
+        required: true,
+        multiple: true,
+        max: 10,
+        uploader: fileStore,
+        renderInput: ({ banners }, { key, uploader, ...meta }) => (
+          <RestForm.FieldBox name={key} {...meta}>
+            <FileUploader
+              store={uploader!}
+              name={key}
+              {...meta}
+              defaultValue={banners?.map(({ uri }) => uri)}
+            />
+          </RestForm.FieldBox>
+        ),
+      },
+      {
+        key: 'location',
+        renderLabel: t('activity_address'),
+        required: true,
+        invalidMessage: textJoin(t('please_enter'), t('activity_address')),
+      },
+      {
+        key: 'enrollmentStartedAt',
+        renderInput: ({ enrollmentStartedAt, enrollmentEndedAt }) => (
+          <DateTimeInput
+            key="enrollment"
+            label={t('enrollment')}
+            name="enrollment"
+            startAt={enrollmentStartedAt}
+            endAt={enrollmentEndedAt}
+            required
+          />
+        ),
+      },
+      {
+        key: 'eventStartedAt',
+        renderInput: ({ eventStartedAt, eventEndedAt }) => (
+          <DateTimeInput
+            key="event"
+            label={t('activity_time')}
+            name="event"
+            startAt={eventStartedAt}
+            endAt={eventEndedAt}
+            required
+          />
+        ),
+      },
+      {
+        key: 'judgeStartedAt',
+        renderInput: ({ judgeStartedAt, judgeEndedAt }) => (
+          <DateTimeInput
+            key="judge"
+            label={t('judge_time')}
+            name="judge"
+            startAt={judgeStartedAt}
+            endAt={judgeEndedAt}
+            required
+          />
+        ),
+      },
+      { key: 'ribbon', renderLabel: t('ribbon') },
+      {
+        key: 'maxEnrollment',
+        renderLabel: t('max_enrollment'),
+        placeholder: t('max_enrollment_placeholder'),
+        type: 'number',
+        min: 0,
+        max: 100000,
+      },
+      {
+        key: 'summary',
+        renderLabel: t('activity_introduction'),
+        required: true,
+        invalidMessage: textJoin(t('please_enter'), t('activity_introduction')),
+      },
+      {
+        key: 'detail',
+        renderLabel: t('activity_detail'),
+        contentEditable: true,
+        tools: CustomTools,
+        required: true,
+        invalidMessage: textJoin(t('please_enter'), t('activity_detail')),
+      },
+    ];
+  }
+
+  render() {
+    const i18n = this.observedContext,
       { downloading, uploading } = activityStore;
 
     const loading = downloading > 0 || uploading > 0 || fileStore.uploading > 0;
 
     return (
-      <Form
-        noValidate
-        className="container-fluid"
-        validated={this.validated}
-        onSubmit={this.submitHandler}
-      >
+      <>
+        <RestForm
+          className="container-fluid"
+          translator={i18n}
+          store={activityStore}
+          fields={this.fields}
+          onSubmit={this.submitHandler}
+        />
         {loading && <Loading />}
-
-        <Form.Group as={Row} className="mb-3" controlId="name">
-          <Form.Label column sm={2}>
-            {t('activity_id')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              name="name"
-              type="text"
-              placeholder={t('name_placeholder')}
-              pattern="[a-zA-Z0-9]+"
-              required
-              defaultValue={name}
-              readOnly={!!name}
-            />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('activity_id'))}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="displayName">
-          <Form.Label column sm={2}>
-            {t('activity_name')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control name="displayName" type="text" required defaultValue={displayName} />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('activity_name'))}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="tags">
-          <Form.Label column sm={2}>
-            {t('tag')}
-          </Form.Label>
-          <Col sm={10}>
-            <BadgeInput name="tags" placeholder={t('tag_placeholder')} defaultValue={tags} />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="image">
-          <Form.Label column sm={2}>
-            {t('bannerUrls')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <FileUploader
-              store={fileStore}
-              accept="image/*"
-              name="bannerUrls"
-              max={10}
-              multiple
-              required
-              defaultValue={banners?.map(({ uri }) => uri)}
-            />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="location">
-          <Form.Label column sm={2}>
-            {t('activity_address')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control name="location" type="text" required defaultValue={location} />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('activity_address'))}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <DateTimeInput
-          key="enrollment"
-          label={t('enrollment')}
-          name="enrollment"
-          startAt={enrollmentStartedAt}
-          endAt={enrollmentEndedAt}
-          required
-        />
-        <DateTimeInput
-          key="event"
-          label={t('activity_time')}
-          name="event"
-          startAt={eventStartedAt}
-          endAt={eventEndedAt}
-          required
-        />
-        <DateTimeInput
-          key="judge"
-          label={t('judge_time')}
-          name="judge"
-          startAt={judgeStartedAt}
-          endAt={judgeEndedAt}
-          required
-        />
-
-        <Form.Group as={Row} className="mb-3" controlId="slogan">
-          <Form.Label column sm={2}>
-            {t('ribbon')}
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control name="ribbon" defaultValue={ribbon} />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="peopleLimit">
-          <Form.Label column sm={2}>
-            {t('max_enrollment')}
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              name="maxEnrollment"
-              type="number"
-              min={0}
-              max={100000}
-              placeholder={t('max_enrollment_placeholder')}
-              defaultValue={maxEnrollment || 0}
-            />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="summary">
-          <Form.Label column sm={2}>
-            {t('activity_introduction')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control name="summary" type="text" defaultValue={summary} required />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('activity_introduction'))}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="briefInfo">
-          <Form.Label column sm={2}>
-            {t('activity_detail')}
-            <span className="text-danger"> *</span>
-          </Form.Label>
-          <Col sm={10}>
-            <HTMLEditor defaultValue={detail} onChange={code => (this.detailHTML = code)} />
-            <Form.Control hidden name="detail" required value={this.detailHTML} />
-            <Form.Control.Feedback type="invalid">
-              {textJoin(t('please_enter'), t('activity_detail'))}
-            </Form.Control.Feedback>
-          </Col>
-        </Form.Group>
-
-        <footer className="text-center">
-          <Button type="submit" className="px-5">
-            {t('submit')}
-          </Button>
-        </footer>
-      </Form>
+      </>
     );
   }
 }
