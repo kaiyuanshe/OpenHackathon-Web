@@ -30,7 +30,7 @@
     "mobx-react": "^9.2.0",
     "mobx-react-helper": "^0.4.1",
     "mobx-restful": "^2.1.0",
-    "mobx-restful-table": "^2.5.0",
+    "mobx-restful-table": "^2.5.1",
     "next": "^15.3.3",
     "next-ssr-middleware": "^1.0.0",
     "open-react-map": "^0.9.0",

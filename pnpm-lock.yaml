@@ -82,8 +82,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(mobx@6.13.7)(typescript@5.8.3)
       mobx-restful-table:
-        specifier: ^2.5.0
-        version: 2.5.0(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+        specifier: ^2.5.1
+        version: 2.5.1(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
       next:
         specifier: ^15.3.3
         version: 15.3.3(@babel/core@7.27.4)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3993,8 +3993,8 @@ packages:
       react-native:
         optional: true
 
-  mobx-restful-table@2.5.0:
-    resolution: {integrity: sha512-ma2Dons0AHeSR4HJ+d8Fb20EAltrPca8BeZ3O2aZNco4dn9Z1JnF1RPTET2qzjKNdai34wosHWJSSRJsY2YK2A==}
+  mobx-restful-table@2.5.1:
+    resolution: {integrity: sha512-Xh5MjJ8itANcfLEoWnWYPvEEqrKwnUKz11NiqES5jW55YCjA+T3/nq7HrEFPx9gF3BIheNlEAERfczAU+bHoFQ==}
     peerDependencies:
       react: '>=16.8'
 
@@ -9585,7 +9585,7 @@ snapshots:
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
 
-  mobx-restful-table@2.5.0(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
+  mobx-restful-table@2.5.1(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
     dependencies:
       '@swc/helpers': 0.5.17
       classnames: 2.5.1

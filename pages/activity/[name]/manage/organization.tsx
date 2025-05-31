@@ -1,17 +1,16 @@
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { Organizer } from '@kaiyuanshe/openhackathon-service';
+import { Loading } from 'idea-react';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
-import { ScrollList } from 'mobx-restful-table';
+import { Column, RestTable } from 'mobx-restful-table';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, Context, FC, FormEvent, useContext } from 'react';
-import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
+import { FC, useContext } from 'react';
+import { Badge, Col, Image, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { OrganizationModal } from '../../../../components/Organization/ActivityOrganizationModal';
-import { OrganizationTableLayout } from '../../../../components/Organization/OrganizationList';
 import activityStore from '../../../../models/Activity';
+import { OrganizerTypeName } from '../../../../models/Activity/Organization';
 import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
 
@@ -41,25 +40,33 @@ class OrganizationEditor extends ObservedComponent<OrganizationPageProps, typeof
 
   store = activityStore.organizationOf(this.props.route.params!.name);
 
-  @observable
-  accessor selectedIds: number[] = [];
+  @computed
+  get columns(): Column<Organizer>[] {
+    const i18n = this.observedContext;
+    const { t } = i18n;
 
-  @observable
-  accessor show = false;
-
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { t } = this.observedContext,
-      { selectedIds } = this;
-
-    if (!selectedIds[0]) return alert(t('please_select_at_least_one_partner'));
-
-    if (!confirm(t('confirm_to_delete_partner'))) return;
-
-    for (const id of selectedIds) await this.store.deleteOne(id);
-  };
+    return [
+      { key: 'name', renderHead: t('name') },
+      { key: 'description', renderHead: t('introduction') },
+      {
+        key: 'type',
+        renderHead: t('type'),
+        renderBody: ({ type }) => OrganizerTypeName(i18n)[type],
+      },
+      {
+        key: 'logo',
+        renderBody: ({ logo, name, description }) =>
+          logo && (
+            <Image
+              style={{ width: '3rem' }}
+              src={logo?.uri}
+              alt={logo?.description || description}
+              title={logo?.name || name}
+            />
+          ),
+      },
+    ];
+  }
 
   renderList() {
     const { t } = this.observedContext,
@@ -91,57 +98,26 @@ class OrganizationEditor extends ObservedComponent<OrganizationPageProps, typeof
 
   render() {
     const i18n = this.observedContext,
-      { store, show } = this;
+      { downloading, uploading } = this.store;
     const { t } = i18n,
-      loading = store.uploading > 0;
+      loading = downloading > 0 || uploading > 0;
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Row xs={1} sm={2}>
-          <Col sm="auto" md="auto">
-            {this.renderList()}
-
-            <Col className="d-flex flex-column">
-              <Button
-                variant="success"
-                className="my-3"
-                disabled={loading}
-                onClick={() => (this.show = true)}
-              >
-                <FontAwesomeIcon className="me-2" icon={faPlus} />
-                {t('add')}
-              </Button>
-              <Button variant="danger" type="submit" disabled={loading}>
-                <FontAwesomeIcon className="me-2" icon={faTrash} />
-                {t('delete')}
-              </Button>
-            </Col>
-          </Col>
-          <Col className="flex-fill">
-            <ScrollList
-              translator={i18n}
-              store={store}
-              renderList={allItems => (
-                <OrganizationTableLayout
-                  defaultData={allItems}
-                  selectedIds={this.selectedIds}
-                  onSelect={list => (this.selectedIds = list)}
-                />
-              )}
-            />
-          </Col>
-        </Row>
-
-        <OrganizationModal
-          store={store}
-          show={show}
-          onHide={() => (this.show = false)}
-          onSave={() => {
-            this.show = false;
-            store.refreshList();
-          }}
-        />
-      </Form>
+      <Row>
+        <Col sm="auto" md="auto">
+          {this.renderList()}
+        </Col>
+        <Col className="flex-fill">
+          <RestTable
+            translator={i18n}
+            store={this.store}
+            columns={this.columns}
+            editable
+            deletable
+          />
+          {loading && <Loading />}
+        </Col>
+      </Row>
     );
   }
 }
