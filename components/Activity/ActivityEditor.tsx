@@ -39,7 +39,6 @@ export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeo
       {
         key: 'name',
         renderLabel: t('activity_id'),
-        // @ts-expect-error Upstream Type issue
         pattern: '[a-zA-Z0-9]+',
         required: true,
         invalidMessage: t('name_placeholder'),

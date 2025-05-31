@@ -136,7 +136,7 @@ class AwardEditor extends ObservedComponent<AwardPageProps, typeof i18n> {
           {this.renderForm()}
         </Col>
         <Col className="flex-fill">
-          <AwardList store={store} onDelete={this.handleReset} onEdit={this.handleReset} />
+          <AwardList store={store} />
         </Col>
       </Row>
     );

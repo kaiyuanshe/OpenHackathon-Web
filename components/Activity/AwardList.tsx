@@ -1,100 +1,58 @@
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Loading } from 'idea-react';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
-import { ScrollList, ScrollListProps } from 'mobx-restful-table';
-import { FC, PureComponent, useContext } from 'react';
-import { Button, Image, Table } from 'react-bootstrap';
+import { ObservedComponent } from 'mobx-react-helper';
+import { Column, RestTable } from 'mobx-restful-table';
+import { Image } from 'react-bootstrap';
 
-import { Award } from '../../models/Activity/Award';
+import { Award, AwardModel } from '../../models/Activity/Award';
 import { i18n, I18nContext } from '../../models/Base/Translation';
-import styles from '../../styles/Table.module.less';
-import { XScrollListProps } from '../layout/ScrollList';
-
-export interface AwardListLayoutProps extends XScrollListProps<Award> {
-  onEdit?: (id: number) => any;
-  onDelete?: (id: number) => any;
-}
 
 export const AwardTargetName = ({ t }: typeof i18n) => ({
   individual: t('personal'),
   team: t('team'),
 });
 
-const AwardTableHead = ({ t }: typeof i18n) => [
-  t('quantity'),
-  t('type'),
-  t('photo'),
-  t('name'),
-  t('description'),
-  t('operation'),
-];
+@observer
+export class AwardList extends ObservedComponent<{ store: AwardModel }, typeof i18n> {
+  static contextType = I18nContext;
 
-export const AwardListLayout: FC<AwardListLayoutProps> = observer(
-  ({ defaultData = [], onEdit, onDelete }) => {
-    const i18n = useContext(I18nContext);
+  @computed
+  get columns(): Column<Award>[] {
+    const i18n = this.observedContext;
     const { t } = i18n;
 
-    return (
-      <Table hover responsive="lg" className={styles.table}>
-        <thead>
-          <tr>
-            {AwardTableHead(i18n).map((data, idx) => (
-              <th key={idx}>{data}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {defaultData.map(({ quantity, target, pictures, name, description, id }) => (
-            <tr key={id}>
-              <td>{quantity}</td>
-              <td>{AwardTargetName(i18n)[target]}</td>
-              <td>
-                {pictures! && <Image src={pictures?.[0].uri} alt={pictures?.[0].description} />}
-              </td>
-              <td>
-                <Button variant="link" onClick={() => onEdit?.(id!)}>
-                  {name}
-                </Button>
-              </td>
-              <td>{description}</td>
-              <td>
-                <Button variant="danger" size="sm" onClick={() => onDelete?.(id!)}>
-                  <FontAwesomeIcon icon={faTrash} className="me-2" />
-                  {t('delete')}
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    );
-  },
-);
-
-export type AwardListProps = Pick<ScrollListProps<Award>, 'store'> & AwardListLayoutProps;
-
-export class AwardList extends PureComponent<AwardListProps> {
-  onEdit = (id: number) => {
-    this.props.onEdit?.(id);
-    this.props.store.getOne(id);
-  };
-
-  onDelete = (id: number) => {
-    if (!confirm(i18n.t('sure_delete_this_work'))) return;
-
-    this.props.onDelete?.(id);
-    this.props.store.deleteOne(id);
-  };
+    return [
+      { key: 'quantity', renderHead: t('quantity') },
+      {
+        key: 'target',
+        renderHead: t('type'),
+        renderBody: ({ target }) => AwardTargetName(i18n)[target],
+      },
+      {
+        key: 'pictures',
+        renderHead: t('photo'),
+        renderBody: ({ pictures }) =>
+          pictures && <Image src={pictures?.[0].uri} alt={pictures?.[0].description} />,
+      },
+      { key: 'name', renderHead: t('name') },
+      { key: 'description', renderHead: t('description') },
+    ];
+  }
 
   render() {
+    const i18n = this.observedContext,
+      { store } = this.props;
+    const { downloading, uploading } = store;
+
+    const loading = downloading > 0 || uploading > 0;
+
     return (
-      <ScrollList
-        translator={i18n}
-        store={this.props.store}
-        renderList={allItems => (
-          <AwardListLayout defaultData={allItems} onEdit={this.onEdit} onDelete={this.onDelete} />
-        )}
-      />
+      <>
+        <RestTable translator={i18n} store={store} columns={this.columns} editable deletable />
+
+        {loading && <Loading />}
+      </>
     );
   }
 }

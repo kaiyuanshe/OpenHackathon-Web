@@ -21,7 +21,7 @@ import { getActivityStatusText } from '../../../components/Activity/ActivityEntr
 import { CommentBox } from '../../../components/CommentBox';
 import { PageHead } from '../../../components/layout/PageHead';
 import { AnnouncementList } from '../../../components/Message/MessageList';
-import { OrganizationListLayout } from '../../../components/Organization/OrganizationList';
+import { OrganizationCard } from '../../../components/Organization/OrganizationCard';
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
@@ -307,7 +307,14 @@ export default class ActivityPage extends ObservedComponent<ActivityPageProps, t
             {organizationList.length > 0 && (
               <>
                 <h2>{t('sponsor_information')}</h2>
-                <OrganizationListLayout defaultData={organizationList} />
+
+                <ul className="list-unstyled">
+                  {organizationList.map(item => (
+                    <li key={item.id} className="mb-2">
+                      <OrganizationCard {...item} />
+                    </li>
+                  ))}
+                </ul>
               </>
             )}
             {displayName && location && (
