@@ -1,6 +1,9 @@
+import { TeamMember, TeamMemberStatus } from '@kaiyuanshe/openhackathon-service';
+import { Loading } from 'idea-react';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
-import { ScrollList } from 'mobx-restful-table';
+import { Column, FormField, RestTable } from 'mobx-restful-table';
 import { compose, router } from 'next-ssr-middleware';
 
 import {
@@ -8,10 +11,16 @@ import {
   TeamManageBaseProps,
   TeamManageFrame,
 } from '../../../../../../components/Team/TeamManageFrame';
-import { TeamParticipantTableLayout } from '../../../../../../components/Team/TeamParticipantTable';
+import { UserBadge } from '../../../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../../../models/Activity';
 import { i18n, I18nContext } from '../../../../../../models/Base/Translation';
+import { convertDatetime } from '../../../../../../utils/time';
 import { sessionGuard } from '../../../../../api/core';
+
+const StatusName = ({ t }: typeof i18n): Record<TeamMemberStatus, string> => ({
+  approved: t('status_approved'),
+  pendingApproval: t('status_pending'),
+});
 
 export const getServerSideProps = compose<TeamManageBaseParams>(router, sessionGuard);
 
@@ -26,11 +35,48 @@ export default class TeamParticipantPage extends ObservedComponent<
     .teamOf(this.props.route.params!.name)
     .memberOf(+this.props.route.params!.tid);
 
+  @computed
+  get columns(): Column<TeamMember>[] {
+    const i18n = this.observedContext;
+    const { t } = i18n;
+
+    return [
+      { key: 'user', renderHead: t('user'), renderBody: ({ user }) => <UserBadge {...user} /> },
+      {
+        key: 'createdAt',
+        renderHead: t('apply_time'),
+        renderBody: ({ createdAt }) => convertDatetime(createdAt),
+      },
+      {
+        key: 'role',
+        renderHead: t('apply_role'),
+        renderBody: ({ role }) => (role === 'admin' ? t('admin') : t('member')),
+      },
+      { key: 'description', renderHead: t('remark') },
+      {
+        key: 'status',
+        renderHead: t('status'),
+        renderBody: ({ status, user: { id } }) => (
+          <FormField
+            label={t('status')}
+            options={Object.entries(StatusName(i18n)).map(([value, label]) => ({ value, label }))}
+            defaultValue={status}
+            onChange={({ currentTarget: { value } }) =>
+              this.store.updateOne({ status: value as TeamMemberStatus }, id)
+            }
+          />
+        ),
+      },
+    ];
+  }
+
   render() {
-    const { store } = this,
+    const { props, store, columns } = this,
       { t } = this.observedContext;
-    const { resolvedUrl, params } = this.props.route;
-    const { name, tid } = params!;
+    const { resolvedUrl, params } = props.route,
+      { downloading, uploading } = store;
+    const { name, tid } = params!,
+      loading = downloading > 0 || uploading > 0;
 
     return (
       <TeamManageFrame
@@ -40,16 +86,9 @@ export default class TeamParticipantPage extends ObservedComponent<
         path={resolvedUrl}
         title={t('team_registration')}
       >
-        <ScrollList
-          translator={i18n}
-          store={store}
-          renderList={allItems => (
-            <TeamParticipantTableLayout
-              defaultData={allItems}
-              onApprove={(userId, status) => store.updateOne({ status }, userId)}
-            />
-          )}
-        />
+        <RestTable translator={i18n} {...{ store, columns }} />
+
+        {loading && <Loading />}
       </TeamManageFrame>
     );
   }
