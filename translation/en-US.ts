@@ -1,10 +1,22 @@
 import { textJoin } from 'mobx-i18n';
+import { IDType } from 'mobx-restful';
 import { diffTime } from 'web-utility';
 
 export default {
   home_page: 'Home page',
   load_more: 'Load more...',
   no_more: 'No more',
+
+  // Pagination Table
+  create: 'Create',
+  view: 'View',
+  submit: 'Submit',
+  cancel: 'Cancel',
+  edit: 'Edit',
+  delete: 'Delete',
+  total_x_rows: ({ totalCount }: { totalCount: number }) => `Total ${totalCount} rows`,
+  sure_to_delete_x: ({ keys }: { keys: IDType[] }) => `Are you sure to delete ${keys.join(', ')}?`,
+
   select: 'select',
   open_hackathon_platform: 'Open Hackathon',
   create_activity: 'Create Activity',
@@ -67,12 +79,8 @@ export default {
   loading: 'Loading...',
   sign_in: 'Sign in',
   sign_out: 'Sign out',
-  create: 'Create',
-  edit: 'Edit',
-  submit: 'Submit',
   save: 'Save',
   success: 'Success',
-  cancel: 'Cancel',
   edit_profile: 'Edit Profile',
   edit_profile_tips: "After editing profile in GitHub, it'll be reloaded at next sign-in.",
   hackathons: 'Hackathons',
@@ -84,7 +92,6 @@ export default {
   partners: 'Partners',
   top_hackathons: 'Top hackathons',
   manage_this_hackathon: 'Manage',
-  delete: 'Delete',
   all: 'All',
   organizer: 'Organizer',
   organizer_manage: 'Manage Organizer',

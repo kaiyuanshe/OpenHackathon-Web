@@ -1,16 +1,15 @@
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { Staff, StaffType } from '@kaiyuanshe/openhackathon-service';
+import { Loading } from 'idea-react';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
-import { ScrollList } from 'mobx-restful-table';
+import { Column, RestTable } from 'mobx-restful-table';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { FC, FormEvent, useContext } from 'react';
-import { Badge, Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
+import { FC, useContext } from 'react';
+import { Badge, Col, ListGroup, Row } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
-import { AdministratorModal } from '../../../../components/User/ActivityAdministratorModal';
-import { HackathonAdminList } from '../../../../components/User/HackathonAdminList';
+import { adminColumns } from '../../../../components/User/HackathonAdminList';
 import activityStore from '../../../../models/Activity';
 import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
@@ -40,26 +39,24 @@ class AdministratorEditor extends ObservedComponent<AdministratorPageProps, type
 
   store = activityStore.staffOf(this.props.route.params!.name + '');
 
-  @observable
-  accessor selectedIds: number[] = [];
+  @computed
+  get columns() {
+    const i18n = this.observedContext;
+    const { t } = i18n;
 
-  @observable
-  accessor show = false;
-
-  //处理删除管理员或裁判
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { t } = this.observedContext,
-      { selectedIds } = this;
-
-    if (!selectedIds[0]) return alert(t('please_select_at_least_one_user'));
-
-    if (!confirm(t('confirm_to_delete_admin_or_referee'))) return;
-
-    for (const id of selectedIds) await this.store.deleteOne(id);
-  };
+    return [
+      {
+        key: 'type',
+        renderHead: t('type'),
+        type: 'radio',
+        options: [
+          { value: 'admin', label: t('admin') },
+          { value: 'judge', label: t('referee') },
+        ],
+      },
+      ...adminColumns(i18n),
+    ] as Column<Staff>[];
+  }
 
   renderList() {
     const { t } = this.observedContext,
@@ -67,19 +64,31 @@ class AdministratorEditor extends ObservedComponent<AdministratorPageProps, type
 
     return (
       <ListGroup>
-        <ListGroup.Item className="d-flex justify-content-between">
+        <ListGroup.Item
+          className="d-flex justify-content-between"
+          action
+          onClick={() => this.store.getList({}, 1)}
+        >
           {t('all_user')}
           <Badge className="ms-2" bg="secondary">
             {allItems.length}
           </Badge>
         </ListGroup.Item>
-        <ListGroup.Item className="d-flex justify-content-between">
+        <ListGroup.Item
+          className="d-flex justify-content-between"
+          action
+          onClick={() => this.store.getList({ type: 'admin' as StaffType.Admin }, 1)}
+        >
           {t('admin')}
           <Badge className="ms-2" bg="secondary">
             {typeCount.admin}
           </Badge>
         </ListGroup.Item>
-        <ListGroup.Item className="d-flex justify-content-between">
+        <ListGroup.Item
+          className="d-flex justify-content-between"
+          action
+          onClick={() => this.store.getList({ type: 'judge' as StaffType.Judge }, 1)}
+        >
           {t('referee')}
           <Badge className="ms-2" bg="secondary">
             {typeCount.judge}
@@ -91,57 +100,26 @@ class AdministratorEditor extends ObservedComponent<AdministratorPageProps, type
 
   render() {
     const i18n = this.observedContext,
-      { store, show } = this;
-    const { t } = i18n,
-      loading = store.uploading > 0;
+      { downloading, uploading } = this.store;
+
+    const loading = downloading > 0 || uploading > 0;
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Row xs="1" sm="2">
-          <Col sm="auto" md="auto">
-            {this.renderList()}
-
-            <Col className="d-flex flex-column">
-              <Button
-                variant="success"
-                className="my-3"
-                disabled={loading}
-                onClick={() => (this.show = true)}
-              >
-                <FontAwesomeIcon className="me-2" icon={faPlus} />
-                {t('add')}
-              </Button>
-              <Button variant="danger" type="submit" disabled={loading}>
-                <FontAwesomeIcon className="me-2" icon={faTrash} />
-                {t('delete')}
-              </Button>
-            </Col>
-          </Col>
-          <Col className="flex-fill">
-            <ScrollList
-              translator={i18n}
-              store={store}
-              renderList={allItems => (
-                <HackathonAdminList
-                  defaultData={allItems}
-                  selectedIds={this.selectedIds}
-                  onSelect={list => (this.selectedIds = list)}
-                />
-              )}
-            />
-          </Col>
-        </Row>
-
-        <AdministratorModal
-          store={store}
-          show={show}
-          onHide={() => (this.show = false)}
-          onSave={() => {
-            this.show = false;
-            this.store.refreshList();
-          }}
-        />
-      </Form>
+      <Row xs="1" sm="2">
+        <Col sm="auto" md="auto">
+          {this.renderList()}
+        </Col>
+        <Col className="flex-fill">
+          <RestTable
+            translator={i18n}
+            store={this.store}
+            columns={this.columns}
+            editable
+            deletable
+          />
+          {loading && <Loading />}
+        </Col>
+      </Row>
     );
   }
 }
