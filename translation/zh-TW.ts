@@ -1,10 +1,22 @@
 import { textJoin } from 'mobx-i18n';
+import { IDType } from 'mobx-restful';
 import { diffTime } from 'web-utility';
 
 export default {
   home_page: '主頁',
   load_more: '加載更多……',
   no_more: '沒有更多',
+
+  // Pagination Table
+  create: '新增',
+  view: '查看',
+  submit: '提交',
+  cancel: '取消',
+  edit: '編輯',
+  delete: '刪除',
+  total_x_rows: ({ totalCount }: { totalCount: number }) => `共 ${totalCount} 行`,
+  sure_to_delete_x: ({ keys }: { keys: IDType[] }) => `您確定刪除 ${keys.join('、')} 嗎？`,
+
   select: '選擇',
   open_hackathon_platform: '開放黑客松',
   create_activity: '創建活動',
@@ -67,12 +79,8 @@ export default {
   loading: '加載中……',
   sign_in: '登錄',
   sign_out: '退出',
-  create: '創建',
-  edit: '編輯',
-  submit: '提交',
   save: '保存',
   success: '成功',
-  cancel: '取消',
   edit_profile: '編輯用戶資料',
   edit_profile_tips: '在 GitHub 編輯用戶資料後，下次登錄時會自動同步。',
   hackathons: '黑客鬆活動',
@@ -84,7 +92,6 @@ export default {
   partners: '合作夥伴',
   top_hackathons: '熱門活動',
   manage_this_hackathon: '管理',
-  delete: '刪除',
   all: '全部',
   organizer: '主辦方',
   organizer_manage: '主辦方管理',

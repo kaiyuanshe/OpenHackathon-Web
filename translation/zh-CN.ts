@@ -1,10 +1,22 @@
 import { textJoin } from 'mobx-i18n';
+import { IDType } from 'mobx-restful';
 import { diffTime } from 'web-utility';
 
 export default {
   home_page: '主页',
   load_more: '加载更多……',
   no_more: '没有更多',
+
+  // Pagination Table
+  create: '新增',
+  view: '查看',
+  submit: '提交',
+  cancel: '取消',
+  edit: '编辑',
+  delete: '删除',
+  total_x_rows: ({ totalCount }: { totalCount: number }) => `共 ${totalCount} 行`,
+  sure_to_delete_x: ({ keys }: { keys: IDType[] }) => `您确定删除 ${keys.join('、')} 吗？`,
+
   select: '选择',
   open_hackathon_platform: '开放黑客松',
   create_activity: '创建活动',
@@ -67,12 +79,8 @@ export default {
   loading: '加载中……',
   sign_in: '登录',
   sign_out: '登出',
-  create: '创建',
-  edit: '编辑',
-  submit: '提交',
   save: '保存',
   success: '成功',
-  cancel: '取消',
   edit_profile: '编辑用户资料',
   edit_profile_tips: '在 GitHub 编辑用户资料后，下次登录时会自动同步。',
   hackathons: '黑客松活动',
@@ -84,7 +92,6 @@ export default {
   partners: '合作伙伴',
   top_hackathons: '热门活动',
   manage_this_hackathon: '管理',
-  delete: '删除',
   all: '全部',
   organizer: '主办方',
   organizer_manage: '主办方管理',

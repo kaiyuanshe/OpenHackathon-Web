@@ -1,15 +1,12 @@
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { observable } from 'mobx';
+import { Loading } from 'idea-react';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
 import { compose, RouteProps, router } from 'next-ssr-middleware';
-import { Component, Context, createRef, FC, FormEvent, useContext } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import { FC, useContext } from 'react';
+import { Container } from 'react-bootstrap';
 
 import { ActivityManageFrame } from '../../../../components/Activity/ActivityManageFrame';
 import { AnnouncementList } from '../../../../components/Message/MessageList';
-import { AnnouncementModal } from '../../../../components/Message/MessageModal';
 import activityStore from '../../../../models/Activity';
 import { i18n, I18nContext } from '../../../../models/Base/Translation';
 import { sessionGuard } from '../../../api/core';
@@ -40,72 +37,15 @@ class MessageListEditor extends ObservedComponent<MessageListPageProps, typeof i
 
   store = activityStore.announcementOf(this.props.route.params!.name);
 
-  form = createRef<HTMLFormElement>();
-
-  @observable
-  accessor selectedIds: number[] = [];
-
-  @observable
-  accessor show = false;
-
-  handleReset = () => this.form.current?.reset();
-
-  handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const { t } = this.observedContext,
-      { selectedIds } = this;
-
-    if (!selectedIds[0]) return alert(t('please_select_at_least_one_announcement'));
-
-    if (!confirm(t('confirm_to_delete_announcement'))) return;
-
-    for (const id of selectedIds) await this.store.deleteOne(id);
-  };
-
   render() {
-    const { t } = this.observedContext,
-      { store, show } = this;
-    const loading = store.uploading > 0;
+    const { downloading, uploading } = this.store;
+    const loading = downloading > 0 || uploading > 0;
 
     return (
       <Container fluid>
-        <Form
-          className="d-flex justify-content-between align-items-center"
-          onSubmit={this.handleSubmit}
-        >
-          <Button
-            variant="success"
-            className="my-3"
-            disabled={loading}
-            onClick={() => (this.show = true)}
-          >
-            <FontAwesomeIcon className="me-2" icon={faPlus} />
-            {t('publish_announcement')}
-          </Button>
-          <Button variant="danger" type="submit" disabled={loading}>
-            <FontAwesomeIcon className="me-2" icon={faTrash} />
-            {t('delete')}
-          </Button>
-        </Form>
+        <AnnouncementList store={this.store} editable deletable />
 
-        <AnnouncementList
-          store={store}
-          hideControls={false}
-          onSelect={list => (this.selectedIds = list)}
-          onEdit={() => (this.show = true)}
-          onDelete={this.handleReset}
-        />
-        <AnnouncementModal
-          store={store}
-          show={show}
-          onHide={() => (this.show = false)}
-          onSave={() => {
-            this.show = false;
-            store.refreshList();
-          }}
-        />
+        {loading && <Loading />}
       </Container>
     );
   }

@@ -280,7 +280,7 @@ export default class ActivityPage extends ObservedComponent<ActivityPageProps, t
                 {/*todo update no data*/}
               </Tab>
               <Tab className="pt-2" eventKey="log" title={t('latest_news')}>
-                <AnnouncementList store={myMessage} hideControls />
+                <AnnouncementList store={myMessage} />
               </Tab>
               <Tab eventKey="team" title={t('all_teams')} className="pt-2">
                 <h3>{t('my_team')}</h3>
