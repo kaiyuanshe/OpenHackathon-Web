@@ -25,8 +25,6 @@ export class AnnouncementList extends ObservedComponent<AnnouncementListProps, t
   render() {
     const i18n = this.observedContext;
 
-    return (
-      <RestTable {...this.props} translator={i18n} columns={this.columns} editable deletable />
-    );
+    return <RestTable {...this.props} translator={i18n} columns={this.columns} />;
   }
 }

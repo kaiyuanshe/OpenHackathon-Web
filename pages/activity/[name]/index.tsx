@@ -49,7 +49,7 @@ export const getServerSideProps = compose<{ name?: string }, ActivityPageProps>(
       activityStore.organizationOf(name).getList(),
     ]);
 
-    return { props: { activity, organizationList } };
+    return { props: JSON.parse(JSON.stringify({ activity, organizationList })) };
   },
 );
 

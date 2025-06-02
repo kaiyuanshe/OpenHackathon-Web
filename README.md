@@ -15,7 +15,7 @@ Open-source [Hackathon][1] Platform with **Git-based Cloud Development Environme
   - testing: https://test.hackathon.kaiyuanshe.cn/
   - production: https://hackathon.kaiyuanshe.cn/
 - RESTful API
-  - production: https://openhackathon-service-server.onrender.com/
+  - production: https://openhackathon-service.onrender.com/
 
 ## Technology stack
 
