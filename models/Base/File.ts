@@ -1,65 +1,34 @@
-import { HTTPError, Request, request } from 'koajax';
-import { DataObject, toggle } from 'mobx-restful';
+import { SignedLink } from '@kaiyuanshe/openhackathon-service';
+import { toggle } from 'mobx-restful';
 import { FileModel } from 'mobx-restful-table';
+import { blobOf, uniqueID } from 'web-utility';
 
 import sessionStore from '../User/Session';
-import { ErrorBaseData, UploadUrl } from './index';
 
-export class AzureFileModel extends FileModel {
-  static async uploadBlob<T = void>(
-    fullPath: string,
-    method: Request['method'] = 'PUT',
-    body?: any,
-    headers: DataObject = {},
-  ) {
-    headers['x-ms-blob-type'] = 'BlockBlob';
+export class S3FileModel extends FileModel {
+  client = sessionStore.client;
 
-    const { response } = request<T>({
-      path: fullPath,
-      method,
-      body,
-      headers,
-    });
-    const { headers: header, body: data } = await response;
+  @toggle('uploading')
+  async upload(file: string | Blob) {
+    if (typeof file === 'string') {
+      const name = file.split('/').pop()!;
 
-    if (!data || !('traceId' in (data as DataObject))) return data!;
-
-    const { status, title, detail } = data as unknown as ErrorBaseData;
-
-    throw new HTTPError(
-      detail || title,
-      { method, path: fullPath, headers, body },
-      { status, statusText: title, headers: header, body: data },
+      file = new File([await blobOf(file)], name);
+    }
+    const { body } = await this.client.post<SignedLink>(
+      `file/signed-link/${file instanceof File ? file.name : uniqueID()}`,
     );
+    await this.client.put(body!.putLink, file, { 'Content-Type': file.type });
+
+    return super.upload(body!.getLink);
   }
 
   @toggle('uploading')
-  async upload(file: File) {
-    const { type, name } = file;
+  async delete(link: string) {
+    await this.client.delete(`file/${link.replace(`${this.client.baseURI}/file/`, '')}`);
 
-    const { body } = await sessionStore.client.post<UploadUrl>(
-      `user/generateFileUrl`,
-      { filename: name },
-    );
-    const parts = body!.uploadUrl.split('/');
-
-    const path = parts.slice(0, -1).join('/'),
-      [fileName, data] = parts.at(-1)!.split('?');
-
-    const URI_Put = `${path}/${encodeURIComponent(fileName)}?${data}`;
-
-    await AzureFileModel.uploadBlob(URI_Put, 'PUT', file, {
-      'Content-Type': type,
-    });
-
-    const { origin, pathname } = new URL(body!.url);
-
-    const URI_Get = `${
-      origin + pathname.split('/').slice(0, -1).join('/')
-    }/${encodeURIComponent(fileName)}`;
-
-    return super.upload(URI_Get);
+    await super.delete(link);
   }
 }
 
-export default new AzureFileModel();
+export default new S3FileModel();

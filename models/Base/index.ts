@@ -1,11 +1,10 @@
 import { Base, ListChunk } from '@kaiyuanshe/openhackathon-service';
-import { Filter as BaseFilter, ListModel, RESTClient } from 'mobx-restful';
+import { Filter as BaseFilter, IDType, ListModel, RESTClient, toggle } from 'mobx-restful';
 import { buildURLData } from 'web-utility';
 
 import { ownClient } from '../User/Session';
 
-export interface UploadUrl
-  extends Record<'filename' | 'uploadUrl' | 'url', string> {
+export interface UploadUrl extends Record<'filename' | 'uploadUrl' | 'url', string> {
   expiration: number;
 }
 
@@ -58,6 +57,15 @@ export abstract class TableModel<
   F extends InputData<D> = InputData<D>,
 > extends ListModel<D, F> {
   client = ownClient;
+
+  @toggle('uploading')
+  async updateOne(data: BaseFilter<D>, id?: IDType) {
+    const { body } = await (id
+      ? this.client.put<D>(`${this.baseURI}/${id}`, data)
+      : this.client.post<D>(this.baseURI, data));
+
+    return (this.currentOne = body!);
+  }
 
   async loadPage(pageIndex: number, pageSize: number, filter: F) {
     const { body } = await this.client.get<ListChunk<D>>(

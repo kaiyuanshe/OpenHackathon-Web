@@ -1,10 +1,17 @@
-import { Hackathon } from '@kaiyuanshe/openhackathon-service';
+import { Hackathon, Media } from '@kaiyuanshe/openhackathon-service';
 import { Loading } from 'idea-react';
 import { computed } from 'mobx';
 import { textJoin } from 'mobx-i18n';
 import { observer } from 'mobx-react';
 import { ObservedComponent } from 'mobx-react-helper';
-import { BadgeInput, Field, FileUploader, RestForm } from 'mobx-restful-table';
+import {
+  ArrayField,
+  ArrayFieldProps,
+  Field,
+  FileUploader,
+  FormField,
+  RestForm,
+} from 'mobx-restful-table';
 
 import activityStore from '../../models/Activity';
 import fileStore from '../../models/Base/File';
@@ -33,13 +40,14 @@ export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeo
 
   @computed
   get fields(): Field<Hackathon>[] {
-    const { t } = this.observedContext;
+    const i18n = this.observedContext;
+    const { t } = i18n;
 
     return [
       {
         key: 'name',
         renderLabel: t('activity_id'),
-        pattern: '[a-zA-Z0-9]+',
+        pattern: '[\\w-]+',
         required: true,
         invalidMessage: t('name_placeholder'),
       },
@@ -49,31 +57,14 @@ export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeo
         required: true,
         invalidMessage: textJoin(t('please_enter'), t('activity_name')),
       },
-      {
-        key: 'tags',
-        renderLabel: t('tag'),
-        renderInput: ({ tags }, { key, ...meta }) => (
-          <RestForm.FieldBox name={key} {...meta}>
-            <BadgeInput name={key} placeholder={t('tag_placeholder')} defaultValue={tags} />
-          </RestForm.FieldBox>
-        ),
-      },
+      { key: 'tags', renderLabel: t('tag'), multiple: true, placeholder: t('tag_placeholder') },
       {
         key: 'banners',
         renderLabel: t('bannerUrls'),
-        accept: 'image/*',
-        required: true,
-        multiple: true,
         max: 10,
-        uploader: fileStore,
-        renderInput: ({ banners }, { key, uploader, ...meta }) => (
+        renderInput: ({ banners }, { key, ...meta }) => (
           <RestForm.FieldBox name={key} {...meta}>
-            <FileUploader
-              store={uploader!}
-              name={key}
-              {...meta}
-              defaultValue={banners?.map(({ uri }) => uri)}
-            />
+            <ArrayField name="banners" defaultValue={banners} renderItem={this.renderMedia(i18n)} />
           </RestForm.FieldBox>
         ),
       },
@@ -147,6 +138,28 @@ export class ActivityEditor extends ObservedComponent<ActivityEditorProps, typeo
       },
     ];
   }
+
+  renderMedia =
+    ({ t }: typeof i18n): ArrayFieldProps<Media>['renderItem'] =>
+    ({ uri, name, description }) => (
+      <div className="d-flex align-items-center gap-2">
+        <FileUploader
+          store={fileStore}
+          name="uri"
+          accept="image/*"
+          multiple
+          defaultValue={uri ? [uri] : []}
+        />
+        <FormField label={t('name')} name="name" defaultValue={name} />
+        <FormField
+          label={t('description')}
+          as="textarea"
+          rows={3}
+          name="description"
+          defaultValue={description}
+        />
+      </div>
+    );
 
   render() {
     const i18n = this.observedContext,
