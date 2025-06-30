@@ -92,14 +92,6 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
     return activityStore.currentTeam?.sessionOne?.id === this.observedProps.team.id;
   }
 
-  @computed
-  get evaluatable() {
-    const now = Date.now(),
-      { judgeStartedAt, judgeEndedAt } = this.observedProps.activity;
-
-    return +new Date(judgeStartedAt) <= now && now <= +new Date(judgeEndedAt);
-  }
-
   async componentDidMount() {
     if (isServer()) return;
 
@@ -154,14 +146,9 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
 
   render() {
     const { t } = this.observedContext,
-      { name, displayName: hackathonDisplayName } = this.props.activity,
-      {
-        id,
-        displayName,
-        description,
-        createdBy: { avatar },
-      } = this.props.team,
-      { teamMemberList, teamWorkList } = this.props,
+      { activity, team, teamMemberList, teamWorkList } = this.props;
+    const { name, displayName: hackathonDisplayName } = activity,
+      { id, displayName, description, createdBy } = team,
       {
         currentRoute,
         currentUserInThisTeam,
@@ -170,7 +157,6 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
         handleJoinTeam,
         isShowJoinTeamBtn,
         isShowLeaveTeamBtn,
-        evaluatable,
       } = this;
 
     return (
@@ -185,7 +171,7 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
               <Card.Header className="bg-white">
                 <Card.Img
                   variant="top"
-                  src={avatar}
+                  src={createdBy.avatar}
                   className="d-block m-auto"
                   style={{ maxWidth: '15rem' }}
                 />
@@ -241,8 +227,9 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
             </Tabs>
           </Col>
         </Row>
-        {evaluatable && <EvaluationForm activityName={name} teamId={id} />}
-
+        {ActivityModel.isEvaluatable(activity) && (
+          <EvaluationForm activityName={name} teamId={id} />
+        )}
         <CommentBox />
 
         <JoinTeamModal
