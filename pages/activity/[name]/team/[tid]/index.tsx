@@ -13,6 +13,7 @@ import { formToJSON } from 'web-utility';
 import { CommentBox } from '../../../../../components/CommentBox';
 import { MainBreadcrumb } from '../../../../../components/layout/MainBreadcrumb';
 import { PageHead } from '../../../../../components/layout/PageHead';
+import { EvaluationForm } from '../../../../../components/Team/EvaluationForm';
 import { JoinTeamModal } from '../../../../../components/Team/JoinTeamModal';
 import { TeamMemberListLayout } from '../../../../../components/Team/TeamMemberList';
 import { TeamWorkList } from '../../../../../components/Team/TeamWorkList';
@@ -91,6 +92,14 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
     return activityStore.currentTeam?.sessionOne?.id === this.observedProps.team.id;
   }
 
+  @computed
+  get evaluatable() {
+    const now = Date.now(),
+      { judgeStartedAt, judgeEndedAt } = this.observedProps.activity;
+
+    return +new Date(judgeStartedAt) <= now && now <= +new Date(judgeEndedAt);
+  }
+
   async componentDidMount() {
     if (isServer()) return;
 
@@ -161,6 +170,7 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
         handleJoinTeam,
         isShowJoinTeamBtn,
         isShowLeaveTeamBtn,
+        evaluatable,
       } = this;
 
     return (
@@ -231,6 +241,8 @@ export default class TeamPage extends ObservedComponent<TeamPageProps, typeof i1
             </Tabs>
           </Col>
         </Row>
+        {evaluatable && <EvaluationForm activityName={name} teamId={id} />}
+
         <CommentBox />
 
         <JoinTeamModal

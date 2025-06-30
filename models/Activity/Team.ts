@@ -15,6 +15,7 @@ import { createListStream, Filter, InputData, TableModel } from '../Base';
 import { WorkspaceModel } from '../Git';
 import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
+import { EvaluationModel } from './Evaluation';
 
 export type TeamFilter = Filter<Team> & BaseFilter;
 
@@ -61,6 +62,13 @@ export class TeamModel extends TableModel<Team, TeamFilter> {
 
   workspaceOf(tid = this.currentOne.id) {
     return (this.currentWorkspace = new WorkspaceModel(`${this.baseURI}/${tid}`));
+  }
+
+  @computed
+  get currentEvaluation() {
+    const { hackathon, id } = this.currentOne;
+
+    return new EvaluationModel(hackathon.name, id);
   }
 
   assignmentOf(tid = this.currentOne.id) {
