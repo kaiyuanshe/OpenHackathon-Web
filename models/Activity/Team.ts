@@ -1,10 +1,11 @@
 import {
   BaseFilter,
-  Team,
+  Team as _Team,
   TeamMember,
   TeamMemberFilter,
   TeamWork,
   TeamWorkFilter,
+  Score,
 } from '@kaiyuanshe/openhackathon-service';
 import { action, computed, observable } from 'mobx';
 import { ListModel, persist, restore, Stream, toggle } from 'mobx-restful';
@@ -16,6 +17,12 @@ import { WorkspaceModel } from '../Git';
 import sessionStore from '../User/Session';
 import { AwardAssignment } from './Award';
 import { EvaluationModel } from './Evaluation';
+
+export interface Team extends _Team {
+  scores?: Score[];
+  score?: number;
+  rank?: number;
+}
 
 export type TeamFilter = Filter<Team> & BaseFilter;
 

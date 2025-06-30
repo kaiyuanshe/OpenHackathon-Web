@@ -88,6 +88,12 @@ export class ActivityModel extends TableModel<Hackathon, ActivityFilter> {
     return (this.currentOrganization = new OrganizerModel(`hackathon/${name}`));
   }
 
+  static isEvaluatable({ judgeStartedAt, judgeEndedAt }: Hackathon) {
+    const now = Date.now();
+
+    return +new Date(judgeStartedAt) <= now && now <= +new Date(judgeEndedAt);
+  }
+
   @toggle('uploading')
   async updateOne(data: InputData<Hackathon>, name?: string) {
     if (!name) {

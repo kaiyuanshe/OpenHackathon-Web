@@ -1,17 +1,14 @@
-import { Team } from '@kaiyuanshe/openhackathon-service';
 import { ScrollListProps } from 'mobx-restful-table';
 import { Col, Row } from 'react-bootstrap';
 
-import { TeamModel } from '../../models/Activity/Team';
+import { Team, TeamModel } from '../../models/Activity/Team';
 import { TeamCard } from './TeamCard';
 
 export interface TeamListProps extends ScrollListProps<Team> {
   store: TeamModel;
 }
 
-export const TeamListLayout = ({
-  defaultData = [],
-}: Pick<TeamListProps, 'defaultData'>) => (
+export const TeamListLayout = ({ defaultData = [] }: Pick<TeamListProps, 'defaultData'>) => (
   <Row className="g-4" xs={1} md={2} lg={2} xxl={2}>
     {defaultData.map(item => (
       <Col key={item.id}>

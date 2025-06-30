@@ -18,6 +18,7 @@ import { cache, compose, errorLogger } from 'next-ssr-middleware';
 import { Button, Carousel, Col, Container, Image, Row, Tab, Tabs } from 'react-bootstrap';
 
 import { getActivityStatusText } from '../../../components/Activity/ActivityEntry';
+import { AwardList } from '../../../components/Activity/AwardList';
 import { CommentBox } from '../../../components/CommentBox';
 import { PageHead } from '../../../components/layout/PageHead';
 import { AnnouncementList } from '../../../components/Message/MessageList';
@@ -25,6 +26,7 @@ import { OrganizationCard } from '../../../components/Organization/OrganizationC
 import { TeamCard } from '../../../components/Team/TeamCard';
 import { TeamCreateModal } from '../../../components/Team/TeamCreateModal';
 import { TeamListLayout } from '../../../components/Team/TeamList';
+import { TeamRank } from '../../../components/Team/TeamRank';
 import { isServer } from '../../../configuration';
 import activityStore, { ActivityModel } from '../../../models/Activity';
 import { i18n, I18nContext } from '../../../models/Base/Translation';
@@ -64,6 +66,7 @@ const StatusName = ({ t }: typeof i18n): Record<EnrollmentStatus, string> => ({
 export default class ActivityPage extends ObservedComponent<ActivityPageProps, typeof i18n> {
   static contextType = I18nContext;
 
+  awardStore = activityStore.awardOf(this.props.activity.name);
   logStore = activityStore.logOf(this.props.activity.id);
   enrollmentStore = activityStore.enrollmentOf(this.props.activity.name);
   teamStore = activityStore.teamOf(this.props.activity.name);
@@ -231,9 +234,9 @@ export default class ActivityPage extends ObservedComponent<ActivityPageProps, t
 
   render() {
     const { t } = this.observedContext,
-      { name, displayName, tags, banners, location, detail } = this.props.activity,
+      { activity, organizationList } = this.props;
+    const { name, displayName, tags, banners, location, detail } = activity,
       { showCreateTeam, loading } = this,
-      { organizationList } = this.props,
       myTeam = activityStore.currentTeam?.sessionOne,
       myMessage = this.messageStore;
 
@@ -302,6 +305,14 @@ export default class ActivityPage extends ObservedComponent<ActivityPageProps, t
                 />
               </Tab>
             </Tabs>
+            <Tab eventKey="award" title={t('award')} className="pt-2">
+              <AwardList store={this.awardStore} />
+            </Tab>
+            {ActivityModel.isEvaluatable(activity) && (
+              <Tab eventKey="team-rank" title={t('works_awards')} className="pt-2">
+                <TeamRank activityName={name} teamStore={this.teamStore} />
+              </Tab>
+            )}
           </Col>
           <Col className="d-flex flex-column">
             {organizationList.length > 0 && (
